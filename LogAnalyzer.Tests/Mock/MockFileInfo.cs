@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Tests
 {
@@ -28,8 +29,7 @@ namespace LogAnalyzer.Tests
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource, Encoding encoding )
 			: this( name, fullName, logSource )
 		{
-			if ( encoding == null )
-				throw new ArgumentNullException( "encoding" );
+			if ( encoding == null ) throw new ArgumentNullException( "encoding" );
 
 			this.encoding = encoding;
 		}
@@ -41,9 +41,11 @@ namespace LogAnalyzer.Tests
 			// do nothing
 		}
 
-		Stream IFileInfo.OpenStream( int startPosition )
+		ILogFileReader IFileInfo.GetReader( LogFileReaderArguments args )
 		{
-			return new ByteListWrapperStream( bytes, sync );
+			MockStreamProvider streamProvider = new MockStreamProvider( bytes, sync );
+			StreamLogFileReader reader = new StreamLogFileReader( args, streamProvider );
+			return reader;
 		}
 
 		int IFileInfo.Length
@@ -95,7 +97,7 @@ namespace LogAnalyzer.Tests
 				lastWriteTime = DateTime.Now;
 			}
 
-			logSource.RaiseFileChanged( this.name );
+			logSource.RaiseFileChanged( name );
 		}
 
 		public void WriteLine( string str )

@@ -12,6 +12,7 @@ using System.Diagnostics;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Caching;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {

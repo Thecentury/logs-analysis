@@ -11,6 +11,7 @@ using System.ComponentModel;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using System.Threading;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
@@ -19,14 +20,14 @@ namespace LogAnalyzer
 	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress
 	{
 		// todo brinchuk remove 3 of me
-		private static readonly string logLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
-		private static readonly Regex logLineRegex = new Regex( logLineRegexText, RegexOptions.Compiled );
+		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
+		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		private readonly IFilter<LogEntry> globalEntriesFilter = null;
-		private readonly Logger logger = null;
-		private readonly LogDirectory parentDirectory = null;
-		private readonly Encoding encoding = null;
+		private readonly IFilter<LogEntry> globalEntriesFilter;
+		private readonly Logger logger;
+		private readonly LogDirectory parentDirectory;
+		private readonly Encoding encoding;
 		public Encoding Encoding
 		{
 			get { return encoding; }
@@ -39,7 +40,7 @@ namespace LogAnalyzer
 		private long prevStreamLength;
 		private long lastLineBreakByteIndex;
 
-		private int linesCount = 0;
+		private int linesCount;
 		public int LinesCount
 		{
 			get { return linesCount; }
@@ -47,7 +48,7 @@ namespace LogAnalyzer
 
 		private readonly IList<LogEntry> logEntries = CollectionHelper.CreateList<LogEntry>();
 
-		private readonly ThinListWrapper<LogEntry> entriesWrapper = null;
+		private readonly ThinListWrapper<LogEntry> entriesWrapper;
 		public ThinListWrapper<LogEntry> LogEntries
 		{
 			get { return entriesWrapper; }
@@ -61,35 +62,38 @@ namespace LogAnalyzer
 			}
 		}
 
-		private bool lastLineWasEmpty = false;
+		private bool lastLineWasEmpty;
 
 		internal LogFile( IFileInfo fileInfo, LogDirectory parent )
 		{
+			entriesWrapper = null;
 			if ( fileInfo == null )
 				throw new ArgumentNullException( "fileInfo" );
 			if ( parent == null )
 				throw new ArgumentNullException( "parent" );
 
-			this.parentDirectory = parent;
-			this.logger = parentDirectory.Config.Logger;
-			this.encoding = parentDirectory.Encoding;
-			this.globalEntriesFilter = parent.GlobalEntriesFilter;
+			parentDirectory = parent;
+			logger = parentDirectory.Config.Logger;
+			encoding = parentDirectory.Encoding;
+			globalEntriesFilter = parent.GlobalEntriesFilter;
 
-			this.entriesWrapper = new ThinListWrapper<LogEntry>( logEntries );
+			entriesWrapper = new ThinListWrapper<LogEntry>( logEntries );
 
-			this.FileInfo = fileInfo;
-			this.Name = fileInfo.Name;
-			this.FullPath = fileInfo.FullName;
+			FileInfo = fileInfo;
+			Name = fileInfo.Name;
+			FullPath = fileInfo.FullName;
 
 			long length = fileInfo.Length;
-			this.prevStreamLength = length;
+			prevStreamLength = length;
 		}
 
 		private Stream OpenStream( int startPosition )
 		{
-			return this.FileInfo.OpenStream( startPosition );
+			throw new NotImplementedException();
+			//return FileInfo.OpenStream( startPosition );
 		}
 
+		// todo brinchuk remove me
 		private StreamReader OpenReader( Stream stream )
 		{
 			return new StreamReader( stream, encoding );
@@ -113,12 +117,8 @@ namespace LogAnalyzer
 			if ( length == 0 )
 				return;
 
-			long position = length;
-			long prevPosition = length;
-
 			using ( Stream stream = OpenStream( 0 ) )
 			{
-				int bytesReadDelta = 0;
 				int notificationsCount = 0;
 				long lineIndex = 0;
 				using ( StreamReader reader = OpenReader( stream ) )
@@ -127,6 +127,7 @@ namespace LogAnalyzer
 					string prevLine = String.Empty;
 					long prevLineBreakIndex = 0;
 					int notParsedLinesCount = 0;
+					int bytesReadDelta = 0;
 					while ( (line = reader.ReadLine()) != null )
 					{
 						LogEntryAppendResult lineAppendResult = AppendLine( line, lineIndex );
@@ -191,9 +192,10 @@ namespace LogAnalyzer
 			entriesWrapper.RaiseCollectionAdded( addedEntries );
 			parentDirectory.OnLogEntriesAddedToFile( addedEntries );
 
-			PropertyChanged.Raise( this, "" );
+			PropertyChanged.RaiseAllChanged( this );
 		}
 
+		// todo brinchuk remove me
 		private static bool WasLineBreakAtTheEnd( string str )
 		{
 			if ( String.IsNullOrEmpty( str ) )
@@ -203,7 +205,7 @@ namespace LogAnalyzer
 			return lastChar == '\r' || lastChar == '\n';
 		}
 
-		private LogEntry lastCreatedEntry = null;
+		private LogEntry lastCreatedEntry;
 
 		// todo brinchuk remove me
 		/// <summary>
@@ -408,11 +410,10 @@ namespace LogAnalyzer
 
 				// начинаем читать с начала последней строки
 				fs.Position = this.lastLineBreakByteIndex;
-				bool wasLineBreakAtTheEnd = false;
 				using ( StreamReader reader = OpenReader( fs ) )
 				{
 					addedText = reader.ReadToEnd();
-					wasLineBreakAtTheEnd = WasLineBreakAtTheEnd( addedText );
+					bool wasLineBreakAtTheEnd = WasLineBreakAtTheEnd( addedText );
 
 					if ( wasLineBreakAtTheEnd )
 					{

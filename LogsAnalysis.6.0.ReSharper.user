@@ -1,68 +1,68 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="8297DC66-BABB-4AC8-8B80-E75B9413E0D2/f:config.xaml/l:..?config.xaml" caret="329" fromTop="5" />
-      <File id="8297DC66-BABB-4AC8-8B80-E75B9413E0D2/f:App.xaml.cs" caret="1098" fromTop="14" />
-      <File id="8297DC66-BABB-4AC8-8B80-E75B9413E0D2/f:MainWindow.xaml.cs" caret="689" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:CacheFileInfo.cs" caret="345" fromTop="13" />
       <File id="2B2192E9-C25A-4B12-96E8-38526B549D1C/d:Interop/f:FlashWindow.cs" caret="4459" fromTop="20" />
       <File id="2B2192E9-C25A-4B12-96E8-38526B549D1C/d:View/f:LogEntriesListView.xaml" caret="7908" fromTop="31" />
       <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IFactory.cs" caret="0" fromTop="0" />
       <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IOptionalDisposable.cs" caret="68" fromTop="2" />
       <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:OptionalDisposable.cs" caret="87" fromTop="4" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="504" fromTop="25" />
       <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:app.config" caret="373" fromTop="9" />
       <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IOptionalDisposablesFactory.cs" caret="163" fromTop="6" />
       <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:ILogSourceServiceFactory.cs" caret="332" fromTop="9" />
       <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceFactory.cs" caret="191" fromTop="3" />
       <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceService.cs" caret="235" fromTop="5" />
       <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemEnvironment.cs" caret="1022" fromTop="28" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="977" fromTop="23" />
       <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:LogMessageInfo.cs" caret="250" fromTop="10" />
       <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="572" fromTop="2" />
       <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:TotalOperationsCountHelper.cs" caret="114" fromTop="5" />
       <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:AssertExtensions.cs" caret="170" fromTop="6" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="739" fromTop="27" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostServerLogSourceFactory.cs" caret="402" fromTop="13" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockLogRecordsSource.cs" caret="239" fromTop="9" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="278" fromTop="14" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogEntry.cs" caret="1596" fromTop="20" />
       <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostFileInfo.cs" caret="172" fromTop="8" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Extensions/f:EventExtensions.cs" caret="1414" fromTop="8" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="739" fromTop="27" />
       <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockDirectoryInfo.cs" caret="375" fromTop="13" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="13279" fromTop="31" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogEntry.cs" caret="1153" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2975" fromTop="30" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="977" fromTop="23" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:CacheFileInfo.cs" caret="941" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="2668" fromTop="9" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="672" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="476" fromTop="25" />
+      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockLogRecordsSource.cs" caret="239" fromTop="9" />
+      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="504" fromTop="25" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostServerLogSourceFactory.cs" caret="402" fromTop="13" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="789" fromTop="19" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="215" fromTop="9" />
     </RecentFiles>
     <RecentEdits>
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceService.cs" caret="235" fromTop="5" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceFactory.cs" caret="191" fromTop="3" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostServerLogSourceFactory.cs" caret="402" fromTop="13" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="850" fromTop="34" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="1276" fromTop="35" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="1139" fromTop="25" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="476" fromTop="13" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="956" fromTop="26" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="1099" fromTop="31" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="329" fromTop="12" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="551" fromTop="20" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostFileInfo.cs" caret="172" fromTop="8" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:TotalOperationsCountHelper.cs" caret="114" fromTop="5" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:AssertExtensions.cs" caret="599" fromTop="20" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:AssertExtensions.cs" caret="170" fromTop="6" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockLogRecordsSource.cs" caret="239" fromTop="9" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockDirectoryInfo.cs" caret="874" fromTop="28" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="3754" fromTop="15" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="3092" fromTop="36" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="196" fromTop="7" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="226" fromTop="9" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="162" fromTop="5" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="912" fromTop="14" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1408" fromTop="28" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1674" fromTop="34" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="858" fromTop="13" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1986" fromTop="24" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="905" fromTop="23" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="509" fromTop="8" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2975" fromTop="30" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="6148" fromTop="23" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="322" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="9935" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="220" fromTop="9" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:CacheFileInfo.cs" caret="203" fromTop="9" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8289" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8745" fromTop="23" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8990" fromTop="28" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="5155" fromTop="23" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="6512" fromTop="19" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="9237" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="10381" fromTop="26" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="4346" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="641" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="3263" fromTop="24" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="3409" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="5891" fromTop="19" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2305" fromTop="33" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="2705" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2008" fromTop="19" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1888" fromTop="38" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1072" fromTop="15" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1627" fromTop="32" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="188" fromTop="11" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="2322" fromTop="39" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="1917" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="1883" fromTop="14" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="505" fromTop="25" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="289" fromTop="11" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="173" fromTop="7" />
     </RecentEdits>
   </RecentFiles>
   <CompletionStatisticsManager>
@@ -103,43 +103,7 @@
   </SettingsComponent>
   <UnitTestSessions>
     <Session>
-      <Name>Session #1</Name>
-      <Elements>
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.ConfigTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DelayedLogRecordsSourceTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.RealDataTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.ConfigTests.Test_0_Directories" ParentId="LogAnalyzer.Tests.ConfigTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.ConfigTests" MethodName="Test_0_Directories" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.ConfigTests.Test_0_EnabledDirectories" ParentId="LogAnalyzer.Tests.ConfigTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.ConfigTests" MethodName="Test_0_EnabledDirectories" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DelayedLogRecordsSourceTests.TestDelayedLogRecordsSource" ParentId="LogAnalyzer.Tests.DelayedLogRecordsSourceTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DelayedLogRecordsSourceTests" MethodName="TestDelayedLogRecordsSource" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestDeserialization" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestDeserialization" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests.TestDynamicAddFile" ParentId="LogAnalyzer.Tests.LoggingTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.LoggingTests" MethodName="TestDynamicAddFile" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestExpressionBuilderManager" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestExpressionBuilderManager" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestExpressionBuilderXamlSerialization" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestExpressionBuilderXamlSerialization" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestGreaterThanBuilder" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestGreaterThanBuilder" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_1251" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_1251" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_1252" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_1252" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_ASCII" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_ASCII" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_BigEndianUnicode" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_BigEndianUnicode" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_Default" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_Default" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_Unicode" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_Unicode" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF32" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_UTF32" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF7" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_UTF7" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF8" ParentId="LogAnalyzer.Tests.DifferentEncodingsTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.DifferentEncodingsTests" MethodName="TestLoggingInEncoding_UTF8" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests.TestMultiThreadedLogging" ParentId="LogAnalyzer.Tests.LoggingTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.LoggingTests" MethodName="TestMultiThreadedLogging" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestPropertyAccessFilter" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestPropertyAccessFilter" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.RealDataTests.TestRealData" ParentId="LogAnalyzer.Tests.RealDataTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.RealDataTests" MethodName="TestRealData" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests.TestRecordsWithEqualTime" ParentId="LogAnalyzer.Tests.LoggingTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.LoggingTests" MethodName="TestRecordsWithEqualTime" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests.TestSeveralDirectories" ParentId="LogAnalyzer.Tests.LoggingTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.LoggingTests" MethodName="TestSeveralDirectories" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.LoggingTests.TestSimpleMerge" ParentId="LogAnalyzer.Tests.LoggingTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.LoggingTests" MethodName="TestSimpleMerge" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestStringContainsFilter" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestStringContainsFilter" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-        <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.FilterTests.TestStringStartsWithFilter" ParentId="LogAnalyzer.Tests.FilterTests" type="NUnitTestElement" TypeName="LogAnalyzer.Tests.FilterTests" MethodName="TestStringStartsWithFilter" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
-      </Elements>
-    </Session>
-    <Session>
-      <Name>Session #2</Name>
+      <Name>Session #3</Name>
       <Elements>
         <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.ConfigTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
         <UnitTestElement Provider="nUnit" Id="LogAnalyzer.Tests.DelayedLogRecordsSourceTests" type="NUnitTestFixtureElement" Project="FB338E53-99EE-4568-9B3D-CC85004E58F2" />
