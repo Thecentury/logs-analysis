@@ -18,6 +18,7 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "LogFile {FullPath}" )]
 	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress
 	{
+		// todo brinchuk remove 3 of me
 		private static readonly string logLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 		private static readonly Regex logLineRegex = new Regex( logLineRegexText, RegexOptions.Compiled );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
@@ -97,8 +98,9 @@ namespace LogAnalyzer
 		/// <summary>
 		/// Максимальное число не распарсенных записей, после прочтения которых будет брошено исключение InvalidEncodingException.
 		/// </summary>
-		private const int maxLinesReadWhenThrowInvalidEncodingException = 250;
-		private const int fileReadNotificationBytesStep = 512000;
+		private const int MaxLinesReadWhenThrowInvalidEncodingException = 250;
+		private const int FileReadNotificationBytesStep = 512000;
+
 		/// <summary>
 		/// Максимальная длина одной считанной из файла строки.
 		/// <para/>Если длина строки больше, то считается, что выбрана неправильная кодировка, и бросаетмя исключение InvalidEncodingException.
@@ -121,7 +123,7 @@ namespace LogAnalyzer
 				long lineIndex = 0;
 				using ( StreamReader reader = OpenReader( stream ) )
 				{
-					string line = String.Empty;
+					string line;
 					string prevLine = String.Empty;
 					long prevLineBreakIndex = 0;
 					int notParsedLinesCount = 0;
@@ -129,9 +131,9 @@ namespace LogAnalyzer
 					{
 						LogEntryAppendResult lineAppendResult = AppendLine( line, lineIndex );
 
-						if ( (notificationsCount + 1) * fileReadNotificationBytesStep < stream.Position )
+						if ( (notificationsCount + 1) * FileReadNotificationBytesStep < stream.Position )
 						{
-							bytesReadDelta = (int)(stream.Position - notificationsCount * fileReadNotificationBytesStep);
+							bytesReadDelta = (int)(stream.Position - notificationsCount * FileReadNotificationBytesStep);
 
 							ReadProgress.Raise( this, new FileReadEventArgs { BytesReadSincePreviousCall = bytesReadDelta } );
 							notificationsCount++;
@@ -149,16 +151,16 @@ namespace LogAnalyzer
 						lineIndex++;
 						prevLine = line;
 
-						bool invalidEncoding = notParsedLinesCount > maxLinesReadWhenThrowInvalidEncodingException && logEntries.Count == 0
+						bool invalidEncoding = notParsedLinesCount > MaxLinesReadWhenThrowInvalidEncodingException && logEntries.Count == 0
 							|| line.Length > MaxLineLength;
-						
+
 						if ( invalidEncoding )
 						{
 							throw new InvalidEncodingException( this );
 						}
 					}
 
-					bytesReadDelta = (int)(stream.Position - notificationsCount * fileReadNotificationBytesStep);
+					bytesReadDelta = (int)(stream.Position - notificationsCount * FileReadNotificationBytesStep);
 					ReadProgress.Raise( this, new FileReadEventArgs { BytesReadSincePreviousCall = bytesReadDelta } );
 
 					bool wasLineBreak = WasLineBreakAtTheEnd( prevLine );
@@ -203,6 +205,7 @@ namespace LogAnalyzer
 
 		private LogEntry lastCreatedEntry = null;
 
+		// todo brinchuk remove me
 		/// <summary>
 		/// 
 		/// </summary>

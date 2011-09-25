@@ -68,6 +68,7 @@
     <Compile Include="Environment\ConstIntervalTimeService.cs" />
     <Compile Include="Environment\CreateFileInfoContext.cs" />
     <Compile Include="Environment\DelayedLogRecordsSource.cs" />
+    <Compile Include="Environment\ILogFileReader.cs" />
     <Compile Include="Environment\IOperationsQueue.cs" />
     <Compile Include="Environment\ITimeService.cs" />
     <Compile Include="LogAnalyzerIOException.cs" />

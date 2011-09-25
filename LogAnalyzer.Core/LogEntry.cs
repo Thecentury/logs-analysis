@@ -53,11 +53,11 @@ namespace LogAnalyzer
 		/// <param name="time"></param>
 		/// <param name="firstLine"></param>
 		/// <param name="lineIndex">Номер строки в файле лога.</param>
+		/// <param name="parentLogFile"></param>
 		internal LogEntry( string type, int threadId, DateTime time, string firstLine, int lineIndex, LogFile parentLogFile )
 		{
 			if ( lineIndex < 0 )
 				throw new ArgumentOutOfRangeException( "lineIndex" );
-
 			if ( parentLogFile == null )
 				throw new ArgumentNullException( "parentLogFile" );
 
