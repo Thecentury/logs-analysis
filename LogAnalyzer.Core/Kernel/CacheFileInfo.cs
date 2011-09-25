@@ -27,7 +27,7 @@ namespace LogAnalyzer.Kernel
 			cacheFile.Refresh();
 		}
 
-		public ILogFileReader GetReader( LogFileReaderArguments args )
+		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
 			CacheStreamReader streamReader = new CacheStreamReader( cacheFile, remoteFile );
 			StreamLogFileReader reader = new StreamLogFileReader( args, streamReader );

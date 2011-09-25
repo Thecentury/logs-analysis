@@ -16,7 +16,7 @@ namespace ModuleLogsProvider.Logging.Most
 			throw new NotImplementedException();
 		}
 
-		public ILogFileReader GetReader( LogFileReaderArguments args )
+		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
 			throw new NotImplementedException();
 		}

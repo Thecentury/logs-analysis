@@ -68,7 +68,7 @@
     <Compile Include="Kernel\ConstIntervalTimeService.cs" />
     <Compile Include="Kernel\CreateFileInfoContext.cs" />
     <Compile Include="Kernel\DelayedLogRecordsSource.cs" />
-    <Compile Include="Kernel\ILogFileReader.cs" />
+    <Compile Include="Kernel\LogFileReaderBase.cs" />
     <Compile Include="Kernel\IStreamProvider.cs" />
     <Compile Include="Kernel\StreamLogFileReader.cs" />
     <Compile Include="Kernel\LogFileReaderArguments.cs" />

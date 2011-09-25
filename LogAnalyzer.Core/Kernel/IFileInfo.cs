@@ -6,7 +6,12 @@ namespace LogAnalyzer.Kernel
 	{
 		void Refresh();
 
-		ILogFileReader GetReader( LogFileReaderArguments args );
+		/// <summary>
+		/// Должен вызываться только один раз для заданного LogFile, и затем кешироваться!
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		LogFileReaderBase GetReader( LogFileReaderArguments args );
 
 		int Length { get; }
 		string Name { get; }
