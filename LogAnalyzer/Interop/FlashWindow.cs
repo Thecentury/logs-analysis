@@ -154,7 +154,7 @@ namespace LogAnalyzer.GUI
 		{
 			if ( hwnd == IntPtr.Zero )
 			{
-				App.Current.Dispatcher.Invoke( () =>
+				Application.Current.Dispatcher.Invoke( () =>
 				{
 					hwnd = new WindowInteropHelper( Application.Current.MainWindow ).Handle;
 				}, DispatcherPriority.Send );
