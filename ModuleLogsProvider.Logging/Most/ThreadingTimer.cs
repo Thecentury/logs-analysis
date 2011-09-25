@@ -9,9 +9,7 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class ThreadingTimer : ITimer
 	{
-		// ReSharper disable NotAccessedField.Local
 		private readonly Timer logsPollTimer;
-		// ReSharper restore NotAccessedField.Local
 
 		public ThreadingTimer( TimeSpan logsUpdateInterval )
 		{

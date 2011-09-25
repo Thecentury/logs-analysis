@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using LogAnalyzer;
 using System.IO;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Config
 {
-	public class LogAnalyzerConfiguration
+	public partial class LogAnalyzerConfiguration
 	{
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]

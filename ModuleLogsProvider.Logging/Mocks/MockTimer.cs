@@ -6,7 +6,7 @@ using LogAnalyzer.Extensions;
 
 namespace ModuleLogsProvider.Logging.Mocks
 {
-	internal sealed class MockTimer : ITimer
+	public sealed class MockTimer : ITimer
 	{
 		public void MakeRing()
 		{

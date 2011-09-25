@@ -1,7 +1,7 @@
-<LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer" 
-						  >
+<Config:LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer"
+                          xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer">
 
-	<LogAnalyzerConfiguration.Directories>
+	<Config:LogAnalyzerConfiguration.Directories>
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->
 		<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs2" EncodingName="windows-1251"/>
 
@@ -27,7 +27,7 @@
 
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\AWAD_AVIA_SEARCH\logs\"/>-->
 
-	</LogAnalyzerConfiguration.Directories>
+	</Config:LogAnalyzerConfiguration.Directories>
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<MessageTypeEquals Value="E"/>
@@ -56,16 +56,16 @@
 	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
 		<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
 	
-	<LogAnalyzerConfiguration.LoggerAcceptedTypes>
+	<Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
 		<MessageType>Debug</MessageType>
 		<MessageType>Error</MessageType>
 		<MessageType>Info</MessageType>
-	</LogAnalyzerConfiguration.LoggerAcceptedTypes>
+	</Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
 	
-	<LogAnalyzerConfiguration.LoggerWriters>
+	<Config:LogAnalyzerConfiguration.LoggerWriters>
 		<FileLogWriter FileName="1.log" ShouldCleanLogFile="True"/>
 		<DebugLogWriter/>
-	</LogAnalyzerConfiguration.LoggerWriters>
+	</Config:LogAnalyzerConfiguration.LoggerWriters>
 
 	<!--<LogAnalyzerConfiguration.AcceptedTypes>
 		<FileLogger FileName="1.log" ShouldCleanLogFile="False">
@@ -75,4 +75,4 @@
 		</FileLogger>
 	</LogAnalyzerConfiguration.Logger>-->
 
-</LogAnalyzerConfiguration>
+</Config:LogAnalyzerConfiguration>

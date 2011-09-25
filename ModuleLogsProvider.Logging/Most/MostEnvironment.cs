@@ -1,5 +1,6 @@
 ﻿using System;
 using LogAnalyzer;
+using LogAnalyzer.Config;
 using ModuleLogsProvider.Logging.Mocks;
 
 namespace ModuleLogsProvider.Logging.Most
@@ -7,7 +8,7 @@ namespace ModuleLogsProvider.Logging.Most
 	public sealed class MostEnvironment : IEnvironment
 	{
 		private readonly ITimeService timeService = new ConstIntervalTimeService( TimeSpan.FromDays( 1000 ) );
-		private readonly WorkerThreadOperationsQueue operationsQueue = null;
+		private readonly WorkerThreadOperationsQueue operationsQueue;
 		private readonly MostDirectoryInfo directory;
 
 		public MostEnvironment( LogAnalyzerConfiguration config )
@@ -17,10 +18,8 @@ namespace ModuleLogsProvider.Logging.Most
 
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 
-			ILogSourceServiceFactory serviceFactory = new MockLogSourceFactory();
-
-			// todo brinchuk move update interval to config
-			ThreadingTimer timer = new ThreadingTimer( TimeSpan.FromSeconds( 20 ) );
+			ILogSourceServiceFactory serviceFactory = config.Resolve<ILogSourceServiceFactory>();
+			ITimer timer = config.Resolve<ITimer>();
 
 			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory );
 			directory = new MostDirectoryInfo( notificationSource );
