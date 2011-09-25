@@ -7,11 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
-using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
-	public sealed class StreamLogFileReader : ILogFileReader
+	public sealed class StreamLogFileReader : LogFileReaderBase
 	{
 		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
@@ -44,6 +43,7 @@ namespace LogAnalyzer
 			logger = args.Logger;
 			parentLogFile = args.ParentLogFile;
 			encoding = args.Encoding;
+
 			this.streamFileInfo = streamFileInfo;
 		}
 
@@ -131,7 +131,7 @@ namespace LogAnalyzer
 			return addedText;
 		}
 
-		public IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )
+		public override IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )
 		{
 			string addedText = ReadAddedText();
 
@@ -154,7 +154,7 @@ namespace LogAnalyzer
 				bool emptyLine = String.IsNullOrEmpty( line );
 				if ( !emptyLine )
 				{
-					LogEntryAppendResult _ = this.AppendLine( line, lineIndex, lastAddedEntry, addedEntries );
+					LogEntryAppendResult _ = AppendLine( line, lineIndex, lastAddedEntry, addedEntries );
 				}
 
 				linesCount = (int)(lineIndex + 1);
@@ -163,6 +163,102 @@ namespace LogAnalyzer
 			}
 
 			return addedEntries;
+		}
+
+		/// <summary>
+		/// Максимальное число не распарсенных записей, после прочтения которых будет брошено исключение InvalidEncodingException.
+		/// </summary>
+		private const int MaxLinesReadWhenThrowInvalidEncodingException = 250;
+		private const int FileReadNotificationBytesStep = 512000;
+
+		/// <summary>
+		/// Максимальная длина одной считанной из файла строки.
+		/// <para/>Если длина строки больше, то считается, что выбрана неправильная кодировка, и бросаетмя исключение InvalidEncodingException.
+		/// </summary>
+		private const int MaxLineLength = 40000;
+
+		public override IList<LogEntry> ReadEntireFile()
+		{
+			List<LogEntry> logEntries = new List<LogEntry>();
+
+			using ( Stream stream = OpenStream( 0 ) )
+			{
+				int notificationsCount = 0;
+				long lineIndex = 0;
+
+				int length = (int)stream.Length;
+				if ( length == 0 )
+					return logEntries;
+
+				using ( StreamReader reader = OpenReader( stream ) )
+				{
+					string line;
+					string prevLine = String.Empty;
+					long prevLineBreakIndex = 0;
+					int notParsedLinesCount = 0;
+					int bytesReadDelta = 0;
+					while ( (line = reader.ReadLine()) != null )
+					{
+						LogEntryAppendResult lineAppendResult = AppendLine( line, lineIndex, logEntries.LastOrDefault(), logEntries );
+
+						if ( (notificationsCount + 1) * FileReadNotificationBytesStep < stream.Position )
+						{
+							bytesReadDelta = (int)(stream.Position - notificationsCount * FileReadNotificationBytesStep);
+
+							RaiseFileReadProgress( bytesReadDelta );
+							notificationsCount++;
+						}
+
+						if ( lineAppendResult == LogEntryAppendResult.NotParsed )
+						{
+							notParsedLinesCount++;
+						}
+						else
+						{
+							notParsedLinesCount = 0;
+						}
+
+						lineIndex++;
+						prevLine = line;
+
+						bool invalidEncoding = notParsedLinesCount > MaxLinesReadWhenThrowInvalidEncodingException && logEntries.Count == 0
+							|| line.Length > MaxLineLength;
+
+						if ( invalidEncoding )
+						{
+							throw new InvalidEncodingException( encoding, Name );
+						}
+					}
+
+					bytesReadDelta = (int)(stream.Position - notificationsCount * FileReadNotificationBytesStep);
+					RaiseFileReadProgress( bytesReadDelta );
+
+					bool wasLineBreak = WasLineBreakAtTheEnd( prevLine );
+					if ( wasLineBreak )
+					{
+						prevLineBreakIndex = length;
+					}
+					else
+					{
+						// если последняя считанная строка не заканчивается переносом строки,
+						// то считаем, что перенос строки был перед началом последней строки.
+						int byteCount = encoding.GetByteCount( prevLine );
+						prevLineBreakIndex = length - byteCount;
+					}
+
+					this.lastLineBreakByteIndex = prevLineBreakIndex;
+				}
+
+				linesCount = (int)lineIndex;
+
+				if ( lastLineBreakByteIndex == length )
+				{
+					linesCount++;
+					lastLineWasEmpty = true;
+				}
+			}
+
+			return logEntries;
 		}
 
 		private bool TryExtractLogEntryData( string line, out string type, out int tid, out DateTime time, out string text )

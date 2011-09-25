@@ -41,7 +41,7 @@ namespace LogAnalyzer.Tests
 			// do nothing
 		}
 
-		ILogFileReader IFileInfo.GetReader( LogFileReaderArguments args )
+		LogFileReaderBase IFileInfo.GetReader( LogFileReaderArguments args )
 		{
 			MockStreamProvider streamProvider = new MockStreamProvider( bytes, sync );
 			StreamLogFileReader reader = new StreamLogFileReader( args, streamProvider );

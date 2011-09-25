@@ -7,10 +7,11 @@ namespace LogAnalyzer.Kernel
 	internal sealed class FileSystemFileInfo : IFileInfo
 	{
 		private readonly FileInfo fileInfo;
+		private LogFileReaderBase reader;
 
 		public FileSystemFileInfo( string path )
 		{
-			this.fileInfo = new FileInfo( path );
+			fileInfo = new FileInfo( path );
 		}
 
 		public void Refresh()
@@ -18,10 +19,15 @@ namespace LogAnalyzer.Kernel
 			fileInfo.Refresh();
 		}
 
-		public ILogFileReader GetReader( LogFileReaderArguments args )
+		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			FileSystemStreamReader streamReader = new FileSystemStreamReader( fileInfo );
-			StreamLogFileReader reader = new StreamLogFileReader( args, streamReader );
+			// todo brinchuk многопоточность?!?!?! Тут может быть доступ из разных потоков?
+			if ( reader == null )
+			{
+				FileSystemStreamReader streamReader = new FileSystemStreamReader( fileInfo );
+				reader = new StreamLogFileReader( args, streamReader );
+			}
+
 			return reader;
 		}
 

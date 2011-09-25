@@ -18,14 +18,14 @@ namespace LogAnalyzer
 	[Serializable]
 	public class InvalidEncodingException : LogAnalyzerException
 	{
-		public InvalidEncodingException( LogFile logFile )
+		private readonly string fileName;
+		private readonly Encoding encoding;
+
+		public InvalidEncodingException( Encoding encoding, string fileName )
 			: base( "Выбрана неверная кодировка для чтения файла лога." )
 		{
-			if ( logFile == null )
-				throw new ArgumentNullException( "logFile" );
-
-			this.LogFile = logFile;
-			this.Encoding = logFile.Encoding;
+			this.encoding = encoding;
+			this.fileName = fileName;
 		}
 
 		protected InvalidEncodingException( SerializationInfo info, StreamingContext context ) : base( info, context ) { }
@@ -34,11 +34,18 @@ namespace LogAnalyzer
 		{
 			get
 			{
-				return String.Format( "Ошибка при начальной загрузке файла \"{0}\": неверная кодировка (\"{1}\")", LogFile.FullPath, Encoding.WebName );
+				return String.Format( "Ошибка при начальной загрузке файла \"{0}\": неверная кодировка (\"{1}\")", fileName, encoding.WebName );
 			}
 		}
 
-		public LogFile LogFile { get; private set; }
-		public Encoding Encoding { get; private set; }
+		public string FileName
+		{
+			get { return fileName; }
+		}
+
+		public Encoding Encoding
+		{
+			get { return encoding; }
+		}
 	}
 }
