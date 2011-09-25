@@ -24,4 +24,9 @@ namespace LogAnalyzer
 		/// </summary>
 		DateTime LoggingDate { get; }
 	}
+
+	public interface IStreamFileInfo
+	{
+		Stream OpenStream( int startPosition );
+	}
 }
