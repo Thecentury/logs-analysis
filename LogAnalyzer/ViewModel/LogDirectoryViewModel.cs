@@ -139,7 +139,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		{
 			get
 			{
-				return "/Resources/folder.png";
+				return MakePackUri( "/Resources/folder.png" );
 			}
 		}
 

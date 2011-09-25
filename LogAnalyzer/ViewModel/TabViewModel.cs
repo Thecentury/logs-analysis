@@ -5,6 +5,7 @@ using System.Text;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
+using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModel
 {
@@ -34,6 +35,11 @@ namespace LogAnalyzer.GUI.ViewModel
 		public virtual string IconFile
 		{
 			get { return null; }
+		}
+
+		protected string MakePackUri( string uri )
+		{
+			return PackUriHelper.MakePackUri( uri );
 		}
 
 		public bool CanBeClosed

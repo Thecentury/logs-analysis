@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using LogAnalyzer.Filters;
 
 namespace LogAnalyzer.Kernel
 {
@@ -7,5 +8,6 @@ namespace LogAnalyzer.Kernel
 		public Logger Logger { get; set; }
 		public Encoding Encoding { get; set; }
 		public LogFile ParentLogFile { get; set; }
+		public IFilter<LogEntry> GlobalEntriesFilter { get; set; }
 	}
 }
