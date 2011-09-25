@@ -10,8 +10,6 @@ namespace LogsService
 {
 	public class MostLogSourceService : ILogSourceService
 	{
-		#region ILogSourceService Members
-
 		public void ClearMessagesList()
 		{
 			throw new NotImplementedException();
@@ -36,7 +34,5 @@ namespace LogsService
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
 using LogAnalyzer.Caching;
-using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	[DebuggerDisplay( "Dir {Path}" )]
 	internal sealed class FileSystemDirectoryInfo : IDirectoryInfo
 	{
 		private readonly LogDirectoryConfigurationInfo directoryConfig;
 		private readonly CacheManager cacheManager;
-		private readonly string path = null;
+		private readonly string path;
 		public string Path
 		{
 			get { return path; }
@@ -22,7 +20,7 @@ namespace LogAnalyzer
 
 		private readonly bool useCache;
 
-		private readonly LogNotificationsSourceBase notificationSource = null;
+		private readonly LogNotificationsSourceBase notificationSource;
 
 		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{

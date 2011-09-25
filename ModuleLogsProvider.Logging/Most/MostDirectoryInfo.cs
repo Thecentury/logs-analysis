@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
 
-namespace ModuleLogsProvider.Logging
+namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostDirectoryInfo : IDirectoryInfo
 	{

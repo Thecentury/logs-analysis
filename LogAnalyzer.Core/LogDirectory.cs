@@ -20,7 +20,7 @@ namespace LogAnalyzer
 	{
 		private readonly IList<LogFile> files = CollectionHelper.CreateList<LogFile>();
 
-		private readonly ThinListWrapper<LogFile> filesWrapper = null;
+		private readonly ThinListWrapper<LogFile> filesWrapper;
 		public ThinListWrapper<LogFile> Files
 		{
 			get { return filesWrapper; }
@@ -31,14 +31,14 @@ namespace LogAnalyzer
 			get { return files.Count; }
 		}
 
-		private readonly LogNotificationsSourceBase operationsSource = null;
-		private readonly IEnvironment environment = null;
-		private readonly IDirectoryInfo directoryInfo = null;
-		private readonly IOperationsQueue operationsQueue = null;
-		private readonly LogAnalyzerConfiguration config = null;
-		private readonly Core core = null;
+		private readonly LogNotificationsSourceBase operationsSource;
+		private readonly IEnvironment environment;
+		private readonly IDirectoryInfo directoryInfo;
+		private readonly IOperationsQueue operationsQueue;
+		private readonly LogAnalyzerConfiguration config;
+		private readonly Core core;
 		private readonly ExpressionFilter<IFileInfo> fileFilter = new ExpressionFilter<IFileInfo>();
-		private readonly IFilter<LogEntry> globalEntriesFilter = null;
+		private readonly IFilter<LogEntry> globalEntriesFilter;
 		private readonly Encoding encoding = Encoding.Unicode;
 
 		public IFilter<LogEntry> GlobalEntriesFilter
