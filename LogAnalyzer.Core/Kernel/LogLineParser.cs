@@ -14,11 +14,11 @@ namespace LogAnalyzer.Kernel
 		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		public bool TryExtractLogEntryData( string line, out string type, out int tid, out DateTime time, out string text )
+		public bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )
 		{
-			// init
+			// инициализация некорректными данными
 			type = null;
-			tid = -1;
+			threadId = -1;
 			time = DateTime.MinValue;
 			text = null;
 
@@ -34,8 +34,8 @@ namespace LogAnalyzer.Kernel
 				}
 
 				string tidStr = match.Groups["TID"].Value;
-				tid = 0;
-				if ( !Int32.TryParse( tidStr, out tid ) )
+				threadId = 0;
+				if ( !Int32.TryParse( tidStr, out threadId ) )
 				{
 					// todo ошибка!!!
 					throw new InvalidOperationException();

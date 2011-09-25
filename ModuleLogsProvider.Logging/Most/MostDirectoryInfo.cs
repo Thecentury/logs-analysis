@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -24,6 +26,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
+
 			throw new NotImplementedException();
 		}
 

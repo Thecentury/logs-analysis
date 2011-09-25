@@ -53,6 +53,7 @@
     <Compile Include="Mocks\MockTimer.cs" />
     <Compile Include="Most\MostFileInfo.cs" />
     <Compile Include="Most\MostLogFileReader.cs" />
+    <Compile Include="Most\MostLogMessagesStorage.cs" />
     <Compile Include="Most\MostServerLogSourceFactory.cs" />
     <Compile Include="Most\MostDirectoryInfo.cs" />
     <Compile Include="Most\MostEnvironment.cs" />

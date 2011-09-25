@@ -15,8 +15,8 @@ namespace LogAnalyzer
 	public sealed class LogEntry : INotifyPropertyChanged, IFreezable
 	{
 		// todo probably read from config
-		private static readonly string exceptionRegexText = @"^\s*at (?<Function>.*) in (?<File>.*):line (?<LineNumber>\d+)$";
-		private static Regex exceptionRegex = null;
+		private const string ExceptionRegexText = @"^\s*at (?<Function>.*) in (?<File>.*):line (?<LineNumber>\d+)$";
+		private static readonly Regex exceptionRegex = new Regex( ExceptionRegexText, RegexOptions.Compiled );
 
 		public string Type { get; private set; }
 		public int ThreadId { get; private set; }
@@ -54,7 +54,7 @@ namespace LogAnalyzer
 		/// <param name="firstLine"></param>
 		/// <param name="lineIndex">Номер строки в файле лога.</param>
 		/// <param name="parentLogFile"></param>
-		internal LogEntry( string type, int threadId, DateTime time, string firstLine, int lineIndex, LogFile parentLogFile )
+		public LogEntry( string type, int threadId, DateTime time, string firstLine, int lineIndex, LogFile parentLogFile )
 		{
 			if ( lineIndex < 0 )
 				throw new ArgumentOutOfRangeException( "lineIndex" );
@@ -83,7 +83,7 @@ namespace LogAnalyzer
 			if ( threadId < 0 )
 				throw new ArgumentOutOfRangeException( "threadId" );
 			if ( textLine == null )
-				throw new ArgumentNullException( "text" );
+				throw new ArgumentNullException( "textLine" );
 			if ( isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
@@ -104,7 +104,7 @@ namespace LogAnalyzer
 		public void ReplaceLastLine( string newLine, long newLineIndex )
 		{
 			if ( newLine == null )
-				throw new ArgumentNullException( "line" );
+				throw new ArgumentNullException( "newLine" );
 
 			if ( textLines.Count == 0 )
 				throw new InvalidOperationException();
@@ -124,7 +124,7 @@ namespace LogAnalyzer
 		public void AppendLine( string newLine )
 		{
 			if ( newLine == null )
-				throw new ArgumentNullException( "line" );
+				throw new ArgumentNullException( "newLine" );
 
 			// первая строка должна извлекаться из заголовка LogEntry
 			if ( textLines.Count == 0 )
@@ -143,12 +143,6 @@ namespace LogAnalyzer
 			if ( line == null )
 				throw new ArgumentNullException( "line" );
 
-			// todo propably, make this thread-safe
-			if ( exceptionRegex == null )
-			{
-				exceptionRegex = new Regex( exceptionRegexText, RegexOptions.Compiled );
-			}
-
 			Match match = exceptionRegex.Match( line );
 			if ( match.Success )
 			{
@@ -156,7 +150,7 @@ namespace LogAnalyzer
 				string fileName = match.Groups["File"].Value;
 				string excLineNumberText = match.Groups["LineNumber"].Value;
 
-				int excLineNumber = -1;
+				int excLineNumber = 0;
 				if ( Int32.TryParse( excLineNumberText, out excLineNumber ) )
 				{
 					FileLineInfo result = new FileLineInfo
