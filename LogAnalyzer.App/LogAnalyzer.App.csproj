@@ -98,9 +98,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ModuleLogsProvider.Types\ModuleLogsProvider.Types.csproj">
+    <ProjectReference Include="..\..\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj">
       <Project>{E6F957AA-0184-4291-8D50-B3ABEE965EF8}</Project>
-      <Name>ModuleLogsProvider.Types</Name>
+      <Name>ModuleLogsProvider.ServerTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>

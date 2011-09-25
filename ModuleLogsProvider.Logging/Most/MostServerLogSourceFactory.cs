@@ -11,18 +11,6 @@ namespace ModuleLogsProvider.Logging
 	/// </summary>
 	public sealed class MostServerLogSourceFactory : ILogSourceServiceFactory
 	{
-		//public IOptionalDisposable<ILogSourceService> CreateObject()
-		//{
-		//    return new OptionalDisposable<ILogSourceService>( new LogSourceServiceClient() );
-		//}
-		#region IFactory<IOptionalDisposable<ILogSourceService>> Members
-
-		//public IOptionalDisposable<ILogSourceService> CreateObject()
-		//{
-		//    return new OptionalDisposable<ILogSourceService>( new LogSourceServiceClient() );
-		//}
-
-		#endregion
 		#region IFactory<IOptionalDisposable<ILogSourceService>> Members
 
 		public IOptionalDisposable<ILogSourceService> CreateObject()

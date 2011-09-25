@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Awad.Eticket.ModuleLogsProvider.Types;
-using Awad.Eticket.ModuleLogsProvider.Types.Auxilliary;
+﻿using Awad.Eticket.ModuleLogsProvider.Types.Auxilliary;
 using ILogSourceService = ModuleLogsProvider.Logging.MostLogsServices.ILogSourceService;
 
-namespace ModuleLogsProvider.Logging
+namespace ModuleLogsProvider.Logging.Mocks
 {
 	public sealed class MockLogSourceFactory : ILogSourceServiceFactory
 	{

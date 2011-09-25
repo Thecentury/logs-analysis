@@ -8,17 +8,15 @@ namespace ModuleLogsProvider.Logging
 {
 	public sealed class MostDirectoryInfo : IDirectoryInfo
 	{
-		private readonly LogNotificationsSourceBase notificationSource;
+		private readonly MostNotificationSource notificationSource;
 
-		public MostDirectoryInfo( LogNotificationsSourceBase notificationSource )
+		public MostDirectoryInfo( MostNotificationSource notificationSource )
 		{
 			if ( notificationSource == null )
 				throw new ArgumentNullException( "notificationSource" );
 
 			this.notificationSource = notificationSource;
 		}
-
-		#region IDirectoryInfo Members
 
 		public LogNotificationsSourceBase NotificationSource
 		{
@@ -34,7 +32,5 @@ namespace ModuleLogsProvider.Logging
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }

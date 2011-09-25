@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer;
+using ModuleLogsProvider.Logging.Mocks;
 
 namespace ModuleLogsProvider.Logging
 {
@@ -10,6 +11,7 @@ namespace ModuleLogsProvider.Logging
 	{
 		private readonly ITimeService timeService = new ConstIntervalTimeService( TimeSpan.FromDays( 1000 ) );
 		private readonly WorkerThreadOperationsQueue operationsQueue = null;
+		private readonly MostDirectoryInfo directory;
 
 		public MostEnvironment( LogAnalyzerConfiguration config )
 		{
@@ -17,13 +19,17 @@ namespace ModuleLogsProvider.Logging
 				throw new ArgumentNullException( "config" );
 
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
-		}
 
-		#region IEnvironment Members
+			ILogSourceServiceFactory serviceFactory = new MockLogSourceFactory();
+
+			// todo brinchuk move update interval to config
+			MostNotificationSource notificationSource = new MostNotificationSource( TimeSpan.FromSeconds( 20 ), serviceFactory );
+			directory = new MostDirectoryInfo( notificationSource );
+		}
 
 		public IDirectoryInfo GetDirectory( string path )
 		{
-			throw new NotImplementedException();
+			return directory;
 		}
 
 		public IOperationsQueue OperationsQueue
@@ -35,7 +41,5 @@ namespace ModuleLogsProvider.Logging
 		{
 			get { return timeService; }
 		}
-
-		#endregion
 	}
 }

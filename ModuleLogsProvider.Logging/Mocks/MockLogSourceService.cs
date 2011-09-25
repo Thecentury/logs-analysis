@@ -3,7 +3,7 @@ using System.Linq;
 using Awad.Eticket.ModuleLogsProvider.Types;
 using ILogSourceService = ModuleLogsProvider.Logging.MostLogsServices.ILogSourceService;
 
-namespace ModuleLogsProvider.Logging
+namespace ModuleLogsProvider.Logging.Mocks
 {
 	public sealed class MockLogsSourceService : ILogSourceService
 	{
