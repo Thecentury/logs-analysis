@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -43,7 +43,7 @@ namespace ModuleLogsProvider.Logging.Most
 				int startingIndex = LoadedMessages.Count;
 
 				// todo brinchuk try-catch?
-				LogMessageInfo[] newMessages = client.GetLinesStartingWithIndex( startingIndex );
+				var newMessages = client.GetMessages( startingIndex );
 				NotifyOnNewMessages( newMessages );
 
 				LoadedMessages.AddRange( newMessages );

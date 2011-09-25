@@ -17,7 +17,7 @@ using LogAnalyzer.Filters;
 
 namespace LogAnalyzer
 {
-	public sealed class Core : LogEntriesList
+	public sealed class LogAnalyzerCore : LogEntriesList
 	{
 		private readonly IEnvironment environment = null;
 		private readonly LogAnalyzerConfiguration config = null;
@@ -61,7 +61,7 @@ namespace LogAnalyzer
 
 		private int directoriesLoadedCount = 0;
 
-		public Core( LogAnalyzerConfiguration config, IEnvironment environment )
+		public LogAnalyzerCore( LogAnalyzerConfiguration config, IEnvironment environment )
 			: base( environment, config.Logger )
 		{
 			if ( config == null )

@@ -8,10 +8,10 @@
   <xs:element name="ArrayOfLogMessageInfo" nillable="true" type="tns:ArrayOfLogMessageInfo" />
   <xs:complexType name="LogMessageInfo">
     <xs:sequence>
-      <xs:element name="_x003C_IndexInAllMessagesList_x003E_k__BackingField" type="xs:int" />
-      <xs:element name="_x003C_LoggerName_x003E_k__BackingField" nillable="true" type="xs:string" />
-      <xs:element name="_x003C_MessageType_x003E_k__BackingField" nillable="true" type="xs:string" />
-      <xs:element name="_x003C_Message_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IndexInAllMessagesList" type="xs:int" />
+      <xs:element minOccurs="0" name="LoggerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MessageType" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LogMessageInfo" nillable="true" type="tns:LogMessageInfo" />

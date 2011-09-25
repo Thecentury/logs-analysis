@@ -18,7 +18,7 @@ namespace LogAnalyzer.Tests
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			var env = new MockEnvironment( config, operationsQueue );
 
-			Core core = new Core( config, env );
+			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
 		}
 
 		[ExpectedException( typeof( ArgumentException ) )]
@@ -33,7 +33,7 @@ namespace LogAnalyzer.Tests
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			var env = new MockEnvironment( config, operationsQueue );
 
-			Core core = new Core( config, env );
+			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
 		}
 	}
 }

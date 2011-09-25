@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="ec407421-a687-4672-b924-61c9f976c50f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="af292781-2b74-4614-b736-4bf27453709f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,10 +21,10 @@
     <MetadataSource Address="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="700b518b-bda1-474f-bcb2-aec0a9eb1732" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="c7fc1a2d-3360-42b2-af2b-41575177edf9" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="ae8b3931-2fb6-4896-bf5a-340d85a64625" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
-    <MetadataFile FileName="Awad.Eticket.ModuleLogsProvider.Types.xsd" MetadataType="Schema" ID="37fc3b7c-f3fd-409b-9589-9d7e66810ec8" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="9cda2b58-b3a5-4f78-bcde-82ecd5c5b9be" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="5f6e4529-6e8a-405c-a978-52ea94bbed7a" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="661d91de-50e5-4a08-a0c6-5760f5b6115d" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="Awad.Eticket.ModuleLogsProvider.Types.xsd" MetadataType="Schema" ID="873f380b-19af-4969-872c-956fe88bdab8" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

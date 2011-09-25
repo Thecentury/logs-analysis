@@ -34,7 +34,7 @@ namespace LogAnalyzer.GUI.ViewModel
 
 			this.applicationViewModel = applicationViewModel;
 
-			Core core = applicationViewModel.Core;
+			LogAnalyzerCore core = applicationViewModel.Core;
 			core.ReadProgress += OnCore_ReadProgress;
 
 			IsActive = true;

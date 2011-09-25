@@ -26,8 +26,8 @@ namespace LogAnalyzer.GUI.ViewModel
 
 	public sealed class ApplicationViewModel : BindingObject
 	{
-		private readonly Core core = null;
-		public Core Core
+		private readonly LogAnalyzerCore core = null;
+		public LogAnalyzerCore Core
 		{
 			get { return core; }
 		}
@@ -46,7 +46,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			config.Logger.WriteInfo( "Starting..." );
 
 			FileSystemEnvironment environment = new FileSystemEnvironment( config );
-			core = new Core( config, environment );
+			core = new LogAnalyzerCore( config, environment );
 
 			core.Loaded += OnCore_Loaded;
 

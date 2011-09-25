@@ -13,9 +13,9 @@ using System.Threading;
 
 namespace LogAnalyzer.GUI.ViewModel
 {
-	public sealed class CoreViewModel : LogEntriesListViewModel, IHierarchyMember<ApplicationViewModel, Core>
+	public sealed class CoreViewModel : LogEntriesListViewModel, IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>
 	{
-		private readonly Core core = null;
+		private readonly LogAnalyzerCore core = null;
 
 		private readonly List<LogDirectoryViewModel> directories = null;
 
@@ -24,7 +24,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			get { return directories; }
 		}
 
-		public CoreViewModel( Core core, ApplicationViewModel applicationViewModel )
+		public CoreViewModel( LogAnalyzerCore core, ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
 			if ( core == null )
@@ -80,12 +80,12 @@ namespace LogAnalyzer.GUI.ViewModel
 			return false;
 		}
 
-		ApplicationViewModel IHierarchyMember<ApplicationViewModel, Core>.Parent
+		ApplicationViewModel IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>.Parent
 		{
 			get { return ApplicationViewModel; }
 		}
 
-		Core IHierarchyMember<ApplicationViewModel, Core>.Data
+		LogAnalyzerCore IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>.Data
 		{
 			get { return core; }
 		}
