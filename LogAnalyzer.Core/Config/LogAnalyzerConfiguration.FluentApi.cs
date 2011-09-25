@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LogAnalyzer.Config;
 
 namespace LogAnalyzer
 {
 	public class LogAnalyzerConfigurationFluentApi
 	{
-		private readonly LogAnalyzerConfiguration config = null;
+		private readonly LogAnalyzerConfiguration config;
 
 		public LogAnalyzerConfiguration BuildConfig()
 		{
@@ -53,6 +54,20 @@ namespace LogAnalyzer
 			config.LoggerAcceptedTypes.Add( MessageType.Error );
 			config.LoggerAcceptedTypes.Add( MessageType.Info );
 			config.LoggerAcceptedTypes.Add( MessageType.Verbose );
+
+			return this;
+		}
+
+		public LogAnalyzerConfigurationFluentApi Register<TContract>( Func<object> createFunc )
+		{
+			config.Register<TContract>( createFunc );
+
+			return this;
+		}
+
+		public LogAnalyzerConfigurationFluentApi RegisterInstance<TContract>( TContract instance )
+		{
+			config.RegisterInstance<TContract>( instance );
 
 			return this;
 		}

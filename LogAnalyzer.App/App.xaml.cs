@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModel;

@@ -1,68 +1,66 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="2B2192E9-C25A-4B12-96E8-38526B549D1C/d:Interop/f:FlashWindow.cs" caret="4459" fromTop="20" />
-      <File id="2B2192E9-C25A-4B12-96E8-38526B549D1C/d:View/f:LogEntriesListView.xaml" caret="7908" fromTop="31" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IFactory.cs" caret="0" fromTop="0" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IOptionalDisposable.cs" caret="68" fromTop="2" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:OptionalDisposable.cs" caret="87" fromTop="4" />
-      <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:app.config" caret="373" fromTop="9" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/d:Auxilliary/f:IOptionalDisposablesFactory.cs" caret="163" fromTop="6" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:ILogSourceServiceFactory.cs" caret="332" fromTop="9" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceFactory.cs" caret="191" fromTop="3" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceService.cs" caret="235" fromTop="5" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemEnvironment.cs" caret="1022" fromTop="28" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:LogMessageInfo.cs" caret="250" fromTop="10" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="572" fromTop="2" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:TotalOperationsCountHelper.cs" caret="114" fromTop="5" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Helpers/f:AssertExtensions.cs" caret="170" fromTop="6" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogEntry.cs" caret="1596" fromTop="20" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostFileInfo.cs" caret="172" fromTop="8" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Extensions/f:EventExtensions.cs" caret="1414" fromTop="8" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="739" fromTop="27" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockDirectoryInfo.cs" caret="375" fromTop="13" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="977" fromTop="23" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:CacheFileInfo.cs" caret="941" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="2668" fromTop="9" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="672" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="476" fromTop="25" />
-      <File id="FB338E53-99EE-4568-9B3D-CC85004E58F2/d:Mock/f:MockLogRecordsSource.cs" caret="239" fromTop="9" />
-      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="504" fromTop="25" />
-      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostServerLogSourceFactory.cs" caret="402" fromTop="13" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="789" fromTop="19" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="215" fromTop="9" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogFileReaderBase.cs" caret="139" fromTop="6" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogDirectory.cs" caret="4231" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:IFileInfo.cs" caret="798" fromTop="25" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:FileSystemDirectoryInfo.cs" caret="2188" fromTop="39" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:FileSystemEnvironment.cs" caret="0" fromTop="0" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Auxilliary/f:IOptionalDisposable.cs" caret="64" fromTop="2" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Auxilliary/f:OptionalDisposable.cs" caret="201" fromTop="9" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Auxilliary/f:IOptionalDisposablesFactory.cs" caret="0" fromTop="0" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockLogSourceFactory.cs" caret="376" fromTop="12" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:ILogSourceServiceFactory.cs" caret="136" fromTop="3" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostServerLogSourceFactory.cs" caret="46" fromTop="1" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Auxilliary/f:IFactory.cs" caret="0" fromTop="0" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:app.config" caret="0" fromTop="0" />
+      <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:app.config" caret="395" fromTop="11" />
+      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="466" fromTop="22" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogNotificationsSourceBase.cs" caret="220" fromTop="10" />
+      <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:MostLogSourceService.cs" caret="413" fromTop="17" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="10003" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogLineParser.cs" caret="521" fromTop="14" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:FileSystemFileInfo.cs" caret="692" fromTop="27" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostDirectoryInfo.cs" caret="499" fromTop="16" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostFileInfo.cs" caret="636" fromTop="16" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="925" fromTop="21" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:ITimer.cs" caret="209" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockTimer.cs" caret="235" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:ThreadingTimer.cs" caret="283" fromTop="11" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="349" fromTop="1" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostLogFileReader.cs" caret="494" fromTop="18" />
     </RecentFiles>
     <RecentEdits>
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="6148" fromTop="23" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="322" fromTop="12" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="9935" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="220" fromTop="9" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:CacheFileInfo.cs" caret="203" fromTop="9" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8289" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8745" fromTop="23" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="8990" fromTop="28" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="5155" fromTop="23" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="6512" fromTop="19" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="9237" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="10381" fromTop="26" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="4346" fromTop="12" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="641" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="3263" fromTop="24" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="3409" fromTop="20" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="5891" fromTop="19" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2305" fromTop="33" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogFile.cs" caret="2705" fromTop="12" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="2008" fromTop="19" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1888" fromTop="38" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1072" fromTop="15" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:ILogFileReader.cs" caret="1627" fromTop="32" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IFileInfo.cs" caret="188" fromTop="11" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="2322" fromTop="39" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="1917" fromTop="12" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="1883" fromTop="14" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemFileInfo.cs" caret="505" fromTop="25" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="289" fromTop="11" />
-      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogFileReaderArguments.cs" caret="173" fromTop="7" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="351" fromTop="11" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="86" fromTop="3" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="1813" fromTop="36" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:FileSystemFileInfo.cs" caret="501" fromTop="23" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="336" fromTop="14" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="569" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogLineParser.cs" caret="1627" fromTop="39" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogLineParser.cs" caret="562" fromTop="15" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogLineParser.cs" caret="1582" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:LogLineParser.cs" caret="233" fromTop="11" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="7809" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="0" fromTop="0" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="816" fromTop="25" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="8689" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Kernel/f:StreamLogFileReader.cs" caret="10003" fromTop="20" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="1790" fromTop="31" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="1499" fromTop="23" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:ThreadingTimer.cs" caret="288" fromTop="14" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="668" fromTop="13" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="441" fromTop="7" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="827" fromTop="15" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="816" fromTop="15" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="1025" fromTop="29" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostNotificationSource.cs" caret="925" fromTop="21" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="831" fromTop="21" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:ITimer.cs" caret="209" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Mocks/f:MockTimer.cs" caret="235" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:ThreadingTimer.cs" caret="622" fromTop="19" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:ThreadingTimer.cs" caret="285" fromTop="12" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Most/f:MostEnvironment.cs" caret="349" fromTop="7" />
     </RecentEdits>
   </RecentFiles>
   <CompletionStatisticsManager>
@@ -98,6 +96,7 @@
     <string />
     <integer />
     <boolean>
+      <setting name="livetemplates.csharp.usevar">True</setting>
       <setting name="SolutionAnalysisEnabled">False</setting>
     </boolean>
   </SettingsComponent>

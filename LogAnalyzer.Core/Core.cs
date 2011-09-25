@@ -9,6 +9,7 @@ using System.Security.AccessControl;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
