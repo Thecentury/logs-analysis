@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModuleLogsProvider.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -85,6 +84,9 @@
     <None Include="Service References\MostLogsServices\Awad.Eticket.ModuleLogsProvider.Types.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\MostLogsServices\ModuleLogsProvider.Logging.MostLogsServices.LogMessageInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\MostLogsServices\service.wsdl" />
     <None Include="Service References\MostLogsServices\service.xsd">
       <SubType>Designer</SubType>
@@ -108,7 +110,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,10 +8,10 @@ namespace LogAnalyzer.Tests
 {
 	public sealed class TotalOperationsCountHelper
 	{
-		private readonly Core core = null;
+		private readonly LogAnalyzerCore core = null;
 		private int operationsCount = 0;
 
-		public TotalOperationsCountHelper( Core core )
+		public TotalOperationsCountHelper( LogAnalyzerCore core )
 		{
 			if ( core == null )
 				throw new ArgumentNullException( "core" );

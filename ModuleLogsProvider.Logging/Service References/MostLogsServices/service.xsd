@@ -43,17 +43,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetLinesStartingWithIndex">
+  <xs:element name="GetMessages">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="index" type="xs:int" />
+        <xs:element minOccurs="0" name="startingIndex" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetLinesStartingWithIndexResponse">
+  <xs:element name="GetMessagesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Awad.Eticket.ModuleLogsProvider.Types" minOccurs="0" name="GetLinesStartingWithIndexResult" nillable="true" type="q1:ArrayOfLogMessageInfo" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Awad.Eticket.ModuleLogsProvider.Types" minOccurs="0" name="GetMessagesResult" nillable="true" type="q1:ArrayOfLogMessageInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

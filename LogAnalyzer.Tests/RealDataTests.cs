@@ -28,7 +28,7 @@ namespace LogAnalyzer.Tests
 
 			FileSystemEnvironment env = new FileSystemEnvironment( config );
 
-			Core core = new Core( config, env );
+			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
 			core.Start();
 			core.WaitForLoaded();
 

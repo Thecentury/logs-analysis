@@ -248,7 +248,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_ILogSourceService_GetLinesStartingWithIndex_Input_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_ILogSourceService_GetMessages_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -267,7 +267,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_ILogSourceService_GetLinesStartingWithIndex_output_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_ILogSourceService_GetMessages_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -317,11 +317,11 @@
   <wsdl:message name="ILogSourceService_GetIsListening_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetIsListeningResponse" />
   </wsdl:message>
-  <wsdl:message name="ILogSourceService_GetLinesStartingWithIndex_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetLinesStartingWithIndex" />
+  <wsdl:message name="ILogSourceService_GetMessages_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMessages" />
   </wsdl:message>
-  <wsdl:message name="ILogSourceService_GetLinesStartingWithIndex_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetLinesStartingWithIndexResponse" />
+  <wsdl:message name="ILogSourceService_GetMessages_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMessagesResponse" />
   </wsdl:message>
   <wsdl:portType name="ILogSourceService">
     <wsdl:operation name="ClearMessagesList">
@@ -340,9 +340,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILogSourceService/GetIsListening" message="tns:ILogSourceService_GetIsListening_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILogSourceService/GetIsListeningResponse" message="tns:ILogSourceService_GetIsListening_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetLinesStartingWithIndex">
-      <wsdl:input wsaw:Action="http://tempuri.org/ILogSourceService/GetLinesStartingWithIndex" message="tns:ILogSourceService_GetLinesStartingWithIndex_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ILogSourceService/GetLinesStartingWithIndexResponse" message="tns:ILogSourceService_GetLinesStartingWithIndex_OutputMessage" />
+    <wsdl:operation name="GetMessages">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILogSourceService/GetMessages" message="tns:ILogSourceService_GetMessages_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILogSourceService/GetMessagesResponse" message="tns:ILogSourceService_GetMessages_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_ILogSourceService" type="tns:ILogSourceService">
@@ -392,14 +392,14 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLinesStartingWithIndex">
-      <soap12:operation soapAction="http://tempuri.org/ILogSourceService/GetLinesStartingWithIndex" style="document" />
+    <wsdl:operation name="GetMessages">
+      <soap12:operation soapAction="http://tempuri.org/ILogSourceService/GetMessages" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSHttpBinding_ILogSourceService_GetLinesStartingWithIndex_Input_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_ILogSourceService_GetMessages_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSHttpBinding_ILogSourceService_GetLinesStartingWithIndex_output_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_ILogSourceService_GetMessages_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

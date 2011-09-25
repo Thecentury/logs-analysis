@@ -14,7 +14,7 @@ namespace LogAnalyzer.Tests
 		protected MockFileInfo file1;
 		protected MockFileInfo file2;
 		protected MockFileInfo file3;
-		protected Core core;
+		protected LogAnalyzerCore core;
 		protected DeterminedTimeLogHelper logger1;
 		protected DeterminedTimeLogHelper logger2;
 		protected DeterminedTimeLogHelper logger3;
@@ -41,7 +41,7 @@ namespace LogAnalyzer.Tests
 			logger2 = new DeterminedTimeLogHelper( file2 );
 			logger3 = new DeterminedTimeLogHelper( file3 );
 
-			core = new Core( config, env );
+			core = new LogAnalyzerCore( config, env );
 			core.Start();
 			core.WaitForLoaded();
 

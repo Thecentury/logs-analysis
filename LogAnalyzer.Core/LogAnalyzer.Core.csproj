@@ -62,7 +62,7 @@
     <Compile Include="Collections\ParallelSort.cs" />
     <Compile Include="Collections\SingleThreadWriteCollection.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfoFluentApi.cs" />
-    <Compile Include="Core.cs" />
+    <Compile Include="LogAnalyzerCore.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="FileReadEventArgs.cs" />
     <Compile Include="Kernel\CacheFileInfo.cs" />

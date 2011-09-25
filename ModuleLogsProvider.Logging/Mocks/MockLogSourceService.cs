@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Awad.Eticket.ModuleLogsProvider.Types;
-using ILogSourceService = ModuleLogsProvider.Logging.MostLogsServices.ILogSourceService;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Mocks
 {
@@ -14,8 +13,6 @@ namespace ModuleLogsProvider.Logging.Mocks
 		{
 			messages.Add( message );
 		}
-
-		#region ILogSourceService Members
 
 		public void ClearMessagesList()
 		{
@@ -37,12 +34,10 @@ namespace ModuleLogsProvider.Logging.Mocks
 			return isListening;
 		}
 
-		public LogMessageInfo[] GetLinesStartingWithIndex( int index )
+		public LogMessageInfo[] GetMessages( int startingIndex )
 		{
-			var result = messages.Skip( index ).ToArray();
+			var result = messages.Skip( startingIndex ).ToArray();
 			return result;
 		}
-
-		#endregion
 	}
 }

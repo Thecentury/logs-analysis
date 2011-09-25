@@ -37,7 +37,7 @@ namespace LogAnalyzer
 		private readonly IDirectoryInfo directoryInfo;
 		private readonly IOperationsQueue operationsQueue;
 		private readonly LogAnalyzerConfiguration config;
-		private readonly Core core;
+		private readonly LogAnalyzerCore core;
 		private readonly ExpressionFilter<IFileInfo> fileFilter = new ExpressionFilter<IFileInfo>();
 		private readonly IFilter<LogEntry> globalEntriesFilter;
 		private readonly Encoding encoding = Encoding.Unicode;
@@ -71,7 +71,7 @@ namespace LogAnalyzer
 		public string DisplayName { get; private set; }
 		public bool UseCache { get; private set; }
 
-		internal LogDirectory( LogDirectoryConfigurationInfo directoryConfigurationInfo, LogAnalyzerConfiguration config, IEnvironment environment, Core core )
+		internal LogDirectory( LogDirectoryConfigurationInfo directoryConfigurationInfo, LogAnalyzerConfiguration config, IEnvironment environment, LogAnalyzerCore core )
 			: base( environment, config.Logger )
 		{
 			if ( directoryConfigurationInfo == null )
