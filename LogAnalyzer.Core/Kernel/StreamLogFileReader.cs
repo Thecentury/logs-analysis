@@ -7,22 +7,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
-	public interface ILogFileReader
-	{
-		IList<LogEntry> ReadFromCurrentPositionToTheEnd( IList<LogEntry> exisingEntries );
-	}
-
-	internal sealed class StreamLogFileReader : ILogFileReader
+	public sealed class StreamLogFileReader : ILogFileReader
 	{
 		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
 		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		private readonly IFilter<LogEntry> globalEntriesFilter = null;
+		// todo brinchuk init me!
+		private readonly IFilter<LogEntry> globalEntriesFilter;
 
 		private long lastLineBreakByteIndex;
 		private long prevStreamLength;
@@ -30,36 +27,34 @@ namespace LogAnalyzer
 		private readonly Encoding encoding;
 		private int linesCount = 0;
 		private bool lastLineWasEmpty = false;
-		private LogEntry lastCreatedEntry = null;
+		private LogEntry lastCreatedEntry;
 		private readonly LogFile parentLogFile;
+		private readonly IStreamProvider streamFileInfo;
 
 		private string Name
 		{
 			get { return parentLogFile.Name; }
 		}
 
-		public StreamLogFileReader( Logger logger, Encoding encoding, LogFile parentLogLogFile )
+		public StreamLogFileReader( LogFileReaderArguments args, IStreamProvider streamFileInfo )
 		{
-			if ( logger == null )
-				throw new ArgumentNullException( "logger" );
-			if ( encoding == null )
-				throw new ArgumentNullException( "encoding" );
-			if ( parentLogLogFile == null )
-				throw new ArgumentNullException( "parentLogLogFile" );
+			if ( args == null ) throw new ArgumentNullException( "args" );
+			if ( streamFileInfo == null ) throw new ArgumentNullException( "streamFileInfo" );
 
-			this.logger = logger;
-			this.parentLogFile = parentLogLogFile;
-			this.encoding = encoding;
+			logger = args.Logger;
+			parentLogFile = args.ParentLogFile;
+			encoding = args.Encoding;
+			this.streamFileInfo = streamFileInfo;
 		}
 
 		private Stream OpenStream( int startingPosition )
 		{
-			throw new NotImplementedException();
+			return streamFileInfo.OpenStream( startingPosition );
 		}
 
 		private StreamReader OpenReader( Stream stream )
 		{
-			throw new NotImplementedException();
+			return new StreamReader( stream, encoding );
 		}
 
 		private List<LogEntry> NoLogEntries()
@@ -69,7 +64,11 @@ namespace LogAnalyzer
 
 		private bool WasLineBreakAtTheEnd( string str )
 		{
-			throw new NotImplementedException();
+			if ( String.IsNullOrEmpty( str ) )
+				return false;
+
+			char lastChar = str[str.Length - 1];
+			return lastChar == '\r' || lastChar == '\n';
 		}
 
 		#region ILogFileReader Members
@@ -100,11 +99,10 @@ namespace LogAnalyzer
 
 				// начинаем читать с начала последней строки
 				fs.Position = this.lastLineBreakByteIndex;
-				bool wasLineBreakAtTheEnd = false;
 				using ( StreamReader reader = OpenReader( fs ) )
 				{
 					addedText = reader.ReadToEnd();
-					wasLineBreakAtTheEnd = WasLineBreakAtTheEnd( addedText );
+					bool wasLineBreakAtTheEnd = WasLineBreakAtTheEnd( addedText );
 
 					if ( wasLineBreakAtTheEnd )
 					{
@@ -133,7 +131,7 @@ namespace LogAnalyzer
 			return addedText;
 		}
 
-		public IList<LogEntry> ReadFromCurrentPositionToTheEnd( IList<LogEntry> exisingEntries )
+		public IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )
 		{
 			string addedText = ReadAddedText();
 
@@ -156,7 +154,7 @@ namespace LogAnalyzer
 				bool emptyLine = String.IsNullOrEmpty( line );
 				if ( !emptyLine )
 				{
-					LogEntryAppendResult _ = this.AppendLine( line, lineIndex, exisingEntries, addedEntries );
+					LogEntryAppendResult _ = this.AppendLine( line, lineIndex, lastAddedEntry, addedEntries );
 				}
 
 				linesCount = (int)(lineIndex + 1);
@@ -217,10 +215,10 @@ namespace LogAnalyzer
 		/// </summary>
 		/// <param name="line"></param>
 		/// <param name="lineIndex"></param>
-		/// <param name="existingEntries"></param>
+		/// <param name="latestAddedEntry"></param>
 		/// <param name="addedEntries"></param>
 		/// <returns>Была ли на самом деле добавлена новая строка?</returns>
-		private LogEntryAppendResult AppendLine( string line, long lineIndex, IList<LogEntry> existingEntries, IList<LogEntry> addedEntries )
+		private LogEntryAppendResult AppendLine( string line, long lineIndex, LogEntry latestAddedEntry, IList<LogEntry> addedEntries )
 		{
 			if ( line == null )
 				throw new ArgumentNullException( "line" );
@@ -263,8 +261,7 @@ namespace LogAnalyzer
 				}
 				else
 				{
-					LogEntry entry = GetLastAddedLogEntry( existingEntries );
-					entry.ReplaceLastLine( line, lineIndex );
+					latestAddedEntry.ReplaceLastLine( line, lineIndex );
 
 					logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": replaced line #{1}", Name, lineIndex );
 				}
@@ -276,14 +273,12 @@ namespace LogAnalyzer
 				{
 					lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
 
-					LogEntry lastAddedEntry = GetLastAddedLogEntry( existingEntries );
-
 					LogEntryAppendResult result = TryAddEntry( lastCreatedEntry, addedEntries );
 					if ( result == LogEntryAppendResult.Added )
 					{
 						// морозим предыдущий, если он был
-						if ( lastAddedEntry != null )
-							lastAddedEntry.Freeze();
+						if ( latestAddedEntry != null )
+							latestAddedEntry.Freeze();
 					}
 				}
 				else
@@ -293,7 +288,7 @@ namespace LogAnalyzer
 					{
 						lastCreatedEntry.AppendLine( line );
 
-						bool wasNotAddedToList = lastCreatedEntry != GetLastAddedLogEntry( existingEntries );
+						bool wasNotAddedToList = lastCreatedEntry != latestAddedEntry;
 						if ( wasNotAddedToList )
 						{
 							LogEntryAppendResult res = TryAddEntry( lastCreatedEntry, addedEntries );
@@ -313,12 +308,6 @@ namespace LogAnalyzer
 			}
 
 			return LogEntryAppendResult.Added;
-		}
-
-		private LogEntry GetLastAddedLogEntry( IList<LogEntry> logEntries )
-		{
-			LogEntry logEntry = logEntries.LastOrDefault();
-			return logEntry;
 		}
 
 		private LogEntryAppendResult TryAddEntry( LogEntry newEntry, IList<LogEntry> addedEntries )

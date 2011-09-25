@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer;
+using LogAnalyzer.Kernel;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -15,7 +16,7 @@ namespace ModuleLogsProvider.Logging.Most
 			throw new NotImplementedException();
 		}
 
-		public System.IO.Stream OpenStream( int startPosition )
+		public ILogFileReader GetReader( LogFileReaderArguments args )
 		{
 			throw new NotImplementedException();
 		}
