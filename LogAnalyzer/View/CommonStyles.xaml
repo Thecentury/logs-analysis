@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:core="clr-namespace:LogAnalyzer;assembly=LogAnalyzer"
+					xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModel"
+					xmlns:local="clr-namespace:LogAnalyzer.GUI">
+
+	<Style x:Key="toolbarButtonStyle" TargetType="FrameworkElement">
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+	</Style>
+	
+	<Style x:Key="toolbarImageStyle" TargetType="Image">
+		<Setter Property="Stretch" Value="None"/>
+	</Style>
+
+</ResourceDictionary>

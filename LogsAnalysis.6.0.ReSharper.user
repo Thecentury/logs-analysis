@@ -1,0 +1,95 @@
+<Configuration>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Config/f:LogDirectoryConfigurationInfo.cs" caret="1136" fromTop="44" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemNotificationsSource.cs" caret="681" fromTop="19" />
+      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:LogMessageInfo.cs" caret="460" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemDirectoryInfo.cs" caret="1194" fromTop="20" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:FileSystemEnvironment.cs" caret="0" fromTop="0" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IEnvironment.cs" caret="0" fromTop="0" />
+      <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:MostLogSourceService.cs" caret="326" fromTop="13" />
+      <File id="1F3BC95E-3E86-434A-AA66-C9877560DEA7/f:app.config" caret="307" fromTop="7" />
+      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="367" fromTop="17" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/f:LogEntry.cs" caret="0" fromTop="0" />
+      <File id="2B2192E9-C25A-4B12-96E8-38526B549D1C/d:ViewModel/f:ApplicationViewModel.cs" caret="0" fromTop="0" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/d:Service References/d:MostLogsServices/f:Reference.cs" caret="691" fromTop="15" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:IDisposablesFactory.cs" caret="215" fromTop="9" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:IFactory.cs" caret="180" fromTop="9" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IDirectoryInfo.cs" caret="366" fromTop="12" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="437" fromTop="13" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:LogNotificationsSourceBase.cs" caret="275" fromTop="8" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1112" fromTop="21" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="556" fromTop="20" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostEnvironment.cs" caret="605" fromTop="12" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Config/f:LogAnalyzerConfiguration.cs" caret="892" fromTop="20" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="E6F957AA-0184-4291-8D50-B3ABEE965EF8/f:ILogSourceService.cs" caret="258" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="90" fromTop="4" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="0" fromTop="0" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="70" fromTop="3" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1255" fromTop="19" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1289" fromTop="28" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1382" fromTop="30" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1449" fromTop="26" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="1509" fromTop="31" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="975" fromTop="22" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="412" fromTop="12" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="799" fromTop="14" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="421" fromTop="16" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:IDisposablesFactory.cs" caret="206" fromTop="7" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="235" fromTop="8" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="775" fromTop="34" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="572" fromTop="21" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:IFactory.cs" caret="180" fromTop="9" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="952" fromTop="16" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="613" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="1486" fromTop="35" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="1352" fromTop="34" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostNotificationSource.cs" caret="1085" fromTop="14" />
+      <File id="C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78/d:Environment/f:IDirectoryInfo.cs" caret="243" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="522" fromTop="11" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="110" fromTop="5" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="465" fromTop="16" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="655" fromTop="24" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:MostDirectoryInfo.cs" caret="259" fromTop="10" />
+      <File id="44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA/f:LogsService.cs" caret="845" fromTop="9" />
+    </RecentEdits>
+  </RecentFiles>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="CSharpCodeCompletionContext">
+      <Item value="public" priority="92" />
+      <Item value="sealed" priority="92" />
+      <Item value="class" priority="30" />
+      <Item value="DataMember" priority="31" />
+      <Item value="ctor" priority="31" />
+      <Item value="MostLogsServices" priority="31" />
+      <Item value="LogSourceServiceClient`0" priority="26" />
+      <Item value="private" priority="31" />
+      <Item value="readonly" priority="31" />
+      <Item value="TimeSpan`0" priority="63" />
+      <Item value="new" priority="95" />
+      <Item value="Timer" priority="86" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.TimeSpan">
+      <Item value="FromSeconds`0" priority="26" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir>C:\Program Files (x86)\NUnit 2.5.10\bin\net-2.0\lib</NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+</Configuration>
