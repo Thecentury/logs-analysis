@@ -1,5 +1,6 @@
-﻿using Awad.Eticket.ModuleLogsProvider.Types.Auxilliary;
-using ILogSourceService = ModuleLogsProvider.Logging.MostLogsServices.ILogSourceService;
+﻿
+using ModuleLogsProvider.Logging.Auxilliary;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Mocks
 {

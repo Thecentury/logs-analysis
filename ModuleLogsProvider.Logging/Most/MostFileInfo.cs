@@ -9,36 +9,52 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostFileInfo : IFileInfo
 	{
-		#region IFileInfo Members
+		private readonly List<LogEntry> logEntries = new List<LogEntry>();
+		private readonly string name;
+
+		public MostFileInfo( string name )
+		{
+			if ( name == null ) throw new ArgumentNullException( "name" );
+
+			this.name = name;
+		}
 
 		public void Refresh()
 		{
-			throw new NotImplementedException();
+			// do nothing
 		}
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			throw new NotImplementedException();
+			return new MostLogFileReader( logEntries );
 		}
 
+		/// <summary>
+		/// Длина файла, в байтах.
+		/// </summary>
+		/// <value></value>
 		public int Length
 		{
-			get { throw new NotImplementedException(); }
+			get { return logEntries.Count; }
 		}
 
 		public string Name
 		{
-			get { throw new NotImplementedException(); }
+			get { return name; }
 		}
 
 		public string FullName
 		{
-			get { throw new NotImplementedException(); }
+			get { return name; }
 		}
 
+		/// <summary>
+		/// Расширение (с начальной точкой).
+		/// </summary>
+		/// <value></value>
 		public string Extension
 		{
-			get { throw new NotImplementedException(); }
+			get { return ".log"; }
 		}
 
 		public DateTime LastWriteTime
@@ -50,7 +66,5 @@ namespace ModuleLogsProvider.Logging.Most
 		{
 			get { throw new NotImplementedException(); }
 		}
-
-		#endregion
 	}
 }

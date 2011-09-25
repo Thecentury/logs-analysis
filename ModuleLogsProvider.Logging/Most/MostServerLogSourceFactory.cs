@@ -1,23 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Awad.Eticket.ModuleLogsProvider.Types.Auxilliary;
+﻿using ModuleLogsProvider.Logging.Auxilliary;
 using ModuleLogsProvider.Logging.MostLogsServices;
 
-namespace ModuleLogsProvider.Logging
+namespace ModuleLogsProvider.Logging.Most
 {
 	/// <summary>
 	/// Возвращает боевую реализацию сервиса ILogSourceService.
 	/// </summary>
 	public sealed class MostServerLogSourceFactory : ILogSourceServiceFactory
 	{
-		#region IFactory<IOptionalDisposable<ILogSourceService>> Members
-
 		public IOptionalDisposable<ILogSourceService> CreateObject()
 		{
 			return new OptionalDisposable<ILogSourceService>( new LogSourceServiceClient() );
 		}
-
-		#endregion
 	}
 }
