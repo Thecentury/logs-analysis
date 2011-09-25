@@ -42,14 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auxilliary\IOptionalDisposablesFactory.cs" />
-    <Compile Include="Auxilliary\IFactory.cs" />
-    <Compile Include="Auxilliary\IOptionalDisposable.cs" />
+    <Compile Include="ILogSourceServiceFactory.cs" />
+    <Compile Include="MockLogSourceFactory.cs" />
+    <Compile Include="MockLogsSourceService.cs" />
     <Compile Include="MostServerLogSourceFactory.cs" />
     <Compile Include="MostDirectoryInfo.cs" />
     <Compile Include="MostEnvironment.cs" />
     <Compile Include="MostNotificationSource.cs" />
-    <Compile Include="Auxilliary\OptionalDisposable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\MostLogsServices\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -103,7 +102,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

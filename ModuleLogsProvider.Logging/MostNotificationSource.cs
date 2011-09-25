@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Awad.Eticket.ModuleLogsProvider.Types;
+using Awad.Eticket.ModuleLogsProvider.Types.Auxilliary;
 using LogAnalyzer;
 
 namespace ModuleLogsProvider.Logging
