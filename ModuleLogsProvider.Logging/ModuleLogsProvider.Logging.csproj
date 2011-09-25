@@ -43,12 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILogSourceServiceFactory.cs" />
-    <Compile Include="MockLogSourceFactory.cs" />
-    <Compile Include="MockLogsSourceService.cs" />
-    <Compile Include="MostServerLogSourceFactory.cs" />
-    <Compile Include="MostDirectoryInfo.cs" />
-    <Compile Include="MostEnvironment.cs" />
-    <Compile Include="MostNotificationSource.cs" />
+    <Compile Include="Mocks\MockLogSourceFactory.cs" />
+    <Compile Include="Mocks\MockLogSourceService.cs" />
+    <Compile Include="Most\MostFileInfo.cs" />
+    <Compile Include="Most\MostServerLogSourceFactory.cs" />
+    <Compile Include="Most\MostDirectoryInfo.cs" />
+    <Compile Include="Most\MostEnvironment.cs" />
+    <Compile Include="Most\MostNotificationSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\MostLogsServices\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -57,9 +58,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ModuleLogsProvider.Types\ModuleLogsProvider.Types.csproj">
+    <ProjectReference Include="..\..\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj">
       <Project>{E6F957AA-0184-4291-8D50-B3ABEE965EF8}</Project>
-      <Name>ModuleLogsProvider.Types</Name>
+      <Name>ModuleLogsProvider.ServerTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
@@ -102,6 +103,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

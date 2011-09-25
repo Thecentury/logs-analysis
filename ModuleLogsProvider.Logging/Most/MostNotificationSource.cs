@@ -33,6 +33,11 @@ namespace ModuleLogsProvider.Logging
 
 		private void OnTimerTick( object state )
 		{
+			UpdateLogMessages();
+		}
+
+		public void UpdateLogMessages()
+		{
 			using ( var clientWrapper = serviceFactory.CreateObject() )
 			{
 				var client = clientWrapper.Inner;

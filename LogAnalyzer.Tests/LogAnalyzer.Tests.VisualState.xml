@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
+  <TopNode>[0-1000]C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\LogAnalyzer.Tests.nunit</TopNode>
+  <SelectedNode>[0-1000]C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\LogAnalyzer.Tests.nunit</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\LogAnalyzer.Tests.nunit" Expanded="true" />
+    <Node UniqueName="[0-1032]C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\bin\Debug\LogAnalyzer.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1033]LogAnalyzer" Expanded="true" />
+    <Node UniqueName="[0-1034]LogAnalyzer.Tests" Expanded="true" />
+    <Node UniqueName="[0-1021]LogAnalyzer.Tests.ConfigTests" Expanded="true" />
+    <Node UniqueName="[0-1019]LogAnalyzer.Tests.DelayedLogRecordsSourceTests" Expanded="true" />
+    <Node UniqueName="[0-1009]LogAnalyzer.Tests.DifferentEncodingsTests" Expanded="true" />
+    <Node UniqueName="[0-1001]LogAnalyzer.Tests.FilterTests" Expanded="true" />
+    <Node UniqueName="[0-1024]LogAnalyzer.Tests.LoggingTests" Expanded="true" />
+    <Node UniqueName="[0-1030]LogAnalyzer.Tests.RealDataTests" Expanded="true" />
+  </Nodes>
+</VisualState>

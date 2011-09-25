@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\LogAnalyzer.Tests.nunit" total="24" errors="0" failures="0" not-run="1" inconclusive="0" ignored="1" skipped="0" invalid="0" date="2011-08-15" time="22:27:05">
+  <environment nunit-version="2.5.10.11092" clr-version="2.0.50727.5446" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests" machine-name="MIKHAIL-PC" user="Mikhail" user-domain="Mikhail-PC" />
+  <culture-info current-culture="ru-RU" current-uiculture="ru-RU" />
+  <test-suite type="Project" name="C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\LogAnalyzer.Tests.nunit" executed="True" result="Success" success="True" time="8.858" asserts="0">
+    <results>
+      <test-suite type="Assembly" name="C:\Development\AWAD\LogAnalyzer\LogAnalyzer.Tests\bin\Debug\LogAnalyzer.Tests.dll" executed="True" result="Success" success="True" time="8.837" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="LogAnalyzer" executed="True" result="Success" success="True" time="8.837" asserts="0">
+            <results>
+              <test-suite type="Namespace" name="Tests" executed="True" result="Success" success="True" time="8.837" asserts="0">
+                <results>
+                  <test-suite type="TestFixture" name="ConfigTests" executed="True" result="Success" success="True" time="1.660" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.ConfigTests.Test_0_Directories" executed="True" result="Success" success="True" time="1.550" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.ConfigTests.Test_0_EnabledDirectories" executed="True" result="Success" success="True" time="0.008" asserts="0" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="DelayedLogRecordsSourceTests" executed="True" result="Success" success="True" time="0.780" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.DelayedLogRecordsSourceTests.TestDelayedLogRecordsSource" executed="True" result="Success" success="True" time="0.779" asserts="3" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="DifferentEncodingsTests" executed="True" result="Success" success="True" time="2.063" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_1251" executed="True" result="Success" success="True" time="1.622" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_1252" executed="True" result="Success" success="True" time="0.050" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_ASCII" executed="True" result="Success" success="True" time="0.052" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_BigEndianUnicode" executed="True" result="Success" success="True" time="0.025" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_Default" executed="True" result="Success" success="True" time="0.017" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_Unicode" executed="True" result="Success" success="True" time="0.014" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF32" executed="True" result="Success" success="True" time="0.011" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF7" executed="True" result="Success" success="True" time="0.015" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.DifferentEncodingsTests.TestLoggingInEncoding_UTF8" executed="True" result="Success" success="True" time="0.012" asserts="0" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="FilterTests" executed="True" result="Success" success="True" time="2.554" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestDeserialization" executed="True" result="Success" success="True" time="1.211" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestExpressionBuilderManager" executed="True" result="Success" success="True" time="0.036" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestExpressionBuilderXamlSerialization" executed="True" result="Success" success="True" time="1.129" asserts="1" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestGreaterThanBuilder" executed="True" result="Success" success="True" time="0.063" asserts="1" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestPropertyAccessFilter" executed="True" result="Success" success="True" time="0.011" asserts="1" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestStringContainsFilter" executed="True" result="Success" success="True" time="0.054" asserts="2" />
+                      <test-case name="LogAnalyzer.Tests.FilterTests.TestStringStartsWithFilter" executed="True" result="Success" success="True" time="0.014" asserts="2" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="LoggingTests" executed="True" result="Success" success="True" time="1.688" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.LoggingTests.TestDynamicAddFile" executed="True" result="Success" success="True" time="0.045" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.LoggingTests.TestMultiThreadedLogging" executed="True" result="Success" success="True" time="1.447" asserts="1" />
+                      <test-case name="LogAnalyzer.Tests.LoggingTests.TestRecordsWithEqualTime" executed="True" result="Success" success="True" time="0.050" asserts="2" />
+                      <test-case name="LogAnalyzer.Tests.LoggingTests.TestSeveralDirectories" executed="True" result="Success" success="True" time="0.025" asserts="0" />
+                      <test-case name="LogAnalyzer.Tests.LoggingTests.TestSimpleMerge" executed="True" result="Success" success="True" time="0.020" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="RealDataTests" executed="True" result="Inconclusive" success="False" time="0.002" asserts="0">
+                    <results>
+                      <test-case name="LogAnalyzer.Tests.RealDataTests.TestRealData" executed="False" result="Ignored">
+                        <reason>
+                          <message><![CDATA[]]></message>
+                        </reason>
+                      </test-case>
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
