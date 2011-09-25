@@ -71,7 +71,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		{
 			get
 			{
-				return "/Resources/universal.png";
+				return MakePackUri( "/Resources/universal.png" );
 			}
 		}
 

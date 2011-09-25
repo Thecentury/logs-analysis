@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DynamicHighlighting.cs" />
+    <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="FilterEditor\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditor\DelegateBuilderProxy.cs" />

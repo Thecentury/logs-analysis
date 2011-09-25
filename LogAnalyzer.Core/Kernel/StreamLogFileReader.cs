@@ -17,7 +17,6 @@ namespace LogAnalyzer.Kernel
 		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		// todo brinchuk init me!
 		private readonly IFilter<LogEntry> globalEntriesFilter;
 
 		private long lastLineBreakByteIndex;
@@ -43,6 +42,7 @@ namespace LogAnalyzer.Kernel
 			logger = args.Logger;
 			parentLogFile = args.ParentLogFile;
 			encoding = args.Encoding;
+			globalEntriesFilter = args.GlobalEntriesFilter;
 
 			this.streamFileInfo = streamFileInfo;
 		}

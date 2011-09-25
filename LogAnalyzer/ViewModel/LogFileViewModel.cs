@@ -98,7 +98,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		{
 			get
 			{
-				return "/Resources/document-text.png";
+				return MakePackUri( "/Resources/document-text.png" );
 			}
 		}
 	}

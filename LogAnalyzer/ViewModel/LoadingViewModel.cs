@@ -19,12 +19,12 @@ namespace LogAnalyzer.GUI.ViewModel
 		{
 			get
 			{
-				return "/Resources/clock-history.png";
+				return MakePackUri( "/Resources/clock-history.png" );
 			}
 		}
 
-		private int loadedBytes = 0;
-		private readonly ApplicationViewModel applicationViewModel = null;
+		private int loadedBytes;
+		private readonly ApplicationViewModel applicationViewModel;
 
 		public LoadingViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
