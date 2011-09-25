@@ -11,6 +11,7 @@ namespace LogAnalyzer
 		void EnqueueOperation( Action action );
 		int TotalOperationsCount { get; }
 		Thread Thread { get; }
+
 		void WaitAllRunningOperationsToComplete();
 	}
 }

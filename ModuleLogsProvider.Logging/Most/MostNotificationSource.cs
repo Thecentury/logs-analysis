@@ -14,24 +14,23 @@ namespace ModuleLogsProvider.Logging.Most
 
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
 		private readonly ILogSourceServiceFactory serviceFactory;
+		private readonly IOperationsQueue operationQueue;
 
-		public MostNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory )
+		public MostNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
 			if ( serviceFactory == null ) throw new ArgumentNullException( "serviceFactory" );
+			if ( operationQueue == null ) throw new ArgumentNullException( "operationQueue" );
 
 			this.serviceFactory = serviceFactory;
+			this.operationQueue = operationQueue;
+
 			timer.Tick += OnTimerTick;
 		}
 
 		private void OnTimerTick( object sender, EventArgs e )
 		{
-			UpdateLogMessages();
-		}
-
-		public List<LogMessageInfo> LoadedMessages
-		{
-			get { return loadedMessages; }
+			operationQueue.EnqueueOperation( UpdateLogMessages );
 		}
 
 		public void UpdateLogMessages()
@@ -40,13 +39,13 @@ namespace ModuleLogsProvider.Logging.Most
 			{
 				var client = clientWrapper.Inner;
 
-				int startingIndex = LoadedMessages.Count;
+				int startingIndex = loadedMessages.Count;
 
 				// todo brinchuk try-catch?
 				var newMessages = client.GetMessages( startingIndex );
 				NotifyOnNewMessages( newMessages );
 
-				LoadedMessages.AddRange( newMessages );
+				loadedMessages.AddRange( newMessages );
 			}
 		}
 

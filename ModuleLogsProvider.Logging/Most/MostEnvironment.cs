@@ -21,7 +21,7 @@ namespace ModuleLogsProvider.Logging.Most
 			ILogSourceServiceFactory serviceFactory = config.Resolve<ILogSourceServiceFactory>();
 			ITimer timer = config.Resolve<ITimer>();
 
-			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory );
+			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory, operationsQueue );
 			directory = new MostDirectoryInfo( notificationSource );
 		}
 
