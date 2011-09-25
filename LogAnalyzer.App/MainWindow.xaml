@@ -5,9 +5,9 @@
 		xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModel"
 		xmlns:local="clr-namespace:LogAnalyzer.GUI"
 		xmlns:view="clr-namespace:LogAnalyzer.GUI.View"
-		xmlns:cmn="http://adtech-dev.com/Common"
-		Title="Log Analyzer" WindowState="Maximized"
-		Icon="Resources\icon.png">
+		xmlns:cmn="http://adtech-dev.com/Common" xmlns:View="clr-namespace:LogAnalyzer.GUI.View;assembly=LogAnalyzer.GUI"
+        Title="Log Analyzer" WindowState="Maximized"
+		Icon="pack://application:,,,/LogAnalyzer.GUI;component/Resources/icon.png">
 	
 	<Window.InputBindings>
 		<KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
@@ -17,7 +17,7 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="View/CommonStyles.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/LogAnalyzer.GUI;component/View/CommonStyles.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -37,13 +37,13 @@
 				<Button Command="{Binding CreateFilterAndViewCommand}" 
 						ToolTip="Add new filter view"
 						Style="{StaticResource toolbarButtonStyle}">
-					<Image Source="Resources\plus-circle.png"
+					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
 			</ToolBar>
 
 			<Grid>
-				<view:TabsView DataContext="{Binding}"/>
+				<View:TabsView DataContext="{Binding}"/>
 			</Grid>
 
 		</DockPanel>
