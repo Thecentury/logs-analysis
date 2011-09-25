@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a41fc3a0-484c-4c62-9a8f-0265ac1a0db8" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="96958319-d4c0-4900-95d9-1eda88378779" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="c65bd6ec-04ff-4de1-a6bc-2ff591a8078d" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="56493f4c-9b44-406d-b346-9f92f59be890" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+    <MetadataFile FileName="Awad.Eticket.ModuleLogsProvider.Types.xsd" MetadataType="Schema" ID="9661df41-d79a-4719-8488-de53cfa3b160" SourceId="1" SourceUrl="http://localhost:8732/Design_Time_Addresses/LogsService/MostLogSourceService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,4 @@
+syntax: glob
+_ReSharper.LogsAnalysis/*
+*/obj/*
+*/bin/*
