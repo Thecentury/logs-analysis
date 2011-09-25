@@ -20,7 +20,9 @@ namespace ModuleLogsProvider.Logging.Most
 			ILogSourceServiceFactory serviceFactory = new MockLogSourceFactory();
 
 			// todo brinchuk move update interval to config
-			MostNotificationSource notificationSource = new MostNotificationSource( TimeSpan.FromSeconds( 20 ), serviceFactory );
+			ThreadingTimer timer = new ThreadingTimer( TimeSpan.FromSeconds( 20 ) );
+
+			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory );
 			directory = new MostDirectoryInfo( notificationSource );
 		}
 

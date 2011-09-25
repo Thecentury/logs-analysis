@@ -21,7 +21,7 @@ namespace LogAnalyzer.Kernel
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			// todo brinchuk многопоточность?!?!?! Тут может быть доступ из разных потоков?
+			// todo brinchuk многопоточность?! Тут может быть доступ из разных потоков?
 			if ( reader == null )
 			{
 				FileSystemStreamReader streamReader = new FileSystemStreamReader( fileInfo );
