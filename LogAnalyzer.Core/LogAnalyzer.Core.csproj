@@ -72,6 +72,7 @@
     <Compile Include="Kernel\DelayedLogRecordsSource.cs" />
     <Compile Include="Kernel\LogFileReaderBase.cs" />
     <Compile Include="Kernel\IStreamProvider.cs" />
+    <Compile Include="Kernel\LogLineParser.cs" />
     <Compile Include="Kernel\StreamLogFileReader.cs" />
     <Compile Include="Kernel\LogFileReaderArguments.cs" />
     <Compile Include="Kernel\IOperationsQueue.cs" />

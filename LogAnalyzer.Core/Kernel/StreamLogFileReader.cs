@@ -12,22 +12,18 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class StreamLogFileReader : LogFileReaderBase
 	{
-		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
-
-		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
-		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
-
 		private readonly IFilter<LogEntry> globalEntriesFilter;
 
 		private long lastLineBreakByteIndex;
 		private long prevStreamLength;
 		private readonly Logger logger;
 		private readonly Encoding encoding;
-		private int linesCount = 0;
+		private int linesCount;
 		private bool lastLineWasEmpty = false;
 		private LogEntry lastCreatedEntry;
 		private readonly LogFile parentLogFile;
 		private readonly IStreamProvider streamFileInfo;
+		private readonly LogLineParser logLineParser = new LogLineParser();
 
 		private string Name
 		{
@@ -261,51 +257,6 @@ namespace LogAnalyzer.Kernel
 			return logEntries;
 		}
 
-		private bool TryExtractLogEntryData( string line, out string type, out int tid, out DateTime time, out string text )
-		{
-			// init
-			type = null;
-			tid = -1;
-			time = DateTime.MinValue;
-			text = null;
-
-			Match match = logLineRegex.Match( line );
-			if ( match.Success )
-			{
-				// выдираем данные
-				type = match.Groups["Type"].Value;
-				if ( String.IsNullOrWhiteSpace( type ) || type.Length > 1 )
-				{
-					// todo ошибка!!!
-					throw new InvalidOperationException();
-				}
-
-				string tidStr = match.Groups["TID"].Value;
-				tid = 0;
-				if ( !Int32.TryParse( tidStr, out tid ) )
-				{
-					// todo ошибка!!!
-					throw new InvalidOperationException();
-				}
-
-				string timeStr = match.Groups["Time"].Value;
-				time = DateTime.MinValue;
-				if ( !DateTime.TryParseExact( timeStr, DateTimeFormat, null, DateTimeStyles.None, out time ) )
-				{
-					// todo error!
-					throw new InvalidOperationException();
-				}
-
-				text = match.Groups["Text"].Value;
-
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -331,7 +282,7 @@ namespace LogAnalyzer.Kernel
 			if ( isLastLineChanged )
 			{
 				// в последней строке было начало LogEntry?
-				if ( TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( logLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					LogEntry lastEntry = lastCreatedEntry;
 					// последняя запись состоит только из заголовка?
@@ -365,7 +316,7 @@ namespace LogAnalyzer.Kernel
 			else // добавилась новая строка
 			{
 				// в добавленной строке было начало нового LogEntry?
-				if ( TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( logLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
 

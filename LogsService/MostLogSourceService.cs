@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using Awad.Eticket.ModuleLogsProvider.Types;
 
 namespace LogsService
 {
-	public class MostLogSourceService : ILogSourceService
+	/// <summary>
+	/// Реализация сервера логов, в основном, для времени разработки.
+	/// </summary>
+	public sealed class MostLogSourceService : ILogSourceService
 	{
+		private bool isListening = true;
+
 		public void ClearMessagesList()
 		{
 			throw new NotImplementedException();
@@ -17,20 +17,20 @@ namespace LogsService
 
 		public void StartListening()
 		{
-			throw new NotImplementedException();
+			isListening = true;
 		}
 
 		public void StopListening()
 		{
-			throw new NotImplementedException();
+			isListening = false;
 		}
 
 		public bool GetIsListening()
 		{
-			throw new NotImplementedException();
+			return isListening;
 		}
 
-		public LogMessageInfo[] GetLinesStartingWithIndex( int index )
+		public LogMessageInfo[] GetMessages( int index )
 		{
 			throw new NotImplementedException();
 		}
