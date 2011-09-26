@@ -10,22 +10,22 @@ namespace LogAnalyzer
 {
 	public abstract class LogEntriesList : INotifyPropertyChanged, IReportReadProgress
 	{
-		private readonly CompositeObservableListWrapper<LogEntry> mergedEntriesWrapper = null;
+		private readonly CompositeObservableListWrapper<LogEntry> mergedEntriesWrapper;
 		public CompositeObservableListWrapper<LogEntry> MergedEntries
 		{
 			get { return mergedEntriesWrapper; }
 		}
 
-		private readonly LogEntrySortedCollection logEntrySortedCollection = null;
+		private readonly LogEntrySortedCollection logEntrySortedCollection;
 
-		private List<LogEntry> mergedEntriesList = null;
+		private List<LogEntry> mergedEntriesList;
 		protected internal List<LogEntry> MergedEntriesList
 		{
 			get { return mergedEntriesList; }
 			protected set { mergedEntriesList = value; }
 		}
 
-		protected readonly Logger logger = null;
+		protected readonly Logger logger;
 
 		protected LogEntriesList( IEnvironment environment, Logger logger )
 		{
@@ -102,7 +102,7 @@ namespace LogAnalyzer
 			var logEntryAdded = LogEntryAdded;
 			if ( logEntryAdded != null )
 			{
-				foreach ( var logEntry in logEntries )
+				foreach ( LogEntry logEntry in logEntries )
 				{
 					logEntryAdded( this, new LogEntryAddedEventArgs( logEntry ) );
 				}

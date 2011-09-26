@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using LogAnalyzer;
 using LogAnalyzer.Config;
 using ModuleLogsProvider.Logging;
@@ -23,18 +25,29 @@ namespace ModuleLogsProvider.Tests
 		public void TestCreation()
 		{
 			serviceFactory = new MockLogSourceFactory( service );
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "1", LoggerName = "L1" } );
+			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" } );
 
 			LogAnalyzerConfiguration config = BuildConfig();
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
 			core.Start();
-			timer.MakeRing();
+			core.WaitForLoaded();
 
+			Task task = Task.Factory.StartNew( () =>
+												{
+													timer.MakeRing();
+												} );
+
+			Thread.Sleep( 200000 );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
+			task.Wait();
 
 			Assert.That( core.Directories.Count, Is.EqualTo( 1 ) );
+
+			var firstDir = core.Directories[0];
+			Assert.That( firstDir, Is.Not.Null );
+			//ExpressionAssert.That( firstDir, d => d.Files.Count == 1 );
 		}
 
 		private LogAnalyzerConfiguration BuildConfig()

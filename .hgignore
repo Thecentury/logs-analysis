@@ -3,3 +3,4 @@ _ReSharper.LogsAnalysis/*
 */obj/*
 */bin/*
 *.suo
+_ReSharper.*

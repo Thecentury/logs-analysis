@@ -96,7 +96,7 @@ namespace LogAnalyzer
 
 		public bool IsReadOnly
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		public bool Remove( T item )
@@ -148,7 +148,7 @@ namespace LogAnalyzer
 
 		public bool IsFixedSize
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		public void Remove( object value )
@@ -179,12 +179,12 @@ namespace LogAnalyzer
 
 		public bool IsSynchronized
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		public object SyncRoot
 		{
-			get { return list; ; }
+			get { return list; }
 		}
 
 		#endregion

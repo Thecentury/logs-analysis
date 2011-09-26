@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace LogAnalyzer
 {
-	[DebuggerDisplay( "Entry File={ParentLogFile.FullPath} LineIndex={LineIndex}" )]
+	[DebuggerDisplay( "LogEntry File={ParentLogFile.FullPath} LineIndex={LineIndex}" )]
 	public sealed class LogEntry : INotifyPropertyChanged, IFreezable
 	{
 		// todo probably read from config

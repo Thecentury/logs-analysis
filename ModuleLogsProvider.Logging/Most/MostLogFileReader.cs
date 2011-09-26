@@ -20,7 +20,16 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public override IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )
 		{
-			throw new NotImplementedException();
+			int startingIndex = GetStartingIndex( lastAddedEntry );
+
+			var result = logEntries.Skip( startingIndex ).ToList();
+			return result;
+		}
+
+		private int GetStartingIndex( LogEntry lastAddedEntry )
+		{
+			// todo brinchuk !!
+			return 0;
 		}
 	}
 }
