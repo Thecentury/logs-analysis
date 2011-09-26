@@ -23,10 +23,29 @@ namespace ModuleLogsProvider.Tests
 		private MockLogSourceFactory serviceFactory;
 
 		[Test]
-		public void TestCreation()
+		public void TestSingleMessageFromMost()
+		{
+			SendMessages( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" } );
+		}
+
+		[Test]
+		public void TestSerevalMessagesFromMost()
+		{
+			SendMessages(
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = "L1" }
+				);
+		}
+
+		private void SendMessages( params LogMessageInfo[] messages )
 		{
 			serviceFactory = new MockLogSourceFactory( service );
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" } );
+
+			foreach ( var message in messages )
+			{
+				service.AddMessage( message );
+			}
 
 			LogAnalyzerConfiguration config = BuildConfig();
 			MostEnvironment env = new MostEnvironment( config );
@@ -35,10 +54,7 @@ namespace ModuleLogsProvider.Tests
 			core.Start();
 			core.WaitForLoaded();
 
-			Task task = Task.Factory.StartNew( () =>
-												{
-													timer.MakeRing();
-												} );
+			Task task = Task.Factory.StartNew( timer.MakeRing );
 
 			Thread.Sleep( 2000 );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
@@ -52,7 +68,7 @@ namespace ModuleLogsProvider.Tests
 
 			var firstFile = firstDir.Files[0];
 			Assert.NotNull( firstFile );
-			ExpressionAssert.That( firstFile, f => f.LogEntries.Count == 1 );
+			ExpressionAssert.That( firstFile, f => f.LogEntries.Count == messages.Length );
 		}
 
 		private LogAnalyzerConfiguration BuildConfig()
