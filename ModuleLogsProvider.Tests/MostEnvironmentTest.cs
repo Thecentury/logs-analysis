@@ -39,7 +39,7 @@ namespace ModuleLogsProvider.Tests
 													timer.MakeRing();
 												} );
 
-			Thread.Sleep( 200000 );
+			Thread.Sleep( 2000 );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
 			task.Wait();
 
@@ -47,7 +47,8 @@ namespace ModuleLogsProvider.Tests
 
 			var firstDir = core.Directories[0];
 			Assert.That( firstDir, Is.Not.Null );
-			//ExpressionAssert.That( firstDir, d => d.Files.Count == 1 );
+			ExpressionAssert.That( firstDir, d => d.Files.Count == 1 );
+			ExpressionAssert.That( firstDir, d => d.Files.Count != 1 );
 		}
 
 		private LogAnalyzerConfiguration BuildConfig()
