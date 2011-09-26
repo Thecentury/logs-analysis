@@ -10,8 +10,8 @@ namespace ModuleLogsProvider.Tests
 	[TestFixture]
 	public class DependencyInjectionTest
 	{
-		[Test]
-		public void TestDI()
+		//[Test]
+		public void TestDependencyInjection()
 		{
 			const int expected = 1;
 

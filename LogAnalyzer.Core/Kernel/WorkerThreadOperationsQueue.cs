@@ -13,11 +13,11 @@ namespace LogAnalyzer
 	{
 		private int totalOperationsCount = 0;
 
-		private readonly Logger logger = null;
-		private readonly BlockingCollection<IAsyncOperation> operationsQueue = null;
-		private readonly Thread workerThread = null;
+		private readonly Logger logger;
+		private readonly BlockingCollection<IAsyncOperation> operationsQueue;
+		private readonly Thread workerThread;
 
-		private readonly PerformanceCounter operationsCountCounter = null;
+		private readonly PerformanceCounter operationsCountCounter;
 
 		/// <summary>
 		/// Объект для синхронизации WaitAllRunningOperationsToComplete.
@@ -43,10 +43,15 @@ namespace LogAnalyzer
 
 		public void EnqueueOperation( Action action )
 		{
+			if ( action.Method.ToString() == "Void <OnLogEntriesAddedToFile>b__13()" )
+			{
+
+			}
+
 			PerformanceCountersService.Increment( operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (operationsQueue.Count + 1) );
+			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( operationsQueue.Count + 1 ) );
 			operationsQueue.Add( operation );
 
 			Interlocked.Increment( ref totalOperationsCount );

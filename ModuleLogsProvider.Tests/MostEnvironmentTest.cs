@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,12 +23,14 @@ namespace ModuleLogsProvider.Tests
 		private readonly MockLogsSourceService service = new MockLogsSourceService();
 		private MockLogSourceFactory serviceFactory;
 
+		[Description( "Одно сообщение" )]
 		[Test]
 		public void TestSingleMessageFromMost()
 		{
 			SendMessages( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" } );
 		}
 
+		[Description( "Несколько сообщений от одного логгера" )]
 		[Test]
 		public void TestSerevalMessagesFromMost()
 		{
@@ -38,8 +41,21 @@ namespace ModuleLogsProvider.Tests
 				);
 		}
 
+		[Description( "Логирование из двух логгеров" )]
+		[Test]
+		public void TestSeveralMessagesFromTwoLoggers()
+		{
+			SendMessages(
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = "L2" }
+				);
+		}
+
 		private void SendMessages( params LogMessageInfo[] messages )
 		{
+			var loggerNames = messages.Select( m => m.LoggerName ).Distinct().ToList();
+
 			serviceFactory = new MockLogSourceFactory( service );
 
 			foreach ( var message in messages )
@@ -56,19 +72,32 @@ namespace ModuleLogsProvider.Tests
 
 			Task task = Task.Factory.StartNew( timer.MakeRing );
 
-			Thread.Sleep( 2000 );
+			// todo brinchuk return 2000 back
+
+			var millisecondsToSleep = GetSleepDuration();
+			Thread.Sleep( millisecondsToSleep );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
 			task.Wait();
 
-			Assert.That( core.Directories.Count, Is.EqualTo( 1 ) );
+			ExpressionAssert.That( core, c => c.Directories.Count == 1 );
 
 			var firstDir = core.Directories[0];
 			Assert.That( firstDir, Is.Not.Null );
-			ExpressionAssert.That( firstDir, d => d.Files.Count == 1 );
+			ExpressionAssert.That( firstDir, d => d.Files.Count == loggerNames.Count );
 
-			var firstFile = firstDir.Files[0];
-			Assert.NotNull( firstFile );
-			ExpressionAssert.That( firstFile, f => f.LogEntries.Count == messages.Length );
+			foreach ( var file in firstDir.Files )
+			{
+				string fileName = file.Name;
+				var expectedMessagesCount = messages.Count( m => m.LoggerName == fileName );
+
+				ExpressionAssert.That( file, f => f.LogEntries.Count == expectedMessagesCount );
+			}
+		}
+
+		private static int GetSleepDuration()
+		{
+			int millisecondsToSleep = Debugger.IsAttached ? 2000000 : 2000;
+			return millisecondsToSleep;
 		}
 
 		private LogAnalyzerConfiguration BuildConfig()
