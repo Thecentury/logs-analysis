@@ -4,3 +4,5 @@ _ReSharper.LogsAnalysis/*
 */bin/*
 *.suo
 _ReSharper.*
+*.vssscc
+*.vspscc

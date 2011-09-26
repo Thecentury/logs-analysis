@@ -58,7 +58,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		private void NotifyOnNewMessages( IEnumerable<LogMessageInfo> newMessages, AppendMessagesResult appendMessagesResult )
 		{
-			var groups = newMessages.GroupBy( m => m.LoggerName );
+			var groups = newMessages.GroupBy( m => m.LoggerName ).ToList();
 
 			foreach ( var group in groups )
 			{

@@ -5,6 +5,7 @@ using System.Text;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
 using ModuleLogsProvider.Logging.MostLogsServices;
+using System.Diagnostics;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -56,6 +57,7 @@ namespace ModuleLogsProvider.Logging.Most
 		}
 	}
 
+	[DebuggerDisplay("Count = {entries.Count}")]
 	internal sealed class OneFileMessages
 	{
 		private readonly LogFile file;
