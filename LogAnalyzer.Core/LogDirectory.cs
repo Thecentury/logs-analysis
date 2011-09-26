@@ -129,9 +129,9 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var files = (from file in dir.EnumerateFiles( FileNameFilter )
-						 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-						 select file).ToList();
+			var files = ( from file in dir.EnumerateFiles( FileNameFilter )
+						  where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+						  select file ).ToList();
 
 			BeginLoadFiles( files );
 		}
@@ -195,21 +195,13 @@ namespace LogAnalyzer
 			// все файлы в начальной загрузке загружены?
 			if ( initialFilesLoadedCount == initialFilesLoadingCount )
 			{
-				Task mergeTask = new Task( () =>
-				{
-					PerformInitialMerge();
-				} );
-				mergeTask.ContinueWith( t =>
-				{
-					operationsQueue.EnqueueOperation( () =>
+				Task mergeTask = new Task( PerformInitialMerge );
+				mergeTask.ContinueWith( t => operationsQueue.EnqueueOperation( () =>
 					{
-						operationsSource.Start();
-
 						logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).", this.DisplayName, files.Count );
 
 						RaiseLoadedEvent();
-					} );
-				} );
+					} ) );
 
 				mergeTask.Start();
 			}
@@ -381,7 +373,7 @@ namespace LogAnalyzer
 		[Conditional( "DEBUG" )]
 		private void DumpFiles()
 		{
-			logger.DebugWriteInfo( "Files = " + files.Aggregate( "", ( s, f ) => s + (f == null ? "null" : f.Name) + " " ) );
+			logger.DebugWriteInfo( "Files = " + files.Aggregate( "", ( s, f ) => s + ( f == null ? "null" : f.Name ) + " " ) );
 		}
 
 		public override int TotalLengthInBytes

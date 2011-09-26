@@ -6,3 +6,4 @@ _ReSharper.LogsAnalysis/*
 _ReSharper.*
 *.vssscc
 *.vspscc
+*.ReSharper.user
