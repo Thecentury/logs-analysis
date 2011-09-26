@@ -37,37 +37,12 @@ namespace LogAnalyzer.Most.App
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			Task task = new Task( () =>
-									{
-										MostEnvironment env;
-
-										MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
-
-										LogAnalyzerConfiguration config = null;
-
-										config = LogAnalyzerConfiguration
-											.CreateNew()
-											.AcceptAllLogTypes()
-											.AddLogDirectory( "MOST-Path", "*", "MOST-Display-Name" )
-											.Register<IEnvironment>( () => env = new MostEnvironment( config ) )
-											.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
-											.RegisterInstance<ITimer>( timer )
-											.BuildConfig();
-
-										logger = config.Logger;
-
-										ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
-										Application.Current.Dispatcher.BeginInvoke( () =>
-										{
-											Application.Current.MainWindow.DataContext = applicationViewModel;
-										} );
-									} );
-
+			Task task = new Task( Init );
 			task.ContinueWith( t =>
 			{
 				logger.WriteError( "Crash. Exception: {0}", t.Exception );
 
-				LogAnalyzer.Extensions.Condition.BreakIfAttached();
+				Extensions.Condition.BreakIfAttached();
 
 				MessageBox.Show( "Unhandled exception: " + t.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 
@@ -76,6 +51,29 @@ namespace LogAnalyzer.Most.App
 			}, TaskContinuationOptions.OnlyOnFaulted );
 
 			task.Start();
+		}
+
+		private void Init()
+		{
+			MostEnvironment env;
+
+			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
+
+			LogAnalyzerConfiguration config = null;
+
+			config = LogAnalyzerConfiguration
+				.CreateNew()
+				.AcceptAllLogTypes()
+				.AddLogDirectory( "MOST-Path", "*", "MOST-Display-Name" )
+				.Register<IEnvironment>( () => env = new MostEnvironment( config ) )
+				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
+				.RegisterInstance<ITimer>( timer )
+				.BuildConfig();
+
+			logger = config.Logger;
+
+			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
+			Application.Current.Dispatcher.BeginInvoke( () => { Application.Current.MainWindow.DataContext = applicationViewModel; } );
 		}
 
 		private void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
