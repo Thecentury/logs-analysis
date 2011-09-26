@@ -14,7 +14,7 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void Test_0_Directories()
 		{
-			var config = LogAnalyzerConfiguration.Create().BuildConfig();
+			var config = LogAnalyzerConfiguration.CreateNew().BuildConfig();
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			var env = new MockEnvironment( config, operationsQueue );
 
@@ -25,7 +25,7 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void Test_0_EnabledDirectories()
 		{
-			var config = LogAnalyzerConfiguration.Create()
+			var config = LogAnalyzerConfiguration.CreateNew()
 				.AddLogDirectory( "some_path", "*", "fake_dir" )
 				.AsDisabled()
 				.BuildConfig();

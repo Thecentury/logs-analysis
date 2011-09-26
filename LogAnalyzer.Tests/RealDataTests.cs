@@ -17,7 +17,7 @@ namespace LogAnalyzer.Tests
 		{
 			const string encodingName = "windows-1251";
 			LogAnalyzerConfiguration config =
-							LogAnalyzerConfiguration.Create()
+							LogAnalyzerConfiguration.CreateNew()
 							.AddLogDirectory( @"C:\Logs\Logs1", "*", "Logs1" )
 							.WithEncoding( encodingName )
 							.AddLogDirectory( @"C:\Logs\Logs1", "*", "Logs2" )

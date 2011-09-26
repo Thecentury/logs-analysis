@@ -19,7 +19,10 @@ namespace ModuleLogsProvider.Logging.Most
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 
 			ILogSourceServiceFactory serviceFactory = config.Resolve<ILogSourceServiceFactory>();
+			if ( serviceFactory == null ) throw new ArgumentException( "serviceFactory" );
+
 			ITimer timer = config.Resolve<ITimer>();
+			if ( timer == null ) throw new ArgumentException( "timer" );
 
 			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory, operationsQueue );
 			directory = new MostDirectoryInfo( notificationSource );

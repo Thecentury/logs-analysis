@@ -10,6 +10,9 @@ using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.ViewModel;
 using LogAnalyzer.Most.App.Properties;
+using ModuleLogsProvider.Logging;
+using ModuleLogsProvider.Logging.Mocks;
+using ModuleLogsProvider.Logging.Most;
 
 namespace LogAnalyzer.Most.App
 {
@@ -29,20 +32,31 @@ namespace LogAnalyzer.Most.App
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			Task task = new Task( () =>
-			{
-				LogAnalyzerConfiguration config = LogAnalyzerConfiguration
-					.Create()
-					.AcceptAllLogTypes()
-					.BuildConfig();
+									{
+										MostEnvironment env;
 
-				logger = config.Logger;
+										MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
+										MockTimer timer = new MockTimer();
 
-				ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
-				Application.Current.Dispatcher.BeginInvoke( () =>
-				{
-					Application.Current.MainWindow.DataContext = applicationViewModel;
-				} );
-			} );
+										LogAnalyzerConfiguration config = null;
+
+										config = LogAnalyzerConfiguration
+											.CreateNew()
+											.AcceptAllLogTypes()
+											.AddLogDirectory( "MOST-Path", "*", "MOST-Display-Name" )
+											.Register<IEnvironment>( () => env = new MostEnvironment( config ) )
+											.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
+											.RegisterInstance<ITimer>( timer )
+											.BuildConfig();
+
+										logger = config.Logger;
+
+										ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
+										Application.Current.Dispatcher.BeginInvoke( () =>
+										{
+											Application.Current.MainWindow.DataContext = applicationViewModel;
+										} );
+									} );
 
 			task.ContinueWith( t =>
 			{

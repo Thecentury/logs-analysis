@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>39824b75-dd67-49d4-9f63-96450614037e</ProjectGuid>
+    <ProjectGuid>{C273605B-D557-4F56-A49D-D080E7982A25}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LogAnalyzer.Most.App</RootNamespace>
@@ -53,6 +53,7 @@
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -90,6 +91,20 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
+      <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
+      <Name>LogAnalyzer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.GUI.csproj">
+      <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
+      <Name>LogAnalyzer.GUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModuleLogsProvider.Logging\ModuleLogsProvider.Logging.csproj">
+      <Project>{44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA}</Project>
+      <Name>ModuleLogsProvider.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
