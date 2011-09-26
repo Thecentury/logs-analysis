@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
-using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModel;
+using LogAnalyzer.Most.App.Properties;
 
-namespace LogAnalyzer.App
+namespace LogAnalyzer.Most.App
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
@@ -28,24 +28,14 @@ namespace LogAnalyzer.App
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			var args = e.Args;
-			string configPath = Settings.Default.ConfigPath;
-
-			if ( args.Length >= 1 )
-			{
-				string configPathArg = args.FirstOrDefault( s => s.StartsWith( "-c:" ) );
-				if ( configPathArg != null )
-				{
-					configPath = configPathArg.Substring( 3 );
-				}
-			}
-
 			Task task = new Task( () =>
 			{
-				// todo обработка исключений при ошибках загрузки конфига
-				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+				LogAnalyzerConfiguration config = LogAnalyzerConfiguration
+					.Create()
+					.AcceptAllLogTypes()
+					.BuildConfig();
 
-				this.logger = config.Logger;
+				logger = config.Logger;
 
 				ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
 				Application.Current.Dispatcher.BeginInvoke( () =>
@@ -58,7 +48,7 @@ namespace LogAnalyzer.App
 			{
 				logger.WriteError( "Crash. Exception: {0}", t.Exception );
 
-				Extensions.Condition.BreakIfAttached();
+				LogAnalyzer.Extensions.Condition.BreakIfAttached();
 
 				MessageBox.Show( "Unhandled exception: " + t.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 
