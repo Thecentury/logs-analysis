@@ -1,4 +1,8 @@
-﻿using System;
+﻿#if DEBUG
+#define DEBUGCHECK
+#endif
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,7 +60,7 @@ namespace LogAnalyzer
 
 			ValidateThread();
 
-#if DEBUG
+#if DEBUGCHECK
 			int mergedCount = parent.MergedEntries.Count;
 
 			bool sortedEntriesDoNotContainTheEntrybeingAdded = addedEntries.All( newEntry => !sortedLogEntries.Contains( newEntry ) );
@@ -126,7 +130,7 @@ namespace LogAnalyzer
 
 					if ( timeService.IsRelativelyOld( min.Time, maxTime ) )
 					{
-#if DEBUG
+#if DEBUGCHECK
 						LogEntry last = parent.MergedEntries.Last();
 						int comparison = LogEntryByDateComparer.Instance.Compare( last, min );
 						Condition.DebugAssert( comparison <= 0, "Добавляемый элемент меньше последнего в списке parent.MergedEntries." );
@@ -141,7 +145,7 @@ namespace LogAnalyzer
 
 			unappendedSetWrapper.MarkDirty();
 
-#if DEBUG
+#if DEBUGCHECK
 			Condition.DebugAssert( parent.MergedEntries.Count > mergedCount, "Число смерженных записей должно было увеличиться." );
 			AssertParentMergedEntriesAreSorted();
 #endif

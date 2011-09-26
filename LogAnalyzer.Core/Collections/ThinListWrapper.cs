@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
 using LogAnalyzer.Extensions;
+using System.Diagnostics;
 
 namespace LogAnalyzer
 {
@@ -12,6 +13,7 @@ namespace LogAnalyzer
 	/// Добавляет в IList поддержку INotifyCollectionChanged.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
+	[DebuggerDisplay( "Count = {list.Count}" )]
 	public sealed class ThinListWrapper<T> : ThinObservableCollection, IList<T>, IList
 	{
 		private IList<T> list = null;
