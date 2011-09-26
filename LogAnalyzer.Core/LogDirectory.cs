@@ -19,6 +19,7 @@ namespace LogAnalyzer
 {
 	public sealed class LogDirectory : LogEntriesList
 	{
+		private readonly object sync = new object();
 		private readonly IList<LogFile> files = CollectionHelper.CreateList<LogFile>();
 
 		private readonly ThinListWrapper<LogFile> filesWrapper;
@@ -288,12 +289,7 @@ namespace LogAnalyzer
 				{
 					// добавляем в список отслеживаемых файлов
 					// todo обработка исключений
-					IFileInfo file = directoryInfo.GetFileInfo( fullPath );
-					LogFile logFile = CreateLogFile( file );
-
-					Task.Factory.StartNew( logFile.ReadFile );
-
-					AddFile( logFile );
+					AddFile( fullPath );
 				}
 				else
 				{
@@ -301,6 +297,20 @@ namespace LogAnalyzer
 					logger.WriteError( "Watcher notified that the file \"{0}\" was created, but it is already present in 'files' dictionary.", fullPath );
 				}
 			} );
+		}
+
+		private void AddFile( string fullPath )
+		{
+			LogFile logFile;
+			lock ( sync )
+			{
+				IFileInfo file = directoryInfo.GetFileInfo( fullPath );
+				logFile = CreateLogFile( file );
+
+				AddFile( logFile );
+			}
+
+			Task.Factory.StartNew( logFile.ReadFile );
 		}
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
@@ -321,7 +331,7 @@ namespace LogAnalyzer
 				if ( !ContainsFile( fullPath ) )
 				{
 					logger.WriteError( "Core.OnFileChanged: files doesn't contain file \"{0}\"", fullPath );
-					// todo тут возможно добавить в список отслеживаемых файлов
+					AddFile( fullPath );
 					return;
 				}
 				else

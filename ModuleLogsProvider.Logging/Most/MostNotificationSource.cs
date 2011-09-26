@@ -15,6 +15,7 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
 		private readonly ILogSourceServiceFactory serviceFactory;
 		private readonly IOperationsQueue operationQueue;
+		private readonly MostLogMessagesStorage messagesStorage = new MostLogMessagesStorage();
 
 		public MostNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
 		{
@@ -26,6 +27,11 @@ namespace ModuleLogsProvider.Logging.Most
 			this.operationQueue = operationQueue;
 
 			timer.Tick += OnTimerTick;
+		}
+
+		internal MostLogMessagesStorage MessagesStorage
+		{
+			get { return messagesStorage; }
 		}
 
 		private void OnTimerTick( object sender, EventArgs e )
@@ -43,21 +49,25 @@ namespace ModuleLogsProvider.Logging.Most
 
 				// todo brinchuk try-catch?
 				var newMessages = client.GetMessages( startingIndex );
-				NotifyOnNewMessages( newMessages );
+				var appendMessagesResult = messagesStorage.AppendMessages( newMessages );
+				NotifyOnNewMessages( newMessages, appendMessagesResult );
 
 				loadedMessages.AddRange( newMessages );
 			}
 		}
 
-		private void NotifyOnNewMessages( IEnumerable<LogMessageInfo> newMessages )
+		private void NotifyOnNewMessages( IEnumerable<LogMessageInfo> newMessages, AppendMessagesResult appendMessagesResult )
 		{
 			var groups = newMessages.GroupBy( m => m.LoggerName );
 
 			foreach ( var group in groups )
 			{
 				string loggerName = group.Key;
-				RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed | WatcherChangeTypes.Created,
-					DirectoryName, loggerName ) );
+				bool fileCreated = appendMessagesResult.CreatedLogFiles.Contains( loggerName );
+
+				WatcherChangeTypes changeTypes = fileCreated ? WatcherChangeTypes.Created : WatcherChangeTypes.Changed;
+
+				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, loggerName ) );
 			}
 		}
 	}

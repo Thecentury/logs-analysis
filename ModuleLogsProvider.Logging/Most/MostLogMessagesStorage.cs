@@ -12,27 +12,47 @@ namespace ModuleLogsProvider.Logging.Most
 	{
 		private readonly Dictionary<string, OneFileMessages> logNamesToEntries = new Dictionary<string, OneFileMessages>();
 
-		public void AppendMessages( IEnumerable<LogMessageInfo> messages )
+		public IEnumerable<string> GetLogFileNames()
 		{
+			return logNamesToEntries.Keys;
+		}
+
+		public List<LogEntry> GetEntriesByName( string logFileName )
+		{
+			OneFileMessages fileMessages = logNamesToEntries[logFileName];
+			return fileMessages.Entries;
+		}
+
+		public AppendMessagesResult AppendMessages( IEnumerable<LogMessageInfo> messages )
+		{
+			AppendMessagesResult result = new AppendMessagesResult();
+
 			var groupsByLoggerName = messages.GroupBy( m => m.LoggerName );
 			foreach ( IGrouping<string, LogMessageInfo> grouping in groupsByLoggerName )
 			{
 				string loggerName = grouping.Key;
-				OneFileMessages fileMessages = GetMessagesBy( loggerName );
-				fileMessages.AppendMessages( grouping );
-			}
-		}
 
-		private OneFileMessages GetMessagesBy( string loggerName )
-		{
-			OneFileMessages result;
-			if ( !logNamesToEntries.TryGetValue( loggerName, out result ) )
-			{
-				result = new OneFileMessages( loggerName );
-				logNamesToEntries.Add( loggerName, result );
+				OneFileMessages fileMessages;
+				if ( !logNamesToEntries.TryGetValue( loggerName, out fileMessages ) )
+				{
+					fileMessages = new OneFileMessages( loggerName );
+					logNamesToEntries.Add( loggerName, fileMessages );
+					result.CreatedLogFiles.Add( loggerName );
+				}
+
+				fileMessages.AppendMessages( grouping );
 			}
 
 			return result;
+		}
+	}
+
+	public sealed class AppendMessagesResult
+	{
+		private readonly HashSet<string> createdLogFiles = new HashSet<string>();
+		public HashSet<string> CreatedLogFiles
+		{
+			get { return createdLogFiles; }
 		}
 	}
 
@@ -50,6 +70,11 @@ namespace ModuleLogsProvider.Logging.Most
 			file = LogFile.FromName( name );
 		}
 
+		public List<LogEntry> Entries
+		{
+			get { return entries; }
+		}
+
 		public void AppendMessages( IEnumerable<LogMessageInfo> messages )
 		{
 			foreach ( LogMessageInfo logMessageInfo in messages )
@@ -65,7 +90,7 @@ namespace ModuleLogsProvider.Logging.Most
 					throw new NotImplementedException();
 				}
 				LogEntry entry = new LogEntry( type, threadId, time, text, logMessageInfo.IndexInAllMessagesList, file );
-				entries.Add( entry );
+				Entries.Add( entry );
 			}
 		}
 	}

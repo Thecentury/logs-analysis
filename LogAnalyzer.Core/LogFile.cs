@@ -60,10 +60,7 @@ namespace LogAnalyzer
 
 		public LogDirectory ParentDirectory
 		{
-			get
-			{
-				return parentDirectory;
-			}
+			get { return parentDirectory; }
 		}
 
 		/// <summary>
@@ -76,11 +73,16 @@ namespace LogAnalyzer
 			return new LogFile( name );
 		}
 
+		/// <summary>
+		/// Для MOST-сервиса.
+		/// </summary>
+		/// <param name="name"></param>
 		private LogFile( string name )
 		{
 			if ( String.IsNullOrEmpty( name ) ) throw new ArgumentNullException( "name" );
 
 			Name = name;
+			FullPath = name;
 		}
 
 		internal LogFile( IFileInfo fileInfo, LogDirectory parent )
@@ -108,6 +110,13 @@ namespace LogAnalyzer
 					ParentLogFile = this,
 					GlobalEntriesFilter = parent.GlobalEntriesFilter
 				} );
+
+			logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
+		}
+
+		private void OnLogFileReaderFileReadProgress( object sender, FileReadEventArgs e )
+		{
+			ReadProgress.Raise( this, e );
 		}
 
 		public void ReadFile()

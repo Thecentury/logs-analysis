@@ -9,14 +9,16 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostFileInfo : IFileInfo
 	{
-		private readonly List<LogEntry> logEntries = new List<LogEntry>();
+		private readonly List<LogEntry> logEntries;
 		private readonly string name;
 
-		public MostFileInfo( string name )
+		public MostFileInfo( string name, List<LogEntry> logEntries )
 		{
 			if ( name == null ) throw new ArgumentNullException( "name" );
+			if ( logEntries == null ) throw new ArgumentNullException( "logEntries" );
 
 			this.name = name;
+			this.logEntries = logEntries;
 		}
 
 		public void Refresh()
