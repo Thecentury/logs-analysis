@@ -19,17 +19,17 @@ namespace LogAnalyzer
 {
 	public sealed class LogAnalyzerCore : LogEntriesList
 	{
-		private readonly IEnvironment environment = null;
-		private readonly LogAnalyzerConfiguration config = null;
-		private readonly IOperationsQueue operationsQueue = null;
+		private readonly IEnvironment environment;
+		private readonly LogAnalyzerConfiguration config;
+		private readonly IOperationsQueue operationsQueue;
 
 		public IOperationsQueue OperationsQueue
 		{
 			get { return operationsQueue; }
 		}
 
-		private readonly List<LogDirectory> directories = null;
-		private readonly ReadOnlyCollection<LogDirectory> readonlyDirectories = null;
+		private readonly List<LogDirectory> directories;
+		private readonly ReadOnlyCollection<LogDirectory> readonlyDirectories;
 		public IList<LogDirectory> Directories
 		{
 			get { return readonlyDirectories; }
@@ -140,7 +140,7 @@ namespace LogAnalyzer
 
 		private void PerformInitialMerge()
 		{
-			if ( directories.Count == 1 )
+			if ( false && directories.Count == 1 )
 			{
 				this.MergedEntriesList = directories[0].MergedEntriesList;
 				this.MergedEntries.First = this.MergedEntriesList;
