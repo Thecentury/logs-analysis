@@ -36,6 +36,8 @@
 					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
+				
+				<Button Content="Refresh" Click="RefreshButton_Click"/>
 			</ToolBar>
 
 			<Grid>

@@ -307,10 +307,13 @@ namespace LogAnalyzer
 				IFileInfo file = directoryInfo.GetFileInfo( fullPath );
 				logFile = CreateLogFile( file );
 
+				// todo brinchuk this should be done async!
+				logFile.ReadFile();
+
 				AddFile( logFile );
 			}
 
-			Task.Factory.StartNew( logFile.ReadFile );
+			//Task.Factory.StartNew( logFile.ReadFile );
 		}
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
