@@ -23,5 +23,12 @@ namespace LogAnalyzer.Most.App
 		{
 			InitializeComponent();
 		}
+
+		private void RefreshButton_Click( object sender, RoutedEventArgs e )
+		{
+			var app = (App)App.Current;
+			
+			app.Timer.MakeRing();
+		}
 	}
 }

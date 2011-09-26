@@ -23,6 +23,12 @@ namespace LogAnalyzer.Most.App
 	{
 		private Logger logger;
 
+		private readonly MockTimer timer = new MockTimer();
+		public MockTimer Timer
+		{
+			get { return timer; }
+		}
+
 		protected override void OnStartup( StartupEventArgs e )
 		{
 			base.OnStartup( e );
@@ -36,7 +42,6 @@ namespace LogAnalyzer.Most.App
 										MostEnvironment env;
 
 										MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
-										MockTimer timer = new MockTimer();
 
 										LogAnalyzerConfiguration config = null;
 
