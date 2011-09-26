@@ -56,6 +56,12 @@ namespace LogAnalyzer
 
 			ValidateThread();
 
+			bool parentMergedEntriesDoNotContainTheEntryBeingAdded = addedEntries.All( newEntry => !parent.MergedEntries.Select( _ => _ ).Contains( newEntry ) );
+			if ( !parentMergedEntriesDoNotContainTheEntryBeingAdded )
+			{
+				// do nothing
+				// return;
+			}
 #if DEBUG
 			int mergedCount = parent.MergedEntries.Count;
 
@@ -63,9 +69,8 @@ namespace LogAnalyzer
 			Condition.DebugAssert( sortedEntriesDoNotContainTheEntrybeingAdded,
 				"Коллекция sortedLogEntries не должна содержать добавляемые элементы." );
 
-			bool parentMergedEntriesDoNotContainTheEntryBeingAdded = addedEntries.All( newEntry => !parent.MergedEntries.Select( _ => _ ).Contains( newEntry ) );
-			Condition.DebugAssert( parentMergedEntriesDoNotContainTheEntryBeingAdded,
-				"Коллекция parent.MergedEntries не должна содержать добавляемые элементы." );
+			//Condition.DebugAssert( parentMergedEntriesDoNotContainTheEntryBeingAdded,
+			//    "Коллекция parent.MergedEntries не должна содержать добавляемые элементы." );
 
 			AssertParentMergedEntriesAreSorted();
 #endif
