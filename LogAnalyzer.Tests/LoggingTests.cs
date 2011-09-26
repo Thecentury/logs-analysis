@@ -17,7 +17,7 @@ namespace LogAnalyzer.Tests
 		[SetUp]
 		public void Init()
 		{
-			InitEnvironment( Encoding.Unicode );
+			InitEnvironment( Encoding.Unicode, directoriesCount: 2 );
 		}
 
 		[Test]
@@ -26,7 +26,7 @@ namespace LogAnalyzer.Tests
 			WriteTestMessages();
 
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
-			core.WaitForMergedEntriesCount( 4, timeout: 2000 ).AssertIsTrue( "Превышено время ожидания." );
+			core.WaitForMergedEntriesCount( 4, timeout: 2000 ).AssertIsTrueOrFailWithMessage( "Превышено время ожидания." );
 
 			core.MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.First().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
@@ -43,7 +43,7 @@ namespace LogAnalyzer.Tests
 			var file3 = env.Directories.First().AddFile( "3" );
 			file3.WriteInfo( "test" );
 
-			core.WaitForMergedEntriesCount( 1, timeout: 1500 ).AssertIsTrue( "Истекло время ожидания." );
+			core.WaitForMergedEntriesCount( 1, timeout: 1500 ).AssertIsTrueOrFailWithMessage( "Истекло время ожидания." );
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace LogAnalyzer.Tests
 			logger3.WriteInfo( "6", 6 );
 			logger1.WriteInfo( "5", 5 );
 
-			core.WaitForMergedEntriesCount( 7, 6000 ).AssertIsTrue( "Истекло время ожидания." );
+			core.WaitForMergedEntriesCount( 7, 6000 ).AssertIsTrueOrFailWithMessage( "Истекло время ожидания." );
 			core.MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.First().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.Second().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
@@ -82,7 +82,7 @@ namespace LogAnalyzer.Tests
 
 			logger1.WriteInfo( "13", 3 );
 
-			core.WaitForMergedEntriesCount( 7, 2000 ).AssertIsTrue( "Timeout" );
+			core.WaitForMergedEntriesCount( 7, 2000 ).AssertIsTrueOrFailWithMessage( "Timeout" );
 
 			core.MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.First().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );

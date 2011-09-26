@@ -70,7 +70,7 @@ namespace LogAnalyzer.Tests
 
 		private void TestLoggingInEncoding( Encoding encoding )
 		{
-			InitEnvironment( encoding );
+			InitEnvironment( encoding, directoriesCount: 2 );
 			WriteTestMessages();
 		}
 	}
