@@ -60,7 +60,7 @@ namespace LogAnalyzer.Tests
 			logger3.WriteInfo( "6", 6 );
 			logger1.WriteInfo( "5", 5 );
 
-			core.WaitForMergedEntriesCount( 7, 4000 ).AssertIsTrue( "Истекло время ожидания." );
+			core.WaitForMergedEntriesCount( 7, 6000 ).AssertIsTrue( "Истекло время ожидания." );
 			core.MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.First().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
 			core.Directories.Second().MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
