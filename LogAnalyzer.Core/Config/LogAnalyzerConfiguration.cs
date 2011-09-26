@@ -78,7 +78,7 @@ namespace LogAnalyzer.Config
 			return result;
 		}
 
-		public static LogAnalyzerConfigurationFluentApi Create()
+		public static LogAnalyzerConfigurationFluentApi CreateNew()
 		{
 			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
 			return new LogAnalyzerConfigurationFluentApi( config );

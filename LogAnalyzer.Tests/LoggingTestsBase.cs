@@ -22,7 +22,7 @@ namespace LogAnalyzer.Tests
 
 		protected void InitEnvironment( Encoding encoding, int directoriesCount = 2 )
 		{
-			var configBuilder = LogAnalyzerConfiguration.Create();
+			var configBuilder = LogAnalyzerConfiguration.CreateNew();
 			configBuilder.AddLogDirectory( "Dir1", "*", "Some directory 1" );
 			if ( directoriesCount > 1 )
 			{

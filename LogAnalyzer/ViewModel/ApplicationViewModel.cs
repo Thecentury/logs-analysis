@@ -45,7 +45,9 @@ namespace LogAnalyzer.GUI.ViewModel
 
 			config.Logger.WriteInfo( "Starting..." );
 
-			FileSystemEnvironment environment = new FileSystemEnvironment( config );
+			IEnvironment environment = config.Resolve<IEnvironment>();
+			if ( environment == null ) throw new ArgumentException( "environment" );
+
 			core = new LogAnalyzerCore( config, environment );
 
 			core.Loaded += OnCore_Loaded;

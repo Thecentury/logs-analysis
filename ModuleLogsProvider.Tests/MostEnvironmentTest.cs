@@ -73,7 +73,7 @@ namespace ModuleLogsProvider.Tests
 
 		private LogAnalyzerConfiguration BuildConfig()
 		{
-			var config = LogAnalyzerConfiguration.Create()
+			var config = LogAnalyzerConfiguration.CreateNew()
 							.AddLogDirectory( "Dir1", "*", "Some directory 1" )
 							.AddLogWriter( new DebugLogWriter() )
 							.AcceptAllLogTypes()
