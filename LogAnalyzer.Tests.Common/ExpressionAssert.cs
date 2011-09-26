@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using NUnit.Framework;
 
-namespace ModuleLogsProvider.Tests
+namespace LogAnalyzer.Tests.Common
 {
 	/// <summary>
 	/// Assert с особенностями: если он проваливается, то автоматически выдается осмысленный message.
@@ -21,7 +18,7 @@ namespace ModuleLogsProvider.Tests
 			{
 				string typeName = typeof( T ).Name;
 
-				string message = String.Format( "{0}: {1} failed.", typeName, expression.Body.ToString() );
+				string message = String.Format( "{0}: {1} failed.", typeName, expression.Body );
 				Assert.Fail( message );
 			}
 		}

@@ -20,11 +20,16 @@ namespace LogAnalyzer.Tests
 		protected DeterminedTimeLogHelper logger3;
 		protected TotalOperationsCountHelper opsCount;
 
-		protected void InitEnvironment( Encoding encoding )
+		protected void InitEnvironment( Encoding encoding, int directoriesCount = 2 )
 		{
-			config = LogAnalyzerConfiguration.Create()
-				.AddLogDirectory( "Dir1", "*", "Some directory 1" )
-				.AddLogDirectory( "Dir2", "*", "Some directory 2" )
+			var configBuilder = LogAnalyzerConfiguration.Create();
+			configBuilder.AddLogDirectory( "Dir1", "*", "Some directory 1" );
+			if ( directoriesCount > 1 )
+			{
+				configBuilder.AddLogDirectory( "Dir2", "*", "Some directory 2" );
+			}
+
+			config = configBuilder
 				.AddLogWriter( new DebugLogWriter() )
 				.AcceptAllLogTypes()
 				.BuildConfig();
@@ -35,11 +40,15 @@ namespace LogAnalyzer.Tests
 
 			file1 = env.Directories.First().AddFile( "1" );
 			file2 = env.Directories.First().AddFile( "2" );
-			file3 = env.Directories.Second().AddFile( "3" );
 
 			logger1 = new DeterminedTimeLogHelper( file1 );
 			logger2 = new DeterminedTimeLogHelper( file2 );
-			logger3 = new DeterminedTimeLogHelper( file3 );
+
+			if ( directoriesCount > 1 )
+			{
+				file3 = env.Directories.Second().AddFile( "3" );
+				logger3 = new DeterminedTimeLogHelper( file3 );
+			}
 
 			core = new LogAnalyzerCore( config, env );
 			core.Start();

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogAnalyzer;
 using LogAnalyzer.Config;
+using LogAnalyzer.Tests.Common;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
@@ -48,7 +49,10 @@ namespace ModuleLogsProvider.Tests
 			var firstDir = core.Directories[0];
 			Assert.That( firstDir, Is.Not.Null );
 			ExpressionAssert.That( firstDir, d => d.Files.Count == 1 );
-			ExpressionAssert.That( firstDir, d => d.Files.Count != 1 );
+
+			var firstFile = firstDir.Files[0];
+			Assert.NotNull( firstFile );
+			ExpressionAssert.That( firstFile, f => f.LogEntries.Count == 1 );
 		}
 
 		private LogAnalyzerConfiguration BuildConfig()

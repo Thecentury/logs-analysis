@@ -23,7 +23,7 @@ namespace LogAnalyzer.Tests
 		}
 
 		[DebuggerStepThrough]
-		public static void AssertIsTrue( this bool value, string message = "False" )
+		public static void AssertIsTrueOrFailWithMessage( this bool value, string message = "False" )
 		{
 			Assert.IsTrue( value, message );
 		}
