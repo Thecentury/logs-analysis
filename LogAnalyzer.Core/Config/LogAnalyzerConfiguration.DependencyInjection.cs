@@ -32,7 +32,7 @@ namespace LogAnalyzer.Config
 		{
 			var resolvedValue = Resolve<TContract>();
 			if ( resolvedValue == null )
-				throw new ArgumentException( String.Format( "Resolved value of type {0} should not be null.", typeof( T ) ) );
+				throw new ArgumentException( String.Format( "Resolved value of type {0} should not be null.", typeof( TContract ) ) );
 
 			return resolvedValue;
 		}

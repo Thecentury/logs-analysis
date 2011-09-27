@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleLogsProvider.ServerTypes", "..\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj", "{E6F957AA-0184-4291-8D50-B3ABEE965EF8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalyzer.GUI", "LogAnalyzer\LogAnalyzer.GUI.csproj", "{2B2192E9-C25A-4B12-96E8-38526B549D1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalyzer.Core", "LogAnalyzer.Core\LogAnalyzer.Core.csproj", "{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}"
@@ -21,44 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalyzer.Tests.Common", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalyzer.Most.App", "LogAnalyzer.Most.App\LogAnalyzer.Most.App.csproj", "{C273605B-D557-4F56-A49D-D080E7982A25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleLogsProvider.ServerTypes", "..\..\Projects\Eticket\Version31_jet\Source\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj", "{E6F957AA-0184-4291-8D50-B3ABEE965EF8}"
+EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 11
-		SccProjectName0 = Perforce\u0020Project
-		SccLocalPath0 = ..
-		SccProvider0 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection0 = LogsAnalysis\\
-		SccProjectUniqueName1 = LogAnalyzer.App\\LogAnalyzer.App.csproj
-		SccLocalPath1 = ..
-		SccProjectFilePathRelativizedFromConnection1 = LogsAnalysis\\LogAnalyzer.App\\
-		SccProjectUniqueName2 = LogAnalyzer.Core\\LogAnalyzer.Core.csproj
-		SccLocalPath2 = ..
-		SccProjectFilePathRelativizedFromConnection2 = LogsAnalysis\\LogAnalyzer.Core\\
-		SccProjectUniqueName3 = LogAnalyzer.Most.App\\LogAnalyzer.Most.App.csproj
-		SccLocalPath3 = ..
-		SccProjectFilePathRelativizedFromConnection3 = LogsAnalysis\\LogAnalyzer.Most.App\\
-		SccProjectUniqueName4 = LogAnalyzer.Tests.Common\\LogAnalyzer.Tests.Common.csproj
-		SccLocalPath4 = ..
-		SccProjectFilePathRelativizedFromConnection4 = LogsAnalysis\\LogAnalyzer.Tests.Common\\
-		SccProjectUniqueName5 = LogAnalyzer.Tests\\LogAnalyzer.Tests.csproj
-		SccLocalPath5 = ..
-		SccProjectFilePathRelativizedFromConnection5 = LogsAnalysis\\LogAnalyzer.Tests\\
-		SccProjectUniqueName6 = LogAnalyzer\\LogAnalyzer.GUI.csproj
-		SccLocalPath6 = ..
-		SccProjectFilePathRelativizedFromConnection6 = LogsAnalysis\\LogAnalyzer\\
-		SccProjectUniqueName7 = LogsService\\LogsService.csproj
-		SccLocalPath7 = ..
-		SccProjectFilePathRelativizedFromConnection7 = LogsAnalysis\\LogsService\\
-		SccProjectUniqueName8 = ModuleLogsProvider.Logging\\ModuleLogsProvider.Logging.csproj
-		SccLocalPath8 = ..
-		SccProjectFilePathRelativizedFromConnection8 = LogsAnalysis\\ModuleLogsProvider.Logging\\
-		SccProjectUniqueName9 = ModuleLogsProvider.Tests\\ModuleLogsProvider.Tests.csproj
-		SccLocalPath9 = ..
-		SccProjectFilePathRelativizedFromConnection9 = LogsAnalysis\\ModuleLogsProvider.Tests\\
-		SccProjectUniqueName10 = ..\\ModuleLogsProvider.Types\\ModuleLogsProvider.ServerTypes.csproj
-		SccLocalPath10 = ..
-		SccProjectFilePathRelativizedFromConnection10 = ModuleLogsProvider.Types\\
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -74,24 +37,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Any CPU.Build.0 = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|x64.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|x86.ActiveCfg = Debug|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|x64.ActiveCfg = Release|Any CPU
-		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B2192E9-C25A-4B12-96E8-38526B549D1C}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{2B2192E9-C25A-4B12-96E8-38526B549D1C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{2B2192E9-C25A-4B12-96E8-38526B549D1C}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -254,6 +199,24 @@ Global
 		{C273605B-D557-4F56-A49D-D080E7982A25}.Release|x64.ActiveCfg = Release|x86
 		{C273605B-D557-4F56-A49D-D080E7982A25}.Release|x86.ActiveCfg = Release|x86
 		{C273605B-D557-4F56-A49D-D080E7982A25}.Release|x86.Build.0 = Release|x86
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Any CPU.Build.0 = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|x64.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.FullDebug|x86.ActiveCfg = Debug|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|x64.ActiveCfg = Release|Any CPU
+		{E6F957AA-0184-4291-8D50-B3ABEE965EF8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
