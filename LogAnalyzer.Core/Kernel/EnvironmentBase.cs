@@ -21,10 +21,5 @@ namespace LogAnalyzer.Kernel
 		public abstract IOperationsQueue OperationsQueue { get; }
 
 		public abstract ITimeService TimeService { get; }
-
-		public virtual IScheduler Scheduler
-		{
-			get { return config.GetScheduler(); }
-		}
 	}
 }

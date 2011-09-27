@@ -14,7 +14,5 @@ namespace LogAnalyzer.Kernel
 		IOperationsQueue OperationsQueue { get; }
 
 		ITimeService TimeService { get; }
-
-		IScheduler Scheduler { get; }
 	}
 }
