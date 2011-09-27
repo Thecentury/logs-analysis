@@ -214,7 +214,8 @@ namespace LogAnalyzer
 		{
 			// already frozen?
 			if ( isFrozen )
-				throw new InvalidOperationException();
+				return;
+				//throw new InvalidOperationException();
 
 			isFrozen = true;
 
