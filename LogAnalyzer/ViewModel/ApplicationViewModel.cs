@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Diagnostics;
+using LogAnalyzer.Kernel;
 using Microsoft.Win32;
 using System.IO;
 using System.Xaml;
@@ -45,8 +46,7 @@ namespace LogAnalyzer.GUI.ViewModel
 
 			config.Logger.WriteInfo( "Starting..." );
 
-			IEnvironment environment = config.Resolve<IEnvironment>();
-			if ( environment == null ) throw new ArgumentException( "environment" );
+			IEnvironment environment = config.ResolveNotNull<IEnvironment>();
 
 			core = new LogAnalyzerCore( config, environment );
 

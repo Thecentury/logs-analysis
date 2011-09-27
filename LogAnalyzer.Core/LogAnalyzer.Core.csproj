@@ -65,7 +65,9 @@
     <Compile Include="Collections\ParallelHelper.cs" />
     <Compile Include="Collections\ParallelSort.cs" />
     <Compile Include="Collections\SingleThreadWriteCollection.cs" />
+    <Compile Include="Config\LogAnalyzerConfiguration.Extensions.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfoFluentApi.cs" />
+    <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="LogAnalyzerCore.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="FileReadEventArgs.cs" />

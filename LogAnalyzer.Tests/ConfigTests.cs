@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Config;
+using LogAnalyzer.Tests.Mock;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests

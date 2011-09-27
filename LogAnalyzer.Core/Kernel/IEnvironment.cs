@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Reactive.Concurrency;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	public interface IEnvironment
 	{
@@ -17,5 +14,7 @@ namespace LogAnalyzer
 		IOperationsQueue OperationsQueue { get; }
 
 		ITimeService TimeService { get; }
+
+		IScheduler Scheduler { get; }
 	}
 }

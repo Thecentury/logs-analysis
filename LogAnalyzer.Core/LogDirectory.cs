@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Text;
 using System.IO;
 using LogAnalyzer.Config;
@@ -14,6 +16,7 @@ using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Caching;
 using LogAnalyzer.Kernel;
+using System.Reactive.Threading.Tasks;
 
 namespace LogAnalyzer
 {
@@ -37,6 +40,8 @@ namespace LogAnalyzer
 		private readonly IEnvironment environment;
 		private readonly IDirectoryInfo directoryInfo;
 		private readonly IOperationsQueue operationsQueue;
+		private readonly IScheduler scheduler;
+
 		private readonly LogAnalyzerConfiguration config;
 		private readonly LogAnalyzerCore core;
 		private readonly ExpressionFilter<IFileInfo> fileFilter = new ExpressionFilter<IFileInfo>();
@@ -97,6 +102,7 @@ namespace LogAnalyzer
 			this.core = core;
 			this.filesWrapper = new ThinListWrapper<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
+			this.scheduler = config.GetScheduler();
 
 			fileFilter.Changed += OnFileFilterChanged;
 
@@ -129,19 +135,19 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var files = (from file in dir.EnumerateFiles( FileNameFilter )
-						 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-						 select file).ToList();
+			var filesInDirectory = ( from file in dir.EnumerateFiles( FileNameFilter )
+									 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+									 select file ).ToList();
 
-			BeginLoadFiles( files );
+			BeginLoadFiles( filesInDirectory );
 		}
 
-		private int initialFilesLoadedCount = 0;
+		private int initialFilesLoadedCount;
 		private bool loadStarted = false;
-		private int initialFilesLoadingCount = 0;
-		private void BeginLoadFiles( IEnumerable<IFileInfo> files )
+		private int initialFilesLoadingCount;
+		private void BeginLoadFiles( IEnumerable<IFileInfo> filesInDirectory )
 		{
-			foreach ( IFileInfo file in files )
+			foreach ( IFileInfo file in filesInDirectory )
 			{
 				file.Refresh();
 
@@ -158,6 +164,8 @@ namespace LogAnalyzer
 					AddFile( logFile );
 				} );
 
+				scheduler.Schedule( logFile.ReadFile );
+				
 				Task fileReadTask = new Task( logFile.ReadFile );
 
 				fileReadTask.ContinueWith( parentTask =>

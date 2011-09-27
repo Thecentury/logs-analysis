@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Mock
 {
 	public sealed class MockTimeService : ITimeService
 	{
-		#region ITimeService Members
-
 		public bool IsRelativelyOld( DateTime current, DateTime max )
 		{
 			return false;
 		}
-
-		#endregion
 	}
 }

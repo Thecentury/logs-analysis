@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
+using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
-using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
-	public sealed class FileSystemEnvironment : IEnvironment
+	public sealed class FileSystemEnvironment : EnvironmentBase
 	{
-		private readonly WorkerThreadOperationsQueue operationsQueue = null;
-		private readonly List<FileSystemDirectoryInfo> directories = null;
-		private readonly ITimeService timeService = null;
+		private readonly WorkerThreadOperationsQueue operationsQueue;
+		private readonly List<FileSystemDirectoryInfo> directories;
+		private readonly ITimeService timeService;
 
 		public FileSystemEnvironment( LogAnalyzerConfiguration config )
+			: base( config )
 		{
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
@@ -29,18 +28,18 @@ namespace LogAnalyzer
 		/// </summary>
 		/// <param name="path">Путь к папке.</param>
 		/// <returns></returns>
-		public IDirectoryInfo GetDirectory( string path )
+		public override IDirectoryInfo GetDirectory( string path )
 		{
 			FileSystemDirectoryInfo directoryInfo = directories.First( d => d.Path == path );
 			return directoryInfo;
 		}
 
-		public IOperationsQueue OperationsQueue
+		public override IOperationsQueue OperationsQueue
 		{
 			get { return operationsQueue; }
 		}
 
-		public ITimeService TimeService
+		public override ITimeService TimeService
 		{
 			get { return timeService; }
 		}

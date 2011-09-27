@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reactive.Concurrency;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
@@ -9,6 +10,12 @@ namespace LogAnalyzer.Config
 {
 	public partial class LogAnalyzerConfiguration
 	{
+		public LogAnalyzerConfiguration()
+		{
+			IScheduler scheduler = Scheduler.TaskPool;
+			RegisterInstance( scheduler );
+		}
+
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<LogDirectoryConfigurationInfo> Directories

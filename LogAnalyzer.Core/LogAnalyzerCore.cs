@@ -14,6 +14,7 @@ using LogAnalyzer.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {

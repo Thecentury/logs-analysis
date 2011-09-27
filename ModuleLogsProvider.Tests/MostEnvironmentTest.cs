@@ -73,8 +73,6 @@ namespace ModuleLogsProvider.Tests
 
 			Task task = Task.Factory.StartNew( timer.MakeRing );
 
-			// todo brinchuk return 2000 back
-
 			var millisecondsToSleep = GetSleepDuration();
 			Thread.Sleep( millisecondsToSleep );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();

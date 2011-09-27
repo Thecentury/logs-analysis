@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	public sealed class ConstIntervalTimeService : ITimeService
 	{
@@ -22,8 +19,6 @@ namespace LogAnalyzer
 			get { return sortingDelay; }
 		}
 
-		#region ITimeService Members
-
 		public bool IsRelativelyOld( DateTime current, DateTime max )
 		{
 			TimeSpan intervalToNow = DateTime.Now - current;
@@ -32,7 +27,5 @@ namespace LogAnalyzer
 
 			return maxInterval > sortingDelay;
 		}
-
-		#endregion
 	}
 }
