@@ -129,9 +129,9 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var files = ( from file in dir.EnumerateFiles( FileNameFilter )
-						  where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-						  select file ).ToList();
+			var files = (from file in dir.EnumerateFiles( FileNameFilter )
+						 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+						 select file).ToList();
 
 			BeginLoadFiles( files );
 		}
@@ -367,13 +367,6 @@ namespace LogAnalyzer
 			files.Add( logFile );
 
 			OnLogEntriesAddedToFile( logFile.LogEntries );
-		}
-
-		// todo remove me
-		[Conditional( "DEBUG" )]
-		private void DumpFiles()
-		{
-			logger.DebugWriteInfo( "Files = " + files.Aggregate( "", ( s, f ) => s + ( f == null ? "null" : f.Name ) + " " ) );
 		}
 
 		public override int TotalLengthInBytes

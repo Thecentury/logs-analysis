@@ -13,6 +13,8 @@ namespace ModuleLogsProvider.Tests
 			MostEnvironmentTest test = new MostEnvironmentTest();
 			test.TestSingleMessageFromMost();
 
+			Console.WriteLine( "Done." );
+
 			//NUnitTestRunner.RunTests<Program>();
 		}
 	}

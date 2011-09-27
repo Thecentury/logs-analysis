@@ -36,8 +36,7 @@ namespace ModuleLogsProvider.Tests
 		{
 			SendMessages(
 				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = "L1" }
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" }
 				);
 		}
 
@@ -45,10 +44,12 @@ namespace ModuleLogsProvider.Tests
 		[Test]
 		public void TestSeveralMessagesFromTwoLoggers()
 		{
+			const string logger1 = "L1";
+			const string logger2 = "L2";
+
 			SendMessages(
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = "L2" }
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = logger1 },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = logger2 }
 				);
 		}
 
