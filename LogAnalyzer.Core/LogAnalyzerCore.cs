@@ -85,7 +85,6 @@ namespace LogAnalyzer
 			logger.DebugWriteInfo( "" );
 			logger.DebugWriteInfo( "" );
 			logger.DebugWriteInfo( "" );
-			logger.DebugWriteInfo( "" );
 
 			this.directories = config.EnabledDirectories.Select( di => new LogDirectory( di, config, environment, this ) ).ToList();
 			this.readonlyDirectories = directories.AsReadOnly();
@@ -94,19 +93,19 @@ namespace LogAnalyzer
 
 			foreach ( var dir in directories )
 			{
-				dir.Loaded += OnDirectory_Loaded;
-				dir.ReadProgress += new EventHandler<FileReadEventArgs>( OnDirectory_ReadProgress );
+				dir.Loaded += OnDirectoryLoaded;
+				dir.ReadProgress += OnDirectoryReadProgress;
 			}
 
 			this.operationsQueue = environment.OperationsQueue;
 		}
 
-		private void OnDirectory_ReadProgress( object sender, FileReadEventArgs e )
+		private void OnDirectoryReadProgress( object sender, FileReadEventArgs e )
 		{
 			RaiseReadProgress( e );
 		}
 
-		private void OnDirectory_Loaded( object sender, EventArgs e )
+		private void OnDirectoryLoaded( object sender, EventArgs e )
 		{
 			Interlocked.Increment( ref directoriesLoadedCount );
 			if ( directoriesLoadedCount == directories.Count )
@@ -117,7 +116,7 @@ namespace LogAnalyzer
 
 			loadedEvent.Signal();
 			LogDirectory dir = (LogDirectory)sender;
-			dir.Loaded -= OnDirectory_Loaded;
+			dir.Loaded -= OnDirectoryLoaded;
 		}
 
 		protected override void StartCore()

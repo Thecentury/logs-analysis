@@ -47,7 +47,7 @@ namespace LogAnalyzer
 			PerformanceCountersService.Increment( operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (operationsQueue.Count + 1) );
+			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( operationsQueue.Count + 1 ) );
 			operationsQueue.Add( operation );
 
 			Interlocked.Increment( ref totalOperationsCount );
@@ -83,18 +83,27 @@ namespace LogAnalyzer
 			// todo try-catch?
 			while ( true )
 			{
-				IAsyncOperation operation = operationsQueue.Take();
+				try
+				{
+					IAsyncOperation operation = operationsQueue.Take();
 
-				PerformanceCountersService.Decrement( operationsCountCounter );
+					PerformanceCountersService.Decrement( operationsCountCounter );
 
-				logger.DebugWriteVerbose( "Core.MainThreadProc: → {0}:{1}", operation, operation.GetHashCode() );
-				operation.Execute();
-				logger.DebugWriteVerbose( "Core.MainThreadProc: ← {0}:{1} Count = {2}", operation, operation.GetHashCode(), operationsQueue.Count );
+					logger.DebugWriteVerbose( "Core.MainThreadProc: → {0}:{1}", operation, operation.GetHashCode() );
+					operation.Execute();
+					logger.DebugWriteVerbose( "Core.MainThreadProc: ← {0}:{1} Count = {2}", operation, operation.GetHashCode(),
+											 operationsQueue.Count );
 
-				// todo не удалить ли это в Release?
-				// для WaitAllRunningOperationsToComplete
-				lock ( operationsSync )
-					Monitor.Pulse( operationsSync );
+					// todo не удалить ли это в Release?
+					// для WaitAllRunningOperationsToComplete
+					lock ( operationsSync )
+						Monitor.Pulse( operationsSync );
+				}
+				catch ( Exception exc )
+				{
+					Condition.BreakIfAttached();
+					throw;
+				}
 			}
 		}
 	}
