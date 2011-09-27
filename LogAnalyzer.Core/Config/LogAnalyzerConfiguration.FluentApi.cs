@@ -68,7 +68,7 @@ namespace LogAnalyzer.Config
 			return this;
 		}
 
-		public LogAnalyzerConfigurationFluentApi RegisterInstance<TContract>( TContract instance )
+		public LogAnalyzerConfigurationFluentApi RegisterInstance<TContract>( object instance )
 		{
 			if ( instance == null )
 				throw new ArgumentNullException( "instance" );

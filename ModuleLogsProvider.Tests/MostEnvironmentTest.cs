@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogAnalyzer;
 using LogAnalyzer.Config;
+using LogAnalyzer.Operations;
 using LogAnalyzer.Tests.Common;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
@@ -107,6 +108,7 @@ namespace ModuleLogsProvider.Tests
 							.AcceptAllLogTypes()
 							.RegisterInstance<ITimer>( timer )
 							.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
+							.RegisterInstance<OperationScheduler>( OperationScheduler.SyncronousScheduler )
 							.BuildConfig();
 
 			return config;

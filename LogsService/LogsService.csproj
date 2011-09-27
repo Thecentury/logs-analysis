@@ -58,7 +58,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Projects\Eticket\Version31_jet\Source\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj">
+    <ProjectReference Include="..\..\ModuleLogsProvider.Types\ModuleLogsProvider.ServerTypes.csproj">
       <Project>{E6F957AA-0184-4291-8D50-B3ABEE965EF8}</Project>
       <Name>ModuleLogsProvider.ServerTypes</Name>
     </ProjectReference>
