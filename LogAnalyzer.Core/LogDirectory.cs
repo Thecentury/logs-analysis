@@ -40,7 +40,6 @@ namespace LogAnalyzer
 		private readonly IEnvironment environment;
 		private readonly IDirectoryInfo directoryInfo;
 		private readonly IOperationsQueue operationsQueue;
-		private readonly IScheduler scheduler;
 
 		private readonly LogAnalyzerConfiguration config;
 		private readonly LogAnalyzerCore core;
@@ -102,7 +101,6 @@ namespace LogAnalyzer
 			this.core = core;
 			this.filesWrapper = new ThinListWrapper<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
-			this.scheduler = config.GetScheduler();
 
 			fileFilter.Changed += OnFileFilterChanged;
 
@@ -164,8 +162,6 @@ namespace LogAnalyzer
 					AddFile( logFile );
 				} );
 
-				scheduler.Schedule( logFile.ReadFile );
-				
 				Task fileReadTask = new Task( logFile.ReadFile );
 
 				fileReadTask.ContinueWith( parentTask =>

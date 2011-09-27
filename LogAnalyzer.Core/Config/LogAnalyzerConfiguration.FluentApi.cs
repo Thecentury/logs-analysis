@@ -9,14 +9,7 @@ namespace LogAnalyzer.Config
 
 		public LogAnalyzerConfiguration BuildConfig()
 		{
-			ValidateConfig();
-
 			return config;
-		}
-
-		private void ValidateConfig()
-		{
-			ThrowIfCantResolve<IScheduler>();
 		}
 
 		private void ThrowIfCantResolve<TContract>()
@@ -71,16 +64,6 @@ namespace LogAnalyzer.Config
 		public LogAnalyzerConfigurationFluentApi Register<TContract>( Func<object> createFunc )
 		{
 			config.Register<TContract>( createFunc );
-
-			return this;
-		}
-
-		public LogAnalyzerConfigurationFluentApi WithScheduler( IScheduler scheduler )
-		{
-			if ( scheduler == null ) 
-				throw new ArgumentNullException( "scheduler" );
-
-			config.RegisterInstance( scheduler );
 
 			return this;
 		}
