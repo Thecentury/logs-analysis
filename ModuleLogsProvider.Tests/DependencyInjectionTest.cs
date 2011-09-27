@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace ModuleLogsProvider.Tests
 {
-	[TestFixture]
+	//[TestFixture]
 	public class DependencyInjectionTest
 	{
 		//[Test]

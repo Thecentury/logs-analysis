@@ -14,7 +14,7 @@ namespace LogAnalyzer
 
 	internal sealed class DelegateOperation : IAsyncOperation
 	{
-		private readonly Action action = null;
+		private readonly Action action;
 
 		public DelegateOperation( Action action )
 		{
