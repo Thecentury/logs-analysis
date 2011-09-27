@@ -5,11 +5,17 @@ using System.Reactive.Concurrency;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
 	public partial class LogAnalyzerConfiguration
 	{
+		public LogAnalyzerConfiguration()
+		{
+			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
+		}
+
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<LogDirectoryConfigurationInfo> Directories

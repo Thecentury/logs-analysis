@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
+using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Kernel
 {
@@ -21,5 +22,10 @@ namespace LogAnalyzer.Kernel
 		public abstract IOperationsQueue OperationsQueue { get; }
 
 		public abstract ITimeService TimeService { get; }
+
+		public OperationScheduler Scheduler
+		{
+			get { return config.ResolveNotNull<OperationScheduler>(); }
+		}
 	}
 }

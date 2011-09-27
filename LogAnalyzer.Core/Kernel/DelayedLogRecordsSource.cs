@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Reactive.Linq;
-using LogAnalyzer.Extensions;
-using System.Reactive.Concurrency;
-using System.Reactive;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	public sealed class DelayedLogRecordsSource : LogNotificationsSourceBase
 	{
-		private readonly LogNotificationsSourceBase inner = null;
+		private readonly LogNotificationsSourceBase inner;
 		private readonly TimeSpan updateInterval = TimeSpan.FromMilliseconds( 500 );
 
 		public DelayedLogRecordsSource( LogNotificationsSourceBase inner ) : this( inner, TimeSpan.FromMilliseconds( 500 ) ) { }
@@ -25,9 +19,9 @@ namespace LogAnalyzer
 			this.inner = inner;
 			this.updateInterval = updateInterval;
 
-			CreateDelayed( "Changed" ).Subscribe( e => RaiseChanged( e ) );
-			CreateObservable( "Deleted" ).Subscribe( e => RaiseChanged( e ) );
-			CreateObservable( "Created" ).Subscribe( e => RaiseChanged( e ) );
+			CreateDelayed( "Changed" ).Subscribe( RaiseChanged );
+			CreateObservable( "Deleted" ).Subscribe( RaiseChanged );
+			CreateObservable( "Created" ).Subscribe( RaiseChanged );
 			Observable.FromEventPattern<RenamedEventArgs>( inner, "Renamed" ).Subscribe( e => RaiseRenamed( e.EventArgs ) );
 			Observable.FromEventPattern<ErrorEventArgs>( inner, "Error" ).Subscribe( e => RaiseError( e.EventArgs ) );
 		}

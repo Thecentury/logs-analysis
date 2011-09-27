@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LogAnalyzer.Kernel;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
@@ -12,7 +13,7 @@ namespace LogAnalyzer.Tests
 	[TestFixture]
 	public class DifferentEncodingsTests : LoggingTestsBase
 	{
-		protected Func<IOperationsQueue> createOperationsQueue = null;
+		protected Func<IOperationsQueue> CreateOperationsQueue;
 
 		[Test]
 		public void TestLoggingInEncoding_ASCII()

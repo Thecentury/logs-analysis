@@ -9,8 +9,12 @@ namespace LogAnalyzer.Config
 	{
 		private readonly Dictionary<Type, Func<object>> registeredMappings = new Dictionary<Type, Func<object>>();
 
-		public void RegisterInstance<TContract>( TContract instance )
+		public void RegisterInstance<TContract>( object instance )
 		{
+			TContract contract = (TContract)instance;
+			if ( contract == null )
+				throw new ArgumentException();
+
 			Register<TContract>( () => instance );
 		}
 

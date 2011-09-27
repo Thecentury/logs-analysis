@@ -6,12 +6,13 @@ using System.Threading;
 using LogAnalyzer.Extensions;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
 	public sealed class WorkerThreadOperationsQueue : IOperationsQueue
 	{
-		private int totalOperationsCount = 0;
+		private int totalOperationsCount;
 
 		private readonly Logger logger;
 		private readonly BlockingCollection<IAsyncOperation> operationsQueue;

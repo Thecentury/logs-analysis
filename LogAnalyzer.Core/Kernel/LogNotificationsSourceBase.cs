@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.ComponentModel;
 using LogAnalyzer.Extensions;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	public abstract class LogNotificationsSourceBase : INotifyPropertyChanged
 	{
@@ -53,7 +49,7 @@ namespace LogAnalyzer
 
 		protected virtual void StopCore() { }
 
-		private bool isEnabled = false;
+		private bool isEnabled;
 		public bool IsEnabled
 		{
 			get { return isEnabled; }

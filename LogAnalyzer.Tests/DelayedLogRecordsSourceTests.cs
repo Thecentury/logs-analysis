@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
+using LogAnalyzer.Kernel;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
@@ -22,10 +23,10 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestDelayedLogRecordsSource()
 		{
-			int notificationInterval = 50; // ms
+			const int notificationInterval = 50; // ms
 
 			MockLogRecordsSource mockSource = new MockLogRecordsSource( "Dir" );
-			DelayedLogRecordsSource delayedSource = delayedSource = new DelayedLogRecordsSource( mockSource, TimeSpan.FromMilliseconds( notificationInterval ) );
+			DelayedLogRecordsSource delayedSource = new DelayedLogRecordsSource( mockSource, TimeSpan.FromMilliseconds( notificationInterval ) );
 			delayedSource.Start();
 
 			ConcurrentDictionary<string, int> calledTimes = new ConcurrentDictionary<string, int>();

@@ -69,7 +69,6 @@
     <Compile Include="Collections\ParallelHelper.cs" />
     <Compile Include="Collections\ParallelSort.cs" />
     <Compile Include="Collections\SingleThreadWriteCollection.cs" />
-    <Compile Include="Config\LogAnalyzerConfiguration.Extensions.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfoFluentApi.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="LogAnalyzerCore.cs" />
@@ -156,6 +155,11 @@
     <Compile Include="Kernel\WorkerThreadOperationsQueue.cs" />
     <Compile Include="Misc\MultiDictionary.cs" />
     <Compile Include="Misc\PerformanceCountersService.cs" />
+    <Compile Include="Operations\AsyncOperation.cs" />
+    <Compile Include="Operations\SyncronousAsyncOperation.cs" />
+    <Compile Include="Operations\SyncronousOperationScheduler.cs" />
+    <Compile Include="Operations\TaskAsyncOperation.cs" />
+    <Compile Include="Operations\TaskOperationScheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Collections\ThinEnumerableWrapper.cs" />
     <Compile Include="Collections\ThinListWrapper.cs" />
@@ -166,6 +170,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Operations\OperationScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\LogAnalyzerConfiguration.FluentApi.cs" />

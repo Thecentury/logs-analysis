@@ -8,8 +8,8 @@ namespace LogAnalyzer.Tests
 {
 	public sealed class TotalOperationsCountHelper
 	{
-		private readonly LogAnalyzerCore core = null;
-		private int operationsCount = 0;
+		private readonly LogAnalyzerCore core;
+		private int operationsCount;
 
 		public TotalOperationsCountHelper( LogAnalyzerCore core )
 		{

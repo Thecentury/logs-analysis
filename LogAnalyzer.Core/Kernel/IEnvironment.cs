@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Concurrency;
+using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Kernel
 {
@@ -14,5 +15,7 @@ namespace LogAnalyzer.Kernel
 		IOperationsQueue OperationsQueue { get; }
 
 		ITimeService TimeService { get; }
+
+		OperationScheduler Scheduler { get; }
 	}
 }
