@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
+	/// <summary>
+	/// Проверяет, насколько "стара" одна дата относительно другой.
+	/// </summary>
 	public interface ITimeService
 	{
 		bool IsRelativelyOld( DateTime current, DateTime max );

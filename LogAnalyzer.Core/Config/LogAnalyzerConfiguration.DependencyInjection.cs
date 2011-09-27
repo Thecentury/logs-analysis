@@ -17,7 +17,7 @@ namespace LogAnalyzer.Config
 		public void Register<TContract>( Func<object> createImplementationFunc )
 		{
 			Type contractType = typeof( TContract );
-			registeredMappings.Add( contractType, createImplementationFunc );
+			registeredMappings[contractType] = createImplementationFunc;
 		}
 
 		public TContract Resolve<TContract>()
@@ -26,6 +26,21 @@ namespace LogAnalyzer.Config
 			var implementationUntyped = func();
 			TContract implementation = (TContract)implementationUntyped;
 			return implementation;
+		}
+
+		public TContract ResolveNotNull<TContract>()
+		{
+			var resolvedValue = Resolve<TContract>();
+			if ( resolvedValue == null )
+				throw new ArgumentException( String.Format( "Resolved value of type {0} should not be null.", typeof( T ) ) );
+
+			return resolvedValue;
+		}
+
+		public bool CanResolve<TContract>()
+		{
+			bool canResolve = registeredMappings.ContainsKey( typeof( TContract ) );
+			return canResolve;
 		}
 	}
 }

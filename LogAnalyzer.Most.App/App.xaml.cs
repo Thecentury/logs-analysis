@@ -9,6 +9,7 @@ using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.ViewModel;
+using LogAnalyzer.Kernel;
 using LogAnalyzer.Most.App.Properties;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;

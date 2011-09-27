@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LogAnalyzer.Config;
+using System.Reactive.Concurrency;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Config
 {
 	public class LogAnalyzerConfigurationFluentApi
 	{
@@ -12,7 +9,20 @@ namespace LogAnalyzer
 
 		public LogAnalyzerConfiguration BuildConfig()
 		{
+			ValidateConfig();
+
 			return config;
+		}
+
+		private void ValidateConfig()
+		{
+			ThrowIfCantResolve<IScheduler>();
+		}
+
+		private void ThrowIfCantResolve<TContract>()
+		{
+			if ( !config.CanResolve<TContract>() )
+				throw new InvalidOperationException( String.Format( "Config should be able to resolve {0}", typeof( TContract ).Name ) );
 		}
 
 		internal LogAnalyzerConfigurationFluentApi( LogAnalyzerConfiguration config )
@@ -65,9 +75,22 @@ namespace LogAnalyzer
 			return this;
 		}
 
+		public LogAnalyzerConfigurationFluentApi WithScheduler( IScheduler scheduler )
+		{
+			if ( scheduler == null ) 
+				throw new ArgumentNullException( "scheduler" );
+
+			config.RegisterInstance( scheduler );
+
+			return this;
+		}
+
 		public LogAnalyzerConfigurationFluentApi RegisterInstance<TContract>( TContract instance )
 		{
-			config.RegisterInstance<TContract>( instance );
+			if ( instance == null )
+				throw new ArgumentNullException( "instance" );
+
+			config.RegisterInstance( instance );
 
 			return this;
 		}

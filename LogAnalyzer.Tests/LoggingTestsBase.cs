@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Tests.Mock;
 
 namespace LogAnalyzer.Tests
 {
