@@ -72,12 +72,12 @@ namespace ModuleLogsProvider.Tests
 			core.Start();
 			core.WaitForLoaded();
 
-			Task task = Task.Factory.StartNew( timer.MakeRing );
+			timer.MakeRing();
 
-			var millisecondsToSleep = GetSleepDuration();
-			Thread.Sleep( millisecondsToSleep );
+			//var millisecondsToSleep = GetSleepDuration();
+			//Thread.Sleep( millisecondsToSleep );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
-			task.Wait();
+			//task.Wait();
 
 			ExpressionAssert.That( core, c => c.Directories.Count == 1 );
 
