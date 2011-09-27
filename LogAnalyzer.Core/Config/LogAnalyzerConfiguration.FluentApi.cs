@@ -73,7 +73,7 @@ namespace LogAnalyzer.Config
 			if ( instance == null )
 				throw new ArgumentNullException( "instance" );
 
-			config.RegisterInstance( instance );
+			config.RegisterInstance<TContract>( instance );
 
 			return this;
 		}

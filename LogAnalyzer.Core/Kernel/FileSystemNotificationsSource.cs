@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {

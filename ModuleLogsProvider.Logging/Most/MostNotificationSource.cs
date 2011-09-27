@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using LogAnalyzer;
+using LogAnalyzer.Kernel;
 using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most

@@ -162,27 +162,25 @@ namespace LogAnalyzer
 					AddFile( logFile );
 				} );
 
-				Task fileReadTask = new Task( logFile.ReadFile );
-
-				fileReadTask.ContinueWith( parentTask =>
-				{
-					operationsQueue.EnqueueOperation( () =>
+				environment.Scheduler.StartNewOperation( () =>
 					{
-						logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
-						Interlocked.Increment( ref initialFilesLoadedCount );
-						AnalyzeIfLoaded();
+						logFile.ReadFile();
+
+						operationsQueue.EnqueueOperation( () =>
+						{
+							logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
+							Interlocked.Increment( ref initialFilesLoadedCount );
+							AnalyzeIfLoaded();
+						} );
 					} );
-				} );
 
-				// todo какая-то обработка ошибки чтения файла
-				fileReadTask.ContinueWith( parentTask =>
-				{
-					parentTask.Exception.Handle( e => e is LogAnalyzerIOException );
+				//// todo какая-то обработка ошибки чтения файла
+				//fileReadTask.ContinueWith( parentTask =>
+				//{
+				//    parentTask.Exception.Handle( e => e is LogAnalyzerIOException );
 
-					throw new NotImplementedException();
-				}, TaskContinuationOptions.OnlyOnFaulted );
-
-				fileReadTask.Start();
+				//    throw new NotImplementedException();
+				//}, TaskContinuationOptions.OnlyOnFaulted );
 
 				Interlocked.Increment( ref initialFilesLoadingCount );
 			}
@@ -199,15 +197,19 @@ namespace LogAnalyzer
 			// все файлы в начальной загрузке загружены?
 			if ( initialFilesLoadedCount == initialFilesLoadingCount )
 			{
-				Task mergeTask = new Task( PerformInitialMerge );
-				mergeTask.ContinueWith( t => operationsQueue.EnqueueOperation( () =>
-					{
-						logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).", this.DisplayName, files.Count );
+				environment.Scheduler.StartNewOperation( () =>
+														{
+															PerformInitialMerge();
 
-						RaiseLoadedEvent();
-					} ) );
+															operationsSource.Start();
+															operationsQueue.EnqueueOperation( () =>
+																								{
+																									logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
+																													 this.DisplayName, files.Count );
 
-				mergeTask.Start();
+																									RaiseLoadedEvent();
+																								} );
+														} );
 			}
 		}
 
