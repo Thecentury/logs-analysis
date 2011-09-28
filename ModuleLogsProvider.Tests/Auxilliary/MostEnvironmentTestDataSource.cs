@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
 
-namespace ModuleLogsProvider.Tests
+namespace ModuleLogsProvider.Tests.Auxilliary
 {
 	public static class MostEnvironmentTestDataSource
 	{
