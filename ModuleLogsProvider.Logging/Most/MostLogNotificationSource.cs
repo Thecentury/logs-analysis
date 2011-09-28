@@ -69,7 +69,16 @@ namespace ModuleLogsProvider.Logging.Most
 				WatcherChangeTypes changeTypes = fileCreated ? WatcherChangeTypes.Created : WatcherChangeTypes.Changed;
 
 				string fileName = loggerName;
-				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, loggerName ) );
+
+				var args = new FileSystemEventArgs( changeTypes, DirectoryName, fileName );
+				if ( changeTypes == WatcherChangeTypes.Created )
+				{
+					RaiseCreated( args );
+				}
+				else
+				{
+					RaiseChanged( args );
+				}
 			}
 		}
 	}

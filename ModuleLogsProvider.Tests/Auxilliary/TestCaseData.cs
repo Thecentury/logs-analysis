@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LogAnalyzer.Kernel;
+﻿using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
 
-namespace ModuleLogsProvider.Tests
+namespace ModuleLogsProvider.Tests.Auxilliary
 {
 	public sealed class TestCaseData
 	{

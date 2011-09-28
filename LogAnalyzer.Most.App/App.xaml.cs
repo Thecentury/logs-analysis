@@ -36,7 +36,7 @@ namespace LogAnalyzer.Most.App
 
 			Thread.CurrentThread.Name = "UIThread";
 
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			//AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			Task task = new Task( Init );
 			task.ContinueWith( t =>
@@ -69,6 +69,7 @@ namespace LogAnalyzer.Most.App
 				.Register<IEnvironment>( () => env = new MostEnvironment( config ) )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
+				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
 				.BuildConfig();
 
 			logger = config.Logger;

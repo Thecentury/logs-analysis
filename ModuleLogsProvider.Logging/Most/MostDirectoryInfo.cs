@@ -11,6 +11,7 @@ namespace ModuleLogsProvider.Logging.Most
 	public sealed class MostDirectoryInfo : IDirectoryInfo
 	{
 		private readonly MostLogNotificationSource notificationSource;
+		private readonly Dictionary<string, MostFileInfo> namesToFilesMap = new Dictionary<string, MostFileInfo>();
 
 		public MostDirectoryInfo( MostLogNotificationSource notificationSource )
 		{
@@ -32,17 +33,34 @@ namespace ModuleLogsProvider.Logging.Most
 			var logNames = notificationSource.MessagesStorage.GetLogFileNames();
 			foreach ( string logName in logNames )
 			{
-				var fileInfo = GetFileInfo( logName );
+				MostFileInfo fileInfo = GetOrCreateFile( logName );
 				files.Add( fileInfo );
 			}
 
 			return files;
 		}
 
+		private MostFileInfo GetOrCreateFile( string logName )
+		{
+			MostFileInfo fileInfo;
+			if ( !namesToFilesMap.TryGetValue( logName, out fileInfo ) )
+			{
+				fileInfo = CreateFile( logName );
+				namesToFilesMap.Add( logName, fileInfo );
+			}
+
+			return fileInfo;
+		}
+
 		public IFileInfo GetFileInfo( string fullPath )
 		{
 			string logName = Path.GetFileNameWithoutExtension( fullPath );
 
+			return GetOrCreateFile( logName );
+		}
+
+		private MostFileInfo CreateFile( string logName )
+		{
 			var logEntries = notificationSource.MessagesStorage.GetEntriesByName( logName );
 			MostFileInfo fileInfo = new MostFileInfo( logName, logEntries );
 			return fileInfo;

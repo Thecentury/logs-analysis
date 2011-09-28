@@ -26,7 +26,14 @@ namespace LogAnalyzer.Config
 
 		public TContract Resolve<TContract>()
 		{
-			var func = registeredMappings[typeof( TContract )];
+			Type key = typeof (TContract);
+
+			if ( !registeredMappings.ContainsKey( key ) )
+			{
+				
+			}
+
+			var func = registeredMappings[key];
 			var implementationUntyped = func();
 			TContract implementation = (TContract)implementationUntyped;
 			return implementation;

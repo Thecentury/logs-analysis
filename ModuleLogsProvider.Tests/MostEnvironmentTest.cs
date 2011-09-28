@@ -14,7 +14,9 @@ using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
+using ModuleLogsProvider.Tests.Auxilliary;
 using NUnit.Framework;
+using TestCaseData = ModuleLogsProvider.Tests.Auxilliary.TestCaseData;
 
 namespace ModuleLogsProvider.Tests
 {
