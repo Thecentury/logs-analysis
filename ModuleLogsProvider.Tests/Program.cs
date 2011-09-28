@@ -14,9 +14,9 @@ namespace ModuleLogsProvider.Tests
 
 			//test.TestSerevalMessagesFromMost();
 			//test.TestSeveralMessagesFromTwoLoggers();
-			test.TestSingleMessageFromMost();
+			//test.TestSingleMessageFromMost();
 
-			Console.WriteLine( "Done." );
+			Console.WriteLine( "Incomplete!." );
 
 			//NUnitTestRunner.RunTests<Program>();
 		}

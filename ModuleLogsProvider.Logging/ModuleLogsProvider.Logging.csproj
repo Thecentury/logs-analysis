@@ -80,10 +80,6 @@
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LogsService\LogsService.csproj">
-      <Project>{1F3BC95E-3E86-434A-AA66-C9877560DEA7}</Project>
-      <Name>LogsService</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

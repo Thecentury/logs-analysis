@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,37 +21,40 @@ namespace ModuleLogsProvider.Tests
 	[TestFixture]
 	public class MostEnvironmentTest
 	{
+		private const string FirstFileName = @"L1";
+		private const string SecondFileName = @"L2";
+
 		[Description( "Одно сообщение" )]
 		[Test]
-		public void TestSingleMessageFromMost()
+		[TestCaseSource(typeof(MostEnvironmentTestDataSource), "TestCases" )]
+		public void TestSingleMessageFromMost( TestCaseData data )
 		{
-			SendMessages( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" } );
+			SendMessages( data, new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName } );
 		}
 
 		[Description( "Несколько сообщений от одного логгера" )]
 		[Test]
-		public void TestSerevalMessagesFromMost()
+		[TestCaseSource( typeof( MostEnvironmentTestDataSource ), "TestCases" )]
+		public void TestSerevalMessagesFromMost( TestCaseData data )
 		{
-			SendMessages(
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = "L1" },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = "L1" }
+			SendMessages( data,
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = FirstFileName }
 				);
 		}
 
 		[Description( "Логирование из двух логгеров" )]
 		[Test]
-		public void TestSeveralMessagesFromTwoLoggers()
+		[TestCaseSource( typeof( MostEnvironmentTestDataSource ), "TestCases" )]
+		public void TestSeveralMessagesFromTwoLoggers( TestCaseData data )
 		{
-			const string logger1 = "L1";
-			const string logger2 = "L2";
-
-			SendMessages(
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = logger1 },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = logger2 }
+			SendMessages( data,
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
+				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = SecondFileName }
 				);
 		}
 
-		private void SendMessages( params LogMessageInfo[] messages )
+		private void SendMessages( TestCaseData data, params LogMessageInfo[] messages )
 		{
 			var loggerNames = messages.Select( m => m.LoggerName ).Distinct().ToList();
 			MockLogsSourceService service = new MockLogsSourceService();
@@ -62,7 +66,7 @@ namespace ModuleLogsProvider.Tests
 				service.AddMessage( message );
 			}
 
-			LogAnalyzerConfiguration config = BuildConfig( timer, serviceFactory );
+			LogAnalyzerConfiguration config = BuildConfig( timer, serviceFactory, data );
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
@@ -88,7 +92,7 @@ namespace ModuleLogsProvider.Tests
 			}
 		}
 
-		private LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory )
+		private LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory, TestCaseData data )
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
 							.AddLogDirectory( "Dir1", "*", "Some directory 1" )
@@ -96,8 +100,8 @@ namespace ModuleLogsProvider.Tests
 							.AcceptAllLogTypes()
 							.RegisterInstance<ITimer>( timer )
 							.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
-							.RegisterInstance<OperationScheduler>( OperationScheduler.SyncronousScheduler )
-							.RegisterInstance<IOperationsQueue>( new SameThreadOperationsQueue() )
+							.RegisterInstance<OperationScheduler>( data.Scheduler )
+							.RegisterInstance<IOperationsQueue>( data.OperationsQueue )
 							.BuildConfig();
 
 			return config;
