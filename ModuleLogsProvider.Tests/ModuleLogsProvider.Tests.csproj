@@ -57,8 +57,10 @@
   <ItemGroup>
     <Compile Include="DependencyInjectionTest.cs" />
     <Compile Include="MostEnvironmentTest.cs" />
+    <Compile Include="MostEnvironmentTestDataSource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCaseData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">

@@ -21,6 +21,8 @@ namespace LogAnalyzer.Kernel
 		/// </summary>
 		private readonly object operationsSync = new object();
 
+		public WorkerThreadOperationsQueue() : this( new Logger() ) { }
+
 		public WorkerThreadOperationsQueue( Logger logger )
 		{
 			if ( logger == null )
@@ -43,7 +45,7 @@ namespace LogAnalyzer.Kernel
 			PerformanceCountersService.Increment( operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (operationsQueue.Count + 1) );
+			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( operationsQueue.Count + 1 ) );
 			operationsQueue.Add( operation );
 
 			Interlocked.Increment( ref totalOperationsCount );
