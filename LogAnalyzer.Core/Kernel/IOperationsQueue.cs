@@ -10,5 +10,7 @@ namespace LogAnalyzer.Kernel
 		Thread Thread { get; }
 
 		void WaitAllRunningOperationsToComplete();
+
+		bool IsSyncronous { get; }
 	}
 }

@@ -9,7 +9,7 @@ using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most
 {
-	public sealed class MostNotificationSource : LogNotificationsSourceBase
+	public sealed class MostLogNotificationSource : LogNotificationsSourceBase
 	{
 		private const string DirectoryName = "MOST";
 
@@ -18,7 +18,7 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly IOperationsQueue operationQueue;
 		private readonly MostLogMessagesStorage messagesStorage = new MostLogMessagesStorage();
 
-		public MostNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
+		public MostLogNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
 			if ( serviceFactory == null ) throw new ArgumentNullException( "serviceFactory" );
@@ -68,7 +68,8 @@ namespace ModuleLogsProvider.Logging.Most
 
 				WatcherChangeTypes changeTypes = fileCreated ? WatcherChangeTypes.Created : WatcherChangeTypes.Changed;
 
-				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, loggerName ) );
+				string fullFileName = Path.Combine( DirectoryName, loggerName );
+				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, fullFileName ) );
 			}
 		}
 	}
