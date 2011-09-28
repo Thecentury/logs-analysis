@@ -68,8 +68,8 @@ namespace ModuleLogsProvider.Logging.Most
 
 				WatcherChangeTypes changeTypes = fileCreated ? WatcherChangeTypes.Created : WatcherChangeTypes.Changed;
 
-				string fullFileName = Path.Combine( DirectoryName, loggerName );
-				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, fullFileName ) );
+				string fileName = loggerName;
+				RaiseChanged( new FileSystemEventArgs( changeTypes, DirectoryName, loggerName ) );
 			}
 		}
 	}
