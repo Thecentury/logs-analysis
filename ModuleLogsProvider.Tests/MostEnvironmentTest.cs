@@ -20,10 +20,6 @@ namespace ModuleLogsProvider.Tests
 	[TestFixture]
 	public class MostEnvironmentTest
 	{
-		private readonly MockTimer timer = new MockTimer();
-		private readonly MockLogsSourceService service = new MockLogsSourceService();
-		private MockLogSourceFactory serviceFactory;
-
 		[Description( "Одно сообщение" )]
 		[Test]
 		public void TestSingleMessageFromMost()
@@ -57,15 +53,16 @@ namespace ModuleLogsProvider.Tests
 		private void SendMessages( params LogMessageInfo[] messages )
 		{
 			var loggerNames = messages.Select( m => m.LoggerName ).Distinct().ToList();
-
-			serviceFactory = new MockLogSourceFactory( service );
+			MockLogsSourceService service = new MockLogsSourceService();
+			MockTimer timer = new MockTimer();
+			var serviceFactory = new MockLogSourceFactory( service );
 
 			foreach ( var message in messages )
 			{
 				service.AddMessage( message );
 			}
 
-			LogAnalyzerConfiguration config = BuildConfig();
+			LogAnalyzerConfiguration config = BuildConfig( timer, serviceFactory );
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
@@ -91,7 +88,7 @@ namespace ModuleLogsProvider.Tests
 			}
 		}
 
-		private LogAnalyzerConfiguration BuildConfig()
+		private LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory )
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
 							.AddLogDirectory( "Dir1", "*", "Some directory 1" )

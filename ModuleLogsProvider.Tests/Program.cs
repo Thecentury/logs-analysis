@@ -11,7 +11,10 @@ namespace ModuleLogsProvider.Tests
 		public static void Main( string[] args )
 		{
 			MostEnvironmentTest test = new MostEnvironmentTest();
-			test.TestSerevalMessagesFromMost();
+
+			//test.TestSerevalMessagesFromMost();
+			//test.TestSeveralMessagesFromTwoLoggers();
+			test.TestSingleMessageFromMost();
 
 			Console.WriteLine( "Done." );
 
