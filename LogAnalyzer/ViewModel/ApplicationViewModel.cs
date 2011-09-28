@@ -27,13 +27,13 @@ namespace LogAnalyzer.GUI.ViewModel
 
 	public sealed class ApplicationViewModel : BindingObject
 	{
-		private readonly LogAnalyzerCore core = null;
+		private readonly LogAnalyzerCore core;
 		public LogAnalyzerCore Core
 		{
 			get { return core; }
 		}
 
-		private CoreViewModel coreViewModel = null;
+		private CoreViewModel coreViewModel;
 		public CoreViewModel CoreViewModel
 		{
 			get { return coreViewModel; }

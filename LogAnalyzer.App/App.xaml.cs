@@ -55,16 +55,20 @@ namespace LogAnalyzer.App
 			} );
 
 			task.ContinueWith( t =>
-			{
-				logger.WriteError( "Crash. Exception: {0}", t.Exception );
+								{
+									Exception exception = t.Exception;
+									logger.WriteError( "Crash. Exception: {0}", exception );
 
-				Extensions.Condition.BreakIfAttached();
+									Extensions.Condition.BreakIfAttached();
 
-				MessageBox.Show( "Unhandled exception: " + t.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
+									if ( exception != null )
+									{
+										MessageBox.Show( "Unhandled exception: " + exception.ToString(), "Unhandled exception", MessageBoxButton.OK,
+														MessageBoxImage.Error );
+									}
 
-				Environment.Exit( -1 );
-
-			}, TaskContinuationOptions.OnlyOnFaulted );
+									Environment.Exit( -1 );
+								}, TaskContinuationOptions.OnlyOnFaulted );
 
 			task.Start();
 		}

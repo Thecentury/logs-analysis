@@ -17,8 +17,8 @@ namespace LogAnalyzer.GUI.ViewModel
 {
 	public sealed class LogFileViewModel : LogEntriesListViewModel
 	{
-		private readonly LogFile logFile = null;
-		private readonly LogDirectoryViewModel parentDirectory = null;
+		private readonly LogFile logFile;
+		private readonly LogDirectoryViewModel parentDirectory;
 
 		public LogDirectoryViewModel ParentDirectory
 		{

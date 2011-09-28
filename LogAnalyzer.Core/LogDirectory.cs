@@ -299,22 +299,17 @@ namespace LogAnalyzer
 
 		private void AddFile( string fullPath )
 		{
-			LogFile logFile;
 			lock ( sync )
 			{
 				IFileInfo file = directoryInfo.GetFileInfo( fullPath );
-				logFile = CreateLogFile( file );
+				LogFile logFile = CreateLogFile( file );
 
 				// todo brinchuk this should be done async!
 				logFile.ReadFile();
 
 				Condition.DebugAssert( !files.Contains( logFile ) );
 				files.Add( logFile );
-
-				//AddFile( logFile );
 			}
-
-			//Task.Factory.StartNew( logFile.ReadFile );
 		}
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
