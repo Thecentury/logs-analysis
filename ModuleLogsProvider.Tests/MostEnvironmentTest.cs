@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LogAnalyzer;
 using LogAnalyzer.Config;
+using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
 using LogAnalyzer.Tests.Common;
 using ModuleLogsProvider.Logging;
@@ -74,10 +74,7 @@ namespace ModuleLogsProvider.Tests
 
 			timer.MakeRing();
 
-			//var millisecondsToSleep = GetSleepDuration();
-			//Thread.Sleep( millisecondsToSleep );
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
-			//task.Wait();
 
 			ExpressionAssert.That( core, c => c.Directories.Count == 1 );
 
@@ -94,12 +91,6 @@ namespace ModuleLogsProvider.Tests
 			}
 		}
 
-		private static int GetSleepDuration()
-		{
-			int millisecondsToSleep = Debugger.IsAttached ? 2000000 : 2000;
-			return millisecondsToSleep;
-		}
-
 		private LogAnalyzerConfiguration BuildConfig()
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
@@ -109,6 +100,7 @@ namespace ModuleLogsProvider.Tests
 							.RegisterInstance<ITimer>( timer )
 							.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 							.RegisterInstance<OperationScheduler>( OperationScheduler.SyncronousScheduler )
+							.RegisterInstance<IOperationsQueue>( new SameThreadOperationsQueue() )
 							.BuildConfig();
 
 			return config;

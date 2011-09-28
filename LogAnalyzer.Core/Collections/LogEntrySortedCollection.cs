@@ -21,11 +21,11 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "Count = {sortedLogEntries.Count}" )]
 	internal sealed class LogEntrySortedCollection
 	{
-		private readonly LogEntriesList parent = null;
-		private readonly Thread allowedAccessThread = null;
-		private readonly ITimeService timeService = null;
+		private readonly LogEntriesList parent;
+		private readonly Thread allowedAccessThread;
+		private readonly ITimeService timeService;
 
-		private readonly CollectionToListWrapper<LogEntry> unappendedSetWrapper = null;
+		private readonly CollectionToListWrapper<LogEntry> unappendedSetWrapper;
 
 		public IList<LogEntry> UnappendedLogEntries
 		{
@@ -42,10 +42,10 @@ namespace LogAnalyzer
 				throw new ArgumentNullException( "environment" );
 
 			this.parent = parent;
-			this.allowedAccessThread = environment.OperationsQueue.Thread;
-			this.timeService = environment.TimeService;
+			allowedAccessThread = environment.OperationsQueue.Thread;
+			timeService = environment.TimeService;
 
-			this.unappendedSetWrapper = new CollectionToListWrapper<LogEntry>( sortedLogEntries );
+			unappendedSetWrapper = new CollectionToListWrapper<LogEntry>( sortedLogEntries );
 		}
 
 		/// <summary>
@@ -102,16 +102,19 @@ namespace LogAnalyzer
 
 			int totalFilesCount = parent.TotalFilesCount;
 
-			while ( awaitingEntries.Keys.Count >= totalFilesCount )
+			if ( totalFilesCount > 0 )
 			{
-				LogEntry min = sortedLogEntries.Min;
-				parent.AppendLogEntryToMergedList( min );
+				while ( awaitingEntries.Keys.Count >= totalFilesCount )
+				{
+					LogEntry min = sortedLogEntries.Min;
+					parent.AppendLogEntryToMergedList( min );
 
-				int sortedSetLength = sortedLogEntries.Count;
-				sortedLogEntries.Remove( min );
-				Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
+					int sortedSetLength = sortedLogEntries.Count;
+					sortedLogEntries.Remove( min );
+					Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
 
-				awaitingEntries.Remove( min.ParentLogFile, min );
+					awaitingEntries.Remove( min.ParentLogFile, min );
+				}
 			}
 
 			// переносит в parent.MergedEntries записи относительно старые записи лога,

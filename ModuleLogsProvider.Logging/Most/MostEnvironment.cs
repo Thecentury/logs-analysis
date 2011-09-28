@@ -8,7 +8,7 @@ namespace ModuleLogsProvider.Logging.Most
 	public sealed class MostEnvironment : EnvironmentBase
 	{
 		private readonly ITimeService timeService = new ConstIntervalTimeService( TimeSpan.FromDays( 1000 ) );
-		private readonly WorkerThreadOperationsQueue operationsQueue;
+		private readonly IOperationsQueue operationsQueue;
 		private readonly MostDirectoryInfo directory;
 
 		public MostEnvironment( LogAnalyzerConfiguration config )
@@ -17,15 +17,10 @@ namespace ModuleLogsProvider.Logging.Most
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
 
-			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
+			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
 
-			ILogSourceServiceFactory serviceFactory = config.Resolve<ILogSourceServiceFactory>();
-			if ( serviceFactory == null ) 
-				throw new ArgumentException( "serviceFactory" );
-
-			ITimer timer = config.Resolve<ITimer>();
-			if ( timer == null ) 
-				throw new ArgumentException( "timer" );
+			ILogSourceServiceFactory serviceFactory = config.ResolveNotNull<ILogSourceServiceFactory>();
+			ITimer timer = config.ResolveNotNull<ITimer>();
 
 			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory, operationsQueue );
 			directory = new MostDirectoryInfo( notificationSource );
