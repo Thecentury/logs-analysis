@@ -22,7 +22,7 @@ namespace ModuleLogsProvider.Logging.Most
 			ILogSourceServiceFactory serviceFactory = config.ResolveNotNull<ILogSourceServiceFactory>();
 			ITimer timer = config.ResolveNotNull<ITimer>();
 
-			MostNotificationSource notificationSource = new MostNotificationSource( timer, serviceFactory, operationsQueue );
+			MostLogNotificationSource notificationSource = new MostLogNotificationSource( timer, serviceFactory, operationsQueue );
 			directory = new MostDirectoryInfo( notificationSource );
 		}
 

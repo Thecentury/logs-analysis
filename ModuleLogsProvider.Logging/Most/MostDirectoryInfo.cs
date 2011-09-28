@@ -10,9 +10,9 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostDirectoryInfo : IDirectoryInfo
 	{
-		private readonly MostNotificationSource notificationSource;
+		private readonly MostLogNotificationSource notificationSource;
 
-		public MostDirectoryInfo( MostNotificationSource notificationSource )
+		public MostDirectoryInfo( MostLogNotificationSource notificationSource )
 		{
 			if ( notificationSource == null )
 				throw new ArgumentNullException( "notificationSource" );

@@ -34,5 +34,10 @@ namespace LogAnalyzer.Kernel
 		{
 			return;
 		}
+
+		public bool IsSyncronous
+		{
+			get { return true; }
+		}
 	}
 }

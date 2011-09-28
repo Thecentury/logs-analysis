@@ -26,7 +26,7 @@ namespace ModuleLogsProvider.Tests
 
 		[Description( "Одно сообщение" )]
 		[Test]
-		[TestCaseSource(typeof(MostEnvironmentTestDataSource), "TestCases" )]
+		[TestCaseSource( typeof( MostEnvironmentTestDataSource ), "TestCases" )]
 		public void TestSingleMessageFromMost( TestCaseData data )
 		{
 			SendMessages( data, new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName } );
@@ -74,6 +74,11 @@ namespace ModuleLogsProvider.Tests
 			core.WaitForLoaded();
 
 			timer.MakeRing();
+
+			if ( !data.OperationsQueue.IsSyncronous )
+			{
+				Thread.Sleep(2000);
+			}
 
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
 

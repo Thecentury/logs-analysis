@@ -76,9 +76,13 @@ namespace LogAnalyzer.Kernel
 			Condition.DebugAssert( operationsQueue.Count == 0, "Число ожидающих операций должно быть равно 0." );
 		}
 
+		public bool IsSyncronous
+		{
+			get { return false; }
+		}
+
 		private void MainThreadProcedure( object state )
 		{
-			// todo try-catch?
 			while ( true )
 			{
 				try
@@ -99,10 +103,22 @@ namespace LogAnalyzer.Kernel
 				}
 				catch ( Exception exc )
 				{
+					string exceptionMessage = exc.ToString();
 					Condition.BreakIfAttached();
-					throw;
+
+					bool shouldRethrow = ShouldRethrow( exc );
+					if ( shouldRethrow )
+					{
+						throw;
+					}
 				}
 			}
+		}
+
+		private bool ShouldRethrow( Exception exc )
+		{
+			bool shouldRethrow = !( exc is ThreadAbortException );
+			return shouldRethrow;
 		}
 	}
 }
