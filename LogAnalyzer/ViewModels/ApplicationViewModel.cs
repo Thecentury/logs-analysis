@@ -13,6 +13,7 @@ using LogAnalyzer.Filters;
 using LogAnalyzer.Extensions;
 using System.Collections.Specialized;
 using Windows7.DesktopIntegration;
+using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -32,6 +33,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return coreViewModel; }
 		}
 
+		private readonly IWindowService windowService;
+
 		public ApplicationViewModel( LogAnalyzerConfiguration config )
 		{
 			if ( config == null )
@@ -40,12 +43,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			config.Logger.WriteInfo( "Starting..." );
 
 			IEnvironment environment = config.ResolveNotNull<IEnvironment>();
-
 			core = new LogAnalyzerCore( config, environment );
 
 			core.Loaded += OnCore_Loaded;
 
-			TaskbarHelper.SetProgressState( Windows7Taskbar.ThumbnailProgressState.Normal );
+			windowService = config.ResolveNotNull<IWindowService>();
+			windowService.SetProgressState( Windows7Taskbar.ThumbnailProgressState.Normal );
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
@@ -71,8 +74,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				tabs.RemoveAt( 0 );
 				tabs.Add( coreViewModel );
 
-				TaskbarHelper.SetProgressValue( 0 );
-				TaskbarHelper.SetProgressState( Windows7Taskbar.ThumbnailProgressState.NoProgress );
+				windowService.SetProgressValue( 0 );
+				windowService.SetProgressState( Windows7Taskbar.ThumbnailProgressState.NoProgress );
 			} );
 		}
 
@@ -180,6 +183,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				return newViewFromSavedFilterCommand;
 			}
+		}
+
+		public IWindowService WindowService
+		{
+			get { return windowService; }
 		}
 
 		public void NewViewFromSavedFilterCommandExecute()

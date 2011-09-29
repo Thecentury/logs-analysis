@@ -43,6 +43,11 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
 		}
 
+		public void RaiseCollectionChanged( NotifyCollectionChangedEventArgs args )
+		{
+			OnCollectionChanged( args );
+		}
+
 		protected override void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
 			if ( !inBatchUpdate )

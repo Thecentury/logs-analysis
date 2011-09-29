@@ -28,6 +28,9 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
+			// todo brinchuk this is only for test purposes
+			// GetOrCreateFile( "L1" );
+
 			List<IFileInfo> files = new List<IFileInfo>();
 
 			var logNames = notificationSource.MessagesStorage.GetLogFileNames();

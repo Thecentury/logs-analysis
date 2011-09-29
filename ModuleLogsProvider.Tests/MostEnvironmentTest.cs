@@ -71,7 +71,7 @@ namespace ModuleLogsProvider.Tests
 				service.AddMessage( message );
 			}
 
-			LogAnalyzerConfiguration config = BuildConfig( timer, serviceFactory, data );
+			LogAnalyzerConfiguration config = EnvironmentTestHelper.BuildConfig( timer, serviceFactory, data.Scheduler, data.OperationsQueue );
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
@@ -114,20 +114,6 @@ namespace ModuleLogsProvider.Tests
 				addedFilesCount += e.NewItems.Count;
 			}
 		}
-
-		private LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory, TestCaseData data )
-		{
-			var config = LogAnalyzerConfiguration.CreateNew()
-							.AddLogDirectory( "Dir1", "*", "Some directory 1" )
-							.AddLogWriter( new DebugLogWriter() )
-							.AcceptAllLogTypes()
-							.RegisterInstance<ITimer>( timer )
-							.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
-							.RegisterInstance<OperationScheduler>( data.Scheduler )
-							.RegisterInstance<IOperationsQueue>( data.OperationsQueue )
-							.BuildConfig();
-
-			return config;
-		}
+		
 	}
 }

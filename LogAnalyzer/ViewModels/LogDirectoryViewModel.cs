@@ -55,6 +55,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.coreViewModel = coreViewModel;
 
 			this.filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
+			directory.Files.CollectionChanged += Files_CollectionChanged;
 
 			this.syncronizedFiles = new DispatcherObservableCollection( filesViewModels );
 
@@ -62,6 +63,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			// произойдет уже в этом потоке
 			this.syncronizedFiles.CollectionChanged += OnFilesCollectionChanged;
+		}
+
+		private void Files_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			filesViewModels.RaiseCollectionChanged( e );
 		}
 
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
@@ -72,18 +78,21 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnFilesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
-			// todo implement
-			throw new NotImplementedException();
-
 			if ( e.Action != NotifyCollectionChangedAction.Add )
-				throw new NotImplementedException();
+				return;
+			//if ( e.Action != NotifyCollectionChangedAction.Add )
+			//    throw new NotImplementedException();
 
 			if ( e.NewItems != null )
 			{
-				foreach ( LogFile addedFile in e.NewItems )
+				foreach ( object addedObject in e.NewItems )
 				{
-					LogFileViewModel fileViewModel = new LogFileViewModel( addedFile, this );
-					filesViewModels.Add( fileViewModel );
+					LogFile addedFile = addedObject as LogFile;
+					if ( addedFile != null )
+					{
+						LogFileViewModel fileViewModel = new LogFileViewModel( addedFile, this );
+						filesViewModels.Add( fileViewModel );
+					}
 				}
 			}
 
