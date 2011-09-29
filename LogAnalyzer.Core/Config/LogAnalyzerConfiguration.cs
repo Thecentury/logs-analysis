@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reactive.Concurrency;
+using System.Windows;
 using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
@@ -17,7 +18,10 @@ namespace LogAnalyzer.Config
 		{
 			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
 
-			IScheduler scheduler = new DispatcherScheduler( Dispatcher.CurrentDispatcher );
+			Dispatcher currentDispatcher = Application.Current != null
+											? Application.Current.Dispatcher
+											: Dispatcher.CurrentDispatcher;
+			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
 			RegisterInstance<IScheduler>( scheduler );
 		}
 
