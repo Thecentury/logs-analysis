@@ -36,7 +36,8 @@ namespace ModuleLogsProvider.Logging.Most
 				OneFileMessages fileMessages;
 				if ( !logNamesToEntries.TryGetValue( loggerName, out fileMessages ) )
 				{
-					fileMessages = new OneFileMessages( loggerName );
+					LogFile logFile = null;
+					fileMessages = new OneFileMessages( loggerName, logFile );
 					logNamesToEntries.Add( loggerName, fileMessages );
 					result.CreatedLogFiles.Add( loggerName );
 				}
@@ -57,19 +58,16 @@ namespace ModuleLogsProvider.Logging.Most
 		}
 	}
 
-	[DebuggerDisplay("Count = {entries.Count}")]
+	[DebuggerDisplay( "Count = {entries.Count}" )]
 	internal sealed class OneFileMessages
 	{
-		private readonly LogFile file;
 		private readonly List<LogEntry> entries = new List<LogEntry>();
 
 		private static readonly LogLineParser parser = new LogLineParser();
 
-		public OneFileMessages( string name )
+		public OneFileMessages( string name, LogFile file )
 		{
 			if ( String.IsNullOrEmpty( name ) ) throw new ArgumentNullException( "name" );
-
-			file = LogFile.FromName( name );
 		}
 
 		public List<LogEntry> Entries
@@ -91,6 +89,7 @@ namespace ModuleLogsProvider.Logging.Most
 					// todo brinchuk ???
 					throw new NotImplementedException();
 				}
+
 				LogEntry entry = new LogEntry( type, threadId, time, text, logMessageInfo.IndexInAllMessagesList, file );
 				Entries.Add( entry );
 			}

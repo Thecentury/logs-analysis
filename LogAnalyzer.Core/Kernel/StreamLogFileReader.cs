@@ -77,16 +77,17 @@ namespace LogAnalyzer.Kernel
 				// todo use ReadTimeout
 
 				// длина файла уменьшилась - пока рассматриваем только append
-				if ( fs.Length < this.prevStreamLength )
+				if ( fs.Length < prevStreamLength )
 				{
-					logger.WriteError( "LogFile.OnFileChanged: Длина файла \"{0}\" уменьшилась с {1} до {2}", this.Name, this.prevStreamLength, fs.Length );
-					return addedText;
+					logger.WriteError( "LogFile.OnFileChanged: Длина файла \"{0}\" уменьшилась с {1} до {2}", Name, prevStreamLength, fs.Length );
+					return null;
 				}
-				else if ( fs.Length == this.prevStreamLength )
+
+				if ( fs.Length == prevStreamLength )
 				{
 					// длина файла не изменилась
-					logger.DebugWriteInfo( "LogFile.OnFileChanged: Длина файла \"{0}\" не изменилась ({1} байт)", this.Name, this.prevStreamLength );
-					return addedText;
+					logger.DebugWriteInfo( "LogFile.OnFileChanged: Длина файла \"{0}\" не изменилась ({1} байт)", Name, prevStreamLength );
+					return null;
 				}
 
 				long streamLength = fs.Length;

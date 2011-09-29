@@ -10,12 +10,15 @@ namespace ModuleLogsProvider.Logging.Most
 	internal sealed class MostLogFileReader : LogFileReaderBase
 	{
 		private readonly ICollection<LogEntry> logEntries;
+		private readonly LogFileReaderArguments args;
 
-		public MostLogFileReader( ICollection<LogEntry> logEntries )
+		public MostLogFileReader( ICollection<LogEntry> logEntries, LogFileReaderArguments args )
 		{
 			if ( logEntries == null ) throw new ArgumentNullException( "logEntries" );
+			if ( args == null ) throw new ArgumentNullException( "args" );
 
 			this.logEntries = logEntries;
+			this.args = args;
 		}
 
 		public override IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )

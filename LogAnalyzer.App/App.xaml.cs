@@ -10,6 +10,7 @@ using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModel;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.App
 {
@@ -44,6 +45,7 @@ namespace LogAnalyzer.App
 			{
 				// todo обработка исключений при ошибках загрузки конфига
 				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+				config.RegisterInstance<IEnvironment>( new FileSystemEnvironment( config ) );
 
 				this.logger = config.Logger;
 
