@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	public sealed class DispatcherEnumerable<T> : DispatcherObservableCollection, IEnumerable<T>
 	{
-		private readonly IEnumerable<T> collection = null;
+		private readonly IEnumerable<T> collection;
 
 		public DispatcherEnumerable( IEnumerable<T> collection )
 			: base( collection )

@@ -1,14 +1,12 @@
-﻿<UserControl x:Class="ExpressionBuilderSample.Views.FilterExpressionView"
+﻿<UserControl x:Class="LogAnalyzer.GUI.FilterEditor.FilterExpressionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 
 			 xmlns:log="http://www.awad.com/LogAnalyzer"
 			 xmlns:local="clr-namespace:ExpressionBuilderSample"
-			 xmlns:view="clr-namespace:ExpressionBuilderSample.Views"
-			 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:FilterEditing="clr-namespace:LogAnalyzer.GUI.FilterEditing" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
 			 
 			 Background="AliceBlue"
@@ -19,7 +17,7 @@
 
 	<UserControl.Resources>
 
-		<local:FilterBuilderTemplateSelector x:Key="templateSelector"/>
+		<FilterEditing:FilterBuilderTemplateSelector x:Key="templateSelector"/>
 
 		<DataTemplate x:Key="comboboxItemTemplate">
 			<TextBlock Text="{Binding Description}"/>

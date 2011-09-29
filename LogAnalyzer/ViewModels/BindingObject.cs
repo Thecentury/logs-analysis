@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 using LogAnalyzer.Extensions;
 using System.Windows;
 using System.Windows.Threading;
-using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	/// <summary>
 	/// Обеспечивает уведомление об изменении значений свойств.
 	/// </summary>
 	public abstract class BindingObject : INotifyPropertyChanged, IDisposable, IFreezable
 	{
-		private readonly INotifyPropertyChanged observableObject = null;
+		private readonly INotifyPropertyChanged observableObject;
 		// todo probably use 'observableObject' as a lock
 		private readonly object sync = new object();
 
-		public BindingObject() { }
+		protected BindingObject() { }
 
-		public BindingObject( object inner )
+		protected BindingObject( object inner )
 		{
 			if ( inner == null )
 				throw new ArgumentNullException( "inner" );

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using LogAnalyzer.Filters;
+using LogAnalyzer.GUI.ViewModels;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class HighlightingViewModel : BindingObject
 	{
@@ -14,7 +15,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			filter.Changed += new EventHandler( OnFilter_Changed );
 		}
 
-		private Brush brush = null;
+		private Brush brush;
 		public Brush Brush
 		{
 			get { return brush; }

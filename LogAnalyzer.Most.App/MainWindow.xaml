@@ -1,8 +1,8 @@
 ﻿<Window x:Class="LogAnalyzer.Most.App.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:View="clr-namespace:LogAnalyzer.GUI.View;assembly=LogAnalyzer.GUI"
-        xmlns:Views="clr-namespace:LogAnalyzer.GUI.Views;assembly=LogAnalyzer.GUI" Title="Log Analyzer" WindowState="Maximized"
+        xmlns:views="clr-namespace:LogAnalyzer.GUI.Views;assembly=LogAnalyzer.GUI"
+		Title="Log Analyzer" WindowState="Maximized"
 		Icon="pack://application:,,,/LogAnalyzer.GUI;component/Resources/icon.png">
 
 	<Window.InputBindings>
@@ -41,7 +41,7 @@
 			</ToolBar>
 
 			<Grid>
-				<Views:TabsView DataContext="{Binding}"/>
+				<views:TabsView DataContext="{Binding}"/>
 			</Grid>
 
 		</DockPanel>

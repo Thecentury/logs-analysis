@@ -6,7 +6,7 @@ using System.Windows;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public class ExceptionLineViewModel : MessageLineViewModel
 	{
@@ -29,7 +29,7 @@ namespace LogAnalyzer.GUI.ViewModel
 
 		#endregion
 
-		private DelegateCommand<RoutedEventArgs> openFileInVSCommand = null;
+		private DelegateCommand<RoutedEventArgs> openFileInVSCommand;
 		public ICommand OpenFileInVSCommand
 		{
 			get
@@ -37,8 +37,9 @@ namespace LogAnalyzer.GUI.ViewModel
 				// todo implement me
 				if (openFileInVSCommand == null)
 				{
-
+					throw new NotImplementedException();
 				}
+
 				return openFileInVSCommand;
 			}
 		}

@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using AdTech.Common.WPF;
 using System.Windows;
 using LogAnalyzer.Filters;
 using System.Threading;
 using System.Threading.Tasks;
-using LogAnalyzer.GUI.View;
-using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.Views;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class FilterViewModel : LogEntriesListViewModel
 	{
-		private readonly IList<LogEntry> source = null;
+		private readonly IList<LogEntry> source;
 		private List<LogEntry> filteredEntries = new List<LogEntry>();
-		private readonly ThinListWrapper<LogEntry> observableFilteredEntries = null;
+		private readonly ThinListWrapper<LogEntry> observableFilteredEntries;
 		private CancellationTokenSource cancellationSource = new CancellationTokenSource();
 
 		public int SourceCount
@@ -240,7 +237,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		}
 
 
-		private DelegateCommand editFilterCommand = null;
+		private DelegateCommand editFilterCommand;
 		public ICommand EditFilterCommand
 		{
 			get
@@ -268,7 +265,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			}
 		}
 
-		private DelegateCommand refreshCommand = null;
+		private DelegateCommand refreshCommand;
 		public ICommand RefreshCommand
 		{
 			get

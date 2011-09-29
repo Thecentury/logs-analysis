@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 using AdTech.Common.WPF;
 using System.Windows.Input;
-using System.Windows.Controls;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.GUI.ViewModels.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogDirectoryViewModel : LogEntriesListViewModel, IHierarchyMember<CoreViewModel, LogDirectory>
 	{
-		private readonly LogDirectory directory = null;
+		private readonly LogDirectory directory;
 
-		private readonly CoreViewModel coreViewModel = null;
+		private readonly CoreViewModel coreViewModel;
 		public CoreViewModel CoreViewModel
 		{
 			get { return coreViewModel; }
 		}
 
-		private readonly BatchUpdatingObservableCollection<LogFileViewModel> filesViewModels = null;
+		private readonly BatchUpdatingObservableCollection<LogFileViewModel> filesViewModels;
 		public ObservableCollection<LogFileViewModel> Files
 		{
 			get { return filesViewModels; }
@@ -43,7 +41,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			get { return directory.DisplayName; }
 		}
 
-		private readonly DispatcherObservableCollection syncronizedFiles = null;
+		private readonly DispatcherObservableCollection syncronizedFiles;
 
 		public LogDirectoryViewModel( LogDirectory directory, CoreViewModel coreViewModel )
 			: base( coreViewModel.ApplicationViewModel )

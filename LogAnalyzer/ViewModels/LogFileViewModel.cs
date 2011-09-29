@@ -12,8 +12,9 @@ using System.Windows.Input;
 using System.Diagnostics;
 using AdTech.Common.WPF;
 using System.Windows.Controls;
+using LogAnalyzer.GUI.ViewModels;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogFileViewModel : LogEntriesListViewModel
 	{

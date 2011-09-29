@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
-using System.Windows;
-using LogAnalyzer.GUI.View;
 using LogAnalyzer.GUI.Views;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	internal sealed class FilterEditorViewModel : BindingObject
 	{
-		private readonly FilterEditorWindow window = null;
+		private readonly FilterEditorWindow window;
 
 		public FilterEditorViewModel( FilterEditorWindow window )
 		{
@@ -24,7 +19,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			window.DataContext = this;
 		}
 
-		private DelegateCommand okCommand = null;
+		private DelegateCommand okCommand;
 		public ICommand OkCommand
 		{
 			get
@@ -48,7 +43,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			return window.Builder != null;
 		}
 
-		private DelegateCommand closeCommand = null;
+		private DelegateCommand closeCommand;
 		public ICommand CloseCommand
 		{
 			get

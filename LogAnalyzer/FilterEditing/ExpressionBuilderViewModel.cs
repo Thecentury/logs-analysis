@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using LogAnalyzer;
-using LogAnalyzer.Extensions;
-using LogAnalyzer.GUI.ViewModel;
-using AdTech.Common.WPF;
+using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
-using System.Windows.Input;
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using LogAnalyzer.GUI.ViewModels;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal class ExpressionBuilderViewModel : BindingObject
 	{
-		private readonly ParameterExpression parameter = null;
+		private readonly ParameterExpression parameter;
 
 		protected ParameterExpression Parameter
 		{
@@ -48,7 +43,7 @@ namespace ExpressionBuilderSample
 			return result;
 		}
 
-		private List<ExpressionBuilderViewModel> builderViewModels = null;
+		private List<ExpressionBuilderViewModel> builderViewModels;
 		public IList<ExpressionBuilderViewModel> Builders
 		{
 			get
@@ -63,13 +58,13 @@ namespace ExpressionBuilderSample
 			}
 		}
 
-		private readonly ExpressionBuilder builder = null;
+		private readonly ExpressionBuilder builder;
 		public ExpressionBuilder Builder
 		{
 			get { return builder; }
 		}
 
-		private ExpressionBuilderViewModel selectedChild = null;
+		private ExpressionBuilderViewModel selectedChild;
 		public ExpressionBuilderViewModel SelectedChild
 		{
 			get { return selectedChild; }

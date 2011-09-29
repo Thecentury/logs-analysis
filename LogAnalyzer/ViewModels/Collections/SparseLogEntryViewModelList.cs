@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	/// <summary>
 	/// Syncronized Collection + IList for LogEntryViewModels.
@@ -15,8 +12,8 @@ namespace LogAnalyzer.GUI.ViewModel
 	[DebuggerDisplay( "SparseLogEntryList Count={Count}" )]
 	public sealed class SparseLogEntryViewModelList : DispatcherObservableCollection, IList<LogEntryViewModel>, IList, ILogEntryHost
 	{
-		private readonly IList<LogEntry> logEntries = null;
-		private readonly Func<LogEntry, LogFileViewModel> getFileViewModel = null;
+		private readonly IList<LogEntry> logEntries;
+		private readonly Func<LogEntry, LogFileViewModel> getFileViewModel;
 		private readonly Dictionary<int, LogEntryViewModel> viewModelsCache = new Dictionary<int, LogEntryViewModel>();
 		private readonly LogEntriesListViewModel parent;
 
@@ -33,7 +30,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			if ( parentViewModel == null )
 				throw new ArgumentNullException( "parentViewModel" );
 			if ( getFileViewModel == null )
-				throw new ArgumentNullException( "fileViewModel" );
+				throw new ArgumentNullException( "getFileViewModel" );
 
 			this.parent = parentViewModel;
 			this.logEntries = parentViewModel.Entries;

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class DelegateBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly DelegateBuilderProxy delegateBuilder = null;
+		private readonly DelegateBuilderProxy delegateBuilder;
 
 		public DelegateBuilderViewModel( DelegateBuilderProxy builder, ParameterExpression parameter )
 			: base( builder, parameter )

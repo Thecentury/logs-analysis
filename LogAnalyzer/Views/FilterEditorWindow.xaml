@@ -1,15 +1,7 @@
 ﻿<Window x:Class="LogAnalyzer.GUI.Views.FilterEditorWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-
-		xmlns:core="clr-namespace:LogAnalyzer;assembly=LogAnalyzer"
-		xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModel"
-		xmlns:local="clr-namespace:LogAnalyzer.GUI"
-		xmlns:view="clr-namespace:LogAnalyzer.GUI.View"
-
-		xmlns:fe="clr-namespace:ExpressionBuilderSample"
-
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		Title="LogAnalyzer Filter Editor" SizeToContent="WidthAndHeight"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:FilterEditing="clr-namespace:LogAnalyzer.GUI.FilterEditing" Title="LogAnalyzer Filter Editor" SizeToContent="WidthAndHeight"
 		ShowInTaskbar="False"
 		Icon="..\Resources\icon.png"
 		WindowStartupLocation="CenterOwner"
@@ -17,7 +9,7 @@
 		>
 
 	<StackPanel Orientation="Vertical">
-		<fe:FilterEditor x:Name="filterEditor"/>
+		<FilterEditing:FilterEditor x:Name="filterEditor"/>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,0,4,8">
 			<StackPanel.Resources>
 				<Style TargetType="Button">

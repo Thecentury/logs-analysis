@@ -9,7 +9,6 @@ using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Properties;
-using LogAnalyzer.GUI.ViewModel;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 

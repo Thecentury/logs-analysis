@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	public sealed class BatchUpdatingObservableCollection<T> : ObservableCollection<T>
 	{

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Helpers
 {
 	internal static class UITreeHelper
 	{
 		public static IEnumerable<DependencyObject> GetParents( this DependencyObject visual )
 		{
 			DependencyObject current = visual;
-			DependencyObject parent = null;
+			DependencyObject parent;
 			do
 			{
 				parent = VisualTreeHelper.GetParent( current );

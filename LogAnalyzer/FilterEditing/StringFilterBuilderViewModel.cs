@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
+using LogAnalyzer.GUI.FilterEditor;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal class StringFilterBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ExpressionBuilderViewModel stringViewModel = null;
-		private readonly ExpressionBuilderViewModel substringViewModel = null;
+		private readonly ExpressionBuilderViewModel stringViewModel;
+		private readonly ExpressionBuilderViewModel substringViewModel;
 
 		public StringFilterBuilderViewModel( StringFilterBuilder builder, ParameterExpression parameter )
 			: base( builder, parameter )
