@@ -133,9 +133,9 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
-									where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-									select file).ToList();
+			var filesInDirectory = ( from file in dir.EnumerateFiles( FileNameFilter )
+									 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+									 select file ).ToList();
 
 			BeginLoadFiles( filesInDirectory );
 		}
@@ -309,6 +309,9 @@ namespace LogAnalyzer
 
 				Condition.DebugAssert( !files.Contains( logFile ) );
 				files.Add( logFile );
+				filesWrapper.RaiseCollectionAdded( logFile );
+
+				logFile.LogEntries.RaiseCollectionReset();
 			}
 		}
 
@@ -331,7 +334,6 @@ namespace LogAnalyzer
 				{
 					logger.WriteError( "Core.OnFileChanged: files doesn't contain file \"{0}\"", fullPath );
 					AddFile( fullPath );
-					return;
 				}
 				else
 				{

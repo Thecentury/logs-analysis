@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using LogAnalyzer;
@@ -9,16 +10,16 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostFileInfo : IFileInfo
 	{
-		private readonly List<LogEntry> logEntries;
 		private readonly string name;
+		private readonly OneFileMessages messages;
 
-		public MostFileInfo( string name, List<LogEntry> logEntries )
+		internal MostFileInfo( string name, OneFileMessages messages )
 		{
 			if ( name == null ) throw new ArgumentNullException( "name" );
-			if ( logEntries == null ) throw new ArgumentNullException( "logEntries" );
+			if ( messages == null ) throw new ArgumentNullException( "messages" );
 
 			this.name = name;
-			this.logEntries = logEntries;
+			this.messages = messages;
 		}
 
 		public void Refresh()
@@ -28,7 +29,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			return new MostLogFileReader( logEntries, args );
+			return new MostLogFileReader( args, messages );
 		}
 
 		/// <summary>
@@ -37,7 +38,7 @@ namespace ModuleLogsProvider.Logging.Most
 		/// <value></value>
 		public int Length
 		{
-			get { return logEntries.Count; }
+			get { return messages.Entries.Count; }
 		}
 
 		public string Name
@@ -47,7 +48,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public string FullName
 		{
-			get { return name; }
+			get { return Path.Combine( MostLogNotificationSource.DirectoryName, name ); }
 		}
 
 		/// <summary>
@@ -61,12 +62,12 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public DateTime LastWriteTime
 		{
-			get { throw new NotImplementedException(); }
+			get { return DateTime.Now; }
 		}
 
 		public DateTime LoggingDate
 		{
-			get { throw new NotImplementedException(); }
+			get { return DateTime.Now.Date; }
 		}
 	}
 }

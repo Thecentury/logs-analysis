@@ -23,7 +23,7 @@ namespace ModuleLogsProvider.Logging.Most
 			ITimer timer = config.ResolveNotNull<ITimer>();
 
 			MostLogNotificationSource notificationSource = new MostLogNotificationSource( timer, serviceFactory, operationsQueue );
-			directory = new MostDirectoryInfo( notificationSource );
+			directory = notificationSource.DirectoryInfo;
 		}
 
 		public override IDirectoryInfo GetDirectory( string path )

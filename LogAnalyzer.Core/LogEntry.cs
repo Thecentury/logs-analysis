@@ -22,7 +22,8 @@ namespace LogAnalyzer
 		public int ThreadId { get; private set; }
 		public DateTime Time { get; private set; }
 		public int LineIndex { get; private set; }
-		public LogFile ParentLogFile { get; private set; }
+		
+		public LogFile ParentLogFile { get; set; }
 
 		private readonly List<string> textLines = new List<string>();
 		public IList<string> TextLines
@@ -58,8 +59,6 @@ namespace LogAnalyzer
 		{
 			if ( lineIndex < 0 )
 				throw new ArgumentOutOfRangeException( "lineIndex" );
-			if ( parentLogFile == null )
-				throw new ArgumentNullException( "parentLogFile" );
 
 			this.ParentLogFile = parentLogFile;
 

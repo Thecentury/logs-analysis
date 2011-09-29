@@ -12,6 +12,7 @@ using NUnit.Framework;
 
 namespace ModuleLogsProvider.Tests
 {
+	[Description( "Тесты для MostDirectoryInfo" )]
 	[TestFixture]
 	public class MostDirectoryInfoTests
 	{

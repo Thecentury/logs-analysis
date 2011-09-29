@@ -11,6 +11,14 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	internal sealed class MostLogMessagesStorage
 	{
+		private readonly MostDirectoryInfo directory;
+
+		public MostLogMessagesStorage( MostDirectoryInfo directory )
+		{
+			if ( directory == null ) throw new ArgumentNullException( "directory" );
+			this.directory = directory;
+		}
+
 		private readonly Dictionary<string, OneFileMessages> logNamesToEntries = new Dictionary<string, OneFileMessages>();
 
 		public IEnumerable<string> GetLogFileNames()
@@ -18,10 +26,10 @@ namespace ModuleLogsProvider.Logging.Most
 			return logNamesToEntries.Keys;
 		}
 
-		public List<LogEntry> GetEntriesByName( string logFileName )
+		public OneFileMessages GetEntriesByName( string logFileName )
 		{
 			OneFileMessages fileMessages = logNamesToEntries[logFileName];
-			return fileMessages.Entries;
+			return fileMessages;
 		}
 
 		public AppendMessagesResult AppendMessages( IEnumerable<LogMessageInfo> messages )
@@ -36,8 +44,7 @@ namespace ModuleLogsProvider.Logging.Most
 				OneFileMessages fileMessages;
 				if ( !logNamesToEntries.TryGetValue( loggerName, out fileMessages ) )
 				{
-					LogFile logFile = null;
-					fileMessages = new OneFileMessages( loggerName, logFile );
+					fileMessages = new OneFileMessages();
 					logNamesToEntries.Add( loggerName, fileMessages );
 					result.CreatedLogFiles.Add( loggerName );
 				}
@@ -62,17 +69,26 @@ namespace ModuleLogsProvider.Logging.Most
 	internal sealed class OneFileMessages
 	{
 		private readonly List<LogEntry> entries = new List<LogEntry>();
+		private LogFile logFile;
 
 		private static readonly LogLineParser parser = new LogLineParser();
 
-		public OneFileMessages( string name, LogFile file )
-		{
-			if ( String.IsNullOrEmpty( name ) ) throw new ArgumentNullException( "name" );
-		}
+		public OneFileMessages() { }
 
 		public List<LogEntry> Entries
 		{
 			get { return entries; }
+		}
+
+		public void SetLogFile( LogFile logFile )
+		{
+			if ( logFile == null ) throw new ArgumentNullException( "logFile" );
+			
+			this.logFile = logFile;
+			foreach (LogEntry logEntry in entries)
+			{
+				logEntry.ParentLogFile = logFile;
+			}
 		}
 
 		public void AppendMessages( IEnumerable<LogMessageInfo> messages )
@@ -90,7 +106,7 @@ namespace ModuleLogsProvider.Logging.Most
 					throw new NotImplementedException();
 				}
 
-				LogEntry entry = new LogEntry( type, threadId, time, text, logMessageInfo.IndexInAllMessagesList, file );
+				LogEntry entry = new LogEntry( type, threadId, time, text, logMessageInfo.IndexInAllMessagesList, logFile );
 				Entries.Add( entry );
 			}
 		}

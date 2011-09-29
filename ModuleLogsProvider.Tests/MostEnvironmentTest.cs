@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -58,6 +59,8 @@ namespace ModuleLogsProvider.Tests
 
 		private void SendMessages( TestCaseData data, params LogMessageInfo[] messages )
 		{
+			addedFilesCount = 0;
+
 			var loggerNames = messages.Select( m => m.LoggerName ).Distinct().ToList();
 			MockLogsSourceService service = new MockLogsSourceService();
 			MockTimer timer = new MockTimer();
@@ -72,6 +75,7 @@ namespace ModuleLogsProvider.Tests
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
+			core.Directories.First().Files.CollectionChanged += Files_CollectionChanged;
 			core.Start();
 			core.WaitForLoaded();
 
@@ -79,7 +83,7 @@ namespace ModuleLogsProvider.Tests
 
 			if ( !data.OperationsQueue.IsSyncronous )
 			{
-				Thread.Sleep(2000);
+				Thread.Sleep( 2000 );
 			}
 
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
@@ -96,6 +100,18 @@ namespace ModuleLogsProvider.Tests
 				var expectedMessagesCount = messages.Count( m => m.LoggerName == fileName );
 
 				ExpressionAssert.That( file, f => f.LogEntries.Count == expectedMessagesCount );
+			}
+
+			core.Directories.First().Files.CollectionChanged -= Files_CollectionChanged;
+			ExpressionAssert.That( firstDir, d => d.Files.Count == addedFilesCount );
+		}
+
+		private int addedFilesCount = 0;
+		private void Files_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action == NotifyCollectionChangedAction.Add )
+			{
+				addedFilesCount += e.NewItems.Count;
 			}
 		}
 

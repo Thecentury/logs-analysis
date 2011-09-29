@@ -34,7 +34,8 @@ namespace LogAnalysisServer.Dev
 			LogMessageInfo newMessage = GenerateNewMessage();
 			messages.Add( newMessage );
 
-			return messages.Skip( startingIndex ).ToArray();
+			//return messages.Skip( startingIndex ).ToArray();
+			return new[] { newMessage };
 		}
 
 		private LogMessageInfo GenerateNewMessage()
