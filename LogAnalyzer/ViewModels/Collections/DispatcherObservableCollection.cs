@@ -26,12 +26,9 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
-			Observable.FromEvent
-				<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-					h => observableCollection.CollectionChanged += h,
-					h => observableCollection.CollectionChanged -= h )
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection, "CollectionChanged" )
 				.ObserveOn( scheduler )
-				.Subscribe( OnCollectionChanged );
+				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
 		}
 
 		// todo прореживать частоту событий

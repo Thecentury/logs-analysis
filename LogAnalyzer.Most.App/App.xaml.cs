@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Most.App.Properties;
@@ -70,6 +71,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
+				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.BuildConfig();
 
 			logger = config.Logger;
