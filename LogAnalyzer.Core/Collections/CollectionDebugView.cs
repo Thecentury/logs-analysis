@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	internal sealed class CollectionDebugView<T>
 	{
-		private ICollection<T> collection;
+		private readonly ICollection<T> collection;
 		[DebuggerBrowsable( DebuggerBrowsableState.RootHidden )]
 		public T[] Items
 		{

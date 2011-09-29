@@ -1,4 +1,4 @@
-﻿<Window x:Class="LogAnalyzer.GUI.View.FilterEditorWindow"
+﻿<Window x:Class="LogAnalyzer.GUI.Views.FilterEditorWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 
 		xmlns:core="clr-namespace:LogAnalyzer;assembly=LogAnalyzer"
