@@ -49,7 +49,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				loadingProgress = value;
 				RaisePropertyChanged( "LoadingProgress" );
-				TaskbarHelper.SetProgressValue( (int)value );
+				
+				applicationViewModel.WindowService.SetProgressValue( (int)value );
 			}
 		}
 

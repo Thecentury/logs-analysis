@@ -30,13 +30,8 @@ namespace ModuleLogsProvider.Logging.Most
 
 		private int GetStartingIndex( LogEntry lastAddedEntry )
 		{
-			int index = messages.Entries.IndexOf( lastAddedEntry );
-			if ( index >= 0 )
-			{
-				return index;
-			}
-
-			return 0;
+			int index = messages.Entries.IndexOf( lastAddedEntry ) + 1;
+			return index;
 		}
 	}
 }

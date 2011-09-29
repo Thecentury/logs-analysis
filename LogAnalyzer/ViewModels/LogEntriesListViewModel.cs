@@ -32,10 +32,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private SparseLogEntryViewModelList entriesViewModels;
-		protected SparseLogEntryViewModelList EntriesViewModels
+		private SparseLogEntryViewModelList logEntriesViewModels;
+		protected SparseLogEntryViewModelList LogEntriesViewModels
 		{
-			get { return entriesViewModels; }
+			get { return logEntriesViewModels; }
 		}
 
 		private GenericListView<LogEntryViewModel> entriesView;
@@ -89,19 +89,19 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			this.entries = entries;
 
-			this.entriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
-			entriesViewModels.ItemCreated += OnEntriesViewModels_ItemCreated;
-			entriesViewModels.ItemRemoved += OnEntriesViewModels_ItemRemoved;
+			this.logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
+			logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
+			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
 
-			this.entriesViewModels.CollectionChanged += OnEntriesViewModels_CollectionChanged;
+			this.logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
 
 			InvokeInUIDispatcher( () =>
 			{
-				this.entriesView = new GenericListView<LogEntryViewModel>( entriesViewModels );
+				this.entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
 			} );
 		}
 
-		private void OnEntriesViewModels_ItemCreated( object sender, LogEntryHostChangedEventArgs e )
+		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
 		{
 			OnLogEntryViewModelCreated( e.LogEntryViewModel );
 		}
@@ -111,7 +111,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			UpdateDynamicHighlighting();
 		}
 
-		private void OnEntriesViewModels_ItemRemoved( object sender, LogEntryHostChangedEventArgs e )
+		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
 		{
 			OnLogEntryViewModelRemoved( e.LogEntryViewModel );
 		}
@@ -121,7 +121,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			UpdateDynamicHighlighting();
 		}
 
-		private void OnEntriesViewModels_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			OnEntriesChanged();
 		}
@@ -168,7 +168,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( highlightedPropertyName == null )
 				return;
 
-			foreach ( LogEntryViewModel logEntryViewModel in entriesViewModels.CreatedEntries )
+			foreach ( LogEntryViewModel logEntryViewModel in logEntriesViewModels.CreatedEntries )
 			{
 				bool include = dynamicHighlightingFilter.Include( logEntryViewModel.LogEntry );
 

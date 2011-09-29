@@ -119,35 +119,35 @@ namespace LogAnalyzer.GUI
 			return false;
 		}
 
-		/// <summary>
-		/// Start Flashing the specified Window (form)
-		/// </summary>
-		/// <param name="form">The Form (Window) to Flash.</param>
-		/// <returns></returns>
-		public static bool Start( IntPtr handle )
-		{
-			if ( Win2000OrLater )
-			{
-				FLASHWINFO fi = Create_FLASHWINFO( handle, FLASHW_ALL, uint.MaxValue, 0 );
-				return FlashWindowEx( ref fi );
-			}
-			return false;
-		}
+		///// <summary>
+		///// Start Flashing the specified Window (form)
+		///// </summary>
+		///// <returns></returns>
+		//public static bool Start( IntPtr handle )
+		//{
+		//    if ( Win2000OrLater )
+		//    {
+		//        FLASHWINFO fi = Create_FLASHWINFO( handle, FLASHW_ALL, uint.MaxValue, 0 );
+		//        return FlashWindowEx( ref fi );
+		//    }
+		//    return false;
+		//}
 
-		/// <summary>
-		/// Stop Flashing the specified Window (form)
-		/// </summary>
-		/// <param name="form"></param>
-		/// <returns></returns>
-		public static bool Stop( IntPtr handle )
-		{
-			if ( Win2000OrLater )
-			{
-				FLASHWINFO fi = Create_FLASHWINFO( handle, FLASHW_STOP, uint.MaxValue, 0 );
-				return FlashWindowEx( ref fi );
-			}
-			return false;
-		}
+		///// <summary>
+		///// Stop Flashing the specified Window (form)
+		///// </summary>
+		///// <param name="form"></param>
+		///// <param name="handle"></param>
+		///// <returns></returns>
+		//public static bool Stop( IntPtr handle )
+		//{
+		//    if ( Win2000OrLater )
+		//    {
+		//        FLASHWINFO fi = Create_FLASHWINFO( handle, FLASHW_STOP, uint.MaxValue, 0 );
+		//        return FlashWindowEx( ref fi );
+		//    }
+		//    return false;
+		//}
 
 		private static IntPtr hwnd = IntPtr.Zero;
 		public static IntPtr GetHwnd()
