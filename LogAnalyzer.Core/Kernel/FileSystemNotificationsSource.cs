@@ -11,7 +11,7 @@ namespace LogAnalyzer
 {
 	public sealed class FileSystemNotificationsSource : LogNotificationsSourceBase
 	{
-		private readonly FileSystemWatcher watcher = null;
+		private readonly FileSystemWatcher watcher;
 
 		public FileSystemNotificationsSource( string logsPath, string filesFilter, NotifyFilters notifyFilters )
 		{

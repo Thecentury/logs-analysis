@@ -63,28 +63,6 @@ namespace LogAnalyzer
 			get { return parentDirectory; }
 		}
 
-		/// <summary>
-		/// Для MOST-сервиса.
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		public static LogFile FromName( string name )
-		{
-			return new LogFile( name );
-		}
-
-		/// <summary>
-		/// Для MOST-сервиса.
-		/// </summary>
-		/// <param name="name"></param>
-		private LogFile( string name )
-		{
-			if ( String.IsNullOrEmpty( name ) ) throw new ArgumentNullException( "name" );
-
-			Name = name;
-			FullPath = name;
-		}
-
 		internal LogFile( IFileInfo fileInfo, LogDirectory parent )
 		{
 			if ( fileInfo == null )

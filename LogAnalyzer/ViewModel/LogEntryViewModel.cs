@@ -14,11 +14,10 @@ namespace LogAnalyzer.GUI.ViewModel
 {
 	public sealed class LogEntryViewModel : BindingObject
 	{
-		private readonly LogEntry logEntry = null;
-		private readonly LogFileViewModel parentFile = null;
-		private readonly ILogEntryHost host = null;
+		private readonly LogEntry logEntry;
+		private readonly LogFileViewModel parentFile;
+		private readonly ILogEntryHost host;
 		private readonly int indexInParentCollection = -1;
-		private readonly LogEntriesListViewModel parentList;
 
 		/// <summary>
 		/// Индекс в коллекции host.
@@ -39,7 +38,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			if ( logEntry == null )
 				throw new ArgumentNullException( "logEntry" );
 			if ( parentFile == null )
-				throw new ArgumentNullException( "parent" );
+				throw new ArgumentNullException( "parentFile" );
 			if ( host == null )
 				throw new ArgumentNullException( "host" );
 			if ( parentList == null )
@@ -49,7 +48,6 @@ namespace LogAnalyzer.GUI.ViewModel
 			this.parentFile = parentFile;
 			this.host = host;
 			this.indexInParentCollection = indexInParentCollection;
-			this.parentList = parentList;
 
 			// todo обдумать, как еще можно сделать
 			if ( logEntry.IsFrozen )
@@ -80,7 +78,7 @@ namespace LogAnalyzer.GUI.ViewModel
 			get { return logEntry; }
 		}
 
-		private string highlightedColumnName = null;
+		private string highlightedColumnName;
 		public string HighlightedColumnName
 		{
 			get { return highlightedColumnName; }
@@ -132,7 +130,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		}
 
 		// todo аналогично, избавиться от поля.
-		private List<MessageLineViewModel> linesViewModel = null;
+		private List<MessageLineViewModel> linesViewModel;
 		public List<MessageLineViewModel> LinesView
 		{
 			get

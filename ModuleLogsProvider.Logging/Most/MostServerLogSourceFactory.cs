@@ -11,8 +11,11 @@ namespace ModuleLogsProvider.Logging.Most
 	{
 		public IOptionalDisposable<ILogSourceService> CreateObject()
 		{
+			string address = "http://127.0.0.1:9999/MostLogSourceService/";
+			//string address = "http://localhost:8732/Design_Time_Addresses/DevelopmentLogAnalysysServer/Service1/";
+
 			var binding = new BasicHttpBinding();
-			var endpoint = new EndpointAddress( "http://127.0.0.1:9999/MostLogSourceService/" );
+			var endpoint = new EndpointAddress( address );
 			var client = new LogSourceServiceClient( binding, endpoint );
 
 			return new OptionalDisposable<ILogSourceService>( client );

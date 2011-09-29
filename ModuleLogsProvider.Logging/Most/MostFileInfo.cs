@@ -28,7 +28,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			return new MostLogFileReader( logEntries );
+			return new MostLogFileReader( logEntries, args );
 		}
 
 		/// <summary>
