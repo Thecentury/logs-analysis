@@ -7,6 +7,7 @@ using System.Windows.Input;
 using LogAnalyzer.Filters;
 using System.Windows;
 using LogAnalyzer.GUI.View;
+using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModel
 {

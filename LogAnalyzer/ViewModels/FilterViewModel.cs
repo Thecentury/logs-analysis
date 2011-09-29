@@ -9,6 +9,8 @@ using LogAnalyzer.Filters;
 using System.Threading;
 using System.Threading.Tasks;
 using LogAnalyzer.GUI.View;
+using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModel
 {

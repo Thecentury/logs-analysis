@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows;
 using AdTech.Common.WPF;
 using LogAnalyzer.Config;
-using LogAnalyzer.GUI.View;
 using System.Windows.Input;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Diagnostics;
+using LogAnalyzer.GUI.ViewModel;
+using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;
 using Microsoft.Win32;
-using System.IO;
 using System.Xaml;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Extensions;
 using System.Collections.Specialized;
-using LogAnalyzer.GUI.Properties;
 using Windows7.DesktopIntegration;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
-	// todo сделать настраиваемую ширину последней колонки DatGrid'а
+	// todo сделать настраиваемую ширину последней колонки DataGrid'а
 
 	public sealed class ApplicationViewModel : BindingObject
 	{

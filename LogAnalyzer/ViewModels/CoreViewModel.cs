@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Diagnostics;
 using System.Threading;
+using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.ViewModel
 {

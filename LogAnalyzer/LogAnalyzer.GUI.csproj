@@ -104,37 +104,37 @@
     <Compile Include="FilterEditor\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
     <Compile Include="Interop\TaskbarHelper.cs" />
-    <Compile Include="ViewModel\ApplicationViewModel.cs" />
-    <Compile Include="ViewModel\Commands.cs" />
-    <Compile Include="ViewModel\HighlightManager.cs" />
-    <Compile Include="ViewModel\ExceptionLineViewModel.cs" />
-    <Compile Include="ViewModel\Collections\ILogEntryHost.cs" />
-    <Compile Include="ViewModel\FilterEditorViewModel.cs" />
-    <Compile Include="ViewModel\FilterViewModel.cs" />
-    <Compile Include="ViewModel\Helpers\UITreeHelper.cs" />
-    <Compile Include="ViewModel\HighlightingViewModel.cs" />
-    <Compile Include="ViewModel\IHierarchyMember.cs" />
-    <Compile Include="ViewModel\LoadingViewModel.cs" />
-    <Compile Include="ViewModel\LogDirectoryViewModel.cs" />
-    <Compile Include="ViewModel\LogEntriesListViewModel.cs" />
-    <Compile Include="ViewModel\TabViewModel.cs" />
-    <Compile Include="ViewModel\MessageLineViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Commands.cs" />
+    <Compile Include="ViewModels\HighlightManager.cs" />
+    <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
+    <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
+    <Compile Include="ViewModels\FilterEditorViewModel.cs" />
+    <Compile Include="ViewModels\FilterViewModel.cs" />
+    <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
+    <Compile Include="ViewModels\HighlightingViewModel.cs" />
+    <Compile Include="ViewModels\IHierarchyMember.cs" />
+    <Compile Include="ViewModels\LoadingViewModel.cs" />
+    <Compile Include="ViewModels\LogDirectoryViewModel.cs" />
+    <Compile Include="ViewModels\LogEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\TabViewModel.cs" />
+    <Compile Include="ViewModels\MessageLineViewModel.cs" />
     <Compile Include="Views\DefaultTabHeaderControl.xaml.cs">
       <DependentUpon>DefaultTabHeaderControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExceptionView.xaml.cs">
       <DependentUpon>ExceptionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\Collections\BatchUpdatingObservableCollection.cs" />
-    <Compile Include="ViewModel\BindingObject.cs" />
-    <Compile Include="ViewModel\CoreViewModel.cs" />
-    <Compile Include="ViewModel\LogEntryViewModel.cs" />
-    <Compile Include="ViewModel\Collections\SparseLogEntryViewModelList.cs" />
-    <Compile Include="ViewModel\LogFileViewModel.cs" />
-    <Compile Include="ViewModel\Collections\DispatcherObservableCollection.cs" />
-    <Compile Include="ViewModel\Collections\DispatcherEnumerable.cs" />
-    <Compile Include="ViewModel\Collections\DispatcherList.cs" />
-    <Compile Include="ViewModel\GenericListView.cs" />
+    <Compile Include="ViewModels\Collections\BatchUpdatingObservableCollection.cs" />
+    <Compile Include="ViewModels\BindingObject.cs" />
+    <Compile Include="ViewModels\CoreViewModel.cs" />
+    <Compile Include="ViewModels\LogEntryViewModel.cs" />
+    <Compile Include="ViewModels\Collections\SparseLogEntryViewModelList.cs" />
+    <Compile Include="ViewModels\LogFileViewModel.cs" />
+    <Compile Include="ViewModels\Collections\DispatcherObservableCollection.cs" />
+    <Compile Include="ViewModels\Collections\DispatcherEnumerable.cs" />
+    <Compile Include="ViewModels\Collections\DispatcherList.cs" />
+    <Compile Include="ViewModels\GenericListView.cs" />
     <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
     </Compile>

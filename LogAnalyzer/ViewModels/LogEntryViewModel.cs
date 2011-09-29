@@ -9,6 +9,7 @@ using LogAnalyzer.Extensions;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
+using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.ViewModel
 {
