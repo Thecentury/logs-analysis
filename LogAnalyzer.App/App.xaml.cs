@@ -44,7 +44,9 @@ namespace LogAnalyzer.App
 			Task task = new Task( () =>
 			{
 				// todo обработка исключений при ошибках загрузки конфига
-				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath )
+					.WithSchedulerFromDispatcher( Application.Current.Dispatcher );
+
 				config.RegisterInstance<IEnvironment>( new FileSystemEnvironment( config ) );
 
 				this.logger = config.Logger;

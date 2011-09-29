@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reactive.Concurrency;
+using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
@@ -14,6 +16,9 @@ namespace LogAnalyzer.Config
 		public LogAnalyzerConfiguration()
 		{
 			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
+
+			IScheduler scheduler = new DispatcherScheduler( Dispatcher.CurrentDispatcher );
+			RegisterInstance<IScheduler>( scheduler );
 		}
 
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
@@ -61,6 +66,22 @@ namespace LogAnalyzer.Config
 		}
 
 		#region Methods
+
+		public LogAnalyzerConfiguration WithScheduler( IScheduler scheduler )
+		{
+			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
+
+			RegisterInstance<IScheduler>( scheduler );
+
+			return this;
+		}
+
+		public LogAnalyzerConfiguration WithSchedulerFromDispatcher( Dispatcher dispatcher )
+		{
+			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
+
+			return WithScheduler( new DispatcherScheduler( dispatcher ) );
+		}
 
 		public void SaveToStream( Stream stream )
 		{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
@@ -12,6 +13,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		public ApplicationViewModel ApplicationViewModel
 		{
 			get { return applicationViewModel; }
+		}
+
+		public IScheduler Scheduler
+		{
+			get { return applicationViewModel.Config.ResolveNotNull<IScheduler>(); }
 		}
 
 		protected TabViewModel( ApplicationViewModel applicationViewModel )

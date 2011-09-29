@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Reactive.Concurrency;
 
 namespace LogAnalyzer.GUI.ViewModels.Collections
 {
@@ -13,8 +14,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		private readonly IList<T> list = null;
 		private readonly object syncRoot = new object();
 
-		public DispatcherList( IList<T> list )
-			: base( list )
+		public DispatcherList( IList<T> list, IScheduler scheduler )
+			: base( list, scheduler )
 		{
 			if ( list == null )
 				throw new ArgumentNullException( "list" );

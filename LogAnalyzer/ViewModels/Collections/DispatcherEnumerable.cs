@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Reactive.Concurrency;
 
 namespace LogAnalyzer.GUI.ViewModels.Collections
 {
@@ -8,8 +9,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	{
 		private readonly IEnumerable<T> collection;
 
-		public DispatcherEnumerable( IEnumerable<T> collection )
-			: base( collection )
+		public DispatcherEnumerable( IEnumerable<T> collection, IScheduler scheduler )
+			: base( collection, scheduler )
 		{
 			if ( collection == null )
 				throw new ArgumentNullException( "collection" );

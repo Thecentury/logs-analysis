@@ -21,6 +21,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 	public sealed class ApplicationViewModel : BindingObject
 	{
+		private readonly LogAnalyzerConfiguration config;
+		public LogAnalyzerConfiguration Config
+		{
+			get { return config; }
+		}
+		
 		private readonly LogAnalyzerCore core;
 		public LogAnalyzerCore Core
 		{
@@ -39,6 +45,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
+
+			this.config = config;
 
 			config.Logger.WriteInfo( "Starting..." );
 

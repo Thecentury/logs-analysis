@@ -20,17 +20,19 @@ namespace LogAnalyzer.Config
 
 		public void Register<TContract>( Func<object> createImplementationFunc )
 		{
+			if ( createImplementationFunc == null ) throw new ArgumentNullException( "createImplementationFunc" );
+
 			Type contractType = typeof( TContract );
 			registeredMappings[contractType] = createImplementationFunc;
 		}
 
 		public TContract Resolve<TContract>()
 		{
-			Type key = typeof (TContract);
+			Type key = typeof( TContract );
 
 			if ( !registeredMappings.ContainsKey( key ) )
 			{
-				
+				throw new InvalidOperationException( String.Format( "Config is expected to contain registered type '{0}'", key.Name ) );
 			}
 
 			var func = registeredMappings[key];
