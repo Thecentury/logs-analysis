@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using LogAnalyzer.Extensions;
 using System.Windows.Threading;
 using System.Windows;
@@ -13,44 +15,30 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	[IgnoreMissingProperty( "Count" )]
 	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged
 	{
-		public DispatcherObservableCollection( object collection )
+		private readonly IScheduler scheduler;
+
+		public DispatcherObservableCollection( object collection, IScheduler scheduler )
 		{
-			if ( collection == null )
-				throw new ArgumentNullException( "collection" );
+			if ( collection == null ) throw new ArgumentNullException( "collection" );
+			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
+
+			this.scheduler = scheduler;
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
-			// todo загнать сюда IObservable как посредник
-			observableCollection.CollectionChanged += OnCollectionChanged;
-		}
-
-		private void OnCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
-		{
-			OnCollectionChanged( e );
+			Observable.FromEvent
+				<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+					h => observableCollection.CollectionChanged += h,
+					h => observableCollection.CollectionChanged -= h )
+				.ObserveOn( scheduler )
+				.Subscribe( OnCollectionChanged );
 		}
 
 		// todo прореживать частоту событий
 		protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
-			RaiseInDispatcher( e );
+			CollectionChanged.RaiseCollectionChanged( this, e );
 			PropertyChanged.Raise( this, "Count" );
-		}
-
-		private void RaiseInDispatcher( NotifyCollectionChangedEventArgs e )
-		{
-			var eventHandler = this.CollectionChanged;
-			if ( eventHandler == null )
-				return;
-
-			Dispatcher dispatcher = Application.Current.Dispatcher;
-			if ( !dispatcher.CheckAccess() )
-			{
-				dispatcher.BeginInvoke( eventHandler, DispatcherPriority.Background, this, e );
-			}
-			else
-			{
-				eventHandler( this, e );
-			}
 		}
 
 		#region INotifyCollectionChanged Members
@@ -59,7 +47,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public void RaiseCollectionReset()
 		{
-			RaiseInDispatcher( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+			scheduler.Schedule( CollectionChanged.RaiseCollectionReset );
 		}
 
 		#endregion

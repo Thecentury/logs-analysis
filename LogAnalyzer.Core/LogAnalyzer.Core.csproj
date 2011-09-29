@@ -47,6 +47,9 @@
     <DefineConstants>TRACE;DEBUG;ASSERT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rx.Windows.Threading">
+      <HintPath>..\Ext\Rx .NET 4.0\Rx.Windows.Threading.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

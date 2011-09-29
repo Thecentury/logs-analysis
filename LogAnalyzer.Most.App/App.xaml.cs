@@ -70,6 +70,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
+				.WithSchedulerFromDispatcher( Application.Current.Dispatcher )
 				.BuildConfig();
 
 			logger = config.Logger;

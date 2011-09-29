@@ -17,10 +17,6 @@ namespace ModuleLogsProvider.Logging.Most
 		{
 			if ( directory == null ) throw new ArgumentNullException( "directory" );
 			this.directory = directory;
-
-			// todo brinchuk this is for test purposes only
-			//var fileMessages = new OneFileMessages();
-			//logNamesToEntries.Add( "L1", fileMessages );
 		}
 
 		private readonly Dictionary<string, OneFileMessages> logNamesToEntries = new Dictionary<string, OneFileMessages>();

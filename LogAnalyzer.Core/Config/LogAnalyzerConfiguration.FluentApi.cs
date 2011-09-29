@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
+using System.Windows.Threading;
 
 namespace LogAnalyzer.Config
 {
@@ -76,6 +77,22 @@ namespace LogAnalyzer.Config
 			config.RegisterInstance<TContract>( instance );
 
 			return this;
+		}
+
+		public LogAnalyzerConfigurationFluentApi WithScheduler( IScheduler scheduler )
+		{
+			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
+
+			RegisterInstance<IScheduler>( scheduler );
+
+			return this;
+		}
+
+		public LogAnalyzerConfigurationFluentApi WithSchedulerFromDispatcher( Dispatcher dispatcher )
+		{
+			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
+
+			return WithScheduler( new DispatcherScheduler( dispatcher ) );
 		}
 	}
 }

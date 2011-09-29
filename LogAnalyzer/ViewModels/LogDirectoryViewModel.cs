@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Reactive.Concurrency;
 using System.Windows;
 using AdTech.Common.WPF;
 using System.Windows.Input;
@@ -57,7 +58,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
 			directory.Files.CollectionChanged += Files_CollectionChanged;
 
-			this.syncronizedFiles = new DispatcherObservableCollection( filesViewModels );
+			this.syncronizedFiles = new DispatcherObservableCollection( filesViewModels, coreViewModel.Scheduler );
 
 			Init( directory.MergedEntries );
 

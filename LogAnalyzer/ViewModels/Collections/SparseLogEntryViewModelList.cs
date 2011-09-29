@@ -25,7 +25,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		private int maxCount = 0;
 
 		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> getFileViewModel )
-			: base( parentViewModel.Entries )
+			: base( parentViewModel.Entries, parentViewModel.Scheduler )
 		{
 			if ( parentViewModel == null )
 				throw new ArgumentNullException( "parentViewModel" );
