@@ -11,6 +11,7 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.App
 {
@@ -47,6 +48,7 @@ namespace LogAnalyzer.App
 				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
 
 				config.RegisterInstance<IEnvironment>( new FileSystemEnvironment( config ) );
+				config.RegisterInstance<IWindowService>( new RealWindowService() );
 
 				this.logger = config.Logger;
 
