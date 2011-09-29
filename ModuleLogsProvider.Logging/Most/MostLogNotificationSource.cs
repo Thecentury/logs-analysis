@@ -11,12 +11,13 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	public sealed class MostLogNotificationSource : LogNotificationsSourceBase
 	{
-		private const string DirectoryName = "MOST";
+		public const string DirectoryName = "MOST";
 
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
 		private readonly ILogSourceServiceFactory serviceFactory;
 		private readonly IOperationsQueue operationQueue;
-		private readonly MostLogMessagesStorage messagesStorage = new MostLogMessagesStorage();
+		private readonly MostLogMessagesStorage messagesStorage;
+		private readonly MostDirectoryInfo directoryInfo;
 
 		public MostLogNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
 		{
@@ -28,11 +29,19 @@ namespace ModuleLogsProvider.Logging.Most
 			this.operationQueue = operationQueue;
 
 			timer.Tick += OnTimerTick;
+
+			directoryInfo = new MostDirectoryInfo( this );
+			messagesStorage = new MostLogMessagesStorage( DirectoryInfo );
 		}
 
 		internal MostLogMessagesStorage MessagesStorage
 		{
 			get { return messagesStorage; }
+		}
+
+		public MostDirectoryInfo DirectoryInfo
+		{
+			get { return directoryInfo; }
 		}
 
 		private void OnTimerTick( object sender, EventArgs e )

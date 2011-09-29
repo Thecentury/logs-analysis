@@ -119,10 +119,10 @@
     <Compile Include="ViewModel\LogEntriesListViewModel.cs" />
     <Compile Include="ViewModel\TabViewModel.cs" />
     <Compile Include="ViewModel\MessageLineViewModel.cs" />
-    <Compile Include="View\DefaultTabHeaderControl.xaml.cs">
+    <Compile Include="Views\DefaultTabHeaderControl.xaml.cs">
       <DependentUpon>DefaultTabHeaderControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ExceptionView.xaml.cs">
+    <Compile Include="Views\ExceptionView.xaml.cs">
       <DependentUpon>ExceptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\Collections\BatchUpdatingObservableCollection.cs" />
@@ -135,23 +135,23 @@
     <Compile Include="ViewModel\Collections\DispatcherEnumerable.cs" />
     <Compile Include="ViewModel\Collections\DispatcherList.cs" />
     <Compile Include="ViewModel\GenericListView.cs" />
-    <Compile Include="View\FilterEditorWindow.xaml.cs">
+    <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\FilterView.xaml.cs">
+    <Compile Include="Views\FilterView.xaml.cs">
       <DependentUpon>FilterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LoadingView.xaml.cs">
+    <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LogEntriesListView.xaml.cs">
+    <Compile Include="Views\LogEntriesListView.xaml.cs">
       <DependentUpon>LogEntriesListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\StatusBar.xaml.cs">
+    <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TabControlEx.cs" />
-    <Compile Include="View\TabsView.xaml.cs">
+    <Compile Include="Views\TabControlEx.cs" />
+    <Compile Include="Views\TabsView.xaml.cs">
       <DependentUpon>TabsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowsInterop.cs" />
@@ -168,39 +168,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\CommonStyles.xaml">
+    <Page Include="Views\CommonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DefaultTabHeaderControl.xaml">
+    <Page Include="Views\DefaultTabHeaderControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ExceptionView.xaml">
+    <Page Include="Views\ExceptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\FilterEditorWindow.xaml">
+    <Page Include="Views\FilterEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\FilterView.xaml">
+    <Page Include="Views\FilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LoadingView.xaml">
+    <Page Include="Views\LoadingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LogEntriesListView.xaml">
+    <Page Include="Views\LogEntriesListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\StatusBar.xaml">
+    <Page Include="Views\StatusBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TabsView.xaml">
+    <Page Include="Views\TabsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

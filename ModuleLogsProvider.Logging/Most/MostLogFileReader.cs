@@ -9,29 +9,33 @@ namespace ModuleLogsProvider.Logging.Most
 {
 	internal sealed class MostLogFileReader : LogFileReaderBase
 	{
-		private readonly ICollection<LogEntry> logEntries;
-		private readonly LogFileReaderArguments args;
+		private readonly OneFileMessages messages;
 
-		public MostLogFileReader( ICollection<LogEntry> logEntries, LogFileReaderArguments args )
+		public MostLogFileReader( LogFileReaderArguments args, OneFileMessages messages )
 		{
-			if ( logEntries == null ) throw new ArgumentNullException( "logEntries" );
 			if ( args == null ) throw new ArgumentNullException( "args" );
+			if ( messages == null ) throw new ArgumentNullException( "messages" );
 
-			this.logEntries = logEntries;
-			this.args = args;
+			this.messages = messages;
+			messages.SetLogFile( args.ParentLogFile );
 		}
 
 		public override IList<LogEntry> ReadToEnd( LogEntry lastAddedEntry )
 		{
 			int startingIndex = GetStartingIndex( lastAddedEntry );
 
-			var result = logEntries.Skip( startingIndex ).ToList();
+			var result = messages.Entries.Skip( startingIndex ).ToList();
 			return result;
 		}
 
 		private int GetStartingIndex( LogEntry lastAddedEntry )
 		{
-			// todo brinchuk !!
+			int index = messages.Entries.IndexOf( lastAddedEntry );
+			if ( index >= 0 )
+			{
+				return index;
+			}
+
 			return 0;
 		}
 	}

@@ -20,7 +20,6 @@ namespace LogAnalyzer
 {
 	public sealed class LogAnalyzerCore : LogEntriesList
 	{
-		private readonly IEnvironment environment;
 		private readonly LogAnalyzerConfiguration config;
 		private readonly IOperationsQueue operationsQueue;
 
@@ -29,7 +28,7 @@ namespace LogAnalyzer
 			get { return operationsQueue; }
 		}
 
-		private readonly List<LogDirectory> directories;
+		private readonly List<LogDirectory> directories = new List<LogDirectory>();
 		private readonly ReadOnlyCollection<LogDirectory> readonlyDirectories;
 		public IList<LogDirectory> Directories
 		{
@@ -68,7 +67,7 @@ namespace LogAnalyzer
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
 			if ( config.Logger == null )
-				throw new ArgumentNullException( "logger" );
+				throw new ArgumentNullException();
 			if ( environment == null )
 				throw new ArgumentNullException( "environment" );
 
@@ -80,13 +79,17 @@ namespace LogAnalyzer
 
 			// todo обрабатывать null в элементах конфига
 			this.config = config;
-			this.environment = environment;
 
 			logger.DebugWriteInfo( "" );
 			logger.DebugWriteInfo( "" );
 			logger.DebugWriteInfo( "" );
 
-			this.directories = config.EnabledDirectories.Select( di => new LogDirectory( di, config, environment, this ) ).ToList();
+			foreach ( LogDirectoryConfigurationInfo dir in config.EnabledDirectories )
+			{
+				var logDirectory = new LogDirectory( dir, config, environment, this );
+				directories.Add( logDirectory );
+			}
+
 			this.readonlyDirectories = directories.AsReadOnly();
 
 			this.loadedEvent = new CountdownEvent( directories.Count );
