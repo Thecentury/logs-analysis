@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using LogAnalyzer.GUI.ViewModels;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LoadingViewModel : TabViewModel, IHierarchyMember<ApplicationViewModel, LogEntriesList>
 	{

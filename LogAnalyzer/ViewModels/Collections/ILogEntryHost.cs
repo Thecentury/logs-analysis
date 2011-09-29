@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	internal interface ILogEntryHost
 	{
@@ -22,7 +19,7 @@ namespace LogAnalyzer.GUI.ViewModel
 		internal LogEntryHostChangedEventArgs( LogEntryViewModel logEntryViewModel )
 		{
 			if ( logEntryViewModel == null )
-				throw new ArgumentNullException( "viewModel" );
+				throw new ArgumentNullException( "logEntryViewModel" );
 
 			this.LogEntryViewModel = logEntryViewModel;
 		}

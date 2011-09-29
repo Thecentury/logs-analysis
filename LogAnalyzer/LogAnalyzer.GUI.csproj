@@ -86,22 +86,22 @@
     <Compile Include="Common\DynamicHighlighting.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
-    <Compile Include="FilterEditor\BinaryBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\DelegateBuilderProxy.cs" />
-    <Compile Include="FilterEditor\DelegateBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\ExpressionBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\ExpressionBuilderViewModelFactory.cs" />
-    <Compile Include="FilterEditor\FilterBuilderTemplateSelector.cs" />
-    <Compile Include="FilterEditor\FilterEditor.xaml.cs">
+    <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />
+    <Compile Include="FilterEditing\DelegateBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\ExpressionBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\ExpressionBuilderViewModelFactory.cs" />
+    <Compile Include="FilterEditing\FilterBuilderTemplateSelector.cs" />
+    <Compile Include="FilterEditing\FilterEditor.xaml.cs">
       <DependentUpon>FilterEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FilterEditor\GetPropertyBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\FilterExpressionView.xaml.cs">
+    <Compile Include="FilterEditing\GetPropertyBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\FilterExpressionView.xaml.cs">
       <DependentUpon>FilterExpressionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FilterEditor\NotBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\StringFilterBuilderViewModel.cs" />
-    <Compile Include="FilterEditor\TransparentBuilder.cs" />
+    <Compile Include="FilterEditing\NotBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
     <Compile Include="Interop\TaskbarHelper.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
@@ -160,11 +160,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="FilterEditor\FilterEditor.xaml">
+    <Page Include="FilterEditing\FilterEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="FilterEditor\FilterExpressionView.xaml">
+    <Page Include="FilterEditing\FilterExpressionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

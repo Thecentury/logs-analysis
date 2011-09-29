@@ -10,8 +10,9 @@ using System.Windows.Input;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
 using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.GUI.ViewModels.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public abstract class LogEntriesListViewModel : TabViewModel
 	{
@@ -31,25 +32,25 @@ namespace LogAnalyzer.GUI.ViewModel
 			}
 		}
 
-		private SparseLogEntryViewModelList entriesViewModels = null;
+		private SparseLogEntryViewModelList entriesViewModels;
 		protected SparseLogEntryViewModelList EntriesViewModels
 		{
 			get { return entriesViewModels; }
 		}
 
-		private GenericListView<LogEntryViewModel> entriesView = null;
+		private GenericListView<LogEntryViewModel> entriesView;
 		public GenericListView<LogEntryViewModel> EntriesView
 		{
 			get { return entriesView; }
 		}
 
-		private IList<LogEntry> entries = null;
+		private IList<LogEntry> entries;
 		public IList<LogEntry> Entries
 		{
 			get { return entries; }
 		}
 
-		private LogEntryViewModel selectedEntry = null;
+		private LogEntryViewModel selectedEntry;
 		public LogEntryViewModel SelectedEntry
 		{
 			get { return selectedEntry; }
@@ -184,7 +185,7 @@ namespace LogAnalyzer.GUI.ViewModel
 
 		#endregion
 
-		private DelegateCommand<RoutedEventArgs> gotFocusCommand = null;
+		private DelegateCommand<RoutedEventArgs> gotFocusCommand;
 		public ICommand GotFocusCommand
 		{
 			get

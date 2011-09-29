@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public class MessageLineViewModel
 	{
-		private readonly string text = null;
+		private readonly string text;
 
 		public MessageLineViewModel( string text )
 		{

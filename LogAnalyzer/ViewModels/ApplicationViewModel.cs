@@ -5,7 +5,6 @@ using System.Windows;
 using AdTech.Common.WPF;
 using LogAnalyzer.Config;
 using System.Windows.Input;
-using LogAnalyzer.GUI.ViewModel;
 using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;
 using Microsoft.Win32;

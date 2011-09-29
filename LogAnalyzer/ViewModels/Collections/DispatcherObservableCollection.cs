@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections.Specialized;
 using LogAnalyzer.Extensions;
 using System.Windows.Threading;
 using System.Windows;
-using System.Diagnostics;
 using System.ComponentModel;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	/// <summary>
 	/// Передает событие CollectionChanged в UI поток.
@@ -17,8 +13,6 @@ namespace LogAnalyzer.GUI.ViewModel
 	[IgnoreMissingProperty( "Count" )]
 	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged
 	{
-		private readonly INotifyCollectionChanged collection = null;
-
 		public DispatcherObservableCollection( object collection )
 		{
 			if ( collection == null )
@@ -27,7 +21,6 @@ namespace LogAnalyzer.GUI.ViewModel
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
 			// todo загнать сюда IObservable как посредник
-			this.collection = observableCollection;
 			observableCollection.CollectionChanged += OnCollectionChanged;
 		}
 

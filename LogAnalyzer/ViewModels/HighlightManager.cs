@@ -8,19 +8,16 @@ using System.Windows.Data;
 using System.Windows.Media;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
+using LogAnalyzer.GUI.ViewModels.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	internal class HighlightManager
 	{
-		private readonly ObservableCollection<HighlightingViewModel> highlightList;
-
 		public HighlightManager( ObservableCollection<HighlightingViewModel> highlightList )
 		{
 			if ( highlightList == null )
 				throw new ArgumentNullException( "highlightList" );
-
-			this.highlightList = highlightList;
 		}
 
 		public void Register( LogEntryViewModel entry ) { }
@@ -44,7 +41,7 @@ namespace LogAnalyzer.GUI.ViewModel
 				bindingPath = ((Binding)textColumn.Binding).Path.Path;
 			}
 
-			ExpressionBuilder highlightFilterBuilder = null;
+			ExpressionBuilder highlightFilterBuilder;
 			switch ( bindingPath )
 			{
 				case "Type":

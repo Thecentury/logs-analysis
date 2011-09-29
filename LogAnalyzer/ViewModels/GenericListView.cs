@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	/// <summary>
 	/// Просто типизированный View.

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
+using LogAnalyzer.GUI.FilterEditor;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class GetPropertyBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ExpressionBuilderViewModel targetViewModel = null;
-		private readonly GetProperty getPropertyBuilder = null;
+		private readonly ExpressionBuilderViewModel targetViewModel;
+		private readonly GetProperty getPropertyBuilder;
 
 		public GetPropertyBuilderViewModel( GetProperty builder, ParameterExpression parameter )
 			: base( builder, parameter )

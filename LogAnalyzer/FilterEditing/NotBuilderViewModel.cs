@@ -1,17 +1,13 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class NotBuilderViewModel : ExpressionBuilderViewModel
 	{
 		private readonly Not notBuilder;
-		private readonly ExpressionBuilderViewModel innerViewModel = null;
+		private readonly ExpressionBuilderViewModel innerViewModel;
 
 		public NotBuilderViewModel( Not notBuilder, ParameterExpression parameter )
 			: base( notBuilder, parameter )

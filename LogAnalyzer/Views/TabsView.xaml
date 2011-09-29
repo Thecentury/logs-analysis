@@ -1,15 +1,9 @@
 ﻿<UserControl x:Class="LogAnalyzer.GUI.Views.TabsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 
-			 xmlns:core="clr-namespace:LogAnalyzer;assembly=LogAnalyzer"
-			 xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModels"
-			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
-			 xmlns:view="clr-namespace:LogAnalyzer.GUI.Views"
-			 xmlns:cmn="http://adtech-dev.com/Common"
-             
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModels" xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -29,13 +23,13 @@
 
 				<!-- Обычный заголовок -->
 				<DataTemplate DataType="{x:Type vm:TabViewModel}">
-					<view:DefaultTabHeaderControl/>
+					<views:DefaultTabHeaderControl/>
 				</DataTemplate>
 
 				<!-- Заголовок таба фильтра -->
 				<DataTemplate DataType="{x:Type vm:FilterViewModel}">
 					<StackPanel Orientation="Vertical">
-						<view:DefaultTabHeaderControl/>
+						<views:DefaultTabHeaderControl/>
 						<ProgressBar Margin="4" Value="{Binding FilteringProgress, Mode=OneWay}" Minimum="0" Maximum="100">
 							<ProgressBar.Style>
 								<Style TargetType="ProgressBar">
@@ -60,15 +54,15 @@
 						<DataTemplate.Resources>
 
 							<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
-								<view:LogEntriesListView/>
+								<views:LogEntriesListView/>
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
-								<view:LoadingView/>
+								<views:LoadingView/>
 							</DataTemplate>
 							
 							<DataTemplate DataType="{x:Type vm:FilterViewModel}">
-								<view:FilterView/>
+								<views:FilterView/>
 							</DataTemplate>
 
 						</DataTemplate.Resources>
@@ -90,7 +84,7 @@
 		</ad:ResizingPanel>
 	</ad:DockingManager>-->
 
-		<view:TabControlEx ItemsSource="{Binding Tabs}" SelectedIndex="{Binding SelectedIndex}"
+		<views:TabControlEx ItemsSource="{Binding Tabs}" SelectedIndex="{Binding SelectedIndex}"
 				ItemContainerStyle="{StaticResource tabStyle}">
 			<TabControl.Template>
 				<ControlTemplate TargetType="TabControl">
@@ -101,5 +95,5 @@
 					<!-- no content presenter -->
 				</ControlTemplate>
 			</TabControl.Template>
-		</view:TabControlEx>
+		</views:TabControlEx>
 </UserControl>

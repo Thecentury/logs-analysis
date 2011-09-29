@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
 using LogAnalyzer.GUI.Common;
-using LogAnalyzer.GUI.ViewModels;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public class TabViewModel : BindingObject
 	{
-		private readonly ApplicationViewModel applicationViewModel = null;
+		private readonly ApplicationViewModel applicationViewModel;
 		public ApplicationViewModel ApplicationViewModel
 		{
 			get { return applicationViewModel; }
@@ -64,7 +60,7 @@ namespace LogAnalyzer.GUI.ViewModel
 
 		protected virtual void OnClosing() { }
 
-		private DelegateCommand closeCommand = null;
+		private DelegateCommand closeCommand;
 		public ICommand CloseCommand
 		{
 			get

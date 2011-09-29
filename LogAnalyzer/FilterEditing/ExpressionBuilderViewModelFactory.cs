@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
+using LogAnalyzer.GUI.FilterEditor;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class ExpressionBuilderViewModelFactory
 	{

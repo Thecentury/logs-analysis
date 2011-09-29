@@ -10,8 +10,9 @@ using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
 using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.GUI.ViewModels.Collections;
 
-namespace LogAnalyzer.GUI.ViewModel
+namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogEntryViewModel : BindingObject
 	{

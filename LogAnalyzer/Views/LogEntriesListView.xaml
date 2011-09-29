@@ -3,13 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 
-			 xmlns:core="clr-namespace:LogAnalyzer;assembly=LogAnalyzer"
-			 xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModel"
-			 xmlns:view="clr-namespace:LogAnalyzer.GUI.View"
 			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
+			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
 			 
-			 xmlns:cmn="http://adtech-dev.com/Common" xmlns:Views="clr-namespace:LogAnalyzer.GUI.Views" mc:Ignorable="d" 
+			 xmlns:cmn="http://adtech-dev.com/Common"  mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.Resources>
@@ -160,7 +157,7 @@
 					</ControlTemplate>
 
 					<ControlTemplate TargetType="ContentControl" x:Key="exceptionCellTemplate">
-						<Views:ExceptionView DataContext="{Binding LinesView}"/>
+						<views:ExceptionView DataContext="{Binding LinesView}"/>
 					</ControlTemplate>
 
 				</ContentControl.Resources>
@@ -183,7 +180,7 @@
 
 	<DockPanel LastChildFill="True">
 
-		<Views:StatusBar DockPanel.Dock="Bottom"/>
+		<views:StatusBar DockPanel.Dock="Bottom"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}" 
 				  BorderBrush="{x:Null}" BorderThickness="0"
