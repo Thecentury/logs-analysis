@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using LogAnalyzer.Config;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
@@ -19,21 +20,15 @@ namespace ModuleLogsProvider.Tests
 	{
 		private const string LoggerName = "L1";
 
+		private readonly MockTimer timer = new MockTimer();
+		private readonly MockLogsSourceService service = new MockLogsSourceService();
+		private readonly SameThreadOperationsQueue queue = new SameThreadOperationsQueue();
+
+		private LogAnalyzerConfiguration config;
+
 		[Test]
 		public void TestLogEntryAddedAfterCoreStart()
 		{
-			var timer = new MockTimer();
-			var service = new MockLogsSourceService();
-			var serverFactory = new MockLogSourceFactory( service );
-			var scheduler = OperationScheduler.SyncronousScheduler;
-			var queue = new SameThreadOperationsQueue();
-
-			var config = EnvironmentTestHelper.BuildConfig( timer, serverFactory, scheduler, queue );
-			config.RegisterInstance<IScheduler>( Scheduler.Immediate );
-
-			MostEnvironment env = new MostEnvironment( config );
-			config.RegisterInstance<IEnvironment>( env );
-
 			ApplicationViewModel appViewModel = new ApplicationViewModel( config );
 			appViewModel.Core.WaitForLoaded();
 
@@ -57,6 +52,18 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 1, firstDirectoryViewModel.MergedEntries.Count );
 			Assert.AreEqual( 1, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
+		}
+
+		private Init()
+		{
+			var serverFactory = new MockLogSourceFactory(service);
+			var scheduler = OperationScheduler.SyncronousScheduler;
+
+			config = EnvironmentTestHelper.BuildConfig(timer, serverFactory, scheduler, queue);
+			config.RegisterInstance<IScheduler>(Scheduler.Immediate);
+
+			MostEnvironment env = new MostEnvironment(config);
+			config.RegisterInstance<IEnvironment>(env);
 		}
 	}
 }
