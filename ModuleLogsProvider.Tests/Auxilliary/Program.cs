@@ -10,6 +10,7 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 		public static void Main( string[] args )
 		{
 			ViewModelTests test = new ViewModelTests();
+			test.Init();
 			test.TestLogEntryAddedAfterCoreStart();
 
 			//test.TestSerevalMessagesFromMost();

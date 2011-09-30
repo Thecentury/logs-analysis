@@ -97,6 +97,10 @@
       <Project>{5C692517-E5B1-44E7-A0C1-568A50E04D91}</Project>
       <Name>LogAnalyzer.Tests.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer.Tests\LogAnalyzer.Tests.csproj">
+      <Project>{FB338E53-99EE-4568-9B3D-CC85004E58F2}</Project>
+      <Name>LogAnalyzer.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.GUI.csproj">
       <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
       <Name>LogAnalyzer.GUI</Name>

@@ -38,9 +38,9 @@ namespace LogAnalyzer
 			this.logger = logger;
 
 			// todo capacity initialization?
-			this.mergedEntriesList = new List<LogEntry>();
-			this.logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
-			this.mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( mergedEntriesList, logEntrySortedCollection.UnappendedLogEntries );
+			mergedEntriesList = new List<LogEntry>();
+			logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
+			mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( mergedEntriesList, logEntrySortedCollection.UnappendedLogEntries );
 		}
 
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
@@ -50,7 +50,7 @@ namespace LogAnalyzer
 
 		private DateTime loadStartTime;
 
-		private bool isLoaded = false;
+		private bool isLoaded;
 		public bool IsLoaded
 		{
 			get { return isLoaded; }

@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using System.Text;
 using System.IO;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
-using System.Threading.Tasks;
 using System.Threading;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
-using LogAnalyzer.Caching;
 using LogAnalyzer.Kernel;
-using System.Reactive.Threading.Tasks;
 
 namespace LogAnalyzer
 {
@@ -133,9 +125,9 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var filesInDirectory = ( from file in dir.EnumerateFiles( FileNameFilter )
-									 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-									 select file ).ToList();
+			var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
+									where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+									select file).ToList();
 
 			BeginLoadFiles( filesInDirectory );
 		}
@@ -257,7 +249,10 @@ namespace LogAnalyzer
 		private void OnLogEntryAddedToFileHandler( IList<LogEntry> addedEntries )
 		{
 			EnqueueToMerge( addedEntries );
+			MergedEntries.RaiseCollectionAdded( addedEntries );
+
 			core.EnqueueToMerge( addedEntries );
+			core.MergedEntries.RaiseCollectionAdded( addedEntries );
 		}
 
 		#region FileSystemWatcher notifications
