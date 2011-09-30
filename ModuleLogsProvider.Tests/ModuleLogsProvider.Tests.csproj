@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxilliary\EventHelper.cs" />
     <Compile Include="DependencyInjectionTest.cs" />
     <Compile Include="EnvironmentTestHelper.cs" />
     <Compile Include="ViewModelTests.cs" />

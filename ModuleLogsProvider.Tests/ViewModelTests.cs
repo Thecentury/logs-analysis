@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Concurrency;
-using System.Text;
-using LogAnalyzer;
-using LogAnalyzer.Config;
+using System.Reactive.Linq;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
-using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
 using NUnit.Framework;
+using ModuleLogsProvider.Tests.Auxilliary;
 
 namespace ModuleLogsProvider.Tests
 {
@@ -41,14 +39,24 @@ namespace ModuleLogsProvider.Tests
 
 			Assert.That( appViewModel.CoreViewModel.Directories.Count, Is.EqualTo( 1 ) );
 
+			var firstDirectoryViewModel = appViewModel.Core.Directories[0];
+
+			var dirViewModelMergedEntriesCollectionChanged = firstDirectoryViewModel.MergedEntries.CreateEventCounterFromCollectionChanged();
+
+			var firstDirectory = appViewModel.Core.Directories.First();
+			var dirMergedEntriesCollectionChanged = firstDirectory.MergedEntries.CreateEventCounterFromCollectionChanged();
+
 			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName } );
 			timer.MakeRing();
 
 			queue.WaitAllRunningOperationsToComplete();
 
-			var firstDirectoryViewModel = appViewModel.Core.Directories[0];
-			var firstFile = firstDirectoryViewModel.Files.FirstOrDefault( f => f.Name == LoggerName );
-			Assert.That( firstFile, Is.Not.Null );
+			var firstFile = firstDirectoryViewModel.Files.First( f => f.Name == LoggerName );
+
+			Assert.AreEqual( 1, firstFile.LogEntries.Count );
+			Assert.AreEqual( 1, firstDirectoryViewModel.MergedEntries.Count );
+			Assert.AreEqual( 1, dirMergedEntriesCollectionChanged.CalledTimes );
+			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 		}
 	}
 }
