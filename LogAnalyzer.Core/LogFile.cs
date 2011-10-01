@@ -109,7 +109,7 @@ namespace LogAnalyzer
 
 			logEntries.AddRange( addedEntries );
 
-			entriesWrapper.RaiseCollectionAdded( addedEntries );
+			entriesWrapper.RaiseCollectionItemsAdded( addedEntries );
 			parentDirectory.OnLogEntriesAddedToFile( addedEntries );
 
 			PropertyChanged.RaiseAllChanged( this );

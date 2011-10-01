@@ -249,10 +249,10 @@ namespace LogAnalyzer
 		private void OnLogEntryAddedToFileHandler( IList<LogEntry> addedEntries )
 		{
 			EnqueueToMerge( addedEntries );
-			MergedEntries.RaiseCollectionAdded( addedEntries );
+			MergedEntries.RaiseCollectionItemsAdded( addedEntries );
 
 			core.EnqueueToMerge( addedEntries );
-			core.MergedEntries.RaiseCollectionAdded( addedEntries );
+			core.MergedEntries.RaiseCollectionItemsAdded( addedEntries );
 		}
 
 		#region FileSystemWatcher notifications

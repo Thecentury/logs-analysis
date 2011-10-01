@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,18 @@ namespace LogAnalyzer.Extensions
 
 		public static void RaiseCollectionChanged( this NotifyCollectionChangedEventHandler @event, object sender, NotifyCollectionChangedEventArgs args )
 		{
+#if DEBUG
+			// todo brinchuk remove me
+			if ( args.NewItems != null && args.NewItems.Count > 0 )
+			{
+				var firstAdded = args.NewItems[0] as ICollection;
+				if ( firstAdded != null )
+				{
+					throw new InvalidOperationException();
+				}
+			}
+#endif
+
 			if ( @event != null )
 			{
 				@event( sender, args );
