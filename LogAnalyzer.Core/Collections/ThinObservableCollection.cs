@@ -23,14 +23,24 @@ namespace LogAnalyzer
 
 		public void RaiseCollectionAdded( object addedItem )
 		{
+			if ( addedItem is IList )
+			{
+				throw new InvalidOperationException( "Use RaiseCollectionItemsAdded instead." );
+			}
+
 			CollectionChanged.RaiseCollectionChanged( this, new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem ) );
 			RaiseCountChanged();
 		}
 
-		public void RaiseCollectionAdded( IList addedItems )
+		public void RaiseCollectionItemsAdded( IList addedItems )
 		{
 			CollectionChanged.RaiseCollectionChanged( this, new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItems ) );
 			RaiseCountChanged();
+		}
+
+		public void RaiseCollectionItemsAdded<T>( IList<T> addedItems )
+		{
+			RaiseCollectionItemsAdded( (IList)addedItems );
 		}
 
 		#endregion

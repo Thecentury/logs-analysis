@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -71,6 +72,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
+				//.Register<IOperationsQueue>( () => new SameThreadOperationsQueue() )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.BuildConfig();
 
