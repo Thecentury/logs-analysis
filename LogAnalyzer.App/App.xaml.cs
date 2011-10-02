@@ -12,6 +12,7 @@ using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.App
 {

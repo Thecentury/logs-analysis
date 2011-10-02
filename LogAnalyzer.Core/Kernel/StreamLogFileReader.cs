@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Kernel
 {

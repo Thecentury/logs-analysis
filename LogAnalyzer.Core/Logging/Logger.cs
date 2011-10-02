@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Xml.Serialization;
 using System.ComponentModel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Logging
 {
 	public sealed class Logger
 	{
-		private static Logger instance = null;
+		private static volatile Logger instance;
 		public static Logger Instance
 		{
 			get { return Logger.instance; }
@@ -30,7 +27,7 @@ namespace LogAnalyzer
 			}
 		}
 
-		public void WriteLine( string message, MessageType messageType )
+		public void WriteLine( MessageType messageType, string message )
 		{
 			if ( !Accepts( messageType ) )
 				return;

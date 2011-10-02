@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Kernel
 {

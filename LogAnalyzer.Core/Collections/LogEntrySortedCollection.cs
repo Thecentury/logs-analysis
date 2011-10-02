@@ -10,6 +10,7 @@ using System.Threading;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Misc;
 using System.Collections;
 
