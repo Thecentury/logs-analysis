@@ -58,8 +58,6 @@ namespace LogAnalyzer.Most.App
 
 		private void Init()
 		{
-			MostEnvironment env;
-
 			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
 
 			LogAnalyzerConfiguration config = null;
@@ -68,7 +66,7 @@ namespace LogAnalyzer.Most.App
 				.CreateNew()
 				.AcceptAllLogTypes()
 				.AddLogDirectory( "MOST", "*", "MOST-Display-Name" )
-				.Register<IEnvironment>( () => env = new MostEnvironment( config ) )
+				.Register<IEnvironment>( () => new MostEnvironment( config ) )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )

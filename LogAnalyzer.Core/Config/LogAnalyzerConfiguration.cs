@@ -16,13 +16,7 @@ namespace LogAnalyzer.Config
 	{
 		public LogAnalyzerConfiguration()
 		{
-			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
-
-			Dispatcher currentDispatcher = Application.Current != null
-											? Application.Current.Dispatcher
-											: Dispatcher.CurrentDispatcher;
-			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
-			RegisterInstance<IScheduler>( scheduler );
+			RegisterCommonDependencies();
 		}
 
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
@@ -71,20 +65,18 @@ namespace LogAnalyzer.Config
 
 		#region Methods
 
-		public LogAnalyzerConfiguration WithScheduler( IScheduler scheduler )
+		public void SetScheduler( IScheduler scheduler )
 		{
 			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
 
 			RegisterInstance<IScheduler>( scheduler );
-
-			return this;
 		}
 
-		public LogAnalyzerConfiguration WithSchedulerFromDispatcher( Dispatcher dispatcher )
+		public void SetSchedulerFromDispatcher( Dispatcher dispatcher )
 		{
 			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
 
-			return WithScheduler( new DispatcherScheduler( dispatcher ) );
+			SetScheduler( new DispatcherScheduler( dispatcher ) );
 		}
 
 		public void SaveToStream( Stream stream )
