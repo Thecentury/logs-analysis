@@ -191,8 +191,8 @@ namespace LogAnalyzer
 				get { return typeof( T ).Name; }
 			}
 
-			private readonly ICollection<T> collection = null;
-			private T[] array = null;
+			private readonly ICollection<T> collection;
+			private T[] array;
 			private bool isOld = true;
 			private readonly object syncRoot = new object();
 
@@ -229,7 +229,7 @@ namespace LogAnalyzer
 
 			public T this[int index]
 			{
-				get { return collection[index]; }
+				get { return array[index]; }
 				set
 				{
 					throw new NotImplementedException();
