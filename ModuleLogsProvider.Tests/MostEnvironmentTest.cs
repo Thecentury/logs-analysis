@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
@@ -114,6 +115,6 @@ namespace ModuleLogsProvider.Tests
 				addedFilesCount += e.NewItems.Count;
 			}
 		}
-		
+
 	}
 }
