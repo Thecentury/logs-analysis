@@ -182,7 +182,9 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
-		<DataGrid ItemsSource="{Binding EntriesView}" 
+		<DataGrid ItemsSource="{Binding EntriesView}"  
+				  Name="entriesDataGrid"
+				  DataContextChanged="DataGrid_DataContextChanged"
 				  BorderBrush="{x:Null}" BorderThickness="0"
 				  Style="{StaticResource dataGridStyle}"
 				  >
@@ -194,9 +196,14 @@
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="T" Binding="{Binding Type}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>
 				<DataGridTextColumn Header="File" Binding="{Binding File.Name}" Width="150" CellStyle="{StaticResource fileCellStyle}"/>
-				<DataGridTextColumn Header="Directory" Binding="{Binding Directory.DisplayName}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
-				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}'}" CellStyle="{StaticResource threadCellStyle}" 
+				
+				<DataGridTextColumn Header="Directory" x:Name="directoryColumn"
+									Binding="{Binding Directory.DisplayName}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
+				
+				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}'}" 
+									CellStyle="{StaticResource threadCellStyle}" 
 									Width="40"/>
+				
 				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="100"
 									CellStyle="{StaticResource timeCellStyle}"/>

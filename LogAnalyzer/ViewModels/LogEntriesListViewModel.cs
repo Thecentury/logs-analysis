@@ -44,6 +44,22 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return entriesView; }
 		}
 
+		/// <summary>
+		/// Есть ли несколько загруженных директорий?
+		/// </summary>
+		public bool HasSeveralDirectories
+		{
+			get { return ApplicationViewModel.Core.Directories.Count > 1; }
+		}
+
+		/// <summary>
+		/// Нужно ли отображать столбец с именем директории?
+		/// </summary>
+		public Visibility DirectoriesColumnVisibility
+		{
+			get { return HasSeveralDirectories ? Visibility.Visible : Visibility.Collapsed; }
+		}
+
 		private IList<LogEntry> entries;
 		public IList<LogEntry> Entries
 		{
