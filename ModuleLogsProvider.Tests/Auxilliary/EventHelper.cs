@@ -50,7 +50,7 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 
 		internal override void OnInvoked()
 		{
-			foreach (EventCounterBase child in children)
+			foreach ( EventCounterBase child in children )
 			{
 				child.OnInvoked();
 			}
@@ -58,10 +58,10 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 
 		public override bool HaveBeenInvokedOneTime()
 		{
-			foreach (EventCounterBase child in children)
+			foreach ( EventCounterBase child in children )
 			{
 				bool hasBeenInvokedOneTime = child.HaveBeenInvokedOneTime();
-				if(!hasBeenInvokedOneTime)
+				if ( !hasBeenInvokedOneTime )
 					return false;
 			}
 
@@ -74,7 +74,9 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 		public static EventCountHelper CreateEventCounterFromCollectionChanged( this INotifyCollectionChanged obj )
 		{
 			EventCountHelper countHelper = new EventCountHelper();
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( obj, "CollectionChanged" )
+			Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+				h => { obj.CollectionChanged += h; },
+				h => { obj.CollectionChanged -= h; } )
 				.Subscribe( e => countHelper.OnInvoked() );
 			return countHelper;
 		}

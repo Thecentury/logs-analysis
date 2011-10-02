@@ -74,6 +74,7 @@
     <Compile Include="Collections\ParallelSort.cs" />
     <Compile Include="Collections\SingleThreadWriteCollection.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfoFluentApi.cs" />
+    <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\SameThreadOperationsQueue.cs" />
     <Compile Include="LogAnalyzerCore.cs" />

@@ -5,6 +5,7 @@ using System.Reactive.Concurrency;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
@@ -15,9 +16,7 @@ namespace LogAnalyzer.Config
 		{
 			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
 
-			Dispatcher currentDispatcher = Application.Current != null
-											? Application.Current.Dispatcher
-											: Dispatcher.CurrentDispatcher;
+			Dispatcher currentDispatcher = DispatcherHelper.GetDispatcher();
 
 			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
 			RegisterInstance<IScheduler>( scheduler );

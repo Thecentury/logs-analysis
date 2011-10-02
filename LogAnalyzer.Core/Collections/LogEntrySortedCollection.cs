@@ -229,10 +229,7 @@ namespace LogAnalyzer
 
 			public T this[int index]
 			{
-				get
-				{
-					throw new NotImplementedException();
-				}
+				get { return collection[index]; }
 				set
 				{
 					throw new NotImplementedException();
