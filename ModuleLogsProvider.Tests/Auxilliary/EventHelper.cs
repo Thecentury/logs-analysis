@@ -13,6 +13,8 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 		internal abstract void OnInvoked();
 
 		public abstract bool HaveBeenInvokedOneTime();
+
+		public abstract bool HaveNotBeenInvoked();
 	}
 
 	public sealed class EventCountHelper : EventCounterBase
@@ -37,6 +39,11 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 
 			return wasInvokedOneTime;
 		}
+
+		public override bool HaveNotBeenInvoked()
+		{
+			return prevCalledTimes == calledTimes;
+		}
 	}
 
 	public sealed class CompositeEventCounter : EventCounterBase
@@ -58,14 +65,12 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 
 		public override bool HaveBeenInvokedOneTime()
 		{
-			foreach ( EventCounterBase child in children )
-			{
-				bool hasBeenInvokedOneTime = child.HaveBeenInvokedOneTime();
-				if ( !hasBeenInvokedOneTime )
-					return false;
-			}
+			return children.All( child => child.HaveBeenInvokedOneTime() );
+		}
 
-			return true;
+		public override bool HaveNotBeenInvoked()
+		{
+			return children.All( child => child.HaveNotBeenInvoked() );
 		}
 	}
 
@@ -78,14 +83,18 @@ namespace ModuleLogsProvider.Tests.Auxilliary
 				h => { obj.CollectionChanged += h; },
 				h => { obj.CollectionChanged -= h; } )
 				.Subscribe( e => countHelper.OnInvoked() );
+
 			return countHelper;
 		}
 
 		public static EventCountHelper CreateEventCounterFromPropertyChanged( this INotifyPropertyChanged obj )
 		{
 			EventCountHelper countHelper = new EventCountHelper();
-			Observable.FromEventPattern<PropertyChangedEventArgs>( obj, "PropertyChanged" )
+			Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+				h => { obj.PropertyChanged += h; },
+				h => { obj.PropertyChanged -= h; } )
 				.Subscribe( e => countHelper.OnInvoked() );
+
 			return countHelper;
 		}
 	}

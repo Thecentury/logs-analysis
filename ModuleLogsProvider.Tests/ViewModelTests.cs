@@ -74,6 +74,20 @@ namespace ModuleLogsProvider.Tests
 			Assert.IsTrue( mergedEntriesGroupEventCounter.HaveBeenInvokedOneTime() );
 			Assert.AreEqual( 1, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
+
+			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName } );
+			timer.MakeRing();
+
+			queue.WaitAllRunningOperationsToComplete();
+
+			Assert.AreEqual( 2, firstFile.LogEntries.Count );
+			Assert.AreEqual( 2, firstDirectoryViewModel.MergedEntries.Count );
+
+			Assert.IsTrue( fileChangedFroupEventCounter.HaveNotBeenInvoked() );
+
+			Assert.IsTrue( mergedEntriesGroupEventCounter.HaveBeenInvokedOneTime() );
+			Assert.AreEqual( 2, dirMergedEntriesCollectionChanged.CalledTimes );
+			Assert.AreEqual( 2, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 		}
 
 		[TestFixtureSetUp]
