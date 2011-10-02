@@ -1,12 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Text;
+using System.Windows;
+using System.Windows.Threading;
+using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
 	public partial class LogAnalyzerConfiguration
 	{
+		private void RegisterCommonDependencies()
+		{
+			RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
+
+			Dispatcher currentDispatcher = Application.Current != null
+											? Application.Current.Dispatcher
+											: Dispatcher.CurrentDispatcher;
+
+			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
+			RegisterInstance<IScheduler>( scheduler );
+		}
+
 		private readonly Dictionary<Type, Func<object>> registeredMappings = new Dictionary<Type, Func<object>>();
 
 		public void RegisterInstance<TContract>( object instance )
