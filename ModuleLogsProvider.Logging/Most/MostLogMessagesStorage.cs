@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
 using ModuleLogsProvider.Logging.MostLogsServices;
@@ -83,9 +84,9 @@ namespace ModuleLogsProvider.Logging.Most
 		public void SetLogFile( LogFile logFile )
 		{
 			if ( logFile == null ) throw new ArgumentNullException( "logFile" );
-			
+
 			this.logFile = logFile;
-			foreach (LogEntry logEntry in entries)
+			foreach ( LogEntry logEntry in entries )
 			{
 				logEntry.ParentLogFile = logFile;
 			}

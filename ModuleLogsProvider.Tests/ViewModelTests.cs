@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Config;
 using LogAnalyzer.GUI.ViewModels;

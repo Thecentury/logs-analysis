@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Awad.Eticket.ModuleLogsProvider.Types;
 using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Mocks

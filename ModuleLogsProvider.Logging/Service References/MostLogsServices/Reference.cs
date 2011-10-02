@@ -9,102 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace ModuleLogsProvider.Logging.MostLogsServices {
-    using System.Runtime.Serialization;
-    using System;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LogMessageInfo", Namespace="http://schemas.datacontract.org/2004/07/Awad.Eticket.ModuleLogsProvider.Types")]
-    [System.SerializableAttribute()]
-    public partial class LogMessageInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IndexInAllMessagesListField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LoggerNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageTypeField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int IndexInAllMessagesList {
-            get {
-                return this.IndexInAllMessagesListField;
-            }
-            set {
-                if ((this.IndexInAllMessagesListField.Equals(value) != true)) {
-                    this.IndexInAllMessagesListField = value;
-                    this.RaisePropertyChanged("IndexInAllMessagesList");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LoggerName {
-            get {
-                return this.LoggerNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LoggerNameField, value) != true)) {
-                    this.LoggerNameField = value;
-                    this.RaisePropertyChanged("LoggerName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string MessageType {
-            get {
-                return this.MessageTypeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageTypeField, value) != true)) {
-                    this.MessageTypeField = value;
-                    this.RaisePropertyChanged("MessageType");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="MostLogsServices.ILogSourceService")]
@@ -123,7 +28,7 @@ namespace ModuleLogsProvider.Logging.MostLogsServices {
         bool GetIsListening();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogSourceService/GetMessages", ReplyAction="http://tempuri.org/ILogSourceService/GetMessagesResponse")]
-        ModuleLogsProvider.Logging.MostLogsServices.LogMessageInfo[] GetMessages(int startingIndex);
+        Awad.Eticket.ModuleLogsProvider.Types.LogMessageInfo[] GetMessages(int startingIndex);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -169,7 +74,7 @@ namespace ModuleLogsProvider.Logging.MostLogsServices {
             return base.Channel.GetIsListening();
         }
         
-        public ModuleLogsProvider.Logging.MostLogsServices.LogMessageInfo[] GetMessages(int startingIndex) {
+        public Awad.Eticket.ModuleLogsProvider.Types.LogMessageInfo[] GetMessages(int startingIndex) {
             return base.Channel.GetMessages(startingIndex);
         }
     }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ServiceModel;
+﻿using System.ServiceModel;
+using Awad.Eticket.ModuleLogsProvider.Types;
 
-namespace Awad.Eticket.ModuleLogsProvider.Types
+namespace ModuleLogsProvider.Interfaces
 {
 	// todo brinchuk document me
 	[ServiceContract]
