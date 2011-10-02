@@ -41,11 +41,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		[DebuggerStepThrough]
 		protected void InvokeInUIDispatcher( Action action )
 		{
-			// application is shutting down?
-			if ( Application.Current == null )
-				return;
-
-			Application.Current.Dispatcher.Invoke( action, DispatcherPriority.Normal );
+			Dispatcher dispatcher = DispatcherHelper.GetDispatcher();
+			dispatcher.Invoke( action, DispatcherPriority.Normal );
 		}
 
 		protected void BeginInvokeInUIDispatcher( Action action )

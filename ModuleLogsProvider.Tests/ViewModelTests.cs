@@ -43,8 +43,14 @@ namespace ModuleLogsProvider.Tests
 			var firstDirectory = appViewModel.Core.Directories.First();
 			var dirMergedEntriesCollectionChanged = firstDirectory.MergedEntries.CreateEventCounterFromCollectionChanged();
 
+			var coreMergedEntriesCollectionChanged = appViewModel.Core.MergedEntries.CreateEventCounterFromCollectionChanged();
+			var coreViewModelEntriesCollectionChanged =
+				appViewModel.CoreViewModel.EntriesView.CreateEventCounterFromCollectionChanged();
+
 			var mergedEntriesGroupEventCounter = new CompositeEventCounter( dirMergedEntriesCollectionChanged,
-																		   dirViewModelMergedEntriesCollectionChanged );
+																		   dirViewModelMergedEntriesCollectionChanged,
+																		   coreMergedEntriesCollectionChanged,
+																		   coreViewModelEntriesCollectionChanged );
 
 			var firstDirFilesCollectionChangedEventCounter = firstDirectory.Files.CreateEventCounterFromCollectionChanged();
 			var firstDirViewModelFilesCollectionChangedEventCounter =
