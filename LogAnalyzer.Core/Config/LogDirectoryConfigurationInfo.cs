@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Config
 {
-	public sealed class LogDirectoryConfigurationInfo
+	public sealed partial class LogDirectoryConfigurationInfo
 	{
 		public LogDirectoryConfigurationInfo()
 		{
@@ -26,9 +23,9 @@ namespace LogAnalyzer
 			if ( displayName.IsNullOrEmpty() )
 				throw new ArgumentNullException( "displayName" );
 
-			this.Path = path;
-			this.FileNameFilter = fileNameFilter;
-			this.DisplayName = displayName;
+			Path = path;
+			FileNameFilter = fileNameFilter;
+			DisplayName = displayName;
 		}
 
 		/// <summary>

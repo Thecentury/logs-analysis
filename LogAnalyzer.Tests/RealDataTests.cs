@@ -18,14 +18,23 @@ namespace LogAnalyzer.Tests
 		{
 			const string encodingName = "windows-1251";
 			LogAnalyzerConfiguration config =
-							LogAnalyzerConfiguration.CreateNew()
-							.AddLogDirectory( @"C:\Logs\Logs1", "*", "Logs1" )
-							.WithEncoding( encodingName )
-							.AddLogDirectory( @"C:\Logs\Logs1", "*", "Logs2" )
-							.WithEncoding( encodingName )
-							.AddLogWriter( new DebugLogWriter() )
-							.AddAcceptedType( MessageType.Error )
-							.BuildConfig();
+				LogAnalyzerConfiguration.CreateNew()
+					.AddLogDirectory( new LogDirectoryConfigurationInfo
+										{
+											Path = @"C:\Logs\Logs1",
+											FileNameFilter = "*",
+											DisplayName = "Logs1",
+											EncodingName = encodingName
+										} )
+					.AddLogDirectory( new LogDirectoryConfigurationInfo
+										{
+											Path = @"C:\Logs\Logs2",
+											FileNameFilter = "*",
+											DisplayName = "Logs2",
+											EncodingName = encodingName
+										} )
+					.AddLogWriter( new DebugLogWriter() )
+					.AddLoggerAcceptedMessageType( MessageType.Error );
 
 			FileSystemEnvironment env = new FileSystemEnvironment( config );
 

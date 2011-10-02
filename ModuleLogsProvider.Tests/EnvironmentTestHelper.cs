@@ -17,15 +17,14 @@ namespace ModuleLogsProvider.Tests
 		public static LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory, OperationScheduler scheduler, IOperationsQueue operationsQueue )
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
-							.AddLogDirectory( "Dir1", "*", "Some directory 1" )
-							.AddLogWriter( new DebugLogWriter() )
-							.AcceptAllLogTypes()
-							.RegisterInstance<ITimer>( timer )
-							.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
-							.RegisterInstance<OperationScheduler>( scheduler )
-							.RegisterInstance<IOperationsQueue>( operationsQueue )
-							.RegisterInstance<IWindowService>( new RealWindowService() )
-							.BuildConfig();
+				.AddLogDirectory( "Dir1", "*", "Some directory 1" )
+				.AddLogWriter( new DebugLogWriter() )
+				.AcceptAllLogTypes()
+				.RegisterInstance<ITimer>( timer )
+				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
+				.RegisterInstance<OperationScheduler>( scheduler )
+				.RegisterInstance<IOperationsQueue>( operationsQueue )
+				.RegisterInstance<IWindowService>( new RealWindowService() );
 
 			return config;
 		}

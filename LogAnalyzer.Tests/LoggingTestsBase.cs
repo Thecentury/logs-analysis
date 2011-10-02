@@ -34,8 +34,7 @@ namespace LogAnalyzer.Tests
 
 			config = configBuilder
 				.AddLogWriter( new DebugLogWriter() )
-				.AcceptAllLogTypes()
-				.BuildConfig();
+				.AcceptAllLogTypes();
 
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 

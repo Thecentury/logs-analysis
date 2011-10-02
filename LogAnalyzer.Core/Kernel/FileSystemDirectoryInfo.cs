@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using LogAnalyzer.Caching;
+using LogAnalyzer.Config;
 
 namespace LogAnalyzer.Kernel
 {

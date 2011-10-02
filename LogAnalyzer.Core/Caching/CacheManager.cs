@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Caching

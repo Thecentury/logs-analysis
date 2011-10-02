@@ -16,11 +16,13 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void Test_0_Directories()
 		{
-			var config = LogAnalyzerConfiguration.CreateNew().BuildConfig();
+			var config = LogAnalyzerConfiguration.CreateNew();
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			var env = new MockEnvironment( config, operationsQueue );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
+
+			Assert.Inconclusive( "Сюда мы прийти не должны." );
 		}
 
 		[ExpectedException( typeof( ArgumentException ) )]
@@ -28,14 +30,16 @@ namespace LogAnalyzer.Tests
 		public void Test_0_EnabledDirectories()
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
-				.AddLogDirectory( "some_path", "*", "fake_dir" )
-				.AsDisabled()
-				.BuildConfig();
+				.AddLogDirectory(
+					LogDirectoryConfigurationInfo.CreateNew().WithPath( "some_path" ).WithFileNameFilter( "*" ).WithDisplayName( "fake_dir" )
+						.AsDisabled() );
 
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			var env = new MockEnvironment( config, operationsQueue );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
+
+			Assert.Inconclusive( "Сюда мы придти не должны." );
 		}
 	}
 }
