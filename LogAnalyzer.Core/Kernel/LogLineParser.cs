@@ -11,7 +11,7 @@ namespace LogAnalyzer.Kernel
 	{
 		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
-		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled );
+		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled | RegexOptions.Multiline );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
 		public bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )

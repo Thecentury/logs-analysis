@@ -10,12 +10,12 @@
 	
 	<DockPanel LastChildFill="True">
 		<ToolBar DockPanel.Dock="Top" Margin="4,4,4,4">
-			<Button Style="{StaticResource toolbarButtonStyle}"
+			<Button Style="{DynamicResource toolbarButtonStyle}"
 					Command="{Binding EditFilterCommand}" 
 					ToolTip="Edit current filter">
 				<Image Source="..\Resources\pencil.png" Stretch="None"/>
 			</Button>
-			<Button Style="{StaticResource toolbarButtonStyle}"
+			<Button Style="{DynamicResource toolbarButtonStyle}"
 					Command="{Binding RefreshCommand}" 
 					ToolTip="Refresh view">
 				<Image Source="..\Resources\arrow-circle-double.png" Stretch="None"/>
