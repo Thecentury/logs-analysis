@@ -46,6 +46,7 @@ namespace LogAnalyzer
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
 		{
 			logEntrySortedCollection.Enqueue( addedEntries );
+			MergedEntries.RaiseCollectionItemsAdded( addedEntries );
 		}
 
 		private DateTime loadStartTime;

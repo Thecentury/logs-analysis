@@ -40,7 +40,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			LogDirectory logDirectory = logFile.ParentDirectory;
 			var directoryViewModel = directories.First( d => d.LogDirectory == logDirectory );
 
-			var fileViewModel = directoryViewModel.Files.First( f => f.LogFile == logFile );
+			var fileViewModel = directoryViewModel.Files.FirstOrDefault( f => f.LogFile == logFile );
 			return fileViewModel;
 		}
 

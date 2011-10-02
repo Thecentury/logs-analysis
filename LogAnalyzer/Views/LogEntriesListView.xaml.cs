@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.Views
 {
@@ -10,6 +12,15 @@ namespace LogAnalyzer.GUI.Views
 		public LogEntriesListView()
 		{
 			InitializeComponent();
+		}
+
+		private void DataGrid_DataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
+		{
+			LogEntriesListViewModel vm = e.NewValue as LogEntriesListViewModel;
+			if ( vm != null )
+			{
+				directoryColumn.Visibility = vm.DirectoriesColumnVisibility;
+			}
 		}
 	}
 }
