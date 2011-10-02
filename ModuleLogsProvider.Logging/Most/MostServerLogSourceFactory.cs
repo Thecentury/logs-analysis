@@ -10,12 +10,22 @@ namespace ModuleLogsProvider.Logging.Most
 	/// </summary>
 	public sealed class MostServerLogSourceFactory : ILogSourceServiceFactory
 	{
+		const string DesignTimeAddress = "http://127.0.0.1:9999/MostLogSourceService/";
+		private readonly string address;
+
+		public MostServerLogSourceFactory() : this( DesignTimeAddress ) { }
+
+		public MostServerLogSourceFactory( string address )
+		{
+			if ( String.IsNullOrEmpty( address ) ) throw new ArgumentNullException( "address" );
+			this.address = address;
+		}
+
 		public IOptionalDisposable<ILogSourceService> CreateObject()
 		{
-			const string address = "http://127.0.0.1:9999/MostLogSourceService/";
 			//string address = "http://localhost:8732/Design_Time_Addresses/LogAnalysisServer.Dev/LogServer/";
 
-			int size = Int32.MaxValue;
+			const int size = Int32.MaxValue;
 
 			var binding = new BasicHttpBinding
 							{
