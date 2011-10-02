@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
-using ModuleLogsProvider.Logging.MostLogsServices;
+using LogAnalyzer.Logging;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -58,12 +57,19 @@ namespace ModuleLogsProvider.Logging.Most
 
 				int startingIndex = loadedMessages.Count;
 
-				// todo brinchuk try-catch?
-				var newMessages = client.GetMessages( startingIndex );
-				var appendMessagesResult = messagesStorage.AppendMessages( newMessages );
-				NotifyOnNewMessages( newMessages, appendMessagesResult );
+				try
+				{
+					var newMessages = client.GetMessages( startingIndex );
+					var appendMessagesResult = messagesStorage.AppendMessages( newMessages );
+					NotifyOnNewMessages( newMessages, appendMessagesResult );
 
-				loadedMessages.AddRange( newMessages );
+					loadedMessages.AddRange( newMessages );
+				}
+				catch ( Exception exc )
+				{
+					Logger.Instance.WriteLine( MessageType.Error, String.Format( "Exception while getting log messages from MOST.Logging service: {0}", exc.ToString() ) );
+					// todo brinchuk как-то дать пользователю понять, что произошел сбой.
+				}
 			}
 		}
 

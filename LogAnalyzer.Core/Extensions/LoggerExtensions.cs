@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Extensions
 {
@@ -13,7 +14,7 @@ namespace LogAnalyzer.Extensions
 			if ( logger == null )
 				return;
 
-			logger.WriteLine( message, MessageType.Info );
+			logger.WriteLine( MessageType.Info, message );
 		}
 
 		[Conditional( "DEBUG" )]
@@ -28,7 +29,7 @@ namespace LogAnalyzer.Extensions
 				return;
 
 			string message = String.Format( format, parameters );
-			logger.WriteLine( message, MessageType.Info );
+			logger.WriteLine( MessageType.Info, message );
 		}
 
 		[Conditional( "DEBUG" )]
@@ -42,7 +43,7 @@ namespace LogAnalyzer.Extensions
 			if ( logger == null )
 				return;
 
-			logger.WriteLine( message, MessageType.Error );
+			logger.WriteLine( MessageType.Error, message );
 		}
 
 		public static void WriteError( this Logger logger, string format, params object[] parameters )
@@ -51,7 +52,7 @@ namespace LogAnalyzer.Extensions
 				return;
 
 			string message = String.Format( format, parameters );
-			logger.WriteLine( message, MessageType.Error );
+			logger.WriteLine( MessageType.Error, message );
 		}
 
 		public static void WriteVerbose( this Logger logger, string message )
@@ -59,7 +60,7 @@ namespace LogAnalyzer.Extensions
 			if ( logger == null )
 				return;
 
-			logger.WriteLine( message, MessageType.Verbose );
+			logger.WriteLine( MessageType.Verbose, message );
 		}
 
 		[Conditional( "DEBUG" )]
@@ -75,10 +76,10 @@ namespace LogAnalyzer.Extensions
 				return;
 
 			string message = String.Format( format, parameters );
-			logger.WriteLine( message, MessageType.Verbose );
+			logger.WriteLine( MessageType.Verbose, message );
 		}
 
-		[Conditional("DEBUG")]
+		[Conditional( "DEBUG" )]
 		public static void DebugWriteVerbose( this Logger logger, string format, params object[] parameters )
 		{
 			WriteVerbose( logger, format, parameters );

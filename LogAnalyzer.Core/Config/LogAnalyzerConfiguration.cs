@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config

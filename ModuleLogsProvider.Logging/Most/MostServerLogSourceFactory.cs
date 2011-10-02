@@ -6,7 +6,7 @@ using System.ServiceModel;
 namespace ModuleLogsProvider.Logging.Most
 {
 	/// <summary>
-	/// Возвращает боевую реализацию сервиса ILogSourceService.
+	/// Возвращает актуальную реализацию сервиса ILogSourceService.
 	/// </summary>
 	public sealed class MostServerLogSourceFactory : ILogSourceServiceFactory
 	{
@@ -23,8 +23,6 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public IOptionalDisposable<ILogSourceService> CreateObject()
 		{
-			//string address = "http://localhost:8732/Design_Time_Addresses/LogAnalysisServer.Dev/LogServer/";
-
 			const int size = Int32.MaxValue;
 
 			var binding = new BasicHttpBinding

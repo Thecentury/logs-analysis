@@ -6,6 +6,7 @@ using LogAnalyzer.Extensions;
 using System.Diagnostics;
 using System.ComponentModel;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer
 {

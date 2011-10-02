@@ -12,6 +12,7 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Most.App.Properties;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
@@ -70,7 +71,6 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
-				//.Register<IOperationsQueue>( () => new SameThreadOperationsQueue() )
 				.RegisterInstance<IWindowService>( new RealWindowService() );
 
 			logger = config.Logger;

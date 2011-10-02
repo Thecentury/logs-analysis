@@ -3,6 +3,7 @@ using System.Threading;
 using LogAnalyzer.Extensions;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Kernel
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels.Collections
 {
