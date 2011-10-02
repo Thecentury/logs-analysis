@@ -71,8 +71,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
 				//.Register<IOperationsQueue>( () => new SameThreadOperationsQueue() )
-				.RegisterInstance<IWindowService>( new RealWindowService() )
-				.BuildConfig();
+				.RegisterInstance<IWindowService>( new RealWindowService() );
 
 			logger = config.Logger;
 

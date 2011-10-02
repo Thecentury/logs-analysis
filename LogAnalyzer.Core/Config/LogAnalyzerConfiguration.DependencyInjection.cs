@@ -24,21 +24,25 @@ namespace LogAnalyzer.Config
 
 		private readonly Dictionary<Type, Func<object>> registeredMappings = new Dictionary<Type, Func<object>>();
 
-		public void RegisterInstance<TContract>( object instance )
+		public LogAnalyzerConfiguration RegisterInstance<TContract>( object instance )
 		{
 			TContract contract = (TContract)instance;
 			if ( contract == null )
 				throw new ArgumentException();
 
 			Register<TContract>( () => instance );
+
+			return this;
 		}
 
-		public void Register<TContract>( Func<object> createImplementationFunc )
+		public LogAnalyzerConfiguration Register<TContract>( Func<object> createImplementationFunc )
 		{
 			if ( createImplementationFunc == null ) throw new ArgumentNullException( "createImplementationFunc" );
 
 			Type contractType = typeof( TContract );
 			registeredMappings[contractType] = createImplementationFunc;
+
+			return this;
 		}
 
 		public TContract Resolve<TContract>()

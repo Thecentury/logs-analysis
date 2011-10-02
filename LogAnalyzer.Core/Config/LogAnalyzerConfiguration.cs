@@ -65,20 +65,6 @@ namespace LogAnalyzer.Config
 
 		#region Methods
 
-		public void SetScheduler( IScheduler scheduler )
-		{
-			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
-
-			RegisterInstance<IScheduler>( scheduler );
-		}
-
-		public void SetSchedulerFromDispatcher( Dispatcher dispatcher )
-		{
-			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
-
-			SetScheduler( new DispatcherScheduler( dispatcher ) );
-		}
-
 		public void SaveToStream( Stream stream )
 		{
 			XamlServices.Save( stream, this );
@@ -100,12 +86,6 @@ namespace LogAnalyzer.Config
 			}
 
 			return result;
-		}
-
-		public static LogAnalyzerConfigurationFluentApi CreateNew()
-		{
-			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
-			return new LogAnalyzerConfigurationFluentApi( config );
 		}
 
 		public static LogAnalyzerConfiguration CreateSampleConfiguration()
