@@ -42,7 +42,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return directory.DisplayName; }
 		}
 
-		private readonly DispatcherObservableCollection syncronizedFiles;
+		private readonly DispatcherObservableCollection syncronizedFilesViewModels;
 
 		public LogDirectoryViewModel( LogDirectory directory, CoreViewModel coreViewModel )
 			: base( coreViewModel.ApplicationViewModel )
@@ -55,20 +55,33 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.directory = directory;
 			this.coreViewModel = coreViewModel;
 
-			this.filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
+			filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
 			directory.Files.CollectionChanged += Files_CollectionChanged;
-
-			this.syncronizedFiles = new DispatcherObservableCollection( filesViewModels, coreViewModel.Scheduler );
 
 			Init( directory.MergedEntries );
 
+			syncronizedFilesViewModels = new DispatcherObservableCollection( filesViewModels, coreViewModel.Scheduler );
 			// произойдет уже в этом потоке
-			this.syncronizedFiles.CollectionChanged += OnFilesCollectionChanged;
+			syncronizedFilesViewModels.CollectionChanged += OnFilesViewModelsViewModelsCollectionChanged;
 		}
 
 		private void Files_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
-			filesViewModels.RaiseCollectionChanged( e );
+			if ( e.Action == NotifyCollectionChangedAction.Reset )
+			{
+				filesViewModels.RaiseCollectionReset();
+				return;
+			}
+
+			if ( e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null )
+			{
+				foreach ( LogFile addedFile in e.NewItems )
+				{
+					LogFileViewModel fileViewModel = new LogFileViewModel( addedFile, this );
+					filesViewModels.Add( fileViewModel );
+				}
+				return;
+			}
 		}
 
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
@@ -77,25 +90,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			return result;
 		}
 
-		private void OnFilesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnFilesViewModelsViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action != NotifyCollectionChangedAction.Add )
 				return;
-			//if ( e.Action != NotifyCollectionChangedAction.Add )
-			//    throw new NotImplementedException();
-
-			if ( e.NewItems != null )
-			{
-				foreach ( object addedObject in e.NewItems )
-				{
-					LogFile addedFile = addedObject as LogFile;
-					if ( addedFile != null )
-					{
-						LogFileViewModel fileViewModel = new LogFileViewModel( addedFile, this );
-						filesViewModels.Add( fileViewModel );
-					}
-				}
-			}
 
 			BeginInvokeInUIDispatcher( () =>
 			{
