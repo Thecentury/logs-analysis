@@ -59,15 +59,17 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		{
 			get
 			{
-				LogEntryViewModel result = null;
-				if ( !viewModelsCache.TryGetValue( index, out result ) )
+				LogEntryViewModel logEntryViewModel;
+				
+				if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
 				{
 					LogEntry logEntry = logEntries[index];
 					LogFileViewModel fileViewModel = getFileViewModel( logEntry );
-					result = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
-					viewModelsCache.Add( index, result );
 
-					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( result ) );
+					logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
+					viewModelsCache.Add( index, logEntryViewModel );
+
+					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 
 					if ( viewModelsCache.Count > maxCount )
 					{
@@ -75,7 +77,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 						Logger.Instance.DebugWriteInfo( "SparseLogEntryList: MaxCount = " + maxCount );
 					}
 				}
-				return result;
+
+				return logEntryViewModel;
 			}
 			set
 			{
