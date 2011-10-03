@@ -125,9 +125,9 @@ namespace LogAnalyzer
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
 			}
 
-			var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
-									where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-									select file).ToList();
+			var filesInDirectory = ( from file in dir.EnumerateFiles( FileNameFilter )
+									 where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
+									 select file ).ToList();
 
 			BeginLoadFiles( filesInDirectory );
 		}
@@ -285,6 +285,7 @@ namespace LogAnalyzer
 				{
 					// error!
 					logger.WriteError( "Watcher notified that the file \"{0}\" was created, but it is already present in 'files' dictionary.", fullPath );
+					throw new InvalidOperationException( "Надо делать обработку на несуществование" );
 				}
 			} );
 		}
