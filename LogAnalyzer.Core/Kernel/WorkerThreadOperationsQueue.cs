@@ -105,11 +105,11 @@ namespace LogAnalyzer.Kernel
 				catch ( Exception exc )
 				{
 					string exceptionMessage = exc.ToString();
-					Condition.BreakIfAttached();
-
+			
 					bool shouldRethrow = ShouldRethrow( exc );
 					if ( shouldRethrow )
 					{
+						Condition.BreakIfAttached();
 						throw;
 					}
 				}

@@ -21,7 +21,8 @@ namespace ModuleLogsProvider.Tests
 	[TestFixture]
 	public class ViewModelTests
 	{
-		private const string LoggerName = "L1";
+		private const string LoggerName1 = "L1";
+		private const string LoggerName2 = "L2";
 
 		private readonly MockTimer timer = new MockTimer();
 		private readonly MockLogsSourceService service = new MockLogsSourceService();
@@ -57,26 +58,26 @@ namespace ModuleLogsProvider.Tests
 			var firstDirViewModelFilesCollectionChangedEventCounter =
 				firstDirectoryViewModel.Files.CreateEventCounterFromCollectionChanged();
 
-			var fileChangedFroupEventCounter = new CompositeEventCounter( firstDirFilesCollectionChangedEventCounter,
+			var fileChangedGroupEventCounter = new CompositeEventCounter( firstDirFilesCollectionChangedEventCounter,
 																		 firstDirViewModelFilesCollectionChangedEventCounter );
 
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName } );
+			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName1 } );
 			timer.MakeRing();
 
 			queue.WaitAllRunningOperationsToComplete();
 
-			var firstFile = firstDirectoryViewModel.Files.First( f => f.Name == LoggerName );
+			var firstFile = firstDirectoryViewModel.Files.First( f => f.Name == LoggerName1 );
 
 			Assert.AreEqual( 1, firstFile.LogEntries.Count );
 			Assert.AreEqual( 1, firstDirectoryViewModel.MergedEntries.Count );
 
-			Assert.IsTrue( fileChangedFroupEventCounter.HaveBeenInvokedOneTime() );
+			Assert.IsTrue( fileChangedGroupEventCounter.HaveBeenInvokedOneTime() );
 
 			Assert.IsTrue( mergedEntriesGroupEventCounter.HaveBeenInvokedOneTime() );
 			Assert.AreEqual( 1, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName } );
+			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName1 } );
 			timer.MakeRing();
 
 			queue.WaitAllRunningOperationsToComplete();
@@ -84,11 +85,28 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 2, firstFile.LogEntries.Count );
 			Assert.AreEqual( 2, firstDirectoryViewModel.MergedEntries.Count );
 
-			Assert.IsTrue( fileChangedFroupEventCounter.HaveNotBeenInvoked() );
+			Assert.IsTrue( fileChangedGroupEventCounter.HaveNotBeenInvoked() );
 
 			Assert.IsTrue( mergedEntriesGroupEventCounter.HaveBeenInvokedOneTime() );
 			Assert.AreEqual( 2, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 2, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
+
+			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message3", LoggerName = LoggerName2 } );
+			timer.MakeRing();
+
+			queue.WaitAllRunningOperationsToComplete();
+
+			var secondFile = firstDirectoryViewModel.Files.First( f => f.Name == LoggerName2 );
+
+			Assert.AreEqual( 2, firstFile.LogEntries.Count );
+			Assert.AreEqual( 1, secondFile.LogEntries.Count );
+			Assert.AreEqual( 3, firstDirectoryViewModel.MergedEntries.Count );
+
+			Assert.IsTrue( fileChangedGroupEventCounter.HaveBeenInvokedOneTime() );
+
+			Assert.IsTrue( mergedEntriesGroupEventCounter.HaveBeenInvokedOneTime() );
+			Assert.AreEqual( 3, dirMergedEntriesCollectionChanged.CalledTimes );
+			Assert.AreEqual( 3, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 		}
 
 		[TestFixtureSetUp]
