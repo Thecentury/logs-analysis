@@ -41,32 +41,25 @@ namespace LogAnalyzer.Most.App
 
 			//AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			Task task = new Task( Init );
-			task.ContinueWith( t =>
-			{
-				logger.WriteError( "Crash. Exception: {0}", t.Exception );
-
-				Extensions.Condition.BreakIfAttached();
-
-				MessageBox.Show( "Unhandled exception: " + t.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
-
-				Environment.Exit( -1 );
-
-			}, TaskContinuationOptions.OnlyOnFaulted );
-
-			task.Start();
+			Task.Factory
+				.StartNew( Init )
+				.ContinueWith( OnInitException, TaskContinuationOptions.OnlyOnFaulted );
 		}
 
 		private void Init()
 		{
-			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory();
+			const string logsServiceAddress = "http://127.0.0.1:9999/MostLogSourceService/";
+			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory( logsServiceAddress );
 
 			LogAnalyzerConfiguration config = null;
+			const string dirName = "MOST";
+			const string filesFilter = "*";
+			const string displayName = "MOST.Local";
 
 			config = LogAnalyzerConfiguration
 				.CreateNew()
 				.AcceptAllLogTypes()
-				.AddLogDirectory( "MOST", "*", "MOST-Display-Name" )
+				.AddLogDirectory( dirName, filesFilter, displayName )
 				.Register<IEnvironment>( () => new MostEnvironment( config ) )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
@@ -77,6 +70,18 @@ namespace LogAnalyzer.Most.App
 
 			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
 			Application.Current.Dispatcher.BeginInvoke( () => { Application.Current.MainWindow.DataContext = applicationViewModel; } );
+		}
+
+		private void OnInitException( Task parentTask )
+		{
+			var exception = parentTask.Exception;
+
+			logger.WriteError( "Crash. Exception: {0}", exception );
+			Extensions.Condition.BreakIfAttached();
+
+			MessageBox.Show( "Unhandled exception: " + exception, "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
+
+			Environment.Exit( -1 );
 		}
 
 		private void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
