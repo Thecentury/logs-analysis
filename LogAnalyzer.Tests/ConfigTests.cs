@@ -31,7 +31,8 @@ namespace LogAnalyzer.Tests
 		{
 			var config = LogAnalyzerConfiguration.CreateNew()
 				.AddLogDirectory(
-					LogDirectoryConfigurationInfo.CreateNew().WithPath( "some_path" ).WithFileNameFilter( "*" ).WithDisplayName( "fake_dir" )
+					LogDirectoryConfigurationInfo.CreateNew()
+						.WithPath( "some_path" ).WithFileNameFilter( "*" ).WithDisplayName( "fake_dir" )
 						.AsDisabled() );
 
 			var operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
