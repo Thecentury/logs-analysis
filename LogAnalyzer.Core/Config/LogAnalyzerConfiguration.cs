@@ -66,6 +66,11 @@ namespace LogAnalyzer.Config
 
 		#region Methods
 
+		public static LogAnalyzerConfiguration CreateNew()
+		{
+			return new LogAnalyzerConfiguration();
+		}
+
 		public void SaveToStream( Stream stream )
 		{
 			XamlServices.Save( stream, this );

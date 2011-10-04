@@ -4,66 +4,61 @@ using System.Windows.Threading;
 
 namespace LogAnalyzer.Config
 {
-	public partial class LogAnalyzerConfiguration
+	public static class LogAnalyzerConfigurationExtensions
 	{
-		public static LogAnalyzerConfiguration CreateNew()
-		{
-			return new LogAnalyzerConfiguration();
-		}
-
-		public LogAnalyzerConfiguration AddLogDirectory( LogDirectoryConfigurationInfo logDirectory )
+		public static T AddLogDirectory<T>( this T config, LogDirectoryConfigurationInfo logDirectory ) where T : LogAnalyzerConfiguration
 		{
 			if ( logDirectory == null ) throw new ArgumentNullException( "logDirectory" );
-			directories.Add( logDirectory );
+			config.Directories.Add( logDirectory );
 
-			return this;
+			return config;
 		}
 
-		public LogAnalyzerConfiguration AddLogDirectory( string path, string fileNameFilter, string displayName )
+		public static T AddLogDirectory<T>( this T config, string path, string fileNameFilter, string displayName ) where T : LogAnalyzerConfiguration
 		{
 			LogDirectoryConfigurationInfo logDirectory = new LogDirectoryConfigurationInfo( path, fileNameFilter, displayName );
-			directories.Add( logDirectory );
+			config.Directories.Add( logDirectory );
 
-			return this;
+			return config;
 		}
 
-		public LogAnalyzerConfiguration AddLoggerAcceptedMessageType( MessageType messageType )
+		public static T AddLoggerAcceptedMessageType<T>( this T config, MessageType messageType ) where T : LogAnalyzerConfiguration
 		{
-			Logger.AcceptedTypes.Add( messageType );
-			return this;
+			config.Logger.AcceptedTypes.Add( messageType );
+			return config;
 		}
 
-		public LogAnalyzerConfiguration AddLogWriter( LogWriter writer )
+		public static T AddLogWriter<T>( this T config, LogWriter writer ) where T : LogAnalyzerConfiguration
 		{
 			if ( writer == null ) throw new ArgumentNullException( "writer" );
-			LoggerWriters.Add( writer );
-			return this;
+			config.LoggerWriters.Add( writer );
+			return config;
 		}
 
-		public LogAnalyzerConfiguration AcceptAllLogTypes()
+		public static T AcceptAllLogTypes<T>( this T config ) where T : LogAnalyzerConfiguration
 		{
-			LoggerAcceptedTypes.Add( MessageType.Debug );
-			LoggerAcceptedTypes.Add( MessageType.Error );
-			LoggerAcceptedTypes.Add( MessageType.Info );
-			LoggerAcceptedTypes.Add( MessageType.Verbose );
+			config.LoggerAcceptedTypes.Add( MessageType.Debug );
+			config.LoggerAcceptedTypes.Add( MessageType.Error );
+			config.LoggerAcceptedTypes.Add( MessageType.Info );
+			config.LoggerAcceptedTypes.Add( MessageType.Verbose );
 
-			return this;
+			return config;
 		}
 
-		public LogAnalyzerConfiguration SetScheduler( IScheduler scheduler )
+		public static T SetScheduler<T>( this T config, IScheduler scheduler ) where T : LogAnalyzerConfiguration
 		{
 			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
-			RegisterInstance<IScheduler>( scheduler );
+			config.RegisterInstance<IScheduler>( scheduler );
 
-			return this;
+			return config;
 		}
 
 
-		public LogAnalyzerConfiguration SetSchedulerFromDispatcher( Dispatcher dispatcher )
+		public static T SetSchedulerFromDispatcher<T>( this T config, Dispatcher dispatcher ) where T : LogAnalyzerConfiguration
 		{
 			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
 
-			return SetScheduler( new DispatcherScheduler( dispatcher ) );
+			return config.SetScheduler( new DispatcherScheduler( dispatcher ) );
 		}
 	}
 }
