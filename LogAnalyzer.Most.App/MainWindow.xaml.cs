@@ -28,7 +28,7 @@ namespace LogAnalyzer.Most.App
 		{
 			var app = (App)App.Current;
 			
-			app.Timer.MakeRing();
+			app.Timer.Invoke();
 		}
 	}
 }

@@ -8,6 +8,8 @@ namespace ModuleLogsProvider.Logging
 	public interface ITimer
 	{
 		event EventHandler Tick;
-		void MakeRing();
+		void Invoke();
+
+		TimeSpan Interval { get; set; }
 	}
 }

@@ -27,8 +27,8 @@ namespace LogAnalyzer.Most.App
 	{
 		private Logger logger;
 
-		private readonly MockTimer timer = new MockTimer();
-		public MockTimer Timer
+		private readonly ITimer timer = new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) );
+		public ITimer Timer
 		{
 			get { return timer; }
 		}
@@ -51,24 +51,23 @@ namespace LogAnalyzer.Most.App
 			const string logsServiceAddress = "http://127.0.0.1:9999/MostLogSourceService/";
 			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory( logsServiceAddress );
 
-			LogAnalyzerConfiguration config = null;
 			const string dirName = "MOST";
 			const string filesFilter = "*";
 			const string displayName = "MOST.Local";
 
-			config = LogAnalyzerConfiguration
+			var config = LogAnalyzerConfiguration
 				.CreateNew()
 				.AcceptAllLogTypes()
 				.AddLogDirectory( dirName, filesFilter, displayName )
-				.Register<IEnvironment>( () => new MostEnvironment( config ) )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<ITimer>( timer )
 				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( logger ) )
 				.RegisterInstance<IWindowService>( new RealWindowService() );
 
 			logger = config.Logger;
+			var environment = new MostEnvironment( config );
 
-			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
+			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config, environment );
 			Application.Current.Dispatcher.BeginInvoke( () => { Application.Current.MainWindow.DataContext = applicationViewModel; } );
 		}
 
