@@ -15,7 +15,7 @@ namespace Awad.Eticket.ModuleLogsProvider.Types
 		[DataMember]
 		public string Message { get; set; }
 		[DataMember]
-		public string MessageType { get; set; }
+		public MessageSeverity MessageType { get; set; }
 
 		[DataMember]
 		public int IndexInAllMessagesList { get; set; }
