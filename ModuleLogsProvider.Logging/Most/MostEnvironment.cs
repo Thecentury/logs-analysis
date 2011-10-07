@@ -18,11 +18,13 @@ namespace ModuleLogsProvider.Logging.Most
 				throw new ArgumentNullException( "config" );
 
 			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
-
 			ILogSourceServiceFactory serviceFactory = config.ResolveNotNull<ILogSourceServiceFactory>();
 			ITimer timer = config.ResolveNotNull<ITimer>();
+			IErrorReportingService errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 
-			MostLogNotificationSource notificationSource = new MostLogNotificationSource( timer, serviceFactory, operationsQueue );
+			MostLogNotificationSource notificationSource = new MostLogNotificationSource( timer, serviceFactory,
+				operationsQueue, errorReportingService );
+
 			directory = notificationSource.DirectoryInfo;
 		}
 

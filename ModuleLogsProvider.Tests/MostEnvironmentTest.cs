@@ -82,7 +82,7 @@ namespace ModuleLogsProvider.Tests
 
 			timer.Invoke();
 
-			if ( !data.OperationsQueue.IsSyncronous )
+			if ( !data.OperationsQueue.IsSynchronous )
 			{
 				Thread.Sleep( 2000 );
 			}

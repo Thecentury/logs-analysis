@@ -24,7 +24,8 @@ namespace ModuleLogsProvider.Tests
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<OperationScheduler>( scheduler )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
-				.RegisterInstance<IWindowService>( new RealWindowService() );
+				.RegisterInstance<IWindowService>( new RealWindowService() )
+				.RegisterInstance<IErrorReportingService>( new NullErrorReportingService() );
 
 			return config;
 		}

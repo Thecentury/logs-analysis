@@ -19,17 +19,21 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
 		private readonly ILogSourceServiceFactory serviceFactory;
 		private readonly IOperationsQueue operationQueue;
+		private readonly IErrorReportingService errorReportingService;
 		private readonly MostLogMessagesStorage messagesStorage;
 		private readonly MostDirectoryInfo directoryInfo;
 
-		public MostLogNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue )
+		public MostLogNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue,
+			IErrorReportingService errorReportingService )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
 			if ( serviceFactory == null ) throw new ArgumentNullException( "serviceFactory" );
 			if ( operationQueue == null ) throw new ArgumentNullException( "operationQueue" );
+			if ( errorReportingService == null ) throw new ArgumentNullException( "errorReportingService" );
 
 			this.serviceFactory = serviceFactory;
 			this.operationQueue = operationQueue;
+			this.errorReportingService = errorReportingService;
 
 			timer.Tick += OnTimerTick;
 
@@ -75,7 +79,13 @@ namespace ModuleLogsProvider.Logging.Most
 
 					bool isExpected = exc is SocketException || exc is WebException || exc is CommunicationException;
 					if ( !isExpected )
+					{
 						throw;
+					}
+					else
+					{
+						errorReportingService.ReportException( exc );
+					}
 				}
 			}
 		}
