@@ -5,6 +5,7 @@ using System.Text;
 using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Tests.Common;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
@@ -24,8 +25,9 @@ namespace ModuleLogsProvider.Tests
 			MockTimer timer = new MockTimer();
 			MostServerLogSourceFactory serverFactory = new MostServerLogSourceFactory();
 			WorkerThreadOperationsQueue queue = new WorkerThreadOperationsQueue();
+			LoggingErrorReportingService errorReportingService = new LoggingErrorReportingService( new Logger() );
 
-			MostLogNotificationSource source = new MostLogNotificationSource( timer, serverFactory, queue );
+			MostLogNotificationSource source = new MostLogNotificationSource( timer, serverFactory, queue, errorReportingService );
 			source.MessagesStorage.AppendMessages(
 				new LogMessageInfo[]
 					{

@@ -46,7 +46,7 @@ namespace LogAnalyzer.Kernel
 			PerformanceCountersService.Increment( operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( operationsQueue.Count + 1 ) );
+			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (operationsQueue.Count + 1) );
 			operationsQueue.Add( operation );
 
 			Interlocked.Increment( ref totalOperationsCount );
@@ -77,7 +77,7 @@ namespace LogAnalyzer.Kernel
 			Condition.DebugAssert( operationsQueue.Count == 0, "Число ожидающих операций должно быть равно 0." );
 		}
 
-		public bool IsSyncronous
+		public bool IsSynchronous
 		{
 			get { return false; }
 		}
@@ -105,7 +105,7 @@ namespace LogAnalyzer.Kernel
 				catch ( Exception exc )
 				{
 					string exceptionMessage = exc.ToString();
-			
+
 					bool shouldRethrow = ShouldRethrow( exc );
 					if ( shouldRethrow )
 					{
@@ -118,7 +118,7 @@ namespace LogAnalyzer.Kernel
 
 		private bool ShouldRethrow( Exception exc )
 		{
-			bool shouldRethrow = !( exc is ThreadAbortException );
+			bool shouldRethrow = !(exc is ThreadAbortException);
 			return shouldRethrow;
 		}
 	}
