@@ -62,7 +62,7 @@ namespace ModuleLogsProvider.Tests
 			var fileChangedGroupEventCounter = new CompositeEventCounter( firstDirFilesCollectionChangedEventCounter,
 																		 firstDirViewModelFilesCollectionChangedEventCounter );
 
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName1 } );
+			service.AddMessage( new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName1 } );
 			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();
@@ -78,7 +78,7 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 1, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName1 } );
+			service.AddMessage( new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName1 } );
 			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();
@@ -92,7 +92,7 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 2, dirMergedEntriesCollectionChanged.CalledTimes );
 			Assert.AreEqual( 2, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 
-			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message3", LoggerName = LoggerName2 } );
+			service.AddMessage( new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:13	Message3", LoggerName = LoggerName2 } );
 			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();

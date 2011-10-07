@@ -31,8 +31,8 @@ namespace ModuleLogsProvider.Tests
 			source.MessagesStorage.AppendMessages(
 				new LogMessageInfo[]
 					{
-						new LogMessageInfo{ IndexInAllMessagesList = 0, LoggerName = "1", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", MessageType = "E"},
-						new LogMessageInfo{ IndexInAllMessagesList = 1, LoggerName = "2", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", MessageType = "E"}
+						new LogMessageInfo{ IndexInAllMessagesList = 0, LoggerName = "1", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", MessageType = MessageSeverity.Error},
+						new LogMessageInfo{ IndexInAllMessagesList = 1, LoggerName = "2", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", MessageType = MessageSeverity.Error}
 					}
 				);
 

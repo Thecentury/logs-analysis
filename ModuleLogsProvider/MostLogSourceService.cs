@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Awad.Eticket.ModuleLogsProvider.Types;
+using ModuleLogsProvider.Interfaces;
 using Morqua.Logging;
 using System.ServiceModel;
 
@@ -126,6 +127,11 @@ namespace Awad.Eticket.ModuleLogsProvider
 				String.Format( "MostLogSourceService.GetLinesStartingWithIndex( startingIndex = {0} ) returned {1} messages.", startingIndex, result.Length ) );
 
 			return result;
+		}
+
+		public int GetMessagesCount()
+		{
+			return messages.Count;
 		}
 
 		public bool GetIsListening()
