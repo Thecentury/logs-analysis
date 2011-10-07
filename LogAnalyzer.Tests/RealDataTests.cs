@@ -5,6 +5,7 @@ using System.Text;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests

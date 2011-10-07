@@ -26,9 +26,9 @@ namespace LogAnalyzer.Most.App
 
 		private void RefreshButton_Click( object sender, RoutedEventArgs e )
 		{
-			var app = (App)App.Current;
+			var app = (App)Application.Current;
 			
-			app.Timer.Invoke();
+			app.Bootstrapper.Timer.Invoke();
 		}
 	}
 }

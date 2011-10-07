@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Windows.Threading;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Config
 {
