@@ -1,5 +1,6 @@
 <Config:LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer"
-                          xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer">
+                          xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer"
+                                 xmlns:Logging="clr-namespace:LogAnalyzer.Logging;assembly=LogAnalyzer">
 
 	<Config:LogAnalyzerConfiguration.Directories>
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->
@@ -57,9 +58,9 @@
 		<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
 	
 	<Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
-		<MessageType>Debug</MessageType>
-		<MessageType>Error</MessageType>
-		<MessageType>Info</MessageType>
+		<Logging:MessageType>Debug</Logging:MessageType>
+		<Logging:MessageType>Error</Logging:MessageType>
+		<Logging:MessageType>Info</Logging:MessageType>
 	</Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
 	
 	<Config:LogAnalyzerConfiguration.LoggerWriters>

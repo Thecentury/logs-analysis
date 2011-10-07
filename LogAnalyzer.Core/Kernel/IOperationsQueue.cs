@@ -11,6 +11,6 @@ namespace LogAnalyzer.Kernel
 
 		void WaitAllRunningOperationsToComplete();
 
-		bool IsSyncronous { get; }
+		bool IsSynchronous { get; }
 	}
 }
