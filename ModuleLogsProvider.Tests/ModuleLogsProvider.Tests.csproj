@@ -111,9 +111,9 @@
       <Project>{44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA}</Project>
       <Name>ModuleLogsProvider.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModuleLogsProvider.ServerTypes\ModuleLogsProvider.ServerTypes.csproj">
+    <ProjectReference Include="..\ModuleLogsProvider.SharedTypes\ModuleLogsProvider.SharedTypes.csproj">
       <Project>{E6F957AA-0184-4291-8D50-B3ABEE965EF8}</Project>
-      <Name>ModuleLogsProvider.ServerTypes</Name>
+      <Name>ModuleLogsProvider.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -33,7 +33,7 @@ namespace ModuleLogsProvider.Tests
 		[TestCaseSource( typeof( MostEnvironmentTestDataSource ), "TestCases" )]
 		public void TestSingleMessageFromMost( TestCaseData data )
 		{
-			SendMessages( data, new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName } );
+			SendMessages( data, new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName } );
 		}
 
 		[Description( "Несколько сообщений от одного логгера" )]
@@ -42,8 +42,8 @@ namespace ModuleLogsProvider.Tests
 		public void TestSerevalMessagesFromMost( TestCaseData data )
 		{
 			SendMessages( data,
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = FirstFileName }
+				new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
+				new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = FirstFileName }
 				);
 		}
 
@@ -53,8 +53,8 @@ namespace ModuleLogsProvider.Tests
 		public void TestSeveralMessagesFromTwoLoggers( TestCaseData data )
 		{
 			SendMessages( data,
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
-				new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = SecondFileName }
+				new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = FirstFileName },
+				new LogMessageInfo { MessageType = MessageSeverity.Error, Message = "[E] [ 69] 24.05.2011 0:00:14	Message3", LoggerName = SecondFileName }
 				);
 		}
 

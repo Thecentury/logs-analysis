@@ -52,7 +52,7 @@ namespace LogAnalysisServer.Dev
 				IndexInAllMessagesList = messages.Count,
 				LoggerName = "L1",
 				Message = text,
-				MessageType = "I"
+				MessageType = MessageSeverity.Info
 			};
 
 			return message;

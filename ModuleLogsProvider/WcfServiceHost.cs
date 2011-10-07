@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using ModuleLogsProvider.Interfaces;
 using Morqua.Logging;
 using Awad.Eticket.ModuleLogsProvider.Types;
 
@@ -35,11 +36,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 				serviceHost.Closing += HostClosing;
 				serviceHost.Closed += HostClosed;
 
-				serviceHost.AddServiceEndpoint(
-					typeof( ILogSourceService ),
-					new BasicHttpBinding(),
-					uri
-					);
+				serviceHost.AddServiceEndpoint( typeof( ILogSourceService ), new BasicHttpBinding(), uri );
 
 				serviceHost.Open();
 			}

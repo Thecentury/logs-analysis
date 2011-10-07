@@ -36,15 +36,14 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModuleLogsProvider.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Morqua.Logger">
-      <HintPath>..\..\Environment\Platform\ReferenceAssemblies\Morqua.Logger.dll</HintPath>
+      <HintPath>..\Ext\Platform\Morqua.Logger.dll</HintPath>
     </Reference>
     <Reference Include="Morqua.MOST.KernelInterfaces">
-      <HintPath>..\..\Environment\Platform\ReferenceAssemblies\Morqua.MOST.KernelInterfaces.dll</HintPath>
+      <HintPath>..\Ext\Platform\Morqua.MOST.KernelInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Morqua.Utils, Version=3.1.0.0, Culture=neutral, PublicKeyToken=a0ff8797de43e101, processorArchitecture=MSIL">
-      <HintPath>..\..\Environment\Platform\ReferenceAssemblies\Morqua.Utils.dll</HintPath>
+    <Reference Include="Morqua.Utils">
+      <HintPath>..\Ext\Platform\Morqua.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -65,6 +64,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModuleLogsProvider.Interfaces\ModuleLogsProvider.Interfaces.csproj">
+      <Project>{94207655-B188-454C-93B9-867EBB413B61}</Project>
+      <Name>ModuleLogsProvider.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModuleLogsProvider.SharedTypes\ModuleLogsProvider.SharedTypes.csproj">
+      <Project>{E6F957AA-0184-4291-8D50-B3ABEE965EF8}</Project>
+      <Name>ModuleLogsProvider.SharedTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
