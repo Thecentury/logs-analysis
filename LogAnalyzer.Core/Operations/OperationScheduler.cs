@@ -21,6 +21,8 @@ namespace LogAnalyzer.Operations
 
 		protected abstract AsyncOperation CreateOperationCore( Action action );
 
+		#region Static
+
 		private static readonly SyncronousOperationScheduler syncronousScheduler = new SyncronousOperationScheduler();
 		public static OperationScheduler SyncronousScheduler
 		{
@@ -32,5 +34,7 @@ namespace LogAnalyzer.Operations
 		{
 			get { return taskScheduler; }
 		}
+
+		#endregion
 	}
 }
