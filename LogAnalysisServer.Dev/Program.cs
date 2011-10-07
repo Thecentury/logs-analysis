@@ -11,10 +11,14 @@ namespace LogAnalysisServer.Dev
 	{
 		static void Main( string[] args )
 		{
-			string uri = "http://127.0.0.1:9999/MostLogSourceService/";
+			const string logServiceUri = "http://127.0.0.1:9999/MostLogSourceService/";
+			const string performanceServiceUri = "http://127.0.0.1:9999/MostPerformanceService/";
 
-			ServiceHost host = new ServiceHost( typeof( LogServer ), new Uri( uri ) );
-			host.Open();
+			ServiceHost logServiceHost = new ServiceHost( typeof( LogServer ), new Uri( logServiceUri ) );
+			logServiceHost.Open();
+
+			ServiceHost performanceServiceHost = new ServiceHost( typeof( PerformanceService ), new Uri( performanceServiceUri ) );
+			performanceServiceHost.Open();
 
 			while ( true )
 			{
