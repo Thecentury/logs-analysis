@@ -48,12 +48,12 @@ namespace LogAnalyzer.App
 				// todo обработка исключений при ошибках загрузки конфига
 				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
 
-				config.RegisterInstance<IEnvironment>( new FileSystemEnvironment( config ) );
 				config.RegisterInstance<IWindowService>( new RealWindowService() );
 
 				this.logger = config.Logger;
 
-				ApplicationViewModel applicationViewModel = new ApplicationViewModel( config );
+				var environment = new FileSystemEnvironment( config );
+				ApplicationViewModel applicationViewModel = new ApplicationViewModel( config, environment );
 				Application.Current.Dispatcher.BeginInvoke( () =>
 				{
 					Application.Current.MainWindow.DataContext = applicationViewModel;

@@ -48,6 +48,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auxilliary\IFactory.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Mocks\MockLogSourceFactory.cs" />
     <Compile Include="Mocks\MockLogSourceService.cs" />
     <Compile Include="Mocks\MockTimer.cs" />
+    <Compile Include="Most\WpfDispatcherTimer.cs" />
     <Compile Include="Most\MostFileInfo.cs" />
     <Compile Include="Most\MostLogFileReader.cs" />
     <Compile Include="Most\MostLogMessagesStorage.cs" />

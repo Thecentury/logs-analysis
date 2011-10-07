@@ -22,11 +22,12 @@ namespace LogAnalyzer.GUI.ViewModels
 	public sealed class ApplicationViewModel : BindingObject
 	{
 		private readonly LogAnalyzerConfiguration config;
+
 		public LogAnalyzerConfiguration Config
 		{
 			get { return config; }
 		}
-		
+
 		private readonly LogAnalyzerCore core;
 		public LogAnalyzerCore Core
 		{
@@ -41,16 +42,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private readonly IWindowService windowService;
 
-		public ApplicationViewModel( LogAnalyzerConfiguration config )
+		public ApplicationViewModel( LogAnalyzerConfiguration config, IEnvironment environment )
 		{
-			if ( config == null )
-				throw new ArgumentNullException( "config" );
+			if ( config == null ) throw new ArgumentNullException( "config" );
+			if ( environment == null ) throw new ArgumentNullException( "environment" );
 
 			this.config = config;
 
 			config.Logger.WriteInfo( "Starting..." );
 
-			IEnvironment environment = config.ResolveNotNull<IEnvironment>();
 			core = new LogAnalyzerCore( config, environment );
 
 			core.Loaded += OnCore_Loaded;
