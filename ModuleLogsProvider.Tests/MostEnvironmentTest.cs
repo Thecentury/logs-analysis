@@ -80,7 +80,7 @@ namespace ModuleLogsProvider.Tests
 			core.Start();
 			core.WaitForLoaded();
 
-			timer.MakeRing();
+			timer.Invoke();
 
 			if ( !data.OperationsQueue.IsSyncronous )
 			{

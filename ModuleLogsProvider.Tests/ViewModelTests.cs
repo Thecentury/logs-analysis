@@ -33,7 +33,8 @@ namespace ModuleLogsProvider.Tests
 		[Test]
 		public void TestLogEntryAddedAfterCoreStart()
 		{
-			ApplicationViewModel appViewModel = new ApplicationViewModel( config );
+			MostEnvironment env = new MostEnvironment( config );
+			ApplicationViewModel appViewModel = new ApplicationViewModel( config, env );
 			appViewModel.Core.WaitForLoaded();
 
 			Assert.That( appViewModel.CoreViewModel.Directories.Count, Is.EqualTo( 1 ) );
@@ -62,7 +63,7 @@ namespace ModuleLogsProvider.Tests
 																		 firstDirViewModelFilesCollectionChangedEventCounter );
 
 			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:12	Message1", LoggerName = LoggerName1 } );
-			timer.MakeRing();
+			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();
 
@@ -78,7 +79,7 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 1, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 
 			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message2", LoggerName = LoggerName1 } );
-			timer.MakeRing();
+			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();
 
@@ -92,7 +93,7 @@ namespace ModuleLogsProvider.Tests
 			Assert.AreEqual( 2, dirViewModelMergedEntriesCollectionChanged.CalledTimes );
 
 			service.AddMessage( new LogMessageInfo { MessageType = "E", Message = "[E] [ 69] 24.05.2011 0:00:13	Message3", LoggerName = LoggerName2 } );
-			timer.MakeRing();
+			timer.Invoke();
 
 			queue.WaitAllRunningOperationsToComplete();
 
@@ -117,9 +118,6 @@ namespace ModuleLogsProvider.Tests
 
 			this.config = EnvironmentTestHelper.BuildConfig( timer, serverFactory, scheduler, queue );
 			config.RegisterInstance<IScheduler>( Scheduler.Immediate );
-
-			MostEnvironment env = new MostEnvironment( config );
-			config.RegisterInstance<IEnvironment>( env );
 		}
 	}
 }
