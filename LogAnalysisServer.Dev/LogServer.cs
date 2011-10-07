@@ -6,7 +6,7 @@ using ModuleLogsProvider.Interfaces;
 
 namespace LogAnalysisServer.Dev
 {
-	internal class LogServer : ILogSourceService
+	internal sealed class LogServer : ILogSourceService
 	{
 		private static readonly List<LogMessageInfo> messages = new List<LogMessageInfo>();
 
@@ -36,7 +36,11 @@ namespace LogAnalysisServer.Dev
 			messages.Add( newMessage );
 
 			return messages.Skip( startingIndex ).ToArray();
-			return new[] { newMessage };
+		}
+
+		public int GetMessagesCount()
+		{
+			return messages.Count;
 		}
 
 		private LogMessageInfo GenerateNewMessage()

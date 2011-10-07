@@ -22,6 +22,7 @@ namespace ModuleLogsProvider.Interfaces
 		[OperationContract]
 		LogMessageInfo[] GetMessages( int startingIndex );
 
-		// todo brinchuk add GetCount method
+		[OperationContract]
+		int GetMessagesCount();
 	}
 }
