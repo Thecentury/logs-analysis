@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.ServiceModel;
 using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
@@ -72,7 +73,7 @@ namespace ModuleLogsProvider.Logging.Most
 					Logger.Instance.WriteLine( MessageType.Error, String.Format( "Exception while getting log messages from MOST.Logging service: {0}", exc.ToString() ) );
 					// todo brinchuk как-то дать пользователю понять, что произошел сбой.
 
-					bool isExpected = exc is SocketException || exc is WebException;
+					bool isExpected = exc is SocketException || exc is WebException || exc is CommunicationException;
 					if ( !isExpected )
 						throw;
 				}

@@ -8,9 +8,15 @@ namespace ModuleLogsProvider.Logging.Mocks
 {
 	public sealed class MockTimer : ITimer
 	{
-		public void MakeRing()
+		public void Invoke()
 		{
 			Tick.Raise( this );
+		}
+
+		public TimeSpan Interval
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		public event EventHandler Tick;
