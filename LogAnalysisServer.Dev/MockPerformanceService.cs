@@ -7,7 +7,7 @@ using ModuleLogsProvider.Interfaces;
 
 namespace LogAnalysisServer.Dev
 {
-	internal sealed class PerformanceService : IPerformanceInfoService
+	internal sealed class MockPerformanceService : IPerformanceInfoService
 	{
 		private readonly Random rnd = new Random();
 		public double GetCPULoad()

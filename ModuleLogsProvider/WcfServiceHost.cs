@@ -21,12 +21,11 @@ namespace Awad.Eticket.ModuleLogsProvider
 			this.logger = logger;
 		}
 
-		public void Start( MostLogSourceService serviceInstance )
+		public void Start( object serviceInstance, string uri )
 		{
+			if (serviceInstance == null) throw new ArgumentNullException("serviceInstance");
 			try
 			{
-				const string uri = "http://127.0.0.1:9999/MostLogSourceService/";
-
 				serviceHost = new ServiceHost( serviceInstance );
 
 				serviceHost.Faulted += HostFaulted;
