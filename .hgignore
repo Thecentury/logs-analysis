@@ -7,3 +7,4 @@ _ReSharper.*
 *.vssscc
 *.vspscc
 *.ReSharper.user
+*.csproj.user
