@@ -26,14 +26,16 @@ namespace Awad.Eticket.ModuleLogsProvider
 			base.Init( configXml );
 
 			service = new MostLogSourceService( Logger );
+			const string uri = "http://127.0.0.1:9999/MostLogSourceService/";
 			try
 			{
 				wcfServiceHost = new WcfServiceHost( Logger );
-				wcfServiceHost.Start( service );
+				wcfServiceHost.Start( service, uri );
 			}
 			catch ( Exception exc )
 			{
 				Logger.WriteLine( MessageType.Warning, "ModuleLogsProvider.Init(): Exception occured {0}", exc.ToString() );
+				throw;
 			}
 		}
 
@@ -63,27 +65,30 @@ namespace Awad.Eticket.ModuleLogsProvider
 		[KernelCommand( "WriteError" )]
 		public IKernelCommandResults CommandWriteErrorMessage( IKernelCommandParams args )
 		{
-			LogTime( MessageType.Error );
-			return new KernelCommandResults();
+			return LogTimeAndReturn( MessageType.Error );
 		}
 
 		[KernelCommand( "WriteWarning" )]
 		public IKernelCommandResults CommandWriteWarningMessage( IKernelCommandParams args )
 		{
-			LogTime( MessageType.Warning );
-			return new KernelCommandResults();
+			return LogTimeAndReturn( MessageType.Warning );
 		}
 
 		[KernelCommand( "WriteInfo" )]
 		public IKernelCommandResults CommandWriteInfoMessage( IKernelCommandParams args )
 		{
-			LogTime( MessageType.Info );
-			return new KernelCommandResults();
+			return LogTimeAndReturn( MessageType.Info );
 		}
 
 		private void LogTime( MessageType messageType )
 		{
-			Logger.WriteLine( messageType, "ModuleLogsProvider: {0}", DateTime.Now.ToString("hh:MM:ss") );
+			Logger.WriteLine( messageType, "ModuleLogsProvider: {0}", DateTime.Now.ToString( "hh:MM:ss" ) );
+		}
+
+		private KernelCommandResults LogTimeAndReturn( MessageType messageType )
+		{
+			LogTime( messageType );
+			return new KernelCommandResults();
 		}
 	}
 }

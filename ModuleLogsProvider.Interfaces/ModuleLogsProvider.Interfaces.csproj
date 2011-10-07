@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CpuLoadHelper.cs" />
     <Compile Include="ILogSourceService.cs" />
     <Compile Include="IPerformanceInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

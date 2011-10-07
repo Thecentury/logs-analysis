@@ -17,7 +17,7 @@ namespace LogAnalysisServer.Dev
 			ServiceHost logServiceHost = new ServiceHost( typeof( LogServer ), new Uri( logServiceUri ) );
 			logServiceHost.Open();
 
-			ServiceHost performanceServiceHost = new ServiceHost( typeof( PerformanceService ), new Uri( performanceServiceUri ) );
+			ServiceHost performanceServiceHost = new ServiceHost( typeof( MockPerformanceService ), new Uri( performanceServiceUri ) );
 			performanceServiceHost.Open();
 
 			while ( true )
