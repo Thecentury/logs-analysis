@@ -12,13 +12,15 @@ namespace LogAnalysisServer.Dev
 	{
 		static void Main( string[] args )
 		{
-			const string logServiceUri = "http://127.0.0.1:9999/MostLogSourceService/";
-			const string performanceServiceUri = "http://127.0.0.1:9999/MostPerformanceService/";
+			const string logServiceUri = "net.tcp://127.0.0.1:9999/MostLogSourceService/";
+			const string performanceServiceUri = "net.tcp://127.0.0.1:9999/PerformanceService/";
 
-			ServiceHost logServiceHost = new ServiceHost( typeof( LogServer ), new Uri( logServiceUri ) );
+			ServiceHost logServiceHost = new ServiceHost( typeof( LogServer ) );
+			logServiceHost.AddServiceEndpoint( typeof( ILogSourceService ), new NetTcpBinding(), logServiceUri );
 			logServiceHost.Open();
 
-			ServiceHost performanceServiceHost = new ServiceHost( typeof( CurrentProcessPerformanceService ), new Uri( performanceServiceUri ) );
+			ServiceHost performanceServiceHost = new ServiceHost( typeof( CurrentProcessPerformanceService ) );
+			performanceServiceHost.AddServiceEndpoint( typeof( IPerformanceInfoService ), new NetTcpBinding(), performanceServiceUri );
 			performanceServiceHost.Open();
 
 			while ( true )

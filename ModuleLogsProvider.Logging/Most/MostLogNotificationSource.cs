@@ -58,7 +58,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public void UpdateLogMessages()
 		{
-			using ( var clientWrapper = serviceFactory.CreateObject() )
+			using ( var clientWrapper = serviceFactory.Create() )
 			{
 				var client = clientWrapper.Inner;
 

@@ -16,7 +16,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 	{
 		private WcfServiceHost<ILogSourceService> logServiceHost;
 		private WcfServiceHost<ILogSinkService> logSinkServiceHost;
-		private WcfServiceHost<IPerformanceInfoService> performaceServiceHost;
+		private WcfServiceHost<IPerformanceInfoService> performanceServiceHost;
 
 		public override string SystemName
 		{
@@ -36,7 +36,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 
 			logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl );
 			logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl );
-			performaceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(), performanceServiceUrl );
+			performanceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(), performanceServiceUrl );
 		}
 
 		private static string GetUrl( XmlNode urlsNode, string serviceName )
@@ -55,7 +55,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 		{
 			logServiceHost.SafeDispose();
 			logSinkServiceHost.SafeDispose();
-			performaceServiceHost.SafeDispose();
+			performanceServiceHost.SafeDispose();
 		}
 
 		[KernelCommand( "StartListening" )]

@@ -38,6 +38,12 @@
 				</Button>
 				
 				<Button Content="Refresh" Click="RefreshButton_Click"/>
+				<Separator Width="20"/>
+				<TextBlock>
+					<TextBlock>Working set:</TextBlock>
+					<TextBlock Name="workingSetTextBlock"/>
+					<TextBlock> Mb</TextBlock>
+				</TextBlock>
 			</ToolBar>
 
 			<Grid>

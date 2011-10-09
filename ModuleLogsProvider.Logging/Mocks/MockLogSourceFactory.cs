@@ -15,7 +15,7 @@ namespace ModuleLogsProvider.Logging.Mocks
 			this.service = service;
 		}
 
-		public IOptionalDisposable<ILogSourceService> CreateObject()
+		public IOptionalDisposable<ILogSourceService> Create()
 		{
 			return new OptionalDisposable<ILogSourceService>( service );
 		}

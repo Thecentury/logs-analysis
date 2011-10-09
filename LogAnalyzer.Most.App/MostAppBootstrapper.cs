@@ -43,7 +43,7 @@ namespace LogAnalyzer.Most.App
 
 		private void Init()
 		{
-			const string logsServiceAddress = "http://127.0.0.1:9999/MostLogSourceService/";
+			const string logsServiceAddress = "net.tcp://127.0.0.1:9999/MostLogSourceService/";
 			MostServerLogSourceFactory serviceFactory = new MostServerLogSourceFactory( logsServiceAddress );
 
 			const string dirName = "MOST";

@@ -2,6 +2,6 @@
 {
 	public interface IFactory<out T>
 	{
-		T CreateObject();
+		T Create();
 	}
 }
