@@ -11,30 +11,28 @@ namespace Awad.Eticket.ModuleLogsProvider
 {
 	internal sealed class WcfServiceHost<T> : IDisposable where T : class
 	{
-		private ServiceHost serviceHost;
-
+		private readonly ServiceHost serviceHost;
 		private readonly ILogger logger;
-		public WcfServiceHost( ILogger logger )
+		private readonly T serviceInstance;
+
+		public WcfServiceHost( ILogger logger, T serviceInstance, string uri )
 		{
 			if ( logger == null ) throw new ArgumentNullException( "logger" );
+			if ( serviceInstance == null ) throw new ArgumentNullException( "serviceInstance" );
 
 			this.logger = logger;
-		}
-
-		public void Start( T serviceInstance, string uri )
-		{
-			if ( serviceInstance == null ) throw new ArgumentNullException( "serviceInstance" );
+			this.serviceInstance = serviceInstance;
 
 			try
 			{
 				serviceHost = new ServiceHost( serviceInstance );
 
-				serviceHost.Faulted += HostFaulted;
-				serviceHost.UnknownMessageReceived += HostUnknownMessageReceived;
-				serviceHost.Opening += HostOpening;
-				serviceHost.Opened += HostOpened;
-				serviceHost.Closing += HostClosing;
-				serviceHost.Closed += HostClosed;
+				serviceHost.Faulted += OnHostFaulted;
+				serviceHost.UnknownMessageReceived += OnHostUnknownMessageReceived;
+				serviceHost.Opening += OnHostOpening;
+				serviceHost.Opened += OnHostOpened;
+				serviceHost.Closing += OnHostClosing;
+				serviceHost.Closed += OnHostClosed;
 
 				serviceHost.AddServiceEndpoint( typeof( T ), new BasicHttpBinding(), uri );
 
@@ -42,43 +40,42 @@ namespace Awad.Eticket.ModuleLogsProvider
 			}
 			catch ( Exception exc )
 			{
-				logger.WriteLine( MessageType.Error, string.Format( "WcfServiceHost.Start( uri = {0} ): Exc = {1}", uri, exc ) );
+				logger.WriteLine( MessageType.Error, String.Format( "WcfServiceHost.Start( uri = {0} ): Exc = {1}", uri, exc ) );
 				throw;
 			}
 		}
 
-		public MostLogSourceService GetInstance()
+		public T ServiceInstance
 		{
-			MostLogSourceService service = (MostLogSourceService)serviceHost.SingletonInstance;
-			return service;
+			get { return serviceInstance; }
 		}
 
-		void HostClosed( object sender, EventArgs e )
+		private void OnHostClosed( object sender, EventArgs e )
 		{
 			logger.WriteLine( MessageType.Info, "WcfServiceHost.Closed()" );
 		}
 
-		void HostClosing( object sender, EventArgs e )
+		private void OnHostClosing( object sender, EventArgs e )
 		{
 			logger.WriteLine( MessageType.Info, "WcfServiceHost.Closing()" );
 		}
 
-		void HostOpened( object sender, EventArgs e )
+		private void OnHostOpened( object sender, EventArgs e )
 		{
 			logger.WriteLine( MessageType.Info, "WcfServiceHost.Opened()" );
 		}
 
-		void HostOpening( object sender, EventArgs e )
+		private void OnHostOpening( object sender, EventArgs e )
 		{
 			logger.WriteLine( MessageType.Info, "WcfServiceHost.Opening()" );
 		}
 
-		void HostUnknownMessageReceived( object sender, UnknownMessageReceivedEventArgs e )
+		private void OnHostUnknownMessageReceived( object sender, UnknownMessageReceivedEventArgs e )
 		{
 			logger.WriteLine( MessageType.Warning, "WcfServiceHost.UnknownMessageReceived()" );
 		}
 
-		void HostFaulted( object sender, EventArgs e )
+		private void OnHostFaulted( object sender, EventArgs e )
 		{
 			logger.WriteLine( MessageType.Warning, "WcfServiceHost.Faulted()" );
 		}
@@ -98,6 +95,12 @@ namespace Awad.Eticket.ModuleLogsProvider
 			catch ( Exception exc )
 			{
 				logger.WriteLine( MessageType.Warning, "WcfServiceHost.Dispose(): Exception {0}", exc );
+			}
+
+			IDisposable disposableService = ServiceInstance as IDisposable;
+			if ( disposableService != null )
+			{
+				disposableService.Dispose();
 			}
 		}
 	}

@@ -11,7 +11,7 @@ using System.ServiceModel;
 namespace Awad.Eticket.ModuleLogsProvider
 {
 	[ServiceBehavior( InstanceContextMode = InstanceContextMode.Single )]
-	internal sealed class MostLogSourceService : ILogSourceService
+	internal sealed class MostLogSourceService : ILogSourceService, IDisposable
 	{
 		public readonly ILogger logger;
 		private bool isListening = true;
@@ -137,6 +137,11 @@ namespace Awad.Eticket.ModuleLogsProvider
 		public bool GetIsListening()
 		{
 			return isListening;
+		}
+
+		public void Dispose()
+		{
+			Unsubscribe();
 		}
 	}
 }
