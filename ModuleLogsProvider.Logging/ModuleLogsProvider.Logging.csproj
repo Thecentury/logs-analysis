@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,8 @@
     <Compile Include="Mocks\MockLogSourceFactory.cs" />
     <Compile Include="Mocks\MockLogSourceService.cs" />
     <Compile Include="Mocks\MockTimer.cs" />
+    <Compile Include="MostLogAnalyzerConfiguration.cs" />
+    <Compile Include="MostServerUrls.cs" />
     <Compile Include="Most\MostServiceFactory.cs" />
     <Compile Include="Most\NetTcpBindingFactory.cs" />
     <Compile Include="Most\WcfServiceHelper.cs" />
