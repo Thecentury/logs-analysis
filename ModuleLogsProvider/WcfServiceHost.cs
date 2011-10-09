@@ -34,7 +34,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 				serviceHost.Closing += OnHostClosing;
 				serviceHost.Closed += OnHostClosed;
 
-				serviceHost.AddServiceEndpoint( typeof( T ), new BasicHttpBinding(), uri );
+				serviceHost.AddServiceEndpoint( typeof( T ), new NetTcpBinding(), uri );
 
 				serviceHost.Open();
 			}
