@@ -7,7 +7,7 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class NullErrorReportingService : IErrorReportingService
 	{
-		public void ReportException(Exception exc)
+		public void ReportError( Exception exc, string message )
 		{
 			// do nothing here
 		}

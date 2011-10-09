@@ -20,9 +20,9 @@ namespace LogAnalyzer.Kernel
 			this.logger = logger;
 		}
 
-		public void ReportException( Exception exc )
+		public void ReportError( Exception exc, string message )
 		{
-			logger.WriteLine( MessageType.Error, String.Format( "Exception {0}", exc ) );
+			logger.WriteLine( MessageType.Error, String.Format( "{0}; Exception {1}", message, exc ) );
 		}
 	}
 }

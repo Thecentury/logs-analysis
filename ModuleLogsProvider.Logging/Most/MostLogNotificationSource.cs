@@ -74,8 +74,7 @@ namespace ModuleLogsProvider.Logging.Most
 				}
 				catch ( Exception exc )
 				{
-					Logger.Instance.WriteLine( MessageType.Error, String.Format( "Exception while getting log messages from MOST.Logging service: {0}", exc.ToString() ) );
-					// todo brinchuk как-то дать пользователю понять, что произошел сбой.
+					Logger.Instance.WriteLine( MessageType.Error, String.Format( "Exception while receiving log messages from MOST.Logging service: {0}", exc.ToString() ) );
 
 					bool isExpected = exc is SocketException || exc is WebException || exc is CommunicationException;
 					if ( !isExpected )
@@ -84,7 +83,7 @@ namespace ModuleLogsProvider.Logging.Most
 					}
 					else
 					{
-						errorReportingService.ReportException( exc );
+						errorReportingService.ReportError( exc, ErrorMessages.NetworkErrorWhileConnectingToLogsService );
 					}
 				}
 			}
