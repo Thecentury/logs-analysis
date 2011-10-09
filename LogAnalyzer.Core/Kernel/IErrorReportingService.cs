@@ -7,6 +7,6 @@ namespace LogAnalyzer.Kernel
 {
 	public interface IErrorReportingService
 	{
-		void ReportException( Exception exc );
+		void ReportError( Exception exc, string message );
 	}
 }
