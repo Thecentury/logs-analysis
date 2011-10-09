@@ -10,7 +10,7 @@ namespace ModuleLogsProvider.Logging.Most
 	/// </summary>
 	public sealed class MostServerLogSourceFactory : ILogSourceServiceFactory
 	{
-		const string DesignTimeAddress = "http://127.0.0.1:9999/MostLogSourceService/";
+		const string DesignTimeAddress = "net.tcp://127.0.0.1:9999/MostLogSourceService/";
 		private readonly string address;
 
 		public MostServerLogSourceFactory() : this( DesignTimeAddress ) { }
@@ -21,16 +21,9 @@ namespace ModuleLogsProvider.Logging.Most
 			this.address = address;
 		}
 
-		public IOptionalDisposable<ILogSourceService> CreateObject()
+		public IOptionalDisposable<ILogSourceService> Create()
 		{
-			const int size = Int32.MaxValue;
-
-			var binding = new BasicHttpBinding
-							{
-								MaxBufferPoolSize = size,
-								MaxBufferSize = size,
-								MaxReceivedMessageSize = size
-							};
+			var binding = new NetTcpBinding();
 
 			var endpoint = new EndpointAddress( address );
 			var client = new LogSourceServiceClient( binding, endpoint );

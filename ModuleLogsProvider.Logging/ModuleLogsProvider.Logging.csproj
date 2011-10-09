@@ -60,6 +60,9 @@
     <Compile Include="Mocks\MockLogSourceFactory.cs" />
     <Compile Include="Mocks\MockLogSourceService.cs" />
     <Compile Include="Mocks\MockTimer.cs" />
+    <Compile Include="Most\MostServiceFactory.cs" />
+    <Compile Include="Most\NetTcpBindingFactory.cs" />
+    <Compile Include="Most\WcfServiceHelper.cs" />
     <Compile Include="Most\WpfDispatcherTimer.cs" />
     <Compile Include="Most\MostFileInfo.cs" />
     <Compile Include="Most\MostLogFileReader.cs" />
@@ -75,6 +78,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ILogSinkService.cs" />
+    <Compile Include="IPerformanceInfoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
@@ -118,6 +123,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
