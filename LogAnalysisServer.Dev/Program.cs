@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
+using ModuleLogsProvider.Interfaces;
 
 namespace LogAnalysisServer.Dev
 {
@@ -17,7 +18,7 @@ namespace LogAnalysisServer.Dev
 			ServiceHost logServiceHost = new ServiceHost( typeof( LogServer ), new Uri( logServiceUri ) );
 			logServiceHost.Open();
 
-			ServiceHost performanceServiceHost = new ServiceHost( typeof( MockPerformanceService ), new Uri( performanceServiceUri ) );
+			ServiceHost performanceServiceHost = new ServiceHost( typeof( CurrentProcessPerformanceService ), new Uri( performanceServiceUri ) );
 			performanceServiceHost.Open();
 
 			while ( true )
