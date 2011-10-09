@@ -1,0 +1,6 @@
+﻿<MostLogAnalyzerConfiguration xmlns="clr-namespace:ModuleLogsProvider.Logging;assembly=ModuleLogsProvider.Logging"
+                              xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer">
+	<MostLogAnalyzerConfiguration.Urls>
+		<MostServerUrls DisplayName="Local"/>
+	</MostLogAnalyzerConfiguration.Urls>
+</MostLogAnalyzerConfiguration>
