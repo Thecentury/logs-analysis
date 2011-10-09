@@ -15,7 +15,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 	public class ModuleLogsProvider : KernelModule
 	{
 		private WcfServiceHost<ILogSourceService> logServiceHost;
-		private MostLogSourceService logService;
+		private WcfServiceHost<ILogSinkService> logSinkServiceHost;
 
 		public override string SystemName
 		{
@@ -26,40 +26,27 @@ namespace Awad.Eticket.ModuleLogsProvider
 		{
 			base.Init( configXml );
 
-			logService = new MostLogSourceService( Logger );
-			const string uri = "http://127.0.0.1:9999/MostLogSourceService/";
-			try
-			{
-				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger );
-				logServiceHost.Start( logService, uri );
-			}
-			catch ( Exception exc )
-			{
-				Logger.WriteLine( MessageType.Warning, "ModuleLogsProvider.Init(): Exception occured {0}", exc.ToString() );
-				throw;
-			}
+			logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), "http://127.0.0.1:9999/MostLogSourceService/" );
+			logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), "http://127.0.0.1:9999/MostLogSinkService/" );
 		}
 
 		public override void Stop()
 		{
-			if ( logServiceHost != null )
-			{
-				logServiceHost.Dispose();
-			}
-			logService.Unsubscribe();
+			logServiceHost.SafeDispose();
+			logSinkServiceHost.SafeDispose();
 		}
 
 		[KernelCommand( "StartListening" )]
 		public IKernelCommandResults CommandStartListening( IKernelCommandParams args )
 		{
-			logService.StartListening();
+			logServiceHost.ServiceInstance.StartListening();
 			return new KernelCommandResults();
 		}
 
 		[KernelCommand( "StopListening" )]
 		public IKernelCommandResults CommandStopListening( IKernelCommandParams args )
 		{
-			logService.StopListening();
+			logServiceHost.ServiceInstance.StopListening();
 			return new KernelCommandResults();
 		}
 
