@@ -6,11 +6,12 @@ using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
-	public partial class LogAnalyzerConfiguration
+	public partial class LogAnalyzerConfiguration : IDependencyInjectionContainer
 	{
 		private void RegisterCommonDependencies()
 		{
@@ -60,19 +61,19 @@ namespace LogAnalyzer.Config
 			return implementation;
 		}
 
-		public TContract ResolveNotNull<TContract>()
-		{
-			var resolvedValue = Resolve<TContract>();
-			if ( resolvedValue == null )
-				throw new ArgumentException( String.Format( "Resolved value of type {0} should not be null.", typeof( TContract ) ) );
-
-			return resolvedValue;
-		}
-
 		public bool CanResolve<TContract>()
 		{
 			bool canResolve = registeredMappings.ContainsKey( typeof( TContract ) );
 			return canResolve;
 		}
+
+		#region IDependencyInjectionContainer Members
+
+		void IDependencyInjectionContainer.Register<T>( Func<object> createImplementationFunc )
+		{
+			Register<T>(createImplementationFunc);
+		}
+
+		#endregion
 	}
 }

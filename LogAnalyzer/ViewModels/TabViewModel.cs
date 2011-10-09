@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using System.Windows;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels

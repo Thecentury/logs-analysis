@@ -1,6 +1,7 @@
 ﻿using System;
 using LogAnalyzer;
 using LogAnalyzer.Config;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 
 namespace ModuleLogsProvider.Logging.Most

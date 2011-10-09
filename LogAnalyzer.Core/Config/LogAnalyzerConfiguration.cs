@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Reactive.Concurrency;
-using System.Windows;
-using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Logging;
-using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
