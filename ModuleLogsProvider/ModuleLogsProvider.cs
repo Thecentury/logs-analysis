@@ -16,6 +16,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 	{
 		private WcfServiceHost<ILogSourceService> logServiceHost;
 		private WcfServiceHost<ILogSinkService> logSinkServiceHost;
+		private WcfServiceHost<IPerformanceInfoService> performaceServiceHost;
 
 		public override string SystemName
 		{
@@ -26,14 +27,35 @@ namespace Awad.Eticket.ModuleLogsProvider
 		{
 			base.Init( configXml );
 
-			logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), "http://127.0.0.1:9999/MostLogSourceService/" );
-			logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), "http://127.0.0.1:9999/MostLogSinkService/" );
+			var urlsNode = configXml.SelectSingleNode( "urls" );
+			string logsSourceUrl = GetUrl( urlsNode, "logsSource" ) ?? "http://127.0.0.1:9999/MostLogSourceService/";
+			string logsSinkUrl = GetUrl( urlsNode, "logsSink" ) ?? "http://127.0.0.1:9999/MostLogSinkService/";
+			string performanceServiceUrl = GetUrl( urlsNode, "performanceService" ) ?? "http://127.0.0.1:9999/PerformanceService/";
+
+			// todo brinchuk url -> ip!
+
+			logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl );
+			logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl );
+			performaceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(), performanceServiceUrl );
+		}
+
+		private static string GetUrl( XmlNode urlsNode, string serviceName )
+		{
+			if ( urlsNode == null )
+				return null;
+
+			var urlNode = urlsNode.SelectSingleNode( serviceName );
+			if ( urlNode == null )
+				return null;
+
+			return urlNode.InnerText;
 		}
 
 		public override void Stop()
 		{
 			logServiceHost.SafeDispose();
 			logSinkServiceHost.SafeDispose();
+			performaceServiceHost.SafeDispose();
 		}
 
 		[KernelCommand( "StartListening" )]
