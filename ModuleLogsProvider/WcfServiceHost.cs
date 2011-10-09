@@ -9,7 +9,7 @@ using Awad.Eticket.ModuleLogsProvider.Types;
 
 namespace Awad.Eticket.ModuleLogsProvider
 {
-	internal sealed class WcfServiceHost : IDisposable
+	internal sealed class WcfServiceHost<T> : IDisposable where T : class
 	{
 		private ServiceHost serviceHost;
 
@@ -21,9 +21,10 @@ namespace Awad.Eticket.ModuleLogsProvider
 			this.logger = logger;
 		}
 
-		public void Start( object serviceInstance, string uri )
+		public void Start( T serviceInstance, string uri )
 		{
-			if (serviceInstance == null) throw new ArgumentNullException("serviceInstance");
+			if ( serviceInstance == null ) throw new ArgumentNullException( "serviceInstance" );
+
 			try
 			{
 				serviceHost = new ServiceHost( serviceInstance );
@@ -35,13 +36,13 @@ namespace Awad.Eticket.ModuleLogsProvider
 				serviceHost.Closing += HostClosing;
 				serviceHost.Closed += HostClosed;
 
-				serviceHost.AddServiceEndpoint( typeof( ILogSourceService ), new BasicHttpBinding(), uri );
+				serviceHost.AddServiceEndpoint( typeof( T ), new BasicHttpBinding(), uri );
 
 				serviceHost.Open();
 			}
 			catch ( Exception exc )
 			{
-				logger.WriteLine( MessageType.Error, string.Format( "WcfServiceHost.Start: Exc = {0}", exc ) );
+				logger.WriteLine( MessageType.Error, string.Format( "WcfServiceHost.Start( uri = {0} ): Exc = {1}", uri, exc ) );
 				throw;
 			}
 		}

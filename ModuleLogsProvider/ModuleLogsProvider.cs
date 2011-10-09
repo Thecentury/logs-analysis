@@ -1,4 +1,5 @@
 ﻿using System;
+using ModuleLogsProvider.Interfaces;
 using Morqua.MOST.KernelInterfaces;
 using System.Xml;
 using Morqua.Logging;
@@ -13,8 +14,8 @@ namespace Awad.Eticket.ModuleLogsProvider
 	[KernelModule( "ModuleLogsProvider" )]
 	public class ModuleLogsProvider : KernelModule
 	{
-		private WcfServiceHost wcfServiceHost;
-		private MostLogSourceService service;
+		private WcfServiceHost<ILogSourceService> logServiceHost;
+		private MostLogSourceService logService;
 
 		public override string SystemName
 		{
@@ -25,12 +26,12 @@ namespace Awad.Eticket.ModuleLogsProvider
 		{
 			base.Init( configXml );
 
-			service = new MostLogSourceService( Logger );
+			logService = new MostLogSourceService( Logger );
 			const string uri = "http://127.0.0.1:9999/MostLogSourceService/";
 			try
 			{
-				wcfServiceHost = new WcfServiceHost( Logger );
-				wcfServiceHost.Start( service, uri );
+				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger );
+				logServiceHost.Start( logService, uri );
 			}
 			catch ( Exception exc )
 			{
@@ -41,24 +42,24 @@ namespace Awad.Eticket.ModuleLogsProvider
 
 		public override void Stop()
 		{
-			if ( wcfServiceHost != null )
+			if ( logServiceHost != null )
 			{
-				wcfServiceHost.Dispose();
+				logServiceHost.Dispose();
 			}
-			service.Unsubscribe();
+			logService.Unsubscribe();
 		}
 
 		[KernelCommand( "StartListening" )]
 		public IKernelCommandResults CommandStartListening( IKernelCommandParams args )
 		{
-			service.StartListening();
+			logService.StartListening();
 			return new KernelCommandResults();
 		}
 
 		[KernelCommand( "StopListening" )]
 		public IKernelCommandResults CommandStopListening( IKernelCommandParams args )
 		{
-			service.StopListening();
+			logService.StopListening();
 			return new KernelCommandResults();
 		}
 
