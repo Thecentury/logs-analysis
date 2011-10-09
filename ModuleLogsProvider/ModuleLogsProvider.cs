@@ -28,9 +28,9 @@ namespace Awad.Eticket.ModuleLogsProvider
 			base.Init( configXml );
 
 			var urlsNode = configXml.SelectSingleNode( "urls" );
-			string logsSourceUrl = GetUrl( urlsNode, "logsSource" ) ?? "http://127.0.0.1:9999/MostLogSourceService/";
-			string logsSinkUrl = GetUrl( urlsNode, "logsSink" ) ?? "http://127.0.0.1:9999/MostLogSinkService/";
-			string performanceServiceUrl = GetUrl( urlsNode, "performanceService" ) ?? "http://127.0.0.1:9999/PerformanceService/";
+			string logsSourceUrl = GetUrl( urlsNode, "logsSource" ) ?? "net.tcp://127.0.0.1:9999/MostLogSourceService/";
+			string logsSinkUrl = GetUrl( urlsNode, "logsSink" ) ?? "net.tcp://127.0.0.1:9999/MostLogSinkService/";
+			string performanceServiceUrl = GetUrl( urlsNode, "performanceService" ) ?? "net.tcp://127.0.0.1:9999/PerformanceService/";
 
 			// todo brinchuk url -> ip!
 
