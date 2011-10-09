@@ -81,9 +81,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug xcopy "$(TargetPath)" "..\..\..\..\Run\Debug\server\" /D /Y /Q
-if $(ConfigurationName) == Release xcopy "$(TargetPath)" "..\..\..\..\Run\Release\server\" /D /Y /Q
-if $(ConfigurationName) == Debug xcopy "$(TargetDir)$(TargetName).pdb"  "..\..\..\..\Run\Debug\server\" /D /Y /Q
-if $(ConfigurationName) == Release xcopy "$(TargetDir)$(TargetName).pdb"  "..\..\..\..\Run\Release\server\" /D /Y /Q</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
