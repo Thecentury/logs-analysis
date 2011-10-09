@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Kernel
