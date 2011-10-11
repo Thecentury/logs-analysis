@@ -50,14 +50,16 @@ namespace LogAnalyzer.Most.App
 			const string filesFilter = "*";
 			const string displayName = "MOST.Local";
 
+			var operationsQueue = new WorkerThreadOperationsQueue( Logger );
+
 			var config = MostLogAnalyzerConfiguration
-				.CreateNew()
+				.LoadFromFile( "config.xaml" )
 				.AcceptAllLogTypes()
 				.AddLogDirectory( dirName, filesFilter, displayName )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
-				.Register<IOperationsQueue>( () => new WorkerThreadOperationsQueue( Logger ) )
+				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
-				.RegisterInstance<IErrorReportingService>( new NullErrorReportingService() );
+				.RegisterInstance<IErrorReportingService>( new LoggingErrorReportingService( Logger ) );
 
 			logger = config.Logger;
 			var environment = new MostEnvironment( config );
