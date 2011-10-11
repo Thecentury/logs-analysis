@@ -1,6 +1,10 @@
 ﻿<MostLogAnalyzerConfiguration xmlns="clr-namespace:ModuleLogsProvider.Logging;assembly=ModuleLogsProvider.Logging"
                               xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer">
 	<MostLogAnalyzerConfiguration.Urls>
-		<MostServerUrls DisplayName="Local"/>
+		<MostServerUrls DisplayName="Local"
+						LogsSourceServiceUrl="net.tcp://127.0.0.1:9999/MostLogSourceService/"
+						LogsSinkServiceUrl="net.tcp://127.0.0.1:9999/MostLogSinkService/"
+						PerformanceDataServiceUrl="net.tcp://127.0.0.1:9999/PerformanceService/"
+						/>
 	</MostLogAnalyzerConfiguration.Urls>
 </MostLogAnalyzerConfiguration>
