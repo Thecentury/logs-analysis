@@ -10,6 +10,7 @@ using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
 using LogAnalyzer.Tests;
+using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
@@ -28,7 +29,7 @@ namespace ModuleLogsProvider.Tests
 		private readonly MockLogsSourceService service = new MockLogsSourceService();
 		private readonly SameThreadOperationsQueue queue = new SameThreadOperationsQueue();
 
-		private LogAnalyzerConfiguration config;
+		private MostLogAnalyzerConfiguration config;
 
 		[Test]
 		public void TestLogEntryAddedAfterCoreStart()

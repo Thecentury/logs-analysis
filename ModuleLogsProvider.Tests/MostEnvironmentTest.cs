@@ -72,7 +72,7 @@ namespace ModuleLogsProvider.Tests
 				service.AddMessage( message );
 			}
 
-			LogAnalyzerConfiguration config = EnvironmentTestHelper.BuildConfig( timer, serviceFactory, data.Scheduler, data.OperationsQueue );
+			MostLogAnalyzerConfiguration config = EnvironmentTestHelper.BuildConfig( timer, serviceFactory, data.Scheduler, data.OperationsQueue );
 			MostEnvironment env = new MostEnvironment( config );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
