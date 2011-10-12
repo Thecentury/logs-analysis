@@ -12,7 +12,7 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly IOperationsQueue operationsQueue;
 		private readonly MostDirectoryInfo directory;
 
-		public MostEnvironment( LogAnalyzerConfiguration config )
+		public MostEnvironment( MostLogAnalyzerConfiguration config )
 			: base( config )
 		{
 			if ( config == null )
@@ -20,7 +20,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
 			ILogSourceServiceFactory serviceFactory = config.ResolveNotNull<ILogSourceServiceFactory>();
-			ITimer timer = config.ResolveNotNull<ITimer>();
+			ITimer timer = config.LogsUpdateTimer;
 			IErrorReportingService errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 
 			MostLogNotificationSource notificationSource = new MostLogNotificationSource( timer, serviceFactory,

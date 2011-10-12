@@ -62,6 +62,7 @@
     <Compile Include="Mocks\MockLogSourceService.cs" />
     <Compile Include="Mocks\MockTimer.cs" />
     <Compile Include="MostLogAnalyzerConfiguration.cs" />
+    <Compile Include="MostLogAnalyzerConfiguration.FluentApi.cs" />
     <Compile Include="MostServerUrls.cs" />
     <Compile Include="Most\MostServiceFactory.cs" />
     <Compile Include="Most\NetTcpBindingFactory.cs" />
