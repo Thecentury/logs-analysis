@@ -41,6 +41,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		private readonly IWindowService windowService;
+		public IWindowService WindowService
+		{
+			get { return windowService; }
+		}
 
 		public ApplicationViewModel( LogAnalyzerConfiguration config, IEnvironment environment )
 		{

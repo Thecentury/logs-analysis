@@ -8,7 +8,7 @@ using ModuleLogsProvider.Logging.Auxilliary;
 
 namespace ModuleLogsProvider.Logging.Most
 {
-	public sealed class MostServiceFactory<TService> : IFactory<ClientImpl<TService>> where TService : class
+	public sealed class MostServiceFactory<TService> : IFactory<IDisposableService<TService>> where TService : class
 	{
 		private readonly IFactory<Binding> bindingFactory;
 		private readonly string serviceUri;
@@ -22,15 +22,47 @@ namespace ModuleLogsProvider.Logging.Most
 			this.serviceUri = serviceUri;
 		}
 
-		public ClientImpl<TService> Create()
+		public IDisposableService<TService> Create()
 		{
 			var binding = bindingFactory.Create();
 
-			return new ClientImpl<TService>( binding, new EndpointAddress( serviceUri ) );
+			return new ClientWrapper<TService>( new ClientImpl<TService>( binding, new EndpointAddress( serviceUri ) ) );
 		}
 	}
 
-	public sealed class ClientImpl<TClient> : ClientBase<TClient> where TClient : class
+	public interface IDisposableService<T> : IDisposable
+	{
+		T Service { get; }
+	}
+
+	internal sealed class ClientWrapper<T> : IDisposableService<T> where T : class
+	{
+		private readonly ClientImpl<T> client;
+
+		public ClientWrapper( ClientImpl<T> client )
+		{
+			this.client = client;
+		}
+
+		public void Dispose()
+		{
+			if ( client.State == CommunicationState.Faulted )
+				return;
+
+			try
+			{
+				client.Close();
+			}
+			catch ( CommunicationObjectFaultedException exc ) { }
+		}
+
+		public T Service
+		{
+			get { return client.Service; }
+		}
+	}
+
+	internal sealed class ClientImpl<TClient> : ClientBase<TClient> where TClient : class
 	{
 		public ClientImpl( Binding binding, EndpointAddress address ) : base( binding, address ) { }
 
