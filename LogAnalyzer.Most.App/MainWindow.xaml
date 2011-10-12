@@ -8,6 +8,7 @@
 	<Window.InputBindings>
 		<KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
 		<KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
+		<KeyBinding Key="F5" Command="{Binding RefreshLogDataCommand}"/>
 	</Window.InputBindings>
 
 	<Window.Resources>
@@ -36,12 +37,11 @@
 					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
-				
-				<Button Content="Refresh" Click="RefreshButton_Click"/>
-				<Separator Width="20"/>
-				<TextBlock>
+
+				<Button Content="Refresh" Command="{Binding RefreshLogDataCommand}"/>
+				<TextBlock Margin="20,0,0,0" VerticalAlignment="Bottom">
 					<TextBlock>Working set:</TextBlock>
-					<TextBlock Name="workingSetTextBlock"/>
+					<TextBlock Text="{Binding WorkingSetMBs}"/>
 					<TextBlock> Mb</TextBlock>
 				</TextBlock>
 			</ToolBar>

@@ -11,6 +11,7 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using ModuleLogsProvider.GUI.ViewModels;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Most;
 
@@ -61,6 +62,7 @@ namespace LogAnalyzer.Most.App
 				.AddLogDirectory( dirName, filesFilter, displayName )
 				.WithLogsUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) ) )
 				.WithPerformanceDataUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 2 ) ) )
+				.SetSelectedUrls( MostServerUrls.Local )
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
@@ -68,7 +70,7 @@ namespace LogAnalyzer.Most.App
 
 			var environment = new MostEnvironment( config );
 
-			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config, environment );
+			MostApplicationViewModel applicationViewModel = new MostApplicationViewModel( config, environment );
 			Application.Current.Dispatcher.BeginInvoke( () => { Application.Current.MainWindow.DataContext = applicationViewModel; } );
 		}
 

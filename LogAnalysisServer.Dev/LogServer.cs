@@ -12,7 +12,7 @@ namespace LogAnalysisServer.Dev
 
 		public void ClearMessagesList()
 		{
-			throw new NotImplementedException();
+			messages.Clear();
 		}
 
 		public void StartListening()

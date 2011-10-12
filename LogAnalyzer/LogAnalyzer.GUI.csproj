@@ -111,6 +111,7 @@
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\HighlightManager.cs" />
