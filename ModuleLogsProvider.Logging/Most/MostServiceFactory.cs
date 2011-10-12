@@ -30,7 +30,7 @@ namespace ModuleLogsProvider.Logging.Most
 		}
 	}
 
-	public interface IDisposableService<T> : IDisposable
+	public interface IDisposableService<out T> : IDisposable
 	{
 		T Service { get; }
 	}

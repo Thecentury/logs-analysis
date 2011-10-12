@@ -151,7 +151,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			foreach ( string line in logEntry.TextLines )
 			{
-				MessageLineViewModel lineViewModel = null;
+				MessageLineViewModel lineViewModel;
 				FileLineInfo lineInfo = logEntry.GetExceptionLine( line );
 				// в строке нет информации о методе, вызвавшем исключение
 				if ( lineInfo == null )
@@ -169,13 +169,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Commands
 
-		private DelegateCommand openFileViewCommand = null;
+		private DelegateCommand openFileViewCommand;
 		public ICommand OpenFileViewCommand
 		{
 			get
 			{
 				if ( openFileViewCommand == null )
 				{
+					throw new NotImplementedException();
 				}
 
 				return openFileViewCommand;
