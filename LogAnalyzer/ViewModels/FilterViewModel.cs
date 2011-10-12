@@ -77,7 +77,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void OnFilter_Changed( object sender, EventArgs e )
 		{
 			RaisePropertyChanged( "Header" );
-			StartFiltration();
+			StartFiltering();
 			// todo handle filter changes
 		}
 
@@ -96,7 +96,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		const int FilteringProgressNotificationsCount = 20;
-		public void StartFiltration()
+		public void StartFiltering()
 		{
 			// todo this is temp solution
 			if ( IsFiltering )
@@ -281,7 +281,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void RefreshExecute()
 		{
-			StartFiltration();
+			StartFiltering();
 		}
 
 		public bool RefreshCanExecute()

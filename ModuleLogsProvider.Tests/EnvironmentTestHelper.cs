@@ -14,13 +14,15 @@ namespace ModuleLogsProvider.Tests
 {
 	public static class EnvironmentTestHelper
 	{
-		public static LogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory, OperationScheduler scheduler, IOperationsQueue operationsQueue )
+		public static MostLogAnalyzerConfiguration BuildConfig( ITimer timer, ILogSourceServiceFactory serviceFactory, OperationScheduler scheduler, IOperationsQueue operationsQueue )
 		{
-			var config = LogAnalyzerConfiguration.CreateNew()
+			var config = MostLogAnalyzerConfiguration.CreateNew()
 				.AddLogDirectory( "Dir1", "*", "Some directory 1" )
 				.AddLogWriter( new DebugLogWriter() )
 				.AcceptAllLogTypes()
-				.RegisterInstance<ITimer>( timer )
+				.WithLogsUpdateTimer( timer );
+
+			config
 				.RegisterInstance<ILogSourceServiceFactory>( serviceFactory )
 				.RegisterInstance<OperationScheduler>( scheduler )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )

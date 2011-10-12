@@ -19,7 +19,7 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	// todo сделать настраиваемую ширину последней колонки DataGrid'а
 
-	public sealed class ApplicationViewModel : BindingObject
+	public partial class ApplicationViewModel : BindingObject
 	{
 		private readonly LogAnalyzerConfiguration config;
 
@@ -93,7 +93,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return tabs; }
 		}
 
-		private int selectedIndex = 0;
+		private int selectedIndex;
 		public int SelectedIndex
 		{
 			get { return selectedIndex; }
@@ -118,135 +118,5 @@ namespace LogAnalyzer.GUI.ViewModels
 				return tabs[selectedIndex];
 			}
 		}
-
-		#region Commands
-
-		public ICommand CreateAddFileViewCommand( LogFileViewModel logFileViewModel )
-		{
-			DelegateCommand command = new DelegateCommand( () =>
-			{
-				AddNewTab( logFileViewModel.Clone() );
-			} );
-
-			return command;
-		}
-
-		private void AddNewTab( TabViewModel tabViewModel )
-		{
-			tabs.Add( tabViewModel );
-			SelectedIndex = tabs.Count - 1;
-		}
-
-		public ICommand CreateAddDirectoryViewCommand( LogDirectoryViewModel directoryViewModel )
-		{
-			DelegateCommand command = new DelegateCommand( () =>
-			{
-				AddNewTab( directoryViewModel.Clone() );
-			} );
-
-			return command;
-		}
-
-		private DelegateCommand createFilterAndViewCommand = null;
-		public ICommand CreateFilterAndViewCommand
-		{
-			get
-			{
-				if ( createFilterAndViewCommand == null )
-				{
-					createFilterAndViewCommand = new DelegateCommand( CreateFilterAndViewCommandExecute );
-				}
-
-				return createFilterAndViewCommand;
-			}
-		}
-
-		public void CreateFilterAndViewCommandExecute()
-		{
-			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
-			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow );
-			bool? dialogResult = editorWindow.ShowDialog();
-			if ( dialogResult == true )
-			{
-				// todo передавать информацию о "владельце" коллекции sourceEntries 
-				// (напр., для команды ShowInParentEntriesList)
-				ExpressionBuilder filterBuilder = editorViewModel.Builder;
-				FilterViewModel filterViewModel = new FilterViewModel( coreViewModel.Entries, this );
-				filterViewModel.Filter.ExpressionBuilder = filterBuilder;
-
-				AddNewTab( filterViewModel );
-				filterViewModel.StartFiltration();
-			}
-		}
-
-		private DelegateCommand newViewFromSavedFilterCommand = null;
-		public ICommand NewViewFromSavedFilterCommand
-		{
-			get
-			{
-				if ( newViewFromSavedFilterCommand == null )
-				{
-					newViewFromSavedFilterCommand = new DelegateCommand( NewViewFromSavedFilterCommandExecute );
-				}
-
-				return newViewFromSavedFilterCommand;
-			}
-		}
-
-		public IWindowService WindowService
-		{
-			get { return windowService; }
-		}
-
-		public void NewViewFromSavedFilterCommandExecute()
-		{
-			OpenFileDialog openDialog = new OpenFileDialog();
-			if ( openDialog.ShowDialog( Application.Current.MainWindow ) == true )
-			{
-				string fileName = openDialog.FileName;
-
-				// todo exception handling
-				ExpressionBuilder builder = (ExpressionBuilder)XamlServices.Load( fileName );
-				LogEntriesListViewModel selectedTab = tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
-
-				if ( selectedTab != null )
-				{
-					FilterViewModel filterViewModel = new FilterViewModel( selectedTab.Entries, this );
-					filterViewModel.Filter.ExpressionBuilder = builder;
-					filterViewModel.StartFiltration();
-
-					AddNewTab( filterViewModel );
-				}
-			}
-		}
-
-		public DelegateCommand CreateAddThreadViewCommand( int threadId )
-		{
-			return new DelegateCommand( () =>
-			{
-				ExpressionBuilder filter = new ThreadIdEquals( threadId );
-
-				AddFilterViewFromCore( filter );
-			} );
-		}
-
-		private void AddFilterViewFromCore( ExpressionBuilder filter )
-		{
-			FilterViewModel filterViewModel = new FilterViewModel( coreViewModel.Entries, this, filter );
-			AddNewTab( filterViewModel );
-			filterViewModel.StartFiltration();
-		}
-
-		public DelegateCommand CreateAddFileNameViewCommand( string fileName )
-		{
-			return new DelegateCommand( () =>
-			{
-				ExpressionBuilder filter = new FileNameEquals( fileName );
-
-				AddFilterViewFromCore( filter );
-			} );
-		}
-
-		#endregion
 	}
 }
