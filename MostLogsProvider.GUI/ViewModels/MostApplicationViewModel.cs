@@ -10,6 +10,7 @@ using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Most;
+using Windows7.DesktopIntegration;
 
 namespace ModuleLogsProvider.GUI.ViewModels
 {
@@ -41,12 +42,34 @@ namespace ModuleLogsProvider.GUI.ViewModels
 					double memory = client.Service.GetMemoryConsumption();
 					double mbs = Math.Round( memory / 1024.0 / 1024.0, 1 );
 					WorkingSetMBs = mbs;
+
+					double cpuLoad = client.Service.GetCPULoad();
+					double cpuLoadRounded = Math.Round( cpuLoad );
+					CpuLoad = cpuLoadRounded;
+
+					int cpuLoadInt = (int)cpuLoadRounded;
+					if ( cpuLoadRounded < 1 )
+						cpuLoadInt = 0;
+
+					WindowService.SetProgressValue( cpuLoadInt );
+					
+					var progressState = GetProgressState( cpuLoadInt );
+					WindowService.SetProgressState( progressState );
 				}
 				catch ( EndpointNotFoundException exc )
 				{
+					// todo brinchuk тут использовать IErrorReportingService
 					Logger.Instance.WriteLine( MessageType.Error, exc.ToString() );
 				}
 			}
+		}
+
+		private static Windows7Taskbar.ThumbnailProgressState GetProgressState( int cpuLoadInt )
+		{
+			if ( cpuLoadInt <= 0 )
+				return Windows7Taskbar.ThumbnailProgressState.NoProgress;
+			else
+				return Windows7Taskbar.ThumbnailProgressState.Normal;
 		}
 
 		#region Properties
@@ -59,6 +82,17 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			{
 				workingSetMBs = value;
 				RaisePropertyChanged( "WorkingSetMBs" );
+			}
+		}
+
+		private double cpuLoad;
+		public double CpuLoad
+		{
+			get { return cpuLoad; }
+			private set
+			{
+				cpuLoad = value;
+				RaisePropertyChanged( "CpuLoad" );
 			}
 		}
 

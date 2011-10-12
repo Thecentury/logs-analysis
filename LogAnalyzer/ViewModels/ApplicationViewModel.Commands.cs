@@ -81,11 +81,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		public IWindowService WindowService
-		{
-			get { return windowService; }
-		}
-
 		public void NewViewFromSavedFilterCommandExecute()
 		{
 			OpenFileDialog openDialog = new OpenFileDialog();
