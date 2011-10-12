@@ -1,19 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
+using System.Windows.Input;
+using AdTech.Common.WPF;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using ModuleLogsProvider.Logging;
+using ModuleLogsProvider.Logging.Most;
 
 namespace ModuleLogsProvider.GUI.ViewModels
 {
 	public sealed class MostApplicationViewModel : ApplicationViewModel
 	{
+		private readonly MostLogAnalyzerConfiguration config;
+		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
+
 		public MostApplicationViewModel( MostLogAnalyzerConfiguration config, IEnvironment environment )
 			: base( config, environment )
 		{
+			if ( config == null ) throw new ArgumentNullException( "config" );
 
+			this.config = config;
+
+			config.PerformanceDataUpdateTimer.Tick += OnPerformanceDataUpdateTimerTick;
+			var bindingFactory = new NetTcpBindingFactory();
+
+			performanceInfoServiceFactory = new MostServiceFactory<IPerformanceInfoService>( bindingFactory,
+				config.SelectedUrls.PerformanceDataServiceUrl );
 		}
+
+		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
+		{
+			using ( var client = performanceInfoServiceFactory.Create() )
+			{
+				try
+				{
+					double memory = client.Service.GetMemoryConsumption();
+					double mbs = Math.Round( memory / 1024.0 / 1024.0, 1 );
+					WorkingSetMBs = mbs;
+				}
+				catch ( EndpointNotFoundException exc )
+				{
+					Logger.Instance.WriteLine( MessageType.Error, exc.ToString() );
+				}
+			}
+		}
+
+		#region Properties
+
+		private double workingSetMBs;
+		public double WorkingSetMBs
+		{
+			get { return workingSetMBs; }
+			private set
+			{
+				workingSetMBs = value;
+				RaisePropertyChanged( "WorkingSetMBs" );
+			}
+		}
+
+		#endregion
+
+		#region Commands
+
+		#region RefreshLogData command
+
+		private DelegateCommand refreshLogDataCommand;
+
+		/// <summary>
+		/// Обновить записи логов.
+		/// </summary>
+		public ICommand RefreshLogDataCommand
+		{
+			get
+			{
+				if ( refreshLogDataCommand == null )
+				{
+					refreshLogDataCommand = new DelegateCommand( RefreshLogData );
+				}
+				return refreshLogDataCommand;
+			}
+		}
+
+		private void RefreshLogData()
+		{
+			config.LogsUpdateTimer.Invoke();
+			config.PerformanceDataUpdateTimer.Invoke();
+		}
+
+		#endregion
+
+		#endregion
 	}
 }

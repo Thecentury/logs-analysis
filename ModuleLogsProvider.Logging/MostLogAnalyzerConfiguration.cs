@@ -28,6 +28,11 @@ namespace ModuleLogsProvider.Logging
 			get { return urls; }
 		}
 
+		/// <summary>
+		/// Адреса сервисов выбранного сервера.
+		/// </summary>
+		public MostServerUrls SelectedUrls { get; set; }
+
 		public static new MostLogAnalyzerConfiguration LoadFromStream( Stream stream )
 		{
 			MostLogAnalyzerConfiguration config = (MostLogAnalyzerConfiguration)XamlServices.Load( stream );

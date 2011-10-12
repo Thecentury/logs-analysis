@@ -23,6 +23,7 @@ namespace LogAnalysisServer.Dev
 			performanceServiceHost.AddServiceEndpoint( typeof( IPerformanceInfoService ), new NetTcpBinding(), performanceServiceUri );
 			performanceServiceHost.Open();
 
+			Console.WriteLine( "Started." );
 			while ( true )
 			{
 				Thread.Sleep( 100 );

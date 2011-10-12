@@ -14,5 +14,16 @@ namespace ModuleLogsProvider.Logging
 		public string LogsSinkServiceUrl { get; set; }
 
 		public string PerformanceDataServiceUrl { get; set; }
+
+		public static MostServerUrls Local
+		{
+			get { return new MostServerUrls
+			             	{
+			             		DisplayName = "Local",
+								LogsSinkServiceUrl = "net.tcp://127.0.0.1:9999/MostLogSinkService/",
+								LogsSourceServiceUrl = "net.tcp://127.0.0.1:9999/MostLogSourceService/",
+								PerformanceDataServiceUrl = "net.tcp://127.0.0.1:9999/PerformanceService/"
+			             	}; }
+		}
 	}
 }
