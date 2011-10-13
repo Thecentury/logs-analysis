@@ -3,6 +3,8 @@ using LogAnalyzer;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using ModuleLogsProvider.Logging.Auxilliary;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -19,7 +21,7 @@ namespace ModuleLogsProvider.Logging.Most
 				throw new ArgumentNullException( "config" );
 
 			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
-			ILogSourceServiceFactory serviceFactory = config.ResolveNotNull<ILogSourceServiceFactory>();
+			IFactory<IDisposableService<ILogSourceService>> serviceFactory = config.ResolveNotNull<IFactory<IDisposableService<ILogSourceService>>>();
 			ITimer logsUpdateTimer = config.LogsUpdateTimer;
 			IErrorReportingService errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 

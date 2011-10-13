@@ -52,11 +52,11 @@ namespace ModuleLogsProvider.GUI.ViewModels
 						cpuLoadInt = 0;
 
 					WindowService.SetProgressValue( cpuLoadInt );
-					
+
 					var progressState = GetProgressState( cpuLoadInt );
 					WindowService.SetProgressState( progressState );
 				}
-				catch ( EndpointNotFoundException exc )
+				catch ( CommunicationException exc )
 				{
 					// todo brinchuk тут использовать IErrorReportingService
 					Logger.Instance.WriteLine( MessageType.Error, exc.ToString() );
