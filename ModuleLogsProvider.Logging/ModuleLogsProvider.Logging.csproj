@@ -56,7 +56,6 @@
     <Compile Include="Auxilliary\IOptionalDisposable.cs" />
     <Compile Include="Auxilliary\IOptionalDisposablesFactory.cs" />
     <Compile Include="Auxilliary\OptionalDisposable.cs" />
-    <Compile Include="ILogSourceServiceFactory.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="Mocks\MockLogSourceFactory.cs" />
     <Compile Include="Mocks\MockLogSourceService.cs" />
@@ -71,7 +70,6 @@
     <Compile Include="Most\MostFileInfo.cs" />
     <Compile Include="Most\MostLogFileReader.cs" />
     <Compile Include="Most\MostLogMessagesStorage.cs" />
-    <Compile Include="Most\MostServerLogSourceFactory.cs" />
     <Compile Include="Most\MostDirectoryInfo.cs" />
     <Compile Include="Most\MostEnvironment.cs" />
     <Compile Include="Most\MostLogNotificationSource.cs" />
