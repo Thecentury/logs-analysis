@@ -11,6 +11,7 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Operations;
 using ModuleLogsProvider.GUI.ViewModels;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Auxilliary;
@@ -67,6 +68,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<IFactory<IDisposableService<ILogSourceService>>>( serviceFactory )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
+				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
 				.RegisterInstance<IErrorReportingService>( new LoggingErrorReportingService( Logger ) );
 
 			var environment = new MostEnvironment( config );

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using AdTech.Common.WPF;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Operations;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Most;
 using Windows7.DesktopIntegration;
+using LogAnalyzer.Extensions;
 
 namespace ModuleLogsProvider.GUI.ViewModels
 {
@@ -18,6 +21,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 	{
 		private readonly MostLogAnalyzerConfiguration config;
 		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
+		private readonly OperationScheduler operationScheduler;
 
 		public MostApplicationViewModel( MostLogAnalyzerConfiguration config, IEnvironment environment )
 			: base( config, environment )
@@ -31,9 +35,16 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			performanceInfoServiceFactory = new MostServiceFactory<IPerformanceInfoService>( bindingFactory,
 				config.SelectedUrls.PerformanceDataServiceUrl );
+
+			operationScheduler = config.ResolveNotNull<OperationScheduler>();
 		}
 
 		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
+		{
+			operationScheduler.StartNewOperation( UpdatePerformanceData );
+		}
+
+		private void UpdatePerformanceData()
 		{
 			using ( var client = performanceInfoServiceFactory.Create() )
 			{
