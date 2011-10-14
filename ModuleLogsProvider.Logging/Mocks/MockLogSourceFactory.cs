@@ -1,11 +1,12 @@
 ﻿
 using System;
 using ModuleLogsProvider.Logging.Auxilliary;
+using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Mocks
 {
-	public sealed class MockLogSourceFactory : ILogSourceServiceFactory
+	public sealed class MockLogSourceFactory : IFactory<IDisposableService<ILogSourceService>>
 	{
 		private readonly MockLogsSourceService service;
 
@@ -15,9 +16,29 @@ namespace ModuleLogsProvider.Logging.Mocks
 			this.service = service;
 		}
 
-		public IOptionalDisposable<ILogSourceService> Create()
+		public IDisposableService<ILogSourceService> Create()
 		{
-			return new OptionalDisposable<ILogSourceService>( service );
+			return new MockDisposableService<ILogSourceService>( service );
+		}
+	}
+
+	internal sealed class MockDisposableService<T> : IDisposableService<T>
+	{
+		private readonly T service;
+
+		public MockDisposableService( T service )
+		{
+			this.service = service;
+		}
+
+		public void Dispose()
+		{
+			// do nothing here
+		}
+
+		public T Service
+		{
+			get { return service; }
 		}
 	}
 }

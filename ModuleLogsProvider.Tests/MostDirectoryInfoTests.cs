@@ -7,6 +7,7 @@ using LogAnalyzer;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Tests.Common;
+using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Mocks;
 using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
@@ -23,7 +24,8 @@ namespace ModuleLogsProvider.Tests
 		public void TestGetTheSameFileTwice()
 		{
 			MockTimer timer = new MockTimer();
-			MostServerLogSourceFactory serverFactory = new MostServerLogSourceFactory();
+			var serverFactory = new MostServiceFactory<ILogSourceService>( new NetTcpBindingFactory(), MostServerUrls.Local.LogsSourceServiceUrl );
+			
 			WorkerThreadOperationsQueue queue = new WorkerThreadOperationsQueue();
 			LoggingErrorReportingService errorReportingService = new LoggingErrorReportingService( new Logger() );
 
