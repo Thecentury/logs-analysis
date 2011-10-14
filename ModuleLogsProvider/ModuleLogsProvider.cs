@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using ModuleLogsProvider.Interfaces;
 using Morqua.MOST.KernelInterfaces;
 using System.Xml;
@@ -27,16 +29,63 @@ namespace Awad.Eticket.ModuleLogsProvider
 		{
 			base.Init( configXml );
 
+			const string defaultUrlPrefix = "net.tcp://127.0.0.1:9999/";
+
 			var urlsNode = configXml.SelectSingleNode( "urls" );
-			string logsSourceUrl = GetUrl( urlsNode, "logsSource" ) ?? "net.tcp://127.0.0.1:9999/MostLogSourceService/";
-			string logsSinkUrl = GetUrl( urlsNode, "logsSink" ) ?? "net.tcp://127.0.0.1:9999/MostLogSinkService/";
-			string performanceServiceUrl = GetUrl( urlsNode, "performanceService" ) ?? "net.tcp://127.0.0.1:9999/PerformanceService/";
+			string logsSourceUrl = GetUrl( urlsNode, "logsSource" ) ?? defaultUrlPrefix + "MostLogSourceService/";
+			string logsSinkUrl = GetUrl( urlsNode, "logsSink" ) ?? defaultUrlPrefix + "MostLogSinkService/";
+			string performanceServiceUrl = GetUrl( urlsNode, "performanceService" ) ?? defaultUrlPrefix + "PerformanceService/";
 
-			// todo brinchuk url -> ip!
+			List<string> allowedHostsToStartAt = GetAllowedHosts( configXml );
 
-			logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl );
-			logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl );
-			performanceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(), performanceServiceUrl );
+			bool shouldStartServices = ShouldStartServices( allowedHostsToStartAt );
+			if ( shouldStartServices )
+			{
+				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl ).Start();
+				logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl ).Start();
+				performanceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(),
+																					 performanceServiceUrl ).Start();
+			}
+			else
+			{
+				Logger.WriteLine( MessageType.Warning, 
+					String.Format("ModuleLogsProvider: current machine's name \"{0}\" is not in list of allowed hosts.", Environment.MachineName) );
+			}
+		}
+
+		private List<string> GetAllowedHosts( XmlNode configXml )
+		{
+			List<string> allowedHosts = new List<string>();
+
+			XmlNode allowedHostsNode = configXml.SelectSingleNode( "AllowedHosts" );
+			if ( allowedHostsNode == null )
+				return allowedHosts;
+
+			var hostNodes = allowedHostsNode.SelectNodes( "Host" );
+			if ( hostNodes == null )
+				return allowedHosts;
+
+			foreach ( XmlNode hostNode in hostNodes )
+			{
+				string host = hostNode.InnerText;
+				allowedHosts.Add( host );
+			}
+
+			return allowedHosts;
+		}
+
+		private static string NetworkUrlToIp( string url )
+		{
+			var uri = new Uri( url );
+			var ipAddress = Dns.GetHostAddresses( uri.Host ).Where( a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ).First();
+			return String.Format( "{0}{1}:{2}{3}", uri.GetLeftPart( UriPartial.Scheme ), ipAddress, uri.Port, uri.AbsolutePath );
+		}
+
+		private bool ShouldStartServices( List<string> allowedHosts )
+		{
+			string machineName = Environment.MachineName;
+			bool shouldStart = allowedHosts.Contains( machineName );
+			return shouldStart;
 		}
 
 		private static string GetUrl( XmlNode urlsNode, string serviceName )
@@ -48,7 +97,9 @@ namespace Awad.Eticket.ModuleLogsProvider
 			if ( urlNode == null )
 				return null;
 
-			return urlNode.InnerText;
+			string url = urlNode.InnerText;
+			string urlWithIps = NetworkUrlToIp( url );
+			return urlWithIps;
 		}
 
 		public override void Stop()
