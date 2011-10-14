@@ -35,14 +35,18 @@ namespace Awad.Eticket.ModuleLogsProvider
 				serviceHost.Closed += OnHostClosed;
 
 				serviceHost.AddServiceEndpoint( typeof( T ), new NetTcpBinding(), uri );
-
-				serviceHost.Open();
 			}
 			catch ( Exception exc )
 			{
 				logger.WriteLine( MessageType.Error, String.Format( "WcfServiceHost.Start( uri = {0} ): Exc = {1}", uri, exc ) );
 				throw;
 			}
+		}
+
+		public WcfServiceHost<T>  Start()
+		{
+			serviceHost.Open();
+			return this;
 		}
 
 		public T ServiceInstance

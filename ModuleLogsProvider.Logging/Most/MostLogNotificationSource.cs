@@ -9,6 +9,8 @@ using Awad.Eticket.ModuleLogsProvider.Types;
 using LogAnalyzer;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using ModuleLogsProvider.Logging.Auxilliary;
+using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Most
 {
@@ -17,13 +19,13 @@ namespace ModuleLogsProvider.Logging.Most
 		public const string DirectoryName = "MOST";
 
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
-		private readonly ILogSourceServiceFactory serviceFactory;
+		private readonly IFactory<IDisposableService<ILogSourceService>> serviceFactory;
 		private readonly IOperationsQueue operationQueue;
 		private readonly IErrorReportingService errorReportingService;
 		private readonly MostLogMessagesStorage messagesStorage;
 		private readonly MostDirectoryInfo directoryInfo;
 
-		public MostLogNotificationSource( ITimer timer, ILogSourceServiceFactory serviceFactory, IOperationsQueue operationQueue,
+		public MostLogNotificationSource( ITimer timer, IFactory<IDisposableService<ILogSourceService>> serviceFactory, IOperationsQueue operationQueue,
 			IErrorReportingService errorReportingService )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
@@ -60,7 +62,7 @@ namespace ModuleLogsProvider.Logging.Most
 		{
 			using ( var clientWrapper = serviceFactory.Create() )
 			{
-				var client = clientWrapper.Inner;
+				var client = clientWrapper.Service;
 
 				int startingIndex = loadedMessages.Count;
 
