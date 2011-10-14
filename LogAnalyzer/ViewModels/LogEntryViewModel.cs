@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using System.Windows.Data;
-using System.Windows.Controls;
 using LogAnalyzer.Extensions;
 using AdTech.Common.WPF;
 using System.Windows.Input;
-using System.Windows;
-using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
