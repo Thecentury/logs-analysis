@@ -75,6 +75,14 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			}
 		}
 
+		protected override void OnCoreLoaded()
+		{
+			base.OnCoreLoaded();
+
+			config.LogsUpdateTimer.Invoke();
+			config.PerformanceDataUpdateTimer.Invoke();
+		}
+
 		private static Windows7Taskbar.ThumbnailProgressState GetProgressState( int cpuLoadInt )
 		{
 			if ( cpuLoadInt <= 0 )
