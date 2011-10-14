@@ -79,6 +79,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnCore_Loaded( object sender, EventArgs e )
 		{
+			OnCoreLoaded();
+		}
+
+		protected virtual void OnCoreLoaded()
+		{
 			coreViewModel = new CoreViewModel( core, this ) { IsActive = true };
 
 			BeginInvokeInUIDispatcher( () =>
