@@ -1,12 +1,10 @@
-﻿
-using System;
-using ModuleLogsProvider.Logging.Auxilliary;
+﻿using System;
 using ModuleLogsProvider.Logging.Most;
 using ModuleLogsProvider.Logging.MostLogsServices;
 
 namespace ModuleLogsProvider.Logging.Mocks
 {
-	public sealed class MockLogSourceFactory : IFactory<IDisposableService<ILogSourceService>>
+	public sealed class MockLogSourceFactory : IServiceFactory<ILogSourceService>
 	{
 		private readonly MockLogsSourceService service;
 
@@ -39,6 +37,11 @@ namespace ModuleLogsProvider.Logging.Mocks
 		public T Service
 		{
 			get { return service; }
+		}
+
+		public bool IsExpectedException( Exception exc )
+		{
+			return false;
 		}
 	}
 }

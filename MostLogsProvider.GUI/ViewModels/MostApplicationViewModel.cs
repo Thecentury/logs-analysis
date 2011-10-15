@@ -22,6 +22,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		private readonly MostLogAnalyzerConfiguration config;
 		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
 		private readonly OperationScheduler operationScheduler;
+		private readonly IErrorReportingService errorReportingService;
 
 		public MostApplicationViewModel( MostLogAnalyzerConfiguration config, IEnvironment environment )
 			: base( config, environment )
@@ -37,6 +38,8 @@ namespace ModuleLogsProvider.GUI.ViewModels
 				config.SelectedUrls.PerformanceDataServiceUrl );
 
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
+
+			errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 		}
 
 		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
@@ -54,8 +57,8 @@ namespace ModuleLogsProvider.GUI.ViewModels
 					double mbs = Math.Round( memory / 1024.0 / 1024.0, 1 );
 					WorkingSetMBs = mbs;
 
-					double cpuLoad = client.Service.GetCPULoad();
-					double cpuLoadRounded = Math.Round( cpuLoad );
+					double actualCpuLoad = client.Service.GetCPULoad();
+					double cpuLoadRounded = Math.Round( actualCpuLoad );
 					CpuLoad = cpuLoadRounded;
 
 					int cpuLoadInt = (int)cpuLoadRounded;
@@ -67,10 +70,14 @@ namespace ModuleLogsProvider.GUI.ViewModels
 					var progressState = GetProgressState( cpuLoadInt );
 					WindowService.SetProgressState( progressState );
 				}
-				catch ( CommunicationException exc )
+				catch ( Exception exc )
 				{
-					// todo brinchuk тут использовать IErrorReportingService
-					Logger.Instance.WriteLine( MessageType.Error, exc.ToString() );
+					errorReportingService.ReportError( exc, exc.Message );
+
+					bool isExpected = client.IsExpectedException( exc );
+
+					if ( !isExpected )
+						throw;
 				}
 			}
 		}

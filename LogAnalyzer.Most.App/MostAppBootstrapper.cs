@@ -28,17 +28,9 @@ namespace LogAnalyzer.Most.App
 			get { return logger; }
 		}
 
-		private readonly ITimer timer = new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) );
-		public ITimer Timer
-		{
-			get { return timer; }
-		}
-
 		public void Start()
 		{
 			Thread.CurrentThread.Name = "UIThread";
-
-			//AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			Task.Factory
 				.StartNew( Init )
@@ -47,15 +39,17 @@ namespace LogAnalyzer.Most.App
 
 		private void Init()
 		{
-			MostServiceFactory<ILogSourceService> serviceFactory = new MostServiceFactory<ILogSourceService>( new NetTcpBindingFactory(), MostServerUrls.Local.LogsSourceServiceUrl );
+			MostServiceFactory<ILogSourceService> serviceFactory = new MostServiceFactory<ILogSourceService>(
+				new NetTcpBindingFactory(), MostServerUrls.Local.LogsSourceServiceUrl );
 
 			const string dirName = "MOST";
 			const string filesFilter = "*";
 			const string displayName = "MOST.Local";
 
 			var config = MostLogAnalyzerConfiguration
-				.LoadFromFile( @"..\..\config.xaml" )
-				.AcceptAllLogTypes();
+				.LoadFromFile( @"../../config.xaml" )
+				.AcceptAllLogTypes()
+				.AddLogWriter( new DebugLogWriter() );
 
 			logger = config.Logger;
 			var operationsQueue = new WorkerThreadOperationsQueue( logger );
@@ -88,6 +82,5 @@ namespace LogAnalyzer.Most.App
 
 			Environment.Exit( -1 );
 		}
-
 	}
 }
