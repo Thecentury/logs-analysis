@@ -56,6 +56,7 @@
     <Compile Include="Auxilliary\IOptionalDisposable.cs" />
     <Compile Include="Auxilliary\IOptionalDisposablesFactory.cs" />
     <Compile Include="Auxilliary\OptionalDisposable.cs" />
+    <Compile Include="IServiceFactory.cs" />
     <Compile Include="ITimer.cs" />
     <Compile Include="Mocks\MockLogSourceFactory.cs" />
     <Compile Include="Mocks\MockLogSourceService.cs" />

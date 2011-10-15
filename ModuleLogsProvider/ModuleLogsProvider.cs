@@ -41,15 +41,22 @@ namespace Awad.Eticket.ModuleLogsProvider
 			bool shouldStartServices = ShouldStartServices( allowedHostsToStartAt );
 			if ( shouldStartServices )
 			{
-				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl ).Start();
-				logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl ).Start();
+				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl )
+					.Start();
+				logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl )
+					.Start();
 				performanceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(),
 																					 performanceServiceUrl ).Start();
+
+				Logger.WriteLine( MessageType.Info, "Wcf services have started." );
+				Logger.WriteLine( MessageType.Info, "MostLogSourceService: '{0}'", logsSourceUrl );
+				Logger.WriteLine( MessageType.Info, "MostLogSinkService: '{0}'", logsSinkUrl );
+				Logger.WriteLine( MessageType.Info, "MostPerformanceService: '{0}'", performanceServiceUrl );
 			}
 			else
 			{
-				Logger.WriteLine( MessageType.Warning, 
-					String.Format("ModuleLogsProvider: current machine's name \"{0}\" is not in list of allowed hosts.", Environment.MachineName) );
+				Logger.WriteLine( MessageType.Warning,
+					String.Format( "Current machine's name \"{0}\" is not in list of allowed hosts.", Environment.MachineName ) );
 			}
 		}
 

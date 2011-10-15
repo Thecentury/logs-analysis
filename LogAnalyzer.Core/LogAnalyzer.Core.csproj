@@ -76,6 +76,7 @@
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
+    <Compile Include="Kernel\CompositeErrorReportingService.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\ErrorMessages.cs" />
     <Compile Include="Kernel\IDependencyInjectionContainer.cs" />

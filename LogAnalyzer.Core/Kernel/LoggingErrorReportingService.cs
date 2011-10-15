@@ -7,7 +7,7 @@ using LogAnalyzer.Logging;
 namespace LogAnalyzer.Kernel
 {
 	/// <summary>
-	/// Логирует полученные ошибки.
+	/// Реализация <see cref="IErrorReportingService"/>, которая логирует полученные ошибки.
 	/// </summary>
 	public sealed class LoggingErrorReportingService : IErrorReportingService
 	{

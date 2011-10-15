@@ -33,6 +33,7 @@ namespace ModuleLogsProvider.Logging.Most
 	public interface IDisposableService<out T> : IDisposable
 	{
 		T Service { get; }
+		bool IsExpectedException( Exception exc );
 	}
 
 	internal sealed class ClientWrapper<T> : IDisposableService<T> where T : class
@@ -59,6 +60,12 @@ namespace ModuleLogsProvider.Logging.Most
 		public T Service
 		{
 			get { return client.Service; }
+		}
+
+		public bool IsExpectedException(Exception exc)
+		{
+			bool isExpected = exc is CommunicationException;
+			return isExpected;
 		}
 	}
 
