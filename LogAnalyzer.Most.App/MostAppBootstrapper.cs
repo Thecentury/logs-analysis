@@ -48,9 +48,9 @@ namespace LogAnalyzer.Most.App
 			const string displayName = "MOST.Local";
 
 			var config = MostLogAnalyzerConfiguration
-				.LoadFromFile( @"../../config.xaml" )
-				.AcceptAllLogTypes()
-				.AddLogWriter( new DebugLogWriter() );
+				.LoadFromFile(@"../../config.xaml")
+				.AcceptAllLogTypes();
+				//.AddLogWriter( new DebugLogWriter() );
 
 			logger = config.Logger;
 			var operationsQueue = new WorkerThreadOperationsQueue( logger );
@@ -66,7 +66,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
-				.RegisterInstance<IErrorReportingService>( new LoggingErrorReportingService( Logger ) )
+				.RegisterInstance<ErrorReportingServiceBase>( new LoggingErrorReportingService( Logger ) )
 				.RegisterInstance<RegionManager>( regionManager );
 
 			var environment = new MostEnvironment( config );

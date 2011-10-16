@@ -23,7 +23,7 @@ namespace ModuleLogsProvider.Logging.Most
 			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
 			IServiceFactory<ILogSourceService> serviceFactory = config.ResolveNotNull<IServiceFactory<ILogSourceService>>();
 			ITimer logsUpdateTimer = config.LogsUpdateTimer;
-			IErrorReportingService errorReportingService = config.ResolveNotNull<IErrorReportingService>();
+			ErrorReportingServiceBase errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
 
 			MostLogNotificationSource notificationSource = new MostLogNotificationSource( logsUpdateTimer, serviceFactory,
 				operationsQueue, errorReportingService );

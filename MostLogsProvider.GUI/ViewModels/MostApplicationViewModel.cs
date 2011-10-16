@@ -22,7 +22,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		private readonly MostLogAnalyzerConfiguration config;
 		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
 		private readonly OperationScheduler operationScheduler;
-		private readonly IErrorReportingService errorReportingService;
+		private readonly ErrorReportingServiceBase errorReportingService;
 
 		public MostApplicationViewModel( MostLogAnalyzerConfiguration config, IEnvironment environment )
 			: base( config, environment )
@@ -39,7 +39,8 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
 
-			errorReportingService = config.ResolveNotNull<IErrorReportingService>();
+			errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
+			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService );
 		}
 
 		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
@@ -96,6 +97,12 @@ namespace ModuleLogsProvider.GUI.ViewModels
 				return Windows7Taskbar.ThumbnailProgressState.NoProgress;
 			else
 				return Windows7Taskbar.ThumbnailProgressState.Normal;
+		}
+
+		private readonly ErrorReportingViewModel errorReportingViewModel;
+		public ErrorReportingViewModel ErrorReportingViewModel
+		{
+			get { return errorReportingViewModel; }
 		}
 
 		#region Properties

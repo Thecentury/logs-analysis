@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace LogAnalyzer.GUI.Regions
 {
 	public sealed class RegionAdapterFactory
 	{
-		private readonly Dictionary<Type, Func<DependencyObject, RegionAdapter>> typeToCreateRegionAdapterMapping =
-			new Dictionary<Type, Func<DependencyObject, RegionAdapter>>();
+		private readonly Dictionary<Type, Func<RegionAdapter>> typeToCreateRegionAdapterMapping =
+			new Dictionary<Type, Func<RegionAdapter>>();
 
-		private RegionAdapterFactory() { }
+		private RegionAdapterFactory()
+		{
+			RegisterAdapter<Panel>( () => new PanelAdapter() );
+		}
 
 		private static readonly RegionAdapterFactory instance = new RegionAdapterFactory();
 		public static RegionAdapterFactory Instance
@@ -19,7 +23,7 @@ namespace LogAnalyzer.GUI.Regions
 			get { return instance; }
 		}
 
-		public void RegisterAdapter<THost>( Func<DependencyObject, RegionAdapter> createAdapterFunc )
+		public void RegisterAdapter<THost>( Func<RegionAdapter> createAdapterFunc )
 		{
 			if ( createAdapterFunc == null ) throw new ArgumentNullException( "createAdapterFunc" );
 
@@ -33,7 +37,10 @@ namespace LogAnalyzer.GUI.Regions
 			Type hostType = host.GetType();
 			Type regionHostBaseType = typeToCreateRegionAdapterMapping.Keys.Single( type => type.IsAssignableFrom( hostType ) );
 			var createAdapterFunc = typeToCreateRegionAdapterMapping[regionHostBaseType];
-			RegionAdapter adapter = createAdapterFunc( host );
+
+			RegionAdapter adapter = createAdapterFunc();
+			adapter.Init( host );
+
 			return adapter;
 		}
 	}

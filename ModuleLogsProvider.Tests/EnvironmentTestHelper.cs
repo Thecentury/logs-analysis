@@ -30,7 +30,7 @@ namespace ModuleLogsProvider.Tests
 				.RegisterInstance<OperationScheduler>( scheduler )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
-				.RegisterInstance<IErrorReportingService>( new NullErrorReportingService() );
+				.RegisterInstance<ErrorReportingServiceBase>( new NullErrorReportingService() );
 
 			return config;
 		}
