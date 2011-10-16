@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
 	/// <summary>
-	/// Реализация <see cref="IErrorReportingService"/>, которая логирует полученные ошибки.
+	/// Реализация <see cref="ErrorReportingServiceBase"/>, которая логирует полученные ошибки.
 	/// </summary>
-	public sealed class LoggingErrorReportingService : IErrorReportingService
+	public sealed class LoggingErrorReportingService : ErrorReportingServiceBase
 	{
 		private readonly Logger logger;
 
@@ -20,7 +21,7 @@ namespace LogAnalyzer.Kernel
 			this.logger = logger;
 		}
 
-		public void ReportError( Exception exc, string message )
+		protected override void ReportErrorCore( Exception exc, string message )
 		{
 			logger.WriteLine( MessageType.Error, String.Format( "{0}; Exception {1}", message, exc ) );
 		}

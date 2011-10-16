@@ -5,9 +5,9 @@ using System.Text;
 
 namespace LogAnalyzer.Kernel
 {
-	public sealed class NullErrorReportingService : IErrorReportingService
+	public sealed class NullErrorReportingService : ErrorReportingServiceBase
 	{
-		public void ReportError( Exception exc, string message )
+		protected override void ReportErrorCore(Exception exc, string message)
 		{
 			// do nothing here
 		}

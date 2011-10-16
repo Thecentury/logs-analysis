@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
-	public sealed class CompositeErrorReportingService : IErrorReportingService
+	public sealed class CompositeErrorReportingService : ErrorReportingServiceBase
 	{
-		private readonly List<IErrorReportingService> children = new List<IErrorReportingService>();
+		private readonly List<ErrorReportingServiceBase> children = new List<ErrorReportingServiceBase>();
 
 		public CompositeErrorReportingService() { }
-		public CompositeErrorReportingService( params IErrorReportingService[] children )
+		public CompositeErrorReportingService( params ErrorReportingServiceBase[] children )
 		{
 			this.children.AddRange( children );
 		}
 
-		public void ReportError( Exception exc, string message )
+		protected override void ReportErrorCore( Exception exc, string message )
 		{
 			foreach ( var child in children )
 			{

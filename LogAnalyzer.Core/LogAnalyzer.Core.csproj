@@ -79,8 +79,9 @@
     <Compile Include="Kernel\CompositeErrorReportingService.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\ErrorMessages.cs" />
+    <Compile Include="Kernel\ErrorOccuredEventArgs.cs" />
     <Compile Include="Kernel\IDependencyInjectionContainer.cs" />
-    <Compile Include="Kernel\IErrorReportingService.cs" />
+    <Compile Include="Kernel\ErrorReportingServiceBase.cs" />
     <Compile Include="Kernel\LoggingErrorReportingService.cs" />
     <Compile Include="Kernel\NullErrorReportingService.cs" />
     <Compile Include="Kernel\SameThreadOperationsQueue.cs" />

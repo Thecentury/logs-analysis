@@ -111,6 +111,7 @@
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
+    <Compile Include="Regions\PanelAdapter.cs" />
     <Compile Include="Regions\Region.cs" />
     <Compile Include="Regions\RegionAdapter.cs" />
     <Compile Include="Regions\RegionAdapterFactory.cs" />

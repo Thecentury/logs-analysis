@@ -57,8 +57,11 @@ namespace LogAnalyzer.GUI.Regions
 		private static void OnRegionManagerChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{
 			string regionName = GetRegionName( d );
+			if(String.IsNullOrEmpty(regionName))
+				return;
+
 			RegionManager regionManager = (RegionManager)e.NewValue;
-			if ( !String.IsNullOrEmpty( regionName ) && regionManager != null )
+			if ( regionManager != null )
 			{
 				Region region = regionManager.CreateRegion( d, regionName );
 				SetRegion( d, region );
