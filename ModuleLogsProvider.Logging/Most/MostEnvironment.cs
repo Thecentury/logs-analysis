@@ -21,7 +21,7 @@ namespace ModuleLogsProvider.Logging.Most
 				throw new ArgumentNullException( "config" );
 
 			operationsQueue = config.ResolveNotNull<IOperationsQueue>();
-			IFactory<IDisposableService<ILogSourceService>> serviceFactory = config.ResolveNotNull<IFactory<IDisposableService<ILogSourceService>>>();
+			IServiceFactory<ILogSourceService> serviceFactory = config.ResolveNotNull<IServiceFactory<ILogSourceService>>();
 			ITimer logsUpdateTimer = config.LogsUpdateTimer;
 			IErrorReportingService errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 

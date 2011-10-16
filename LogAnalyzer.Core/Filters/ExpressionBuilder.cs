@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Xaml;
 using System.Xml;
+using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Filters
 {
@@ -38,7 +39,7 @@ namespace LogAnalyzer.Filters
 		{
 			if ( !ValidateProperties() )
 			{
-				throw new InvalidOperationException();
+				throw new InvalidOperationException( "Properties validation failed." );
 			}
 
 			Expression result = CreateExpressionCore( parameter );

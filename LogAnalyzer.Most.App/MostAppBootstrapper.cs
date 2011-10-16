@@ -8,6 +8,7 @@ using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.Regions;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
@@ -54,21 +55,29 @@ namespace LogAnalyzer.Most.App
 			logger = config.Logger;
 			var operationsQueue = new WorkerThreadOperationsQueue( logger );
 
+			RegionManager regionManager = new RegionManager();
+
 			config
 				.AddLogDirectory( dirName, filesFilter, displayName )
 				.WithLogsUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) ) )
 				.WithPerformanceDataUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 2 ) ) )
 				.SetSelectedUrls( MostServerUrls.Local )
-				.RegisterInstance<IFactory<IDisposableService<ILogSourceService>>>( serviceFactory )
+				.RegisterInstance<IServiceFactory<ILogSourceService>>( serviceFactory )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
-				.RegisterInstance<IErrorReportingService>( new LoggingErrorReportingService( Logger ) );
+				.RegisterInstance<IErrorReportingService>( new LoggingErrorReportingService( Logger ) )
+				.RegisterInstance<RegionManager>( regionManager );
 
 			var environment = new MostEnvironment( config );
 
 			MostApplicationViewModel applicationViewModel = new MostApplicationViewModel( config, environment );
-			Application.Current.Dispatcher.BeginInvoke( () => { Application.Current.MainWindow.DataContext = applicationViewModel; } );
+			Application.Current.Dispatcher.BeginInvoke( () =>
+															{
+																var mainWindow = Application.Current.MainWindow;
+																RegionManager.SetRegionManager( mainWindow, regionManager );
+																mainWindow.DataContext = applicationViewModel;
+															} );
 		}
 
 		private void OnInitException( Task parentTask )

@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Markup;
-using LogAnalyzer;
+using LogAnalyzer.Properties;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -40,8 +39,9 @@ using LogAnalyzer;
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Logging" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Filters" )]
+[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Regions" )]
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Properties
 {
 	public static class GlobalConstants
 	{
