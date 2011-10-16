@@ -111,6 +111,11 @@
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
+    <Compile Include="Regions\Region.cs" />
+    <Compile Include="Regions\RegionAdapter.cs" />
+    <Compile Include="Regions\RegionAdapterFactory.cs" />
+    <Compile Include="Regions\RegionManager.cs" />
+    <Compile Include="Regions\RegionCollection.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Commands.cs" />
@@ -163,6 +168,7 @@
       <DependentUpon>TabsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowsInterop.cs" />
+    <Compile Include="XmlNamespaces.cs" />
     <Page Include="..\config.xaml">
       <Link>config.xaml</Link>
       <Generator>MSBuild:Compile</Generator>

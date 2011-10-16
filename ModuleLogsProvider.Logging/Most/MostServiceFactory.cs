@@ -8,7 +8,7 @@ using ModuleLogsProvider.Logging.Auxilliary;
 
 namespace ModuleLogsProvider.Logging.Most
 {
-	public sealed class MostServiceFactory<TService> : IFactory<IDisposableService<TService>> where TService : class
+	public sealed class MostServiceFactory<TService> : IServiceFactory<TService> where TService : class
 	{
 		private readonly IFactory<Binding> bindingFactory;
 		private readonly string serviceUri;
@@ -62,7 +62,7 @@ namespace ModuleLogsProvider.Logging.Most
 			get { return client.Service; }
 		}
 
-		public bool IsExpectedException(Exception exc)
+		public bool IsExpectedException( Exception exc )
 		{
 			bool isExpected = exc is CommunicationException;
 			return isExpected;

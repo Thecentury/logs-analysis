@@ -19,13 +19,13 @@ namespace ModuleLogsProvider.Logging.Most
 		public const string DirectoryName = "MOST";
 
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
-		private readonly IFactory<IDisposableService<ILogSourceService>> serviceFactory;
+		private readonly IServiceFactory<ILogSourceService> serviceFactory;
 		private readonly IOperationsQueue operationQueue;
 		private readonly IErrorReportingService errorReportingService;
 		private readonly MostLogMessagesStorage messagesStorage;
 		private readonly MostDirectoryInfo directoryInfo;
 
-		public MostLogNotificationSource( ITimer timer, IFactory<IDisposableService<ILogSourceService>> serviceFactory, IOperationsQueue operationQueue,
+		public MostLogNotificationSource( ITimer timer, IServiceFactory<ILogSourceService> serviceFactory, IOperationsQueue operationQueue,
 			IErrorReportingService errorReportingService )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
@@ -78,15 +78,11 @@ namespace ModuleLogsProvider.Logging.Most
 				{
 					Logger.Instance.WriteLine( MessageType.Error, String.Format( "Exception while receiving log messages from MOST.Logging service: {0}", exc.ToString() ) );
 
-					bool isExpected = exc is SocketException || exc is WebException || exc is CommunicationException;
+					bool isExpected = clientWrapper.IsExpectedException( exc );
 					if ( !isExpected )
-					{
 						throw;
-					}
-					else
-					{
-						errorReportingService.ReportError( exc, ErrorMessages.NetworkErrorWhileConnectingToLogsService );
-					}
+
+					errorReportingService.ReportError( exc, ErrorMessages.NetworkErrorWhileConnectingToLogsService );
 				}
 			}
 		}
