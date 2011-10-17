@@ -47,7 +47,7 @@
 				</TextBlock>
 			</ToolBar>
 
-			<Views:ErrorView DataContext="{Binding ErrorReportingViewModel}" DockPanel.Dock="Bottom"/>
+			<Views:ErrorView DataContext="{Binding ErrorReporting}" DockPanel.Dock="Bottom"/>
 
 			<Grid>
 				<views:TabsView DataContext="{Binding}"/>

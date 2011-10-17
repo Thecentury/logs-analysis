@@ -40,5 +40,15 @@ namespace ModuleLogsProvider.Logging.Most
 			get { return timer.Interval; }
 			set { timer.Interval = value; }
 		}
+
+		public void Start()
+		{
+			timer.Start();
+		}
+
+		public void Stop()
+		{
+			timer.Stop();
+		}
 	}
 }

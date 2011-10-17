@@ -19,6 +19,16 @@ namespace ModuleLogsProvider.Logging.Mocks
 			set { throw new NotImplementedException(); }
 		}
 
+		public void Start()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Stop()
+		{
+			throw new NotImplementedException();
+		}
+
 		public event EventHandler Tick;
 	}
 }

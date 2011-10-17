@@ -48,9 +48,9 @@ namespace LogAnalyzer.Most.App
 			const string displayName = "MOST.Local";
 
 			var config = MostLogAnalyzerConfiguration
-				.LoadFromFile(@"../../config.xaml")
+				.LoadFromFile( @"../../config.xaml" )
 				.AcceptAllLogTypes();
-				//.AddLogWriter( new DebugLogWriter() );
+			//.AddLogWriter( new DebugLogWriter() );
 
 			logger = config.Logger;
 			var operationsQueue = new WorkerThreadOperationsQueue( logger );
@@ -62,6 +62,7 @@ namespace LogAnalyzer.Most.App
 				.WithLogsUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) ) )
 				.WithPerformanceDataUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 2 ) ) )
 				.SetSelectedUrls( MostServerUrls.Local )
+				.Register<ITimer>( () => new WpfDispatcherTimer() )
 				.RegisterInstance<IServiceFactory<ILogSourceService>>( serviceFactory )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
@@ -75,6 +76,7 @@ namespace LogAnalyzer.Most.App
 			Application.Current.Dispatcher.BeginInvoke( () =>
 															{
 																var mainWindow = Application.Current.MainWindow;
+
 																RegionManager.SetRegionManager( mainWindow, regionManager );
 																mainWindow.DataContext = applicationViewModel;
 															} );

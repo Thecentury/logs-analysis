@@ -11,5 +11,8 @@ namespace ModuleLogsProvider.Logging
 		void Invoke();
 
 		TimeSpan Interval { get; set; }
+
+		void Start();
+		void Stop();
 	}
 }

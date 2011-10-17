@@ -11,7 +11,6 @@ namespace ModuleLogsProvider.Logging.Most
 	public sealed class ThreadingTimer : ITimer
 	{
 		private readonly Timer logsPollTimer;
-		private readonly TimeSpan updateInterval;
 
 		public ThreadingTimer( TimeSpan updateInterval )
 		{
@@ -34,10 +33,25 @@ namespace ModuleLogsProvider.Logging.Most
 			Tick.Raise( this );
 		}
 
+		private TimeSpan updateInterval;
 		public TimeSpan Interval
 		{
 			get { return updateInterval; }
-			set { throw new NotSupportedException(); }
+			set
+			{
+				updateInterval = value;
+				logsPollTimer.Change( updateInterval, updateInterval );
+			}
+		}
+
+		public void Start()
+		{
+			logsPollTimer.Change( TimeSpan.Zero, Interval );
+		}
+
+		public void Stop()
+		{
+			logsPollTimer.Change( Timeout.Infinite, 0 );
 		}
 	}
 }
