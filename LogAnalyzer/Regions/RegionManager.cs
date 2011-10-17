@@ -9,6 +9,12 @@ namespace LogAnalyzer.GUI.Regions
 	public sealed class RegionManager
 	{
 		private static readonly Dictionary<string, DependencyObject> regionsByName = new Dictionary<string, DependencyObject>();
+		private readonly Dictionary<string, FutureRegion> createdRegions = new Dictionary<string, FutureRegion>();
+
+		public RegionManager()
+		{
+			regions = new RegionCollection( regionsByName, createdRegions );
+		}
 
 		#region RegionName attached property
 
@@ -57,7 +63,7 @@ namespace LogAnalyzer.GUI.Regions
 		private static void OnRegionManagerChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{
 			string regionName = GetRegionName( d );
-			if(String.IsNullOrEmpty(regionName))
+			if ( String.IsNullOrEmpty( regionName ) )
 				return;
 
 			RegionManager regionManager = (RegionManager)e.NewValue;
@@ -72,19 +78,19 @@ namespace LogAnalyzer.GUI.Regions
 
 		#region Region attached property
 
-		public static Region GetRegion( DependencyObject obj )
+		public static IRegion GetRegion( DependencyObject obj )
 		{
-			return (Region)obj.GetValue( RegionProperty );
+			return (IRegion)obj.GetValue( RegionProperty );
 		}
 
-		public static void SetRegion( DependencyObject obj, Region value )
+		public static void SetRegion( DependencyObject obj, IRegion value )
 		{
 			obj.SetValue( RegionProperty, value );
 		}
 
 		public static readonly DependencyProperty RegionProperty = DependencyProperty.RegisterAttached(
 		  "Region",
-		  typeof( Region ),
+		  typeof( IRegion ),
 		  typeof( RegionManager ),
 		  new FrameworkPropertyMetadata( null ) );
 
@@ -99,7 +105,22 @@ namespace LogAnalyzer.GUI.Regions
 			var adapter = adapterFactory.CreateAdapter( regionHost );
 			Region region = new Region( regionHost, regionName, adapter );
 
+			if ( createdRegions.ContainsKey( regionName ) )
+			{
+				FutureRegion futureRegion = createdRegions[regionName];
+				foreach ( var child in futureRegion.Children )
+				{
+					region.Add( child );
+				}
+			}
+
 			return region;
+		}
+
+		private readonly RegionCollection regions;
+		public RegionCollection Regions
+		{
+			get { return regions; }
 		}
 	}
 }

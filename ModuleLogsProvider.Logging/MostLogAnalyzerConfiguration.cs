@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xaml;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
+using ModuleLogsProvider.Logging.Most;
 
 namespace ModuleLogsProvider.Logging
 {
@@ -20,6 +22,12 @@ namespace ModuleLogsProvider.Logging
 		public ITimer LogsUpdateTimer { get; set; }
 
 		public ITimer PerformanceDataUpdateTimer { get; set; }
+
+		private readonly WpfViewManager viewManager = new WpfViewManager();
+		public IViewManager<FrameworkElement> ViewManager
+		{
+			get { return viewManager; }
+		}
 
 		private readonly List<MostServerUrls> urls = new List<MostServerUrls>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]

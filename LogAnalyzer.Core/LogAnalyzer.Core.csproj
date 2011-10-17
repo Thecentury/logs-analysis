@@ -84,6 +84,7 @@
     <Compile Include="Kernel\ErrorOccuredEventArgs.cs" />
     <Compile Include="Kernel\IDependencyInjectionContainer.cs" />
     <Compile Include="Kernel\ErrorReportingServiceBase.cs" />
+    <Compile Include="Kernel\IViewManager.cs" />
     <Compile Include="Kernel\LoggingErrorReportingService.cs" />
     <Compile Include="Kernel\NullErrorReportingService.cs" />
     <Compile Include="Kernel\SameThreadOperationsQueue.cs" />
