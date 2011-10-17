@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="ViewModels\ErrorReportingViewModel.cs" />
     <Compile Include="ViewModels\MostApplicationViewModel.cs" />
+    <Compile Include="ViewModels\ServerPerformanceViewModel.cs" />
     <Compile Include="Views\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
     </Compile>
