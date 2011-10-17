@@ -76,7 +76,9 @@
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
+    <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
     <Compile Include="Kernel\CompositeErrorReportingService.cs" />
+    <Compile Include="Kernel\DependencyInjectionContainer.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\ErrorMessages.cs" />
     <Compile Include="Kernel\ErrorOccuredEventArgs.cs" />
@@ -191,7 +193,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="Config\LogAnalyzerConfiguration.DependencyInjection.cs" />
     <None Include="Filters\ExpressionBuilders.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

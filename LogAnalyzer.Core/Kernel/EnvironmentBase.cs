@@ -26,7 +26,7 @@ namespace LogAnalyzer.Kernel
 
 		public OperationScheduler Scheduler
 		{
-			get { return config.ResolveNotNull<OperationScheduler>(); }
+			get { return config.Container.ResolveNotNull<OperationScheduler>(); }
 		}
 	}
 }

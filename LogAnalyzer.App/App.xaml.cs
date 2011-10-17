@@ -48,7 +48,7 @@ namespace LogAnalyzer.App
 				// todo обработка исключений при ошибках загрузки конфига
 				LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
 
-				config.RegisterInstance<IWindowService>( new RealWindowService() );
+				config.Container.RegisterInstance<IWindowService>( new RealWindowService() );
 
 				this.logger = config.Logger;
 

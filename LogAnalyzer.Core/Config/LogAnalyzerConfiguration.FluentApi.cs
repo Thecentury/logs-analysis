@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Windows.Threading;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.Config
@@ -49,17 +50,30 @@ namespace LogAnalyzer.Config
 		public static T SetScheduler<T>( this T config, IScheduler scheduler ) where T : LogAnalyzerConfiguration
 		{
 			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
-			config.RegisterInstance<IScheduler>( scheduler );
+			config.Container.RegisterInstance<IScheduler>( scheduler );
 
 			return config;
 		}
-
 
 		public static T SetSchedulerFromDispatcher<T>( this T config, Dispatcher dispatcher ) where T : LogAnalyzerConfiguration
 		{
 			if ( dispatcher == null ) throw new ArgumentNullException( "dispatcher" );
 
 			return config.SetScheduler( new DispatcherScheduler( dispatcher ) );
+		}
+
+		public static LogAnalyzerConfiguration Register<TContract>( this LogAnalyzerConfiguration config, Func<object> createInstanceFunc )
+		{
+			config.Container.Register<TContract>( createInstanceFunc );
+
+			return config;
+		}
+
+		public static LogAnalyzerConfiguration RegisterInstance<T>( this LogAnalyzerConfiguration config, object instance )
+		{
+			config.Container.RegisterInstance<T>( instance );
+
+			return config;
 		}
 	}
 }
