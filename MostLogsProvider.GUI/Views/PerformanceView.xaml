@@ -9,5 +9,9 @@
 		<TextBlock Text="Working set: "/>
 		<TextBlock FontWeight="Bold" Text="{Binding WorkingSetMBs, Mode=OneWay}"/>
 		<TextBlock Text=" MB"/>
+		
+		<TextBlock Text=" CPU: "/>
+		<TextBlock FontWeight="Bold" Text="{Binding CpuLoad, Mode=OneWay}"/>
+		<TextBlock Text="%"/>
 	</StackPanel>
 </UserControl>
