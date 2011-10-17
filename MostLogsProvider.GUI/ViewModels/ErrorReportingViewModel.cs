@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 
@@ -12,7 +13,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 	public sealed class ErrorReportingViewModel : BindingObject
 	{
 		private readonly ErrorReportingServiceBase errorReportingService;
-		private readonly DispatcherTimer autoHideTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds( 2 ) };
+		private readonly DispatcherTimer autoHideTimer;
 
 		public ErrorReportingViewModel( ErrorReportingServiceBase errorReportingService )
 		{
@@ -21,7 +22,8 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			this.errorReportingService = errorReportingService;
 			errorReportingService.ErrorOccured += OnErrorReportingService_ErrorOccured;
 
-			autoHideTimer.Tick += OnAutoHideTimer_Tick;
+			autoHideTimer = new DispatcherTimer( TimeSpan.FromSeconds( 2.5 ), DispatcherPriority.Background, OnAutoHideTimer_Tick, DispatcherHelper.GetDispatcher() );
+			autoHideTimer.Start();
 		}
 
 		private void OnErrorReportingService_ErrorOccured( object sender, ErrorOccuredEventArgs e )
@@ -41,7 +43,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		public string ErrorMessage
 		{
 			get { return errorMessage; }
-			set
+			private set
 			{
 				errorMessage = value;
 				RaisePropertyChanged( "ErrorMessage" );
@@ -52,12 +54,12 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		public Visibility Visibility
 		{
 			get { return visibility; }
-			set
+			private set
 			{
 				if ( visibility != value )
 				{
 					visibility = value;
-					RaisePropertyChanged("Visibility");
+					RaisePropertyChanged( "Visibility" );
 				}
 			}
 		}
