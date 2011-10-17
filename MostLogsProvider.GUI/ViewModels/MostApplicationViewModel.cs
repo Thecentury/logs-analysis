@@ -20,9 +20,6 @@ namespace ModuleLogsProvider.GUI.ViewModels
 	public sealed class MostApplicationViewModel : ApplicationViewModel
 	{
 		private readonly MostLogAnalyzerConfiguration config;
-		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
-		private readonly OperationScheduler operationScheduler;
-		private readonly ErrorReportingServiceBase errorReportingService;
 
 		public MostApplicationViewModel( MostLogAnalyzerConfiguration config, IEnvironment environment )
 			: base( config, environment )
@@ -31,56 +28,9 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			this.config = config;
 
-			config.PerformanceDataUpdateTimer.Tick += OnPerformanceDataUpdateTimerTick;
-			var bindingFactory = new NetTcpBindingFactory();
-
-			performanceInfoServiceFactory = new MostServiceFactory<IPerformanceInfoService>( bindingFactory,
-				config.SelectedUrls.PerformanceDataServiceUrl );
-
-			operationScheduler = config.ResolveNotNull<OperationScheduler>();
-
-			errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
+			var errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
 			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService, config );
-		}
-
-		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
-		{
-			operationScheduler.StartNewOperation( UpdatePerformanceData );
-		}
-
-		private void UpdatePerformanceData()
-		{
-			using ( var client = performanceInfoServiceFactory.Create() )
-			{
-				try
-				{
-					double memory = client.Service.GetMemoryConsumption();
-					double mbs = Math.Round( memory / 1024.0 / 1024.0, 1 );
-					WorkingSetMBs = mbs;
-
-					double actualCpuLoad = client.Service.GetCPULoad();
-					double cpuLoadRounded = Math.Round( actualCpuLoad );
-					CpuLoad = cpuLoadRounded;
-
-					int cpuLoadInt = (int)cpuLoadRounded;
-					if ( cpuLoadRounded < 1 )
-						cpuLoadInt = 0;
-
-					WindowService.SetProgressValue( cpuLoadInt );
-
-					var progressState = GetProgressState( cpuLoadInt );
-					WindowService.SetProgressState( progressState );
-				}
-				catch ( Exception exc )
-				{
-					errorReportingService.ReportError( exc, exc.Message );
-
-					bool isExpected = client.IsExpectedException( exc );
-
-					if ( !isExpected )
-						throw;
-				}
-			}
+			performanceViewModel = new ServerPerformanceViewModel( config );
 		}
 
 		protected override void OnCoreLoaded()
@@ -91,75 +41,16 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			config.PerformanceDataUpdateTimer.Invoke();
 		}
 
-		private static Windows7Taskbar.ThumbnailProgressState GetProgressState( int cpuLoadInt )
-		{
-			if ( cpuLoadInt <= 0 )
-				return Windows7Taskbar.ThumbnailProgressState.NoProgress;
-			else
-				return Windows7Taskbar.ThumbnailProgressState.Normal;
-		}
-
 		private readonly ErrorReportingViewModel errorReportingViewModel;
 		public ErrorReportingViewModel ErrorReporting
 		{
 			get { return errorReportingViewModel; }
 		}
 
-		#region Properties
-
-		private double workingSetMBs;
-		public double WorkingSetMBs
+		private readonly ServerPerformanceViewModel performanceViewModel;
+		public ServerPerformanceViewModel Performance
 		{
-			get { return workingSetMBs; }
-			private set
-			{
-				workingSetMBs = value;
-				RaisePropertyChanged( "WorkingSetMBs" );
-			}
+			get { return performanceViewModel; }
 		}
-
-		private double cpuLoad;
-		public double CpuLoad
-		{
-			get { return cpuLoad; }
-			private set
-			{
-				cpuLoad = value;
-				RaisePropertyChanged( "CpuLoad" );
-			}
-		}
-
-		#endregion
-
-		#region Commands
-
-		#region RefreshLogData command
-
-		private DelegateCommand refreshLogDataCommand;
-
-		/// <summary>
-		/// Обновить записи логов.
-		/// </summary>
-		public ICommand RefreshLogDataCommand
-		{
-			get
-			{
-				if ( refreshLogDataCommand == null )
-				{
-					refreshLogDataCommand = new DelegateCommand( RefreshLogData );
-				}
-				return refreshLogDataCommand;
-			}
-		}
-
-		private void RefreshLogData()
-		{
-			config.LogsUpdateTimer.Invoke();
-			config.PerformanceDataUpdateTimer.Invoke();
-		}
-
-		#endregion
-
-		#endregion
 	}
 }

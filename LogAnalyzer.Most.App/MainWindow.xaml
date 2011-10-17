@@ -9,7 +9,7 @@
 	<Window.InputBindings>
 		<KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
 		<KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
-		<KeyBinding Key="F5" Command="{Binding RefreshLogDataCommand}"/>
+		<KeyBinding Key="F5" Command="{Binding Performance.RefreshLogDataCommand}"/>
 	</Window.InputBindings>
 
 	<Window.Resources>
@@ -39,10 +39,10 @@
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
 
-				<Button Content="Refresh" Command="{Binding RefreshLogDataCommand}"/>
+				<Button Content="Refresh" Command="{Binding Performance.RefreshLogDataCommand}"/>
 				<TextBlock Margin="20,0,0,0" VerticalAlignment="Center">
 					<TextBlock>Working set:</TextBlock>
-					<TextBlock Text="{Binding WorkingSetMBs}"/>
+					<TextBlock Text="{Binding Performance.WorkingSetMBs}"/>
 					<TextBlock> Mb</TextBlock>
 				</TextBlock>
 			</ToolBar>
