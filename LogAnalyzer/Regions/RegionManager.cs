@@ -86,7 +86,7 @@ namespace LogAnalyzer.GUI.Regions
 		  "Region",
 		  typeof( Region ),
 		  typeof( RegionManager ),
-		  new FrameworkPropertyMetadata( null, FrameworkPropertyMetadataOptions.Inherits ) );
+		  new FrameworkPropertyMetadata( null ) );
 
 		#endregion
 

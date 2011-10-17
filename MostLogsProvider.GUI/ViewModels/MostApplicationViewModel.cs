@@ -40,7 +40,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
 
 			errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
-			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService );
+			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService, config );
 		}
 
 		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
@@ -100,7 +100,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		}
 
 		private readonly ErrorReportingViewModel errorReportingViewModel;
-		public ErrorReportingViewModel ErrorReportingViewModel
+		public ErrorReportingViewModel ErrorReporting
 		{
 			get { return errorReportingViewModel; }
 		}

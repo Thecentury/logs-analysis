@@ -10,6 +10,5 @@ namespace LogAnalyzer.GUI.Regions
 	{
 		public abstract void Init( DependencyObject regionHost );
 		public abstract void Add( object child );
-		//public abstract void Remove(object child);
 	}
 }
