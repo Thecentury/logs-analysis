@@ -11,7 +11,6 @@ namespace ModuleLogsProvider.Interfaces
 	public sealed class CurrentProcessPerformanceService : IPerformanceInfoService
 	{
 		private readonly CpuLoadHelper cpuLoadHelper = new CpuLoadHelper();
-		private readonly Process currentProcess = Process.GetCurrentProcess();
 
 		public double GetCPULoad()
 		{
@@ -20,7 +19,7 @@ namespace ModuleLogsProvider.Interfaces
 
 		public double GetMemoryConsumption()
 		{
-			return currentProcess.WorkingSet64;
+			return Process.GetCurrentProcess().WorkingSet64;
 		}
 	}
 }
