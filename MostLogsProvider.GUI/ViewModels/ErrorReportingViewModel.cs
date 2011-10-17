@@ -32,11 +32,23 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			autoHideTimer.Stop();
 			autoHideTimer.Start();
 			Visibility = Visibility.Visible;
+			LastErrorTime = DateTime.Now;
 		}
 
 		public ErrorReportingServiceBase ErrorReportingService
 		{
 			get { return errorReportingService; }
+		}
+
+		private DateTime lastErrorTime;
+		public DateTime LastErrorTime
+		{
+			get { return lastErrorTime; }
+			private set
+			{
+				lastErrorTime = value;
+				RaisePropertyChanged( "LastErrorTime" );
+			}
 		}
 
 		private string errorMessage;
