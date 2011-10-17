@@ -14,6 +14,7 @@ using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
 using ModuleLogsProvider.GUI.ViewModels;
+using ModuleLogsProvider.GUI.Views;
 using ModuleLogsProvider.Logging;
 using ModuleLogsProvider.Logging.Auxilliary;
 using ModuleLogsProvider.Logging.Most;
@@ -69,6 +70,8 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
 				.RegisterInstance<ErrorReportingServiceBase>( new LoggingErrorReportingService( Logger ) )
 				.RegisterInstance<RegionManager>( regionManager );
+
+			config.ViewManager.RegisterView( typeof( PerformanceView ), typeof( ServerPerformanceViewModel ) );
 
 			var environment = new MostEnvironment( config );
 

@@ -15,6 +15,7 @@ namespace LogAnalyzer.GUI.Regions
 		private RegionAdapterFactory()
 		{
 			RegisterAdapter<Panel>( () => new PanelAdapter() );
+			RegisterAdapter<ItemsControl>( () => new ItemsControlAdapter() );
 		}
 
 		private static readonly RegionAdapterFactory instance = new RegionAdapterFactory();

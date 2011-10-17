@@ -6,7 +6,7 @@
 			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
 			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
 			 
-			 xmlns:cmn="http://adtech-dev.com/Common" xmlns:Regions="clr-namespace:LogAnalyzer.GUI.Regions" mc:Ignorable="d" 
+			 xmlns:cmn="http://adtech-dev.com/Common" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.Resources>
@@ -180,7 +180,7 @@
 
 	<DockPanel LastChildFill="True">
 
-		<views:StatusBar DockPanel.Dock="Bottom" Regions:RegionManager.RegionName="StatusBar"/>
+		<views:StatusBar DockPanel.Dock="Bottom"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"

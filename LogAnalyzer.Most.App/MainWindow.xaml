@@ -40,11 +40,6 @@
 				</Button>
 
 				<Button Content="Refresh" Command="{Binding Performance.RefreshLogDataCommand}"/>
-				<TextBlock Margin="20,0,0,0" VerticalAlignment="Center">
-					<TextBlock>Working set:</TextBlock>
-					<TextBlock Text="{Binding Performance.WorkingSetMBs}"/>
-					<TextBlock> Mb</TextBlock>
-				</TextBlock>
 			</ToolBar>
 
 			<Views:ErrorView DataContext="{Binding ErrorReporting}" DockPanel.Dock="Bottom"/>

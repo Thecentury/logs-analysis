@@ -6,6 +6,7 @@ using System.Windows.Input;
 using AdTech.Common.WPF;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.Regions;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Operations;
@@ -25,7 +26,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 		public ServerPerformanceViewModel( MostLogAnalyzerConfiguration config )
 		{
-			if (config == null) throw new ArgumentNullException("config");
+			if ( config == null ) throw new ArgumentNullException( "config" );
 
 			this.config = config;
 			config.PerformanceDataUpdateTimer.Tick += OnPerformanceDataUpdateTimerTick;
@@ -33,10 +34,14 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			performanceInfoServiceFactory = new MostServiceFactory<IPerformanceInfoService>( bindingFactory,
 				config.SelectedUrls.PerformanceDataServiceUrl );
-			
+
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
 			windowService = config.ResolveNotNull<IWindowService>();
 			errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
+
+			var view = config.ViewManager.ResolveView( this );
+			var regionManager = config.ResolveNotNull<RegionManager>();
+			regionManager.Regions["StatusBar"].Add( view );
 		}
 
 		private void OnPerformanceDataUpdateTimerTick( object sender, EventArgs e )
