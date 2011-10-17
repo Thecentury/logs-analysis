@@ -39,7 +39,12 @@
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
 
-				<Button Content="Refresh" Command="{Binding Performance.RefreshLogDataCommand}"/>
+				<Button Command="{Binding Performance.RefreshLogDataCommand}"
+						ToolTip="Refresh"
+						Style="{StaticResource toolbarButtonStyle}">
+					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-retweet.png"
+						   Style="{StaticResource toolbarImageStyle}"/>
+				</Button>
 			</ToolBar>
 
 			<Views:ErrorView DataContext="{Binding ErrorReporting}" DockPanel.Dock="Bottom"/>
