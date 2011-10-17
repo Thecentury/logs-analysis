@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reactive.Concurrency;
+using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
@@ -13,6 +18,22 @@ namespace LogAnalyzer.Config
 		public LogAnalyzerConfiguration()
 		{
 			RegisterCommonDependencies();
+		}
+
+		private readonly IDependencyInjectionContainer container = new DependencyInjectionContainer();
+		public IDependencyInjectionContainer Container
+		{
+			get { return container; }
+		}
+
+		private void RegisterCommonDependencies()
+		{
+			Container.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler );
+
+			Dispatcher currentDispatcher = DispatcherHelper.GetDispatcher();
+
+			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
+			Container.RegisterInstance<IScheduler>( scheduler );
 		}
 
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
