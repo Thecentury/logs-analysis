@@ -5,6 +5,7 @@ using System.Windows;
 using AdTech.Common.WPF;
 using LogAnalyzer.Config;
 using System.Windows.Input;
+using LogAnalyzer.GUI.Regions;
 using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;
 using Microsoft.Win32;
@@ -52,6 +53,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( environment == null ) throw new ArgumentNullException( "environment" );
 
 			this.config = config;
+
+			BeginInvokeInUIDispatcher( () =>
+			{
+				var regionManager = config.ResolveNotNull<RegionManager>();
+				regionManager.Regions["StatusBar"].Add( new MessageSeverityCountView() );
+			} );
 
 			config.Logger.WriteInfo( "Starting..." );
 

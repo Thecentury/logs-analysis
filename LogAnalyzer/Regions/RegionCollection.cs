@@ -35,9 +35,13 @@ namespace LogAnalyzer.GUI.Regions
 				}
 				else
 				{
-					FutureRegion region = new FutureRegion( regionName );
-					createdRegions.Add( regionName, region );
-					return region;
+					FutureRegion futureRegion;
+					if ( !createdRegions.TryGetValue( regionName, out futureRegion ) )
+					{
+						futureRegion = new FutureRegion(regionName);
+						createdRegions.Add( regionName, futureRegion );
+					}
+					return futureRegion;
 				}
 			}
 		}

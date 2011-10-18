@@ -165,6 +165,9 @@
     <Compile Include="Views\LogEntriesListView.xaml.cs">
       <DependentUpon>LogEntriesListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MessageSeverityCountView.xaml.cs">
+      <DependentUpon>MessageSeverityCountView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
@@ -212,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LogEntriesListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MessageSeverityCountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

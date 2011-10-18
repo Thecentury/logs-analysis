@@ -15,6 +15,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return directories; }
 		}
 
+		public override MessageSeverityCount MessageSeverityCount
+		{
+			get { return core.MessageSeverityCount; }
+		}
+
 		public CoreViewModel( LogAnalyzerCore core, ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
