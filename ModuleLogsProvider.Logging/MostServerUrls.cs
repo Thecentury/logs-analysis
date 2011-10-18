@@ -7,6 +7,8 @@ namespace ModuleLogsProvider.Logging
 {
 	public sealed class MostServerUrls
 	{
+		public string Tag { get; set; }
+
 		public string DisplayName { get; set; }
 
 		public string LogsSourceServiceUrl { get; set; }
@@ -19,6 +21,7 @@ namespace ModuleLogsProvider.Logging
 		{
 			get { return new MostServerUrls
 			             	{
+								Tag = "local",
 			             		DisplayName = "Local",
 								LogsSinkServiceUrl = "net.tcp://127.0.0.1:9999/MostLogSinkService/",
 								LogsSourceServiceUrl = "net.tcp://127.0.0.1:9999/MostLogSourceService/",

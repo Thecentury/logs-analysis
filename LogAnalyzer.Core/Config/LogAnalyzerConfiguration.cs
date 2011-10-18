@@ -2,6 +2,7 @@
 using System.Linq;
 using System.IO;
 using System.Reactive.Concurrency;
+using System.Windows;
 using System.Windows.Threading;
 using System.Xaml;
 using System.ComponentModel;
@@ -34,6 +35,12 @@ namespace LogAnalyzer.Config
 
 			IScheduler scheduler = new DispatcherScheduler( currentDispatcher );
 			Container.RegisterInstance<IScheduler>( scheduler );
+		}
+
+		private readonly WpfViewManager viewManager = new WpfViewManager();
+		public IViewManager<FrameworkElement> ViewManager
+		{
+			get { return viewManager; }
 		}
 
 		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();

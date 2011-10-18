@@ -23,11 +23,7 @@ namespace ModuleLogsProvider.Logging
 
 		public ITimer PerformanceDataUpdateTimer { get; set; }
 
-		private readonly WpfViewManager viewManager = new WpfViewManager();
-		public IViewManager<FrameworkElement> ViewManager
-		{
-			get { return viewManager; }
-		}
+		public string ServerUrlsTag { get; set; }
 
 		private readonly List<MostServerUrls> urls = new List<MostServerUrls>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]

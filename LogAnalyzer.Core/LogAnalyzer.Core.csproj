@@ -47,6 +47,7 @@
     <DefineConstants>TRACE;DEBUG;ASSERT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -88,6 +89,7 @@
     <Compile Include="Kernel\LoggingErrorReportingService.cs" />
     <Compile Include="Kernel\NullErrorReportingService.cs" />
     <Compile Include="Kernel\SameThreadOperationsQueue.cs" />
+    <Compile Include="Kernel\WpfViewManager.cs" />
     <Compile Include="LogAnalyzerCore.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="FileReadEventArgs.cs" />
