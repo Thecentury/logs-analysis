@@ -42,6 +42,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return directory.DisplayName; }
 		}
 
+		public override MessageSeverityCount MessageSeverityCount
+		{
+			get { return directory.MessageSeverityCount; }
+		}
+
 		private readonly DispatcherObservableCollection syncronizedFilesViewModels;
 
 		public LogDirectoryViewModel( LogDirectory directory, CoreViewModel coreViewModel )

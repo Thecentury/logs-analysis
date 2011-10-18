@@ -44,6 +44,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return entriesView; }
 		}
 
+		public virtual MessageSeverityCount MessageSeverityCount
+		{
+			get { return null; }
+		}
+
 		/// <summary>
 		/// Есть ли несколько загруженных директорий?
 		/// </summary>
