@@ -38,7 +38,6 @@ namespace LogAnalyzer
 
 			this.logger = logger;
 
-			// todo capacity initialization?
 			mergedEntriesList = new List<LogEntry>();
 			logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
 			mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( mergedEntriesList, logEntrySortedCollection.UnappendedLogEntries );
@@ -48,6 +47,14 @@ namespace LogAnalyzer
 		{
 			logEntrySortedCollection.Enqueue( addedEntries );
 			MergedEntries.RaiseCollectionItemsAdded( addedEntries );
+
+			messageSeverityCount.Update( addedEntries );
+		}
+
+		private readonly MessageSeverityCount messageSeverityCount = new MessageSeverityCount();
+		public MessageSeverityCount MessageSeverityCount
+		{
+			get { return messageSeverityCount; }
 		}
 
 		private DateTime loadStartTime;

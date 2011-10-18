@@ -80,7 +80,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private int selectedEntryIndex = 0;
+		private int selectedEntryIndex;
 		public int SelectedEntryIndex
 		{
 			get { return selectedEntryIndex; }

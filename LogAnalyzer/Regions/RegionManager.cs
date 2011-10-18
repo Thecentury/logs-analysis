@@ -112,6 +112,7 @@ namespace LogAnalyzer.GUI.Regions
 				{
 					region.Add( child );
 				}
+				createdRegions.Remove( regionName );
 			}
 
 			return region;

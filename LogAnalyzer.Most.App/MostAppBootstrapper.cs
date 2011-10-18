@@ -30,13 +30,33 @@ namespace LogAnalyzer.Most.App
 			get { return logger; }
 		}
 
+		private string[] commandLineArgs;
+
 		public void Start( string[] commandLineArgs )
 		{
+			this.commandLineArgs = commandLineArgs;
+
 			Thread.CurrentThread.Name = "UIThread";
 
 			Task.Factory
 				.StartNew( Init )
 				.ContinueWith( OnInitException, TaskContinuationOptions.OnlyOnFaulted );
+		}
+
+		private MostServerUrls GetSelectedUrls( MostLogAnalyzerConfiguration config )
+		{
+			MostServerUrls result = MostServerUrls.Local;
+
+			string selectedServerString = commandLineArgs.FirstOrDefault( line => line.StartsWith( "-server:" ) );
+			if ( selectedServerString != null )
+			{
+				string[] parts = selectedServerString.Split( ':' );
+				string selectedServerTag = parts[1];
+
+				result = config.Urls.First( urls => urls.Tag == selectedServerTag );
+			}
+
+			return result;
 		}
 
 		private void Init()
@@ -58,11 +78,13 @@ namespace LogAnalyzer.Most.App
 
 			RegionManager regionManager = new RegionManager();
 
+			MostServerUrls serverUrls = GetSelectedUrls( config );
+
 			config
 				.AddLogDirectory( dirName, filesFilter, displayName )
 				.WithLogsUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) ) )
 				.WithPerformanceDataUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 2 ) ) )
-				.SetSelectedUrls( MostServerUrls.Local )
+				.SetSelectedUrls( serverUrls )
 				.Register<ITimer>( () => new WpfDispatcherTimer() )
 				.RegisterInstance<IServiceFactory<ILogSourceService>>( serviceFactory )
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
