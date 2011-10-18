@@ -77,7 +77,6 @@
     <Compile Include="Most\MostEnvironment.cs" />
     <Compile Include="Most\MostLogNotificationSource.cs" />
     <Compile Include="Most\ThreadingTimer.cs" />
-    <Compile Include="Most\WpfViewManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\MostLogsServices\Reference.cs">
       <AutoGen>True</AutoGen>

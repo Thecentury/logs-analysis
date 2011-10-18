@@ -35,7 +35,7 @@ namespace LogAnalyzer.Most.App
 		{
 			base.OnStartup( e );
 
-			Bootstrapper.Start();
+			Bootstrapper.Start( e.Args );
 		}
 
 		//private void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )

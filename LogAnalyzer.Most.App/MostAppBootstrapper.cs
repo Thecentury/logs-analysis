@@ -30,7 +30,7 @@ namespace LogAnalyzer.Most.App
 			get { return logger; }
 		}
 
-		public void Start()
+		public void Start( string[] commandLineArgs )
 		{
 			Thread.CurrentThread.Name = "UIThread";
 

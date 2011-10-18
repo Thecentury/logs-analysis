@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using LogAnalyzer.Extensions;
-using LogAnalyzer.Kernel;
 using Expression = System.Linq.Expressions.Expression;
 
-namespace ModuleLogsProvider.Logging.Most
+namespace LogAnalyzer.Kernel
 {
 	public sealed class WpfViewManager : IViewManager<FrameworkElement>
 	{
