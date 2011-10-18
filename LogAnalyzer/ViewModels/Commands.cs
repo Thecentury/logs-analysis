@@ -10,7 +10,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			cancelOperationCommand.InputGestures.Add( new KeyGesture( Key.Escape ) );
 		}
 
-		private static readonly RoutedUICommand cancelOperationCommand = null;
+		private static readonly RoutedUICommand cancelOperationCommand;
 		public static RoutedUICommand CancelOperation
 		{
 			get { return cancelOperationCommand; }

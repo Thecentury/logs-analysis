@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using ModuleLogsProvider.Interfaces;
 using Morqua.MOST.KernelInterfaces;
 using System.Xml;
@@ -41,12 +42,13 @@ namespace Awad.Eticket.ModuleLogsProvider
 			bool shouldStartServices = ShouldStartServices( allowedHostsToStartAt );
 			if ( shouldStartServices )
 			{
-				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl )
-					.Start();
-				logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl )
-					.Start();
+				logServiceHost = new WcfServiceHost<ILogSourceService>( Logger, new MostLogSourceService( Logger ), logsSourceUrl );
+				ThreadPool.QueueUserWorkItem( _ => logServiceHost.Start() );
+				logSinkServiceHost = new WcfServiceHost<ILogSinkService>( Logger, new MostLogSinkService( Logger ), logsSinkUrl );
+				ThreadPool.QueueUserWorkItem( _ => logSinkServiceHost.Start() );
 				performanceServiceHost = new WcfServiceHost<IPerformanceInfoService>( Logger, new CurrentProcessPerformanceService(),
-																					 performanceServiceUrl ).Start();
+																					 performanceServiceUrl );
+				ThreadPool.QueueUserWorkItem( _ => performanceServiceHost.Start() );
 
 				Logger.WriteLine( MessageType.Info, "Wcf services have started." );
 				Logger.WriteLine( MessageType.Info, "MostLogSourceService: '{0}'", logsSourceUrl );

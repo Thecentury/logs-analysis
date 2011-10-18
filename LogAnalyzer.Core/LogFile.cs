@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Globalization;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
 using System.ComponentModel;
 using LogAnalyzer.Collections;
-using LogAnalyzer.Filters;
-using System.Threading;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 
@@ -81,7 +76,7 @@ namespace LogAnalyzer
 			Name = fileInfo.Name;
 			FullPath = fileInfo.FullName;
 
-			this.logFileReader = fileInfo.GetReader(
+			logFileReader = fileInfo.GetReader(
 				new LogFileReaderArguments
 				{
 					Encoding = encoding,

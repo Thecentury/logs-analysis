@@ -143,30 +143,23 @@ namespace LogAnalyzer
 
 		private void PerformInitialMerge()
 		{
-			if ( false && directories.Count == 1 )
-			{
-				this.MergedEntriesList = directories[0].MergedEntriesList;
-				this.MergedEntries.First = this.MergedEntriesList;
-			}
-			else
-			{
-				// todo не сделать ли тут запас по Capacity?
-				MergedEntriesList.Capacity = Directories.Sum( d => d.Files.Sum( f => f.LogEntries.Count ) );
+			// todo не сделать ли тут запас по Capacity?
+			MergedEntriesList.Capacity = Directories.Sum( d => d.Files.Sum( f => f.LogEntries.Count ) );
 
-				LogEntry[] sortedEntries = Directories
-					.SelectMany( d => d.Files.SelectMany( f => f.LogEntries ) )
-					.AsParallel()
-					.OrderBy( LogEntryByDateComparer.Instance )
-					.ToArray();
+			LogEntry[] sortedEntries = Directories
+				.SelectMany( d => d.Files.SelectMany( f => f.LogEntries ) )
+				.AsParallel()
+				.OrderBy( LogEntryByDateComparer.Instance )
+				.ToArray();
 
 #if ASSERT
 			Condition.DebugAssert( sortedEntries.AreSorted( LogEntryByDateComparer.Instance ) );
 #endif
 
-				// ILSpy: используется Buffer.BlockCopy
-				MergedEntriesList.AddRange( sortedEntries );
-				MergedEntries.RaiseCollectionReset();
-			}
+			// ILSpy: используется Buffer.BlockCopy
+			MergedEntriesList.AddRange( sortedEntries );
+			MergedEntries.RaiseCollectionReset();
+			MessageSeverityCount.Update( sortedEntries );
 		}
 
 		public override int TotalLengthInBytes
