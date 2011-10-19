@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\LogEntriesListViewModel.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />
+    <Compile Include="Views\Bootstrapper.cs" />
     <Compile Include="Views\DefaultTabHeaderControl.xaml.cs">
       <DependentUpon>DefaultTabHeaderControl.xaml</DependentUpon>
     </Compile>

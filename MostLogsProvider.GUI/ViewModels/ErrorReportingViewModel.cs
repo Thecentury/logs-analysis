@@ -13,10 +13,10 @@ namespace ModuleLogsProvider.GUI.ViewModels
 {
 	public sealed class ErrorReportingViewModel : BindingObject
 	{
-		private readonly ErrorReportingServiceBase errorReportingService;
+		private readonly IErrorReportingService errorReportingService;
 		private readonly ITimer timer;
 
-		public ErrorReportingViewModel( ErrorReportingServiceBase errorReportingService, IDependencyInjectionContainer container )
+		public ErrorReportingViewModel( IErrorReportingService errorReportingService, IDependencyInjectionContainer container )
 		{
 			if ( errorReportingService == null ) throw new ArgumentNullException( "errorReportingService" );
 			if ( container == null ) throw new ArgumentNullException( "container" );
@@ -39,7 +39,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 			LastErrorTime = DateTime.Now;
 		}
 
-		public ErrorReportingServiceBase ErrorReportingService
+		public IErrorReportingService ErrorReportingService
 		{
 			get { return errorReportingService; }
 		}

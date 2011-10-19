@@ -115,6 +115,5 @@ namespace ModuleLogsProvider.Tests
 				addedFilesCount += e.NewItems.Count;
 			}
 		}
-
 	}
 }

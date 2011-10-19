@@ -6,13 +6,10 @@ using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
-	public abstract class ErrorReportingServiceBase
+	public sealed class ErrorReportingService : IErrorReportingService
 	{
-		protected abstract void ReportErrorCore( Exception exc, string message );
-
 		public void ReportError( Exception exc, string message )
 		{
-			ReportErrorCore( exc, message );
 			ErrorOccured.Raise( this, new ErrorOccuredEventArgs( exc, message ) );
 		}
 

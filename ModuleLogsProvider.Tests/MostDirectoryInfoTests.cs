@@ -27,7 +27,7 @@ namespace ModuleLogsProvider.Tests
 			var serverFactory = new MostServiceFactory<ILogSourceService>( new NetTcpBindingFactory(), MostServerUrls.Local.LogsSourceServiceUrl );
 			
 			WorkerThreadOperationsQueue queue = new WorkerThreadOperationsQueue();
-			LoggingErrorReportingService errorReportingService = new LoggingErrorReportingService( new Logger() );
+			IErrorReportingService errorReportingService = new ErrorReportingService();
 
 			MostLogNotificationSource source = new MostLogNotificationSource( timer, serverFactory, queue, errorReportingService );
 			source.MessagesStorage.AppendMessages(
