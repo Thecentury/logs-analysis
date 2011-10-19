@@ -28,7 +28,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			this.config = config;
 
-			var errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
+			var errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService, config.Container );
 			performanceViewModel = new ServerPerformanceViewModel( config );
 		}

@@ -15,6 +15,9 @@ namespace LogAnalyzer
 
 		public FileSystemNotificationsSource( string logsPath, string filesFilter, NotifyFilters notifyFilters )
 		{
+			if ( !Directory.Exists( logsPath ) )
+				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
+
 			watcher = new FileSystemWatcher( logsPath, filesFilter );
 			watcher.NotifyFilter = notifyFilters;
 			watcher.IncludeSubdirectories = true;

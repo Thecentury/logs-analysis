@@ -4,7 +4,7 @@
 
 	<Config:LogAnalyzerConfiguration.Directories>
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->
-		<Config:LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs2" EncodingName="windows-1251"/>
+		<Config:LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
 
 		<!--<LogDirectoryConfigurationInfo Enabled="True" DisplayName="Logs2" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\Archive\11.07.14\22-43-01\"
 									   UseCache="False"

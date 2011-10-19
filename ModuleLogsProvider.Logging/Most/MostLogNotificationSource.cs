@@ -21,12 +21,12 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly List<LogMessageInfo> loadedMessages = new List<LogMessageInfo>();
 		private readonly IServiceFactory<ILogSourceService> serviceFactory;
 		private readonly IOperationsQueue operationQueue;
-		private readonly ErrorReportingServiceBase errorReportingService;
+		private readonly IErrorReportingService errorReportingService;
 		private readonly MostLogMessagesStorage messagesStorage;
 		private readonly MostDirectoryInfo directoryInfo;
 
 		public MostLogNotificationSource( ITimer timer, IServiceFactory<ILogSourceService> serviceFactory, IOperationsQueue operationQueue,
-			ErrorReportingServiceBase errorReportingService )
+			IErrorReportingService errorReportingService )
 		{
 			if ( timer == null ) throw new ArgumentNullException( "timer" );
 			if ( serviceFactory == null ) throw new ArgumentNullException( "serviceFactory" );

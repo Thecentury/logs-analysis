@@ -22,7 +22,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
 		private readonly OperationScheduler operationScheduler;
 		private readonly IWindowService windowService;
-		private readonly ErrorReportingServiceBase errorReportingService;
+		private readonly IErrorReportingService errorReportingService;
 
 		public ServerPerformanceViewModel( MostLogAnalyzerConfiguration config )
 		{
@@ -37,7 +37,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
 			windowService = config.ResolveNotNull<IWindowService>();
-			errorReportingService = config.ResolveNotNull<ErrorReportingServiceBase>();
+			errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 
 			var view = config.ViewManager.ResolveView( this );
 			var regionManager = config.ResolveNotNull<RegionManager>();

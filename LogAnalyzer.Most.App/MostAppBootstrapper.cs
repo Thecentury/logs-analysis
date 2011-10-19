@@ -90,7 +90,7 @@ namespace LogAnalyzer.Most.App
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
-				.RegisterInstance<ErrorReportingServiceBase>( new LoggingErrorReportingService( Logger ) )
+				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
 				.RegisterInstance<RegionManager>( regionManager );
 
 			config.ViewManager.RegisterView( typeof( PerformanceView ), typeof( ServerPerformanceViewModel ) );
