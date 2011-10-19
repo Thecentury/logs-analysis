@@ -16,22 +16,14 @@ namespace LogAnalyzer.App
 	{
 		protected override void Init()
 		{
-			string configPath = Settings.Default.ConfigPath;
-			if ( CommandLineArgs.Length >= 1 )
-			{
-				string configPathArg = CommandLineArgs.FirstOrDefault( s => s.StartsWith( "-c:" ) );
-				if ( configPathArg != null )
-				{
-					configPath = configPathArg.Substring( 3 );
-				}
-			}
+			string configPath = ArgsParser.GetValueOrDefault( "config", Settings.Default.ConfigPath );
 
 			LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
 			InitConfig( config );
 
 			var environment = new FileSystemEnvironment( config );
 			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config, environment );
-			
+
 			Application.Current.Dispatcher.BeginInvoke( () =>
 			{
 				Application.Current.MainWindow.DataContext = applicationViewModel;

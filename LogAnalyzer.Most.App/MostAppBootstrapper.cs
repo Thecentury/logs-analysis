@@ -19,12 +19,9 @@ namespace LogAnalyzer.Most.App
 		{
 			MostServerUrls result = MostServerUrls.Local;
 
-			string selectedServerString = CommandLineArgs.FirstOrDefault( line => line.StartsWith( "-server:" ) );
-			if ( selectedServerString != null )
+			if ( ArgsParser.ContainsSwitch( "server" ) )
 			{
-				string[] parts = selectedServerString.Split( ':' );
-				string selectedServerTag = parts[1];
-
+				string selectedServerTag = ArgsParser["server"];
 				result = config.Urls.First( urls => urls.Tag == selectedServerTag );
 			}
 

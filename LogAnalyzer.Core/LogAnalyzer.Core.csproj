@@ -171,6 +171,7 @@
     <Compile Include="Logging\SingleThreadedLogWriter.cs" />
     <Compile Include="Kernel\WorkerThreadOperationsQueue.cs" />
     <Compile Include="MessageSeverityCount.cs" />
+    <Compile Include="Misc\CommandLineArgumentsParser.cs" />
     <Compile Include="Misc\MultiDictionary.cs" />
     <Compile Include="Misc\PerformanceCountersService.cs" />
     <Compile Include="Operations\AsyncOperation.cs" />

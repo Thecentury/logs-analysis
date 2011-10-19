@@ -8,29 +8,29 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Regions;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Misc;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.GUI
 {
 	public abstract class Bootstrapper
 	{
-		private string[] commandLineArgs;
-		public string[] CommandLineArgs
-		{
-			get { return commandLineArgs; }
-		}
-
 		private Logger logger;
 		public Logger Logger
 		{
 			get { return logger; }
 		}
 
+		private CommandLineArgumentsParser argsParser;
+		protected CommandLineArgumentsParser ArgsParser
+		{
+			get { return argsParser; }
+		}
+
 		public void Start( string[] commandLineArgs )
 		{
 			if ( commandLineArgs == null ) throw new ArgumentNullException( "commandLineArgs" );
-
-			this.commandLineArgs = commandLineArgs;
+			argsParser = new CommandLineArgumentsParser( commandLineArgs );
 
 			Thread.CurrentThread.Name = "UIThread";
 
@@ -45,8 +45,8 @@ namespace LogAnalyzer.GUI
 		{
 			var exception = parentTask.Exception;
 
-			Logger.WriteError( "Crash. Exception: {0}", exception );
 			Extensions.Condition.BreakIfAttached();
+			Logger.WriteError( "Crash. Exception: {0}", exception );
 
 			MessageBox.Show( "Unhandled exception: " + exception, "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 
