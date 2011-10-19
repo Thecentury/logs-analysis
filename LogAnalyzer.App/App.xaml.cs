@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
-using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
-using LogAnalyzer.GUI.Properties;
-using LogAnalyzer.GUI.ViewModels;
-using LogAnalyzer.Kernel;
-using LogAnalyzer.GUI.Common;
-using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.App
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
 	/// </summary>
-	public partial class App : Application
+	public partial class App
 	{
-		private Logger logger;
+		private readonly AppBootstrapper bootstrapper = new AppBootstrapper();
 
 		protected override void OnStartup( StartupEventArgs e )
 		{
+			Debugger.Launch();
 			base.OnStartup( e );
 
-			AppBootstrapper bootstrapper = new AppBootstrapper();
 			bootstrapper.Start( e.Args );
 		}
 
@@ -35,7 +23,7 @@ namespace LogAnalyzer.App
 		{
 			base.OnExit( e );
 
-			logger.WriteInfo( "Exiting" );
+			bootstrapper.Logger.WriteInfo( "Exiting" );
 		}
 	}
 }
