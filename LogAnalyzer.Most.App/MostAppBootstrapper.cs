@@ -30,9 +30,6 @@ namespace LogAnalyzer.Most.App
 
 		protected override void Init()
 		{
-			MostServiceFactory<ILogSourceService> serviceFactory = new MostServiceFactory<ILogSourceService>(
-				new NetTcpBindingFactory(), MostServerUrls.Local.LogsSourceServiceUrl );
-
 			const string dirName = "MOST";
 			const string filesFilter = "*";
 			const string displayName = "MOST.Local";
@@ -41,6 +38,9 @@ namespace LogAnalyzer.Most.App
 			InitConfig( config );
 
 			MostServerUrls serverUrls = GetSelectedUrls( config );
+
+			MostServiceFactory<ILogSourceService> serviceFactory = new MostServiceFactory<ILogSourceService>(
+				new NetTcpBindingFactory(), serverUrls.LogsSourceServiceUrl );
 
 			config
 				.AddLogDirectory( dirName, filesFilter, displayName )
