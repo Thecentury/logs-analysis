@@ -12,10 +12,21 @@ namespace ModuleLogsProvider.Logging.Most
 	{
 		public Binding Create()
 		{
-			return new NetTcpBinding
-			       	{
-						MaxReceivedMessageSize = Int32.MaxValue
-			       	};
+
+			var binding = new NetTcpBinding
+							{
+								MaxReceivedMessageSize = Int32.MaxValue,
+								ReaderQuotas =
+									{
+										MaxStringContentLength = Int32.MaxValue,
+										MaxArrayLength = Int32.MaxValue,
+										MaxBytesPerRead = Int32.MaxValue,
+										MaxNameTableCharCount = Int32.MaxValue
+									}
+							};
+
+
+			return binding;
 		}
 	}
 }
