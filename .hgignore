@@ -9,3 +9,4 @@ _ReSharper.*
 *.ReSharper.user
 *.csproj.user
 Binaries/*
+*.SCC
