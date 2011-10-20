@@ -6,5 +6,12 @@
 						LogsSinkServiceUrl="net.tcp://127.0.0.1:9999/MostLogSinkService/"
 						PerformanceDataServiceUrl="net.tcp://127.0.0.1:9999/PerformanceService/"
 						/>
+
+		<MostServerUrls DisplayName="Jet" Tag="jet"
+						LogsSourceServiceUrl="net.tcp://192.168.62.65:9999/jet/MostLogSourceService/"
+						LogsSinkServiceUrl="net.tcp://192.168.62.65:9999/jet/MostLogSinkService/"
+						PerformanceDataServiceUrl="net.tcp://192.168.62.65:9999/jet/PerformanceService/"
+						/>
+
 	</MostLogAnalyzerConfiguration.Urls>
 </MostLogAnalyzerConfiguration>

@@ -76,7 +76,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 			                     messageInfo.MessageType == MessageSeverity.Warning;
 
 			string loggerName = messageInfo.LoggerName;
-			bool includeByLogger = loggerName != "Muscat" && loggerName != "UserManager" && loggerName != "eticket-development";
+			bool includeByLogger = loggerName != "UserManager" && loggerName != "eticket-development";
 
 			return includeByType && includeByLogger;
 		}
