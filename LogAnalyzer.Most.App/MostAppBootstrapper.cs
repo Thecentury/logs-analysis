@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
@@ -34,7 +36,10 @@ namespace LogAnalyzer.Most.App
 			const string filesFilter = "*";
 			const string displayName = "MOST.Local";
 
-			var config = MostLogAnalyzerConfiguration.LoadFromFile( @"../../config.xaml" );
+			string configName = ArgsParser.GetValueOrDefault( "config", "config.xaml" );
+
+			string configPath = Path.Combine( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ), configName );
+			var config = MostLogAnalyzerConfiguration.LoadFromFile( configPath );
 			InitConfig( config );
 
 			MostServerUrls serverUrls = GetSelectedUrls( config );

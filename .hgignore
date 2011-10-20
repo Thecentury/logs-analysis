@@ -8,3 +8,4 @@ _ReSharper.*
 *.vspscc
 *.ReSharper.user
 *.csproj.user
+Binaries/*
