@@ -34,7 +34,19 @@ namespace Awad.Eticket.ModuleLogsProvider
 				serviceHost.Closing += OnHostClosing;
 				serviceHost.Closed += OnHostClosed;
 
-				serviceHost.AddServiceEndpoint( typeof( T ), new NetTcpBinding(), uri );
+				var binding = new NetTcpBinding
+				{
+					MaxReceivedMessageSize = Int32.MaxValue,
+					ReaderQuotas =
+					{
+						MaxStringContentLength = Int32.MaxValue,
+						MaxArrayLength = Int32.MaxValue,
+						MaxBytesPerRead = Int32.MaxValue,
+						MaxNameTableCharCount = Int32.MaxValue
+					}
+				};
+
+				serviceHost.AddServiceEndpoint( typeof( T ), binding, uri );
 			}
 			catch ( Exception exc )
 			{

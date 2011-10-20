@@ -35,7 +35,15 @@ namespace LogAnalyzer.Extensions
 
 			if ( @event != null )
 			{
-				@event( sender, args );
+				try
+				{
+					@event( sender, args );
+				}
+				catch ( Exception exc )
+				{
+					// todo brinchuk this is bad!!!
+					// do nothing 
+				}
 			}
 		}
 
@@ -54,7 +62,7 @@ namespace LogAnalyzer.Extensions
 
 				if ( !ignore )
 				{
-					Condition.DebugAssert( containsProperty );
+					Condition.DebugAssert( false );
 				}
 			}
 #endif

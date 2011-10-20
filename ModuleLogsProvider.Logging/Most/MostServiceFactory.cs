@@ -71,7 +71,10 @@ namespace ModuleLogsProvider.Logging.Most
 
 	internal sealed class ClientImpl<TClient> : ClientBase<TClient> where TClient : class
 	{
-		public ClientImpl( Binding binding, EndpointAddress address ) : base( binding, address ) { }
+		public ClientImpl( Binding binding, EndpointAddress address )
+			: base( binding, address )
+		{
+		}
 
 		public TClient Service
 		{
