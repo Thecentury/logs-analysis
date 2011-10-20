@@ -73,7 +73,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 		private bool AcceptMessage( LogMessageInfo messageInfo )
 		{
 			bool includeByType = messageInfo.MessageType == MessageSeverity.Error ||
-			                     messageInfo.MessageType == MessageSeverity.Warning;
+								 messageInfo.MessageType == MessageSeverity.Warning;
 
 			string loggerName = messageInfo.LoggerName;
 			bool includeByLogger = loggerName != "UserManager" && loggerName != "eticket-development";
@@ -124,7 +124,7 @@ namespace Awad.Eticket.ModuleLogsProvider
 			}
 
 			logger.WriteLine( MessageType.Info,
-				String.Format( "MostLogSourceService.GetLinesStartingWithIndex( startingIndex = {0} ) returned {1} messages.", startingIndex, result.Length ) );
+				String.Format( "Returned {0} messages starting from {1}", result.Length, startingIndex ) );
 
 			return result;
 		}
