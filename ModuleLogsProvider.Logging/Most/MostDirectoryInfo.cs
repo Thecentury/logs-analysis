@@ -54,7 +54,7 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			string logName = Path.GetFileNameWithoutExtension( fullPath );
+			string logName = Path.GetFileName( fullPath );
 
 			return GetOrCreateFile( logName );
 		}
