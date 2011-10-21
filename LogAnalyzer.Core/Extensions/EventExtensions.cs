@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows;
 
 namespace LogAnalyzer.Extensions
 {
@@ -22,28 +23,24 @@ namespace LogAnalyzer.Extensions
 		public static void RaiseCollectionChanged( this NotifyCollectionChangedEventHandler @event, object sender, NotifyCollectionChangedEventArgs args )
 		{
 #if DEBUG
-			// todo brinchuk remove me
 			if ( args.NewItems != null && args.NewItems.Count > 0 )
 			{
-				var firstAdded = args.NewItems[0] as ICollection;
-				if ( firstAdded != null )
+				var firstAddedCollection = args.NewItems[0] as ICollection;
+				bool firstAddedIsCollection = firstAddedCollection != null;
+				if ( firstAddedIsCollection )
 				{
-					throw new InvalidOperationException();
+					throw new InvalidOperationException( "Вместо первого добавленного элемента передана коллекция." );
 				}
 			}
 #endif
 
+			//var type = typeof( DataTrigger ).Assembly.GetTypes().First( t => t.Name == "SR" );
+			//var method = type.GetMethods( BindingFlags.Static | BindingFlags.NonPublic )[0];
+			//var result = method.Invoke(null, new object[] {"AddedItemNotInCollection"});
+
 			if ( @event != null )
 			{
-				try
-				{
-					@event( sender, args );
-				}
-				catch ( Exception exc )
-				{
-					// todo brinchuk this is bad!!!
-					// do nothing 
-				}
+				@event( sender, args );
 			}
 		}
 

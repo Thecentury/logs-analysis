@@ -74,8 +74,7 @@ namespace LogAnalyzer
 			{
 				int firstCount = first.Count;
 
-				T result = default( T );
-
+				T result;
 				if ( index < firstCount )
 				{
 					result = first[index];

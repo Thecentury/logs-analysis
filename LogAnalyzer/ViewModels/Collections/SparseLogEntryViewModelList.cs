@@ -10,7 +10,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	/// <summary>
 	/// Syncronized Collection + IList for LogEntryViewModels.
 	/// </summary>
-	[DebuggerDisplay( "SparseLogEntryList Count={Count}" )]
+	[DebuggerDisplay( "SparseLogEntryViewModelList Count={Count}" )]
 	public sealed class SparseLogEntryViewModelList : DispatcherObservableCollection, IList<LogEntryViewModel>, IList, ILogEntryHost
 	{
 		private readonly IList<LogEntry> logEntries;
@@ -95,7 +95,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			}
 			set
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException();
 			}
 		}
 
@@ -110,7 +110,13 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			{
 				LogEntry logEntry = (LogEntry)value;
 
-				int index = logEntries.ParallelIndexOf( logEntry );
+				int index = logEntries.ParallelAssuredIndexOf( logEntry );
+				// тут элемент всегда ожидается в коллекции
+				if ( index < 0 )
+				{
+					Condition.BreakIfAttached();	
+				}
+
 				return index;
 			}
 		}
