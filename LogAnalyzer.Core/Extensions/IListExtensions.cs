@@ -22,9 +22,21 @@ namespace LogAnalyzer.Extensions
 			return list[1];
 		}
 
-		public static int ParallelIndexOf<T>( this IList<T> collection, T item )
+		public static int ParallelIndexOf<T>( this IList<T> collection, T item ) where T : class
 		{
 			return ParallelHelper.IndexOf( collection, item );
+		}
+
+		/// <summary>
+		/// Поиск индекса, уверенный в том, что коллекция содержит искомый элемент.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="collection"></param>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public static int ParallelAssuredIndexOf<T>( this IList<T> collection, T item ) where T : class
+		{
+			return ParallelHelper.AssuredIndexOf( collection, item );
 		}
 	}
 }

@@ -112,7 +112,7 @@ namespace LogAnalyzer
 
 					int sortedSetLength = sortedLogEntries.Count;
 					sortedLogEntries.Remove( min );
-					Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
+					Condition.DebugAssert( sortedLogEntries.Count == ( sortedSetLength - 1 ), "" );
 
 					awaitingEntries.Remove( min.ParentLogFile, min );
 				}
@@ -230,7 +230,21 @@ namespace LogAnalyzer
 
 			public T this[int index]
 			{
-				get { return array[index]; }
+				get
+				{
+					if ( isOld )
+					{
+						lock ( syncRoot )
+						{
+							if ( isOld )
+							{
+								UpdateCopy();
+							}
+						}
+					}
+
+					return array[index];
+				}
 				set
 				{
 					throw new NotImplementedException();

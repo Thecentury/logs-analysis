@@ -20,12 +20,14 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged
 	{
 		private readonly IScheduler scheduler;
+		private readonly object collection;
 
 		public DispatcherObservableCollection( object collection, IScheduler scheduler )
 		{
 			if ( collection == null ) throw new ArgumentNullException( "collection" );
 			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
 
+			this.collection = collection;
 			this.scheduler = scheduler;
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
@@ -34,7 +36,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				.ObserveOn( scheduler );
 
 			collectionChanged.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
-				.SelectMany( e => e.EventArgs.NewItems.OfType<object>() )
+				//.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
+				.SelectMany( e => e.EventArgs.NewItems.Cast<object>() )
 				.Subscribe( addedItem => OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem ) ) );
 
 			collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
