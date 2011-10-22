@@ -124,6 +124,8 @@
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Commands.cs" />
+    <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
+    <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\HighlightManager.cs" />
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
@@ -132,9 +134,11 @@
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
     <Compile Include="ViewModels\IHierarchyMember.cs" />
+    <Compile Include="ViewModels\ITypeName.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />
     <Compile Include="ViewModels\LogDirectoryViewModel.cs" />
     <Compile Include="ViewModels\LogEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />
     <Compile Include="Bootstrapper.cs" />
