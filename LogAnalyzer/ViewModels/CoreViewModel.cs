@@ -15,9 +15,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return directories; }
 		}
 
-		public override MessageSeverityCount MessageSeverityCount
+		private readonly MessageSeverityCountViewModel messageSeverityCount;
+		public override MessageSeverityCountViewModel MessageSeverityCount
 		{
-			get { return core.MessageSeverityCount; }
+			get { return messageSeverityCount; }
 		}
 
 		public CoreViewModel( LogAnalyzerCore core, ApplicationViewModel applicationViewModel )
@@ -35,6 +36,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.directories = core.Directories.Select( d => new LogDirectoryViewModel( d, this ) ).ToList();
 
 			Init( core.MergedEntries );
+
+			messageSeverityCount = new MessageSeverityCountViewModel( core.MessageSeverityCount );
 		}
 
 		// todo не нужно ли оптимизировать поиск?

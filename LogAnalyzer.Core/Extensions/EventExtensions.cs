@@ -59,6 +59,13 @@ namespace LogAnalyzer.Extensions
 
 				if ( !ignore )
 				{
+					var ignoreAllAttributes = sender.GetType()
+						.GetCustomAttributes(typeof (IgnoreAllMissingPropertiesAttribute), true);
+					ignore = ignoreAllAttributes.Length != 0;
+				}
+
+				if ( !ignore )
+				{
 					Condition.DebugAssert( false );
 				}
 			}

@@ -42,9 +42,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return directory.DisplayName; }
 		}
 
-		public override MessageSeverityCount MessageSeverityCount
+		private readonly MessageSeverityCountViewModel messageSeverityCount;
+		public override MessageSeverityCountViewModel MessageSeverityCount
 		{
-			get { return directory.MessageSeverityCount; }
+			get { return messageSeverityCount; }
 		}
 
 		private readonly DispatcherObservableCollection syncronizedFilesViewModels;
@@ -68,6 +69,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			syncronizedFilesViewModels = new DispatcherObservableCollection( filesViewModels, coreViewModel.Scheduler );
 			// произойдет уже в этом потоке
 			syncronizedFilesViewModels.CollectionChanged += OnFilesViewModelsViewModelsCollectionChanged;
+
+			this.messageSeverityCount = new MessageSeverityCountViewModel( directory.MessageSeverityCount );
 		}
 
 		private void Files_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )

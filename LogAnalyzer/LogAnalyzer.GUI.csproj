@@ -138,6 +138,7 @@
     <Compile Include="ViewModels\LoadingViewModel.cs" />
     <Compile Include="ViewModels\LogDirectoryViewModel.cs" />
     <Compile Include="ViewModels\LogEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />

@@ -23,8 +23,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			get { return parent; }
 		}
 
-		private int maxCount = 0;
-
 		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> getFileViewModel )
 			: base( parentViewModel.Entries, parentViewModel.Scheduler )
 		{
@@ -71,12 +69,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 					viewModelsCache.Add( index, logEntryViewModel );
 
 					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
-
-					if ( viewModelsCache.Count > maxCount )
-					{
-						maxCount = viewModelsCache.Count;
-						Logger.Instance.DebugWriteInfo( "SparseLogEntryList: MaxCount = " + maxCount );
-					}
 				}
 
 				return logEntryViewModel;

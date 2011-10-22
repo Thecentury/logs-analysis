@@ -15,4 +15,9 @@ namespace LogAnalyzer.Extensions
 
 		public string PropertyName { get; private set; }
 	}
+
+	[AttributeUsage( AttributeTargets.Class, Inherited = true, AllowMultiple = true )]
+	public sealed class IgnoreAllMissingPropertiesAttribute : Attribute
+	{
+	}
 }
