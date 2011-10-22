@@ -27,7 +27,7 @@
 				</DataTemplate>
 
 				<!-- Заголовок таба фильтра -->
-				<DataTemplate DataType="{x:Type vm:FilterViewModel}">
+				<DataTemplate DataType="{x:Type vm:FilterTabViewModel}">
 					<StackPanel Orientation="Vertical">
 						<views:DefaultTabHeaderControl/>
 						<ProgressBar Margin="4" Value="{Binding FilteringProgress, Mode=OneWay}" Minimum="0" Maximum="100">
@@ -61,7 +61,7 @@
 								<views:LoadingView/>
 							</DataTemplate>
 							
-							<DataTemplate DataType="{x:Type vm:FilterViewModel}">
+							<DataTemplate DataType="{x:Type vm:FilterTabViewModel}">
 								<views:FilterView/>
 							</DataTemplate>
 

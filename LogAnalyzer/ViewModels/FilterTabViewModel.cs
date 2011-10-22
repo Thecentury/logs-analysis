@@ -11,7 +11,7 @@ using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public sealed class FilterViewModel : LogEntriesListViewModel
+	public sealed class FilterTabViewModel : LogEntriesListViewModel
 	{
 		private readonly IList<LogEntry> source;
 		private List<LogEntry> filteredEntries = new List<LogEntry>();
@@ -23,7 +23,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return source.Count; }
 		}
 
-		public FilterViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel, ExpressionBuilder builder )
+		public FilterTabViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel, ExpressionBuilder builder )
 			: this( source, applicationViewModel )
 		{
 			if ( builder == null )
@@ -32,7 +32,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			filter.ExpressionBuilder = builder;
 		}
 
-		public FilterViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel )
+		public FilterTabViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
 			if ( source == null )
@@ -73,10 +73,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override string IconFile
 		{
-			get
-			{
-				return MakePackUri( "/Resources/universal.png" );
-			}
+			get { return MakePackUri( "/Resources/universal.png" ); }
 		}
 
 		private void OnFilter_Changed( object sender, EventArgs e )
@@ -116,7 +113,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				FilteringResult localResult = FilteringResult.NotStarted;
 
-				int notificationStep = count / FilterViewModel.FilteringProgressNotificationsCount;
+				int notificationStep = count / FilteringProgressNotificationsCount;
 				if ( notificationStep == 0 )
 				{
 					// не уведомлять никогда
@@ -134,7 +131,7 @@ namespace LogAnalyzer.GUI.ViewModels
 							{
 								BeginInvokeInUIDispatcher( () =>
 								{
-									FilteringProgress += 100 / FilterViewModel.FilteringProgressNotificationsCount;
+									FilteringProgress += 100 / FilterTabViewModel.FilteringProgressNotificationsCount;
 								} );
 
 								// для того, чтобы успевать увидеть изменение прогресса
@@ -180,7 +177,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		// todo notify about properties change
-		private bool isFiltering = false;
+		private bool isFiltering;
 		public bool IsFiltering
 		{
 			get { return isFiltering; }
@@ -194,7 +191,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private int filteringProgress = 0;
+		private int filteringProgress;
 		public int FilteringProgress
 		{
 			get { return filteringProgress; }
@@ -259,7 +256,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		public void EditFilterExecute()
 		{
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
-			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow );
+			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow ) { Builder = filter.ExpressionBuilder };
 			bool? dialogResult = editorWindow.ShowDialog();
 			if ( dialogResult == true )
 			{

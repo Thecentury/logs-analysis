@@ -11,7 +11,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 	/// </summary>
 	public partial class FilterEditor : UserControl
 	{
-		TransparentBuilder rootBuilder;
+		private readonly TransparentBuilder rootBuilder = new TransparentBuilder();
 
 		public FilterEditor()
 		{
@@ -20,10 +20,14 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private void UserControl_Loaded( object sender, RoutedEventArgs e )
 		{
-			rootBuilder = new TransparentBuilder();
 			rootBuilder.PropertyChanged += OnRootBuilder_PropertyChanged;
 
-			var vm = new ExpressionBuilderViewModel( rootBuilder, System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" ) );
+			var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
+			var vm = new ExpressionBuilderViewModel( rootBuilder, parameterExpression );
+			if ( Builder != null )
+			{
+				vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( Builder, parameterExpression );
+			}
 			DataContext = vm;
 		}
 
@@ -34,6 +38,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		public ExpressionBuilder Builder
 		{
 			get { return rootBuilder.Inner; }
+			set { rootBuilder.Inner = value; }
 		}
 	}
 }

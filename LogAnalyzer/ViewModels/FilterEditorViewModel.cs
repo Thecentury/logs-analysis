@@ -66,6 +66,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		public ExpressionBuilder Builder
 		{
 			get { return window.Builder; }
+			set { window.Builder = value; }
 		}
 	}
 }

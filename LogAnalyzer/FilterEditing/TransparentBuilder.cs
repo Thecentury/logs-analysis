@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	[IgnoreBuilder]
 	public sealed class TransparentBuilder : ExpressionBuilder

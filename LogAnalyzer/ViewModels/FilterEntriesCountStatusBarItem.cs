@@ -9,8 +9,8 @@ namespace LogAnalyzer.GUI.ViewModels
 	[IgnoreAllMissingProperties]
 	public sealed class FilterEntriesCountStatusBarItem : EntriesCountStatusBarItem
 	{
-		private readonly FilterViewModel parent;
-		public FilterEntriesCountStatusBarItem( FilterViewModel parent ) : base( parent )
+		private readonly FilterTabViewModel parent;
+		public FilterEntriesCountStatusBarItem( FilterTabViewModel parent ) : base( parent )
 		{
 			this.parent = parent;
 		}
