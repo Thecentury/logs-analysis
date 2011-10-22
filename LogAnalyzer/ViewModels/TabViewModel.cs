@@ -8,7 +8,7 @@ using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public class TabViewModel : BindingObject
+	public class TabViewModel : BindingObject, ITypeName
 	{
 		private readonly ApplicationViewModel applicationViewModel;
 		public ApplicationViewModel ApplicationViewModel

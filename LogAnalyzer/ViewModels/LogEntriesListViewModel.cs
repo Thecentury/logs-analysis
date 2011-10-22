@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.Specialized;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using AdTech.Common.WPF;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
-using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -98,6 +96,37 @@ namespace LogAnalyzer.GUI.ViewModels
 				RaisePropertyChanged( "SelectedEntryIndex" );
 			}
 		}
+
+		#region StatusBar
+
+		private bool statusBarItemsPopulated;
+		private readonly ObservableCollection<object> statusBarItems = new ObservableCollection<object>();
+		public ObservableCollection<object> StatusBarItems
+		{
+			get
+			{
+				if ( !statusBarItemsPopulated )
+				{
+					PopulateStatusBarItems();
+					statusBarItemsPopulated = true;
+				}
+
+				return statusBarItems;
+			}
+		}
+
+		protected virtual void PopulateStatusBarItems()
+		{
+			statusBarItems.Add( GetEntriesCountStatusBarItem() );
+			statusBarItems.Add( new SelectedEntryIndexStatusBarItem( this ) );
+		}
+
+		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
+		{
+			return new EntriesCountStatusBarItem( this );
+		}
+
+		#endregion
 
 		protected internal abstract LogFileViewModel GetFileViewModel( LogEntry logEntry );
 

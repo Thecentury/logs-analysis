@@ -47,6 +47,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			filter.Changed += OnFilter_Changed;
 		}
 
+		protected override EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
+		{
+			return new FilterEntriesCountStatusBarItem( this );
+		}
+
 		public override string Header
 		{
 			get

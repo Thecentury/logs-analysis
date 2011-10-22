@@ -57,7 +57,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			BeginInvokeInUIDispatcher( () =>
 			{
 				var regionManager = config.ResolveNotNull<RegionManager>();
-				regionManager.Regions["StatusBar"].Add( new MessageSeverityCountView() );
+				// todo brinchuk uncomment me
+				//regionManager.Regions["StatusBar"].Add( new MessageSeverityCountView() );
 			} );
 
 			config.Logger.WriteInfo( "Starting..." );
