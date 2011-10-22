@@ -39,7 +39,6 @@ using LogAnalyzer.Properties;
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Logging" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Filters" )]
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Regions" )]
 
 namespace LogAnalyzer.Properties
 {

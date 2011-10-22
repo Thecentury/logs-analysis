@@ -42,7 +42,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return entriesView; }
 		}
 
-		public virtual MessageSeverityCount MessageSeverityCount
+		public virtual MessageSeverityCountViewModel MessageSeverityCount
 		{
 			get { return null; }
 		}
@@ -119,6 +119,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			statusBarItems.Add( GetEntriesCountStatusBarItem() );
 			statusBarItems.Add( new SelectedEntryIndexStatusBarItem( this ) );
+
+			var messagesCount = MessageSeverityCount;
+			if ( messagesCount != null )
+			{
+				statusBarItems.Add( messagesCount );
+			}
 		}
 
 		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()

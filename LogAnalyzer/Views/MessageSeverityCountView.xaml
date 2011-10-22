@@ -6,7 +6,7 @@
 			 mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
 			 Margin="5,0,5,0">
-	<StackPanel Orientation="Horizontal" DataContext="{Binding MessageSeverityCount}">
+	<StackPanel Orientation="Horizontal">
 		<StackPanel.Resources>
 			<Style TargetType="TextBlock">
 				<Setter Property="Margin" Value="4,0,4,0"/>
@@ -15,23 +15,23 @@
 		
 		<TextBlock>
 			<Run Text="E" Foreground="Red"/>
-			<Run Text="{Binding Error}"/>
+			<Run Text="{Binding Error, Mode=OneWay}"/>
 		</TextBlock>
 		<TextBlock>
 			<Run Text="W" Foreground="Orange"/>
-			<Run Text="{Binding Warning}"/>
+			<Run Text="{Binding Warning, Mode=OneWay}"/>
 		</TextBlock>
 		<TextBlock>
 			<Run Text="I" Foreground="DarkGreen"/>
-			<Run Text="{Binding Info}"/>
+			<Run Text="{Binding Info, Mode=OneWay}"/>
 		</TextBlock>
 		<TextBlock>
 			<Run Text="D"/>
-			<Run Text="{Binding Debug}"/>
+			<Run Text="{Binding Debug, Mode=OneWay}"/>
 		</TextBlock>
 		<TextBlock>
 			<Run Text="V"/>
-			<Run Text="{Binding Verbose}"/>
+			<Run Text="{Binding Verbose, Mode=OneWay}"/>
 		</TextBlock>
 	</StackPanel>
 </UserControl>
