@@ -22,6 +22,7 @@ namespace LogAnalyzer.GUI.Views
 		public ExpressionBuilder Builder
 		{
 			get { return filterEditor.Builder; }
+			set { filterEditor.Builder = value; }
 		}
 	}
 }

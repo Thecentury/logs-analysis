@@ -59,7 +59,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				// todo передавать информацию о "владельце" коллекции sourceEntries 
 				// (напр., для команды ShowInParentEntriesList)
 				ExpressionBuilder filterBuilder = editorViewModel.Builder;
-				FilterViewModel filterViewModel = new FilterViewModel( coreViewModel.Entries, this );
+				FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this );
 				filterViewModel.Filter.ExpressionBuilder = filterBuilder;
 
 				AddNewTab( filterViewModel );
@@ -94,7 +94,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				if ( selectedTab != null )
 				{
-					FilterViewModel filterViewModel = new FilterViewModel( selectedTab.Entries, this );
+					FilterTabViewModel filterViewModel = new FilterTabViewModel( selectedTab.Entries, this );
 					filterViewModel.Filter.ExpressionBuilder = builder;
 					filterViewModel.StartFiltering();
 
@@ -115,7 +115,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void AddFilterViewFromCore( ExpressionBuilder filter )
 		{
-			FilterViewModel filterViewModel = new FilterViewModel( coreViewModel.Entries, this, filter );
+			FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this, filter );
 			AddNewTab( filterViewModel );
 			filterViewModel.StartFiltering();
 		}

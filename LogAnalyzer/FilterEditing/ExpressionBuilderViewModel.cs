@@ -53,7 +53,19 @@ namespace LogAnalyzer.GUI.FilterEditing
 					Type resultType = GetResultType();
 					ExpressionBuilder[] builders = ExpressionBuilderManager.GetBuildersReturningType( resultType );
 					builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
+
+					if ( selectedChild != null )
+					{
+						var selectedBuilderType = SelectedChild.Builder.GetType();
+						var builderWithTypeSameAsSelected = builderViewModels.FirstOrDefault( b => b.builder.GetType() == selectedBuilderType );
+						if ( builderWithTypeSameAsSelected != null )
+						{
+							int index = builderViewModels.IndexOf( builderWithTypeSameAsSelected );
+							builderViewModels[index] = selectedChild;
+						}
+					}
 				}
+
 				return builderViewModels;
 			}
 		}
