@@ -40,7 +40,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private bool CanOkExecute()
 		{
-			return window.Builder != null;
+			var builder = window.Builder;
+
+			bool isBuilderFull = false;
+			if ( builder != null )
+			{
+				isBuilderFull = builder.ValidateProperties();
+			}
+			
+			return isBuilderFull;
 		}
 
 		private DelegateCommand closeCommand;

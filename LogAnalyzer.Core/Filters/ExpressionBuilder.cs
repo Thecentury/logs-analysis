@@ -52,7 +52,8 @@ namespace LogAnalyzer.Filters
 		{
 			Type myType = GetType();
 
-			var propertiesToSet = from prop in myType.GetProperties( BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.FlattenHierarchy )
+			var propertiesToSet = from prop in myType.GetProperties( 
+									  BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.FlattenHierarchy )
 								  let attributes = prop.GetCustomAttributes( typeof( FilterParameterAttribute ), true )
 								  where attributes.Length > 0
 								  from FilterParameterAttribute attr in attributes

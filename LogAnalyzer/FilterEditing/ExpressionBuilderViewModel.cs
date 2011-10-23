@@ -51,22 +51,30 @@ namespace LogAnalyzer.GUI.FilterEditing
 				if ( builderViewModels == null )
 				{
 					Type resultType = GetResultType();
-					ExpressionBuilder[] builders = ExpressionBuilderManager.GetBuildersReturningType( resultType );
+					ExpressionBuilder[] builders = ExpressionBuilderManager
+						.GetBuildersReturningType( resultType )
+						.OrderBy( b => b.GetType().Name )
+						.ToArray();
 					builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
 
-					if ( selectedChild != null )
-					{
-						var selectedBuilderType = SelectedChild.Builder.GetType();
-						var builderWithTypeSameAsSelected = builderViewModels.FirstOrDefault( b => b.builder.GetType() == selectedBuilderType );
-						if ( builderWithTypeSameAsSelected != null )
-						{
-							int index = builderViewModels.IndexOf( builderWithTypeSameAsSelected );
-							builderViewModels[index] = selectedChild;
-						}
-					}
+					ReplaceWithSelected();
 				}
 
 				return builderViewModels;
+			}
+		}
+
+		private void ReplaceWithSelected()
+		{
+			if ( selectedChild != null )
+			{
+				var selectedBuilderType = SelectedChild.Builder.GetType();
+				var builderWithTypeSameAsSelected = builderViewModels.FirstOrDefault( b => b.builder.GetType() == selectedBuilderType );
+				if ( builderWithTypeSameAsSelected != null )
+				{
+					int index = builderViewModels.IndexOf( builderWithTypeSameAsSelected );
+					builderViewModels[index] = selectedChild;
+				}
 			}
 		}
 

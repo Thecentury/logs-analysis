@@ -13,23 +13,23 @@
 			</Style>
 		</StackPanel.Resources>
 		
-		<TextBlock>
+		<TextBlock ToolTip="Errors count">
 			<Run Text="E" Foreground="Red"/>
 			<Run Text="{Binding Error, Mode=OneWay}"/>
 		</TextBlock>
-		<TextBlock>
+		<TextBlock ToolTip="Warnings count">
 			<Run Text="W" Foreground="Orange"/>
 			<Run Text="{Binding Warning, Mode=OneWay}"/>
 		</TextBlock>
-		<TextBlock>
+		<TextBlock ToolTip="Infos count">
 			<Run Text="I" Foreground="DarkGreen"/>
 			<Run Text="{Binding Info, Mode=OneWay}"/>
 		</TextBlock>
-		<TextBlock>
+		<TextBlock ToolTip="Debug count">
 			<Run Text="D"/>
 			<Run Text="{Binding Debug, Mode=OneWay}"/>
 		</TextBlock>
-		<TextBlock>
+		<TextBlock ToolTip="Verbose count">
 			<Run Text="V"/>
 			<Run Text="{Binding Verbose, Mode=OneWay}"/>
 		</TextBlock>
