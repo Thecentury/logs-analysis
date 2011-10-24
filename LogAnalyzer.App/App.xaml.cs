@@ -13,7 +13,6 @@ namespace LogAnalyzer.App
 
 		protected override void OnStartup( StartupEventArgs e )
 		{
-			Debugger.Launch();
 			base.OnStartup( e );
 
 			bootstrapper.Start( e.Args );

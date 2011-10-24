@@ -39,9 +39,10 @@ namespace LogAnalyzer.Config
 
 		public static T AcceptAllLogTypes<T>( this T config ) where T : LogAnalyzerConfiguration
 		{
-			config.LoggerAcceptedTypes.Add( MessageType.Debug );
 			config.LoggerAcceptedTypes.Add( MessageType.Error );
+			config.LoggerAcceptedTypes.Add( MessageType.Warning );
 			config.LoggerAcceptedTypes.Add( MessageType.Info );
+			config.LoggerAcceptedTypes.Add( MessageType.Debug );
 			config.LoggerAcceptedTypes.Add( MessageType.Verbose );
 
 			return config;

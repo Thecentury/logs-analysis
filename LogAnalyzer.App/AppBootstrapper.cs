@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using LogAnalyzer.Config;
@@ -10,6 +12,7 @@ using LogAnalyzer.GUI;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.App
 {
@@ -17,9 +20,29 @@ namespace LogAnalyzer.App
 	{
 		protected override void Init()
 		{
-			string configPath = ArgsParser.GetValueOrDefault( "config", Settings.Default.ConfigPath );
+			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 
-			LogAnalyzerConfiguration config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+			string settingsSubPath = Settings.Default.ConfigPath;
+			string defaultSettingsPath =
+				Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
+			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
+
+			LogAnalyzerConfiguration config;
+			bool configPathExists = File.Exists( configPath );
+			if ( configPathExists )
+			{
+				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+			}
+			else
+			{
+				Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
+				config = new LogAnalyzerConfiguration()
+					.AcceptAllLogTypes()
+					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+			}
+
+			Debugger.Launch();
+
 			InitConfig( config );
 			HandleOpenWithCalls( config );
 
@@ -46,8 +69,14 @@ namespace LogAnalyzer.App
 				var files = paths.OfType<FileInfo>().ToList();
 				if ( files.Count > 0 )
 				{
-					LogDirectoryConfigurationInfo directoryForSeparateFiles = new LogDirectoryConfigurationInfo( "Files", "*", "Files" );
+					LogDirectoryConfigurationInfo directoryForSeparateFiles = new LogDirectoryConfigurationInfo( "Files", "*", "Files" )
+					{
+						EncodingName = config.DefaultEncodingName
+					};
+
 					directoryForSeparateFiles.PredefinedFiles.AddRange( files.Select( f => f.FullName ) );
+
+					config.Directories.Add( directoryForSeparateFiles );
 				}
 			}
 		}
