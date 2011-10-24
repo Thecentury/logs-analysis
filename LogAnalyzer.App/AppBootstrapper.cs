@@ -20,14 +20,18 @@ namespace LogAnalyzer.App
 	{
 		protected override void Init()
 		{
+			bool breakAtStart = Properties.Settings.Default.BreakAtStart;
+			if ( breakAtStart )
+			{
+				Debugger.Launch();
+			}
+
 			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 
-			string settingsSubPath = Settings.Default.ConfigPath;
+			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath =
 				Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
-
-			Debugger.Launch();
 
 			LogAnalyzerConfiguration config;
 			bool configPathExists = File.Exists( configPath );
@@ -37,10 +41,11 @@ namespace LogAnalyzer.App
 			}
 			else
 			{
-				Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
 				config = new LogAnalyzerConfiguration()
 					.AcceptAllLogTypes()
 					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+
+				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
 			}
 
 			InitConfig( config );
