@@ -70,7 +70,6 @@ namespace LogAnalyzer.GUI
 			RegionManager regionManager = new RegionManager();
 
 			config
-				.AcceptAllLogTypes()
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
