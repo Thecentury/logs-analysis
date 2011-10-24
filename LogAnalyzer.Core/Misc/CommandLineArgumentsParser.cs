@@ -9,15 +9,17 @@ namespace LogAnalyzer.Misc
 	{
 		private readonly Dictionary<string, string> switchNameToValueMappings = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
-		public CommandLineArgumentsParser( string[] commandLineArgs )
+		public CommandLineArgumentsParser( IEnumerable<string> commandLineArgs )
 		{
 			if ( commandLineArgs == null ) throw new ArgumentNullException( "commandLineArgs" );
 
 			foreach ( var commandLineArg in commandLineArgs )
 			{
-				if ( commandLineArg.Contains( ":" ) )
+				bool isSwitch = commandLineArg.StartsWith( "/" ) && commandLineArg.Contains( ":" );
+				if ( isSwitch )
 				{
-					string[] parts = commandLineArg.Split( ':' );
+					// skipping start "/"
+					string[] parts = commandLineArg.Substring( 1 ).Split( ':' );
 					string key = parts[0];
 					string value = parts[1];
 					switchNameToValueMappings.Add( key, value );

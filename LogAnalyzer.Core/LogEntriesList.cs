@@ -71,10 +71,10 @@ namespace LogAnalyzer
 		public void Start()
 		{
 			loadStartTime = DateTime.Now;
-			StartCore();
+			StartImpl();
 		}
 
-		protected abstract void StartCore();
+		protected abstract void StartImpl();
 
 		protected void RaiseLoadedEvent()
 		{

@@ -113,7 +113,7 @@ namespace LogAnalyzer
 			throw new NotImplementedException();
 		}
 
-		protected override void StartCore()
+		protected override void StartImpl()
 		{
 			IDirectoryInfo dir = environment.GetDirectory( Path );
 

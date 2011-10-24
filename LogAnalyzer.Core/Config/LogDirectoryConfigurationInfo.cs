@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 
@@ -45,10 +46,13 @@ namespace LogAnalyzer.Config
 
 		public bool UseCache { get; set; }
 
-		// todo brinchuk remove me?
+		private readonly List<string> predefinedFiles = new List<string>();
 		/// <summary>
-		/// Позволяет внедряться в процесс создания IFileInfo в IDirectoryInfo.
+		/// Список из заданных наперед имен файлов. Используется при открытии набора файлов при вызове из системы.
 		/// </summary>
-		public Func<CreateFileInfoContext, IFileInfo> CustomFileCreator { get; set; }
+		public List<string> PredefinedFiles
+		{
+			get { return predefinedFiles; }
+		}
 	}
 }

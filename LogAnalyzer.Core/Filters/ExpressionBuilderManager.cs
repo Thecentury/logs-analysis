@@ -9,7 +9,7 @@ namespace LogAnalyzer.Filters
 {
 	public sealed class ExpressionBuilderManager
 	{
-		private static readonly Type[] expressionBuilderTypes = null;
+		private static readonly Type[] expressionBuilderTypes;
 		static ExpressionBuilderManager()
 		{
 			expressionBuilderTypes = GetAllExpressionBuilderTypes();
