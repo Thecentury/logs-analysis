@@ -10,3 +10,4 @@ _ReSharper.*
 *.csproj.user
 Binaries/*
 *.SCC
+*.vsp

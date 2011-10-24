@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigTests.cs" />
+    <Compile Include="DateTimeParsingBenchmark.cs" />
     <Compile Include="DelayedLogRecordsSourceTests.cs" />
     <Compile Include="DifferentEncodingsTests.cs" />
     <Compile Include="FilterTests.cs" />

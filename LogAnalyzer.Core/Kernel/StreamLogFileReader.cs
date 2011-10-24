@@ -20,11 +20,10 @@ namespace LogAnalyzer.Kernel
 		private readonly Logger logger;
 		private readonly Encoding encoding;
 		private int linesCount;
-		private bool lastLineWasEmpty = false;
+		private bool lastLineWasEmpty;
 		private LogEntry lastCreatedEntry;
 		private readonly LogFile parentLogFile;
 		private readonly IStreamProvider streamFileInfo;
-		private readonly LogLineParser logLineParser = new LogLineParser();
 
 		private string Name
 		{
@@ -284,7 +283,7 @@ namespace LogAnalyzer.Kernel
 			if ( isLastLineChanged )
 			{
 				// в последней строке было начало LogEntry?
-				if ( logLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( LogLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					LogEntry lastEntry = lastCreatedEntry;
 					// последняя запись состоит только из заголовка?
@@ -318,7 +317,7 @@ namespace LogAnalyzer.Kernel
 			else // добавилась новая строка
 			{
 				// в добавленной строке было начало нового LogEntry?
-				if ( logLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( LogLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
 
