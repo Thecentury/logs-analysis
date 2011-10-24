@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Markup;
 using LogAnalyzer.Properties;
@@ -39,6 +40,8 @@ using LogAnalyzer.Properties;
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Logging" )]
 [assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Filters" )]
+
+[assembly: InternalsVisibleTo( "LogAnalyzer.Tests" )]
 
 namespace LogAnalyzer.Properties
 {

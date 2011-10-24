@@ -72,10 +72,6 @@ namespace ModuleLogsProvider.Logging.Most
 		private readonly List<LogEntry> entries = new List<LogEntry>();
 		private LogFile logFile;
 
-		private static readonly LogLineParser parser = new LogLineParser();
-
-		public OneFileMessages() { }
-
 		public List<LogEntry> Entries
 		{
 			get { return entries; }
@@ -101,7 +97,7 @@ namespace ModuleLogsProvider.Logging.Most
 				DateTime time;
 				string text;
 
-				if ( !parser.TryExtractLogEntryData( logMessageInfo.Message, out type, out threadId, out time, out text ) )
+				if ( !LogLineParser.TryExtractLogEntryData( logMessageInfo.Message, out type, out threadId, out time, out text ) )
 				{
 					// todo brinchuk ???
 					throw new NotImplementedException();
