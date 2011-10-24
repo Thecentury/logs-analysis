@@ -59,7 +59,7 @@ namespace LogAnalyzer
 		//Process.Start(vsCommandLine, vsArgs);
 		//Environment.Exit(0);
 
-		private int directoriesLoadedCount = 0;
+		private int directoriesLoadedCount;
 
 		public LogAnalyzerCore( LogAnalyzerConfiguration config, IEnvironment environment )
 			: base( environment, config.Logger )
@@ -122,7 +122,7 @@ namespace LogAnalyzer
 			dir.Loaded -= OnDirectoryLoaded;
 		}
 
-		protected override void StartCore()
+		protected override void StartImpl()
 		{
 			foreach ( var dir in Directories )
 			{
@@ -130,7 +130,7 @@ namespace LogAnalyzer
 			}
 		}
 
-		private readonly CountdownEvent loadedEvent = null;
+		private readonly CountdownEvent loadedEvent;
 
 		public void WaitForLoaded()
 		{

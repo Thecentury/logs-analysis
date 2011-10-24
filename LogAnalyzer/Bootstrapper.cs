@@ -21,6 +21,12 @@ namespace LogAnalyzer.GUI
 			get { return logger; }
 		}
 
+		private string[] commandLineArgs;
+		public string[] CommandLineArgs
+		{
+			get { return commandLineArgs; }
+		}
+
 		private CommandLineArgumentsParser argsParser;
 		protected CommandLineArgumentsParser ArgsParser
 		{
@@ -30,6 +36,8 @@ namespace LogAnalyzer.GUI
 		public void Start( string[] commandLineArgs )
 		{
 			if ( commandLineArgs == null ) throw new ArgumentNullException( "commandLineArgs" );
+			this.commandLineArgs = commandLineArgs;
+
 			argsParser = new CommandLineArgumentsParser( commandLineArgs );
 
 			Thread.CurrentThread.Name = "UIThread";

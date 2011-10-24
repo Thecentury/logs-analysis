@@ -9,9 +9,14 @@ using LogAnalyzer.Config;
 namespace LogAnalyzer.Kernel
 {
 	[DebuggerDisplay( "Dir {Path}" )]
-	internal sealed class FileSystemDirectoryInfo : IDirectoryInfo
+	internal class FileSystemDirectoryInfo : IDirectoryInfo
 	{
 		private readonly LogDirectoryConfigurationInfo directoryConfig;
+		public LogDirectoryConfigurationInfo DirectoryConfig
+		{
+			get { return directoryConfig; }
+		}
+
 		private readonly CacheManager cacheManager;
 		private readonly string path;
 		public string Path
@@ -23,19 +28,27 @@ namespace LogAnalyzer.Kernel
 
 		private readonly LogNotificationsSourceBase notificationSource;
 
-		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
+		public static FileSystemDirectoryInfo Create( LogDirectoryConfigurationInfo config )
+		{
+			if ( config.PredefinedFiles.Count == 0 )
+				return new FileSystemDirectoryInfo( config );
+			else
+				return new PredefinedFilesDirectoryInfo( config );
+		}
+
+		protected FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{
 			if ( directoryConfig == null )
 				throw new ArgumentNullException( "directoryConfig" );
+
 			this.directoryConfig = directoryConfig;
 
 			this.path = directoryConfig.Path;
 			this.useCache = directoryConfig.UseCache;
 
 			string filesFilter = directoryConfig.FileNameFilter;
-			NotifyFilters notifyFilter = NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName;
 
-			this.notificationSource = new DelayedLogRecordsSource( new FileSystemNotificationsSource( path, filesFilter, notifyFilter ) );
+			this.notificationSource = CreateNotificationSource( path, filesFilter );
 
 			if ( useCache )
 			{
@@ -49,6 +62,12 @@ namespace LogAnalyzer.Kernel
 			return Directory.EnumerateFiles( path, searchPattern, SearchOption.TopDirectoryOnly ).Select( GetFileInfo );
 		}
 
+		protected virtual LogNotificationsSourceBase CreateNotificationSource( string path, string filesFilter )
+		{
+			return new DelayedLogRecordsSource( new FileSystemNotificationsSource( path, filesFilter,
+				NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName ) );
+		}
+
 		public LogNotificationsSourceBase NotificationSource
 		{
 			get { return notificationSource; }
@@ -56,14 +75,7 @@ namespace LogAnalyzer.Kernel
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			IFileInfo result = null;
-
-			if ( directoryConfig.CustomFileCreator != null )
-			{
-				var context = new CreateFileInfoContext { FilePath = fullPath, UseCache = useCache };
-				result = directoryConfig.CustomFileCreator( context );
-				return result;
-			}
+			IFileInfo result;
 
 			if ( useCache )
 			{
