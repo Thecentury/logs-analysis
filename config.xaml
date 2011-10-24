@@ -1,6 +1,7 @@
 <Config:LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer"
                           xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer"
-                                 xmlns:Logging="clr-namespace:LogAnalyzer.Logging;assembly=LogAnalyzer">
+                                 xmlns:Logging="clr-namespace:LogAnalyzer.Logging;assembly=LogAnalyzer"
+								 DefaultEncodingName="windows-1251">
 
 	<Config:LogAnalyzerConfiguration.Directories>
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->

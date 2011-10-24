@@ -21,6 +21,13 @@ namespace LogAnalyzer.Config
 			RegisterCommonDependencies();
 		}
 
+		private string defaultEncodingName = "windows-1251";
+		public string DefaultEncodingName
+		{
+			get { return defaultEncodingName; }
+			set { defaultEncodingName = value; }
+		}
+
 		private readonly IDependencyInjectionContainer container = new DependencyInjectionContainer();
 		public IDependencyInjectionContainer Container
 		{

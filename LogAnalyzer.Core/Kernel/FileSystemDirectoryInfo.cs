@@ -56,7 +56,7 @@ namespace LogAnalyzer.Kernel
 			}
 		}
 
-		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
+		public virtual IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
 			// todo дать возможность настраивать вложенные папки?
 			return Directory.EnumerateFiles( path, searchPattern, SearchOption.TopDirectoryOnly ).Select( GetFileInfo );

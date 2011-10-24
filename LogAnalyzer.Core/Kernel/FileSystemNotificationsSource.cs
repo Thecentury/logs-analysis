@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Reactive;
-using System.Reactive.Linq;
-using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
 	public sealed class FileSystemNotificationsSource : LogNotificationsSourceBase
 	{
@@ -18,9 +12,11 @@ namespace LogAnalyzer
 			if ( !Directory.Exists( logsPath ) )
 				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
 
-			watcher = new FileSystemWatcher( logsPath, filesFilter );
-			watcher.NotifyFilter = notifyFilters;
-			watcher.IncludeSubdirectories = true;
+			watcher = new FileSystemWatcher( logsPath, filesFilter )
+			{
+				NotifyFilter = notifyFilters,
+				IncludeSubdirectories = true
+			};
 
 			watcher.Changed += OnFileChanged;
 			watcher.Created += OnFileCreated;

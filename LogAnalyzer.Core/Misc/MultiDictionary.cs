@@ -6,11 +6,31 @@ using System.Diagnostics;
 
 namespace LogAnalyzer.Misc
 {
-	[DebuggerDisplay("KeysCount = {Count} TotalCount = {TotalCount}")]
-	internal class MultiDictionary<TKey, TCollection, TValue> : Dictionary<TKey, TCollection>
-		where TCollection : class, ICollection<TValue>, new()
+	[DebuggerDisplay( "KeysCount = {Count} TotalCount = {TotalCount}" )]
+	public class MultiDictionary<TKey, TCollection, TValue> : Dictionary<TKey, TCollection>
+		where TCollection : class, ICollection<TValue>
 	{
-		public MultiDictionary( int capacity ) : base( capacity ) { }
+		private readonly Func<TCollection> createCollectionFunc;
+
+		public MultiDictionary( Func<TCollection> createCollectionFunc )
+		{
+			if ( createCollectionFunc == null ) throw new ArgumentNullException( "createCollectionFunc" );
+			this.createCollectionFunc = createCollectionFunc;
+		}
+
+		public MultiDictionary( Func<TCollection> createCollectionFunc, IEqualityComparer<TKey> comparer )
+			: base( comparer )
+		{
+			if ( createCollectionFunc == null ) throw new ArgumentNullException( "createCollectionFunc" );
+			this.createCollectionFunc = createCollectionFunc;
+		}
+
+		public MultiDictionary( Func<TCollection> createCollectionFunc, int capacity )
+			: base( capacity )
+		{
+			if ( createCollectionFunc == null ) throw new ArgumentNullException( "createCollectionFunc" );
+			this.createCollectionFunc = createCollectionFunc;
+		}
 
 		public void AddAllElements( IEnumerable<IGrouping<TKey, TValue>> collection )
 		{
@@ -26,11 +46,11 @@ namespace LogAnalyzer.Misc
 
 		public void Append( TKey key, TValue value )
 		{
-			TCollection collection = null;
-			if ( !base.TryGetValue( key, out collection ) )
+			TCollection collection;
+			if ( !TryGetValue( key, out collection ) )
 			{
-				collection = new TCollection();
-				base.Add( key, collection );
+				collection = createCollectionFunc();
+				Add( key, collection );
 			}
 
 			collection.Add( value );
@@ -58,6 +78,13 @@ namespace LogAnalyzer.Misc
 
 	internal sealed class AwaitingLogEntriesCollection : MultiDictionary<LogFile, HashSet<LogEntry>, LogEntry>
 	{
-		public AwaitingLogEntriesCollection( int capacity ) : base( capacity ) { }
+		public AwaitingLogEntriesCollection( int capacity ) : base( () => new HashSet<LogEntry>(), capacity ) { }
+	}
+
+	public sealed class ListMultiDictionary<TKey, TValue> : MultiDictionary<TKey, List<TValue>, TValue>
+	{
+		public ListMultiDictionary() : base( () => new List<TValue>() ) { }
+
+		public ListMultiDictionary( IEqualityComparer<TKey> comparer ) : base( () => new List<TValue>(), comparer ) { }
 	}
 }

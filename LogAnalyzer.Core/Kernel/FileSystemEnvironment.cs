@@ -19,7 +19,7 @@ namespace LogAnalyzer.Kernel
 				throw new ArgumentNullException( "config" );
 
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
-			this.directories = config.EnabledDirectories.Select( d => new FileSystemDirectoryInfo( d ) ).ToList();
+			this.directories = config.EnabledDirectories.Select( FileSystemDirectoryInfo.Create ).ToList();
 			this.timeService = new ConstIntervalTimeService();
 		}
 
