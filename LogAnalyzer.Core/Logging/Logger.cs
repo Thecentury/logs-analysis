@@ -64,7 +64,7 @@ namespace LogAnalyzer.Logging
 
 			string typeString = messageType.ToString()[0].ToString();
 
-			string logLine = String.Format( "[{0}] [{1}] {2} {3}", typeString, Thread.CurrentThread.ManagedThreadId, now.ToString( "HH:mm:ss:fff" ), message );
+			string logLine = String.Format( "[{0}] [{1:3}] {2} {3}", typeString, Thread.CurrentThread.ManagedThreadId, now.ToString( "HH:mm:ss:fff" ), message );
 
 			return logLine;
 		}

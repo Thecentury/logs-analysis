@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.Threading;
-using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Reflection;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Logging
 {
 	public sealed class FileLogWriter : SingleThreadedLogWriter, ISupportInitialize
 	{
-		public string FileName { get; set; }
+		public string FilePath { get; set; }
 
 		public bool ShouldCleanLogFile { get; set; }
 
@@ -22,7 +16,7 @@ namespace LogAnalyzer
 		{
 			try
 			{
-				File.AppendAllLines( FileName, new string[] { message } );
+				File.AppendAllLines( FilePath, new[] { message } );
 			}
 			catch ( IOException )
 			{
@@ -41,12 +35,12 @@ namespace LogAnalyzer
 			if ( String.IsNullOrWhiteSpace( fileName ) )
 				throw new ArgumentException();
 
-			this.FileName = fileName;
 			string fullPath = Path.GetFullPath( fileName );
+			this.FilePath = fullPath;
 			string directoryPath = Path.GetDirectoryName( fullPath );
-			if ( !Directory.Exists( fullPath ) )
+			if ( !Directory.Exists( directoryPath ) )
 			{
-				Directory.CreateDirectory( fullPath );
+				Directory.CreateDirectory( directoryPath );
 			}
 		}
 
@@ -59,11 +53,17 @@ namespace LogAnalyzer
 
 		void ISupportInitialize.EndInit()
 		{
+			if ( !Path.IsPathRooted( FilePath ) )
+			{
+				string exeLocation = Path.GetDirectoryName( Path.GetFullPath( Assembly.GetExecutingAssembly().Location ) );
+				FilePath = Path.Combine( exeLocation, FilePath );
+			}
+
 			if ( ShouldCleanLogFile )
 			{
-				if ( File.Exists( FileName ) )
+				if ( File.Exists( FilePath ) )
 				{
-					File.Delete( FileName );
+					File.Delete( FilePath );
 				}
 			}
 		}

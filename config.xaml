@@ -65,7 +65,7 @@
 	</Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
 	
 	<Config:LogAnalyzerConfiguration.LoggerWriters>
-		<FileLogWriter FileName="1.log" ShouldCleanLogFile="True"/>
+		<FileLogWriter FilePath="1.log" ShouldCleanLogFile="True"/>
 		<DebugLogWriter/>
 	</Config:LogAnalyzerConfiguration.LoggerWriters>
 

@@ -27,6 +27,8 @@ namespace LogAnalyzer.App
 				Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 
+			Debugger.Launch();
+
 			LogAnalyzerConfiguration config;
 			bool configPathExists = File.Exists( configPath );
 			if ( configPathExists )
@@ -40,8 +42,6 @@ namespace LogAnalyzer.App
 					.AcceptAllLogTypes()
 					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
 			}
-
-			Debugger.Launch();
 
 			InitConfig( config );
 			HandleOpenWithCalls( config );
