@@ -15,7 +15,7 @@ namespace LogAnalyzer.Filters
 		{
 			return typeof( bool );
 		}
-		
+
 		public const string Format = "yyyy.MM.dd HH:mm:ss";
 
 		public string StringValue
@@ -49,8 +49,9 @@ namespace LogAnalyzer.Filters
 
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			GetProperty timeProperty = new GetProperty( new Argument(), "Time" );
-			return Expression.GreaterThanOrEqual( timeProperty.CreateExpression( parameterExpression ), Expression.Constant( Value ) );
+			return Expression.GreaterThanOrEqual(
+				Expression.Property( parameterExpression, "Time" ),
+				Expression.Constant( Value ) );
 		}
 	}
 
@@ -62,10 +63,11 @@ namespace LogAnalyzer.Filters
 			Value = value;
 		}
 
-		protected override Expression CreateExpressionCore(ParameterExpression parameterExpression)
+		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			GetProperty timeProperty = new GetProperty( new Argument(), "Time" );
-			return Expression.LessThanOrEqual( timeProperty.CreateExpression( parameterExpression ), Expression.Constant( Value ) );
+			return Expression.LessThanOrEqual(
+				Expression.Property( parameterExpression, "Time" ),
+				Expression.Constant( Value ) );
 		}
 	}
 }

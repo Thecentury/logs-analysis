@@ -74,6 +74,7 @@
     <Compile Include="FilterTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />
+    <Compile Include="LogDateTimeFilterTests.cs" />
     <Compile Include="LoggingTestsBase.cs" />
     <Compile Include="Mock\DeterminedTimeLogHelper.cs" />
     <Compile Include="Mock\MockDirectoryInfo.cs" />

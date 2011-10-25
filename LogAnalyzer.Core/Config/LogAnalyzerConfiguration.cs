@@ -14,7 +14,7 @@ using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Config
 {
-	public partial class LogAnalyzerConfiguration
+	public class LogAnalyzerConfiguration
 	{
 		public LogAnalyzerConfiguration()
 		{
