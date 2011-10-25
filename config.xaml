@@ -1,11 +1,9 @@
-<Config:LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer"
-                          xmlns:Config="clr-namespace:LogAnalyzer.Config;assembly=LogAnalyzer"
-                                 xmlns:Logging="clr-namespace:LogAnalyzer.Logging;assembly=LogAnalyzer"
-								 DefaultEncodingName="windows-1251">
+<LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer" 
+						  DefaultEncodingName="windows-1251">
 
-	<Config:LogAnalyzerConfiguration.Directories>
+	<LogAnalyzerConfiguration.Directories>
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->
-		<Config:LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
+		<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
 
 		<!--<LogDirectoryConfigurationInfo Enabled="True" DisplayName="Logs2" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\Archive\11.07.14\22-43-01\"
 									   UseCache="False"
@@ -19,7 +17,7 @@
 									   EncodingName="windows-1251"/>-->
 
 
-		<Config:LogDirectoryConfigurationInfo Enabled="False" DisplayName="ModuleOrderManager-Jet" FileNameFilter="*.log" Path="c:\Temp\ModuleOrderManager-Jet\"
+		<LogDirectoryConfigurationInfo Enabled="False" DisplayName="ModuleOrderManager-Jet" FileNameFilter="*.log" Path="c:\Temp\ModuleOrderManager-Jet\"
 									   EncodingName="windows-1251"/>
 
 
@@ -29,11 +27,11 @@
 
 		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\AWAD_AVIA_SEARCH\logs\"/>-->
 
-	</Config:LogAnalyzerConfiguration.Directories>
+	</LogAnalyzerConfiguration.Directories>
 
-	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
+	<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<MessageTypeEquals Value="E"/>
-	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
+	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<StringContains>
@@ -56,18 +54,18 @@
 			</EqualsBuilder.Right>
 		</EqualsBuilder>
 	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
-		<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
-	
-	<Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
-		<Logging:MessageType>Debug</Logging:MessageType>
-		<Logging:MessageType>Error</Logging:MessageType>
-		<Logging:MessageType>Info</Logging:MessageType>
-	</Config:LogAnalyzerConfiguration.LoggerAcceptedTypes>
-	
-	<Config:LogAnalyzerConfiguration.LoggerWriters>
+	<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
+
+	<LogAnalyzerConfiguration.LoggerAcceptedTypes>
+		<MessageType>Debug</MessageType>
+		<MessageType>Error</MessageType>
+		<MessageType>Info</MessageType>
+	</LogAnalyzerConfiguration.LoggerAcceptedTypes>
+
+	<LogAnalyzerConfiguration.LoggerWriters>
 		<FileLogWriter FilePath="1.log" ShouldCleanLogFile="True"/>
 		<DebugLogWriter/>
-	</Config:LogAnalyzerConfiguration.LoggerWriters>
+	</LogAnalyzerConfiguration.LoggerWriters>
 
 	<!--<LogAnalyzerConfiguration.AcceptedTypes>
 		<FileLogger FileName="1.log" ShouldCleanLogFile="False">
@@ -77,4 +75,4 @@
 		</FileLogger>
 	</LogAnalyzerConfiguration.Logger>-->
 
-</Config:LogAnalyzerConfiguration>
+</LogAnalyzerConfiguration>
