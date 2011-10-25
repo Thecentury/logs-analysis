@@ -9,6 +9,11 @@
 			 Loaded="UserControl_Loaded">
 	<UserControl.Resources>
 
+		<DataTemplate x:Key="{x:Type log:LogDateTimeFilterBase}">
+			<TextBox Text="{Binding Time, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+					 MinWidth="140" Margin="4"/>
+		</DataTemplate>
+
 		<DataTemplate x:Key="{x:Type log:Not}">
 			<FilterEditor:FilterExpressionView DataContext="{Binding Inner}"/>
 		</DataTemplate>

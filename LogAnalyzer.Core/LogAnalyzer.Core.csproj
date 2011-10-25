@@ -78,6 +78,7 @@
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
+    <Compile Include="Filters\LogDateTimeBuilders.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
