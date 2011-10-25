@@ -107,6 +107,7 @@
     <Compile Include="FilterEditing\FilterExpressionView.xaml.cs">
       <DependentUpon>FilterExpressionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FilterEditing\LogDateTimeViewModel.cs" />
     <Compile Include="FilterEditing\NotBuilderViewModel.cs" />
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />

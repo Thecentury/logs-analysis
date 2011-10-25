@@ -35,6 +35,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 			if ( notBuilder != null )
 				return new NotBuilderViewModel( notBuilder, parameter );
 
+			LogDateTimeFilterBase logDateTime = builder as LogDateTimeFilterBase;
+			if ( logDateTime != null )
+				return new LogDateTimeViewModel( logDateTime, parameter );
+
 			return new ExpressionBuilderViewModel( builder, parameter );
 		}
 	}
