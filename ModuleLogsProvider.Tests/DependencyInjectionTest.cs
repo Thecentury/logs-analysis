@@ -16,7 +16,7 @@ namespace ModuleLogsProvider.Tests
 		{
 			const int expected = 1;
 
-			DependencyInjectionContainer config = new DependencyInjectionContainer();
+			DependencyInjectionContainer config = DependencyInjectionContainer.Instance;
 			config.Register<int>( () => expected );
 
 			var actual = config.Resolve<int>();
