@@ -68,6 +68,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			tabs.CollectionChanged += OnTabs_CollectionChanged;
 
 			core.Start();
+			OnCoreLoaded();
 		}
 
 		private void OnTabs_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -83,8 +84,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			OnCoreLoaded();
 		}
 
+		private bool onCoreLoadedCalled;
 		protected virtual void OnCoreLoaded()
 		{
+			if ( onCoreLoadedCalled )
+				return;
+
+			onCoreLoadedCalled = true;
+
 			coreViewModel = new CoreViewModel( core, this ) { IsActive = true };
 
 			BeginInvokeInUIDispatcher( () =>

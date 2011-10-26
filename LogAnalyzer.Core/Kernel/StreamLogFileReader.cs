@@ -23,29 +23,29 @@ namespace LogAnalyzer.Kernel
 		private bool lastLineWasEmpty;
 		private LogEntry lastCreatedEntry;
 		private readonly LogFile parentLogFile;
-		private readonly IStreamProvider streamFileInfo;
+		private readonly IStreamProvider streamProvider;
 
 		private string Name
 		{
 			get { return parentLogFile.Name; }
 		}
 
-		public StreamLogFileReader( LogFileReaderArguments args, IStreamProvider streamFileInfo )
+		public StreamLogFileReader( LogFileReaderArguments args, IStreamProvider streamProvider )
 		{
 			if ( args == null ) throw new ArgumentNullException( "args" );
-			if ( streamFileInfo == null ) throw new ArgumentNullException( "streamFileInfo" );
+			if ( streamProvider == null ) throw new ArgumentNullException( "streamProvider" );
 
 			logger = args.Logger;
 			parentLogFile = args.ParentLogFile;
 			encoding = args.Encoding;
 			globalEntriesFilter = args.GlobalEntriesFilter;
 
-			this.streamFileInfo = streamFileInfo;
+			this.streamProvider = streamProvider;
 		}
 
 		private Stream OpenStream( int startingPosition )
 		{
-			return streamFileInfo.OpenStream( startingPosition );
+			return streamProvider.OpenStream( startingPosition );
 		}
 
 		private StreamReader OpenReader( Stream stream )
