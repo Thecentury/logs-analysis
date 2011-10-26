@@ -86,6 +86,11 @@ namespace LogAnalyzer
 
 			foreach ( LogDirectoryConfigurationInfo dir in config.EnabledDirectories )
 			{
+				if ( String.IsNullOrWhiteSpace( dir.EncodingName ) )
+				{
+					dir.EncodingName = config.DefaultEncodingName;
+				}
+
 				var logDirectory = new LogDirectory( dir, config, environment, this );
 				directories.Add( logDirectory );
 			}

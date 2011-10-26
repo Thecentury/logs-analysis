@@ -172,7 +172,7 @@ namespace LogAnalyzer.Kernel
 		/// Максимальная длина одной считанной из файла строки.
 		/// <para/>Если длина строки больше, то считается, что выбрана неправильная кодировка, и бросаетмя исключение InvalidEncodingException.
 		/// </summary>
-		private const int MaxLineLength = 40000;
+		private const int MaxLineLength = 100000;
 
 		public override IList<LogEntry> ReadEntireFile()
 		{

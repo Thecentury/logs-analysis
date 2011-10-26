@@ -35,6 +35,11 @@ namespace LogAnalyzer.App
 
 			LogAnalyzerConfiguration config;
 			bool configPathExists = File.Exists( configPath );
+			if ( !configPathExists )
+			{
+				configPath = Path.Combine( exeLocation, configPath );
+				configPathExists = File.Exists( configPath );
+			}
 			if ( configPathExists )
 			{
 				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
@@ -68,7 +73,10 @@ namespace LogAnalyzer.App
 				config.Directories.Clear();
 				foreach ( var dir in paths.OfType<DirectoryInfo>() )
 				{
-					config.Directories.Add( new LogDirectoryConfigurationInfo( dir.FullName, "*", dir.Name ) );
+					config.Directories.Add( new LogDirectoryConfigurationInfo( dir.FullName, "*", dir.Name )
+												{
+													EncodingName = config.DefaultEncodingName
+												} );
 				}
 
 				var files = paths.OfType<FileInfo>().ToList();
@@ -92,13 +100,20 @@ namespace LogAnalyzer.App
 
 			foreach ( string arg in commandLineArgs )
 			{
-				if ( File.Exists( arg ) )
+				try
 				{
-					result.Add( new FileInfo( arg ) );
+					if ( File.Exists( arg ) )
+					{
+						result.Add( new FileInfo( arg ) );
+					}
+					else if ( Directory.Exists( arg ) )
+					{
+						result.Add( new DirectoryInfo( arg ) );
+					}
 				}
-				else if ( Directory.Exists( arg ) )
+				catch ( NotSupportedException exc )
 				{
-					result.Add( new DirectoryInfo( arg ) );
+					Logger.WriteInfo( string.Format( "Path '{0}' is not valid", arg ) );
 				}
 			}
 

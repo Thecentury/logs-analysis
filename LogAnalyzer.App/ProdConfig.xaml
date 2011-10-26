@@ -1,0 +1,48 @@
+﻿<LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer" 
+						  DefaultEncodingName="windows-1251">
+
+	<LogAnalyzerConfiguration.Directories>
+		<LogDirectoryConfigurationInfo DisplayName="awad-front" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\"/>
+		<LogDirectoryConfigurationInfo DisplayName="13" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-13"/>
+		<LogDirectoryConfigurationInfo DisplayName="21" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-21"/>
+		<LogDirectoryConfigurationInfo DisplayName="27-temp" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-27-temp"/>
+		<LogDirectoryConfigurationInfo DisplayName="41" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-41"/>
+		<LogDirectoryConfigurationInfo DisplayName="50" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-50"/>
+		<LogDirectoryConfigurationInfo DisplayName="71" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-71"/>
+		<LogDirectoryConfigurationInfo DisplayName="73" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-73"/>
+		<LogDirectoryConfigurationInfo DisplayName="74-temp" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-74-temp"/>
+		<LogDirectoryConfigurationInfo DisplayName="76" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-76"/>
+		<LogDirectoryConfigurationInfo DisplayName="77-temp" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-77-temp"/>
+		<LogDirectoryConfigurationInfo DisplayName="86" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-86"/>
+		<LogDirectoryConfigurationInfo DisplayName="g7" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\awad-g7"/>
+		<LogDirectoryConfigurationInfo DisplayName="Boeing" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\Boeing"/>
+		<LogDirectoryConfigurationInfo DisplayName="Airbus" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\srv-airbus"/>
+		<LogDirectoryConfigurationInfo DisplayName="Bombardier" FileNameFilter="*.log" Path="c:\Logs\Prod25.10\srv-bombardier"/>
+	</LogAnalyzerConfiguration.Directories>
+
+	<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
+		<And>
+			<And.Left>
+				<LogDateTimeGreater Value="2011.10.25 10:00"/>
+			</And.Left>
+			<And.Right>
+				<LogDateTimeLess Value="2011.10.25 10:45"/>
+			</And.Right>
+		</And>
+	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
+
+	<LogAnalyzerConfiguration.LoggerAcceptedTypes>
+		<MessageType>Debug</MessageType>
+		<MessageType>Error</MessageType>
+		<MessageType>Info</MessageType>
+		<MessageType>Warning</MessageType>
+	</LogAnalyzerConfiguration.LoggerAcceptedTypes>
+
+	<LogAnalyzerConfiguration.LoggerWriters>
+		<FileLogWriter FilePath="1.log" ShouldCleanLogFile="True"/>
+		<DebugLogWriter/>
+	</LogAnalyzerConfiguration.LoggerWriters>
+
+
+
+</LogAnalyzerConfiguration>
