@@ -207,7 +207,7 @@
 				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="100"
 									CellStyle="{StaticResource timeCellStyle}"/>
-				<DataGridTemplateColumn Header="Text" Width="Auto" CellTemplate="{StaticResource textCellTemplate}"/>
+				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->
 				<!--<DataGridTextColumn Header="ColumnName" Binding="{Binding HighlightedColumnName}" Width="60"/>-->
