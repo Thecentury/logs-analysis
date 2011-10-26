@@ -13,8 +13,11 @@ namespace LogAnalyzer.GUI.FilterEditing
 		public BinaryBuilderViewModel( BinaryExpressionBuilder builder, ParameterExpression parameter )
 			: base( builder, parameter )
 		{
-			leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Left" ), parameter );
-			rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Right" ), parameter );
+			var leftBuilder = builder.Left ?? new DelegateBuilderProxy( builder, "Left" );
+			var rightBuilder = builder.Right ?? new DelegateBuilderProxy( builder, "Right" );
+
+			leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( leftBuilder, parameter );
+			rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( rightBuilder, parameter );
 		}
 
 		public ExpressionBuilderViewModel Left
