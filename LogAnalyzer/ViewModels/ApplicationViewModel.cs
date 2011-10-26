@@ -68,7 +68,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			tabs.CollectionChanged += OnTabs_CollectionChanged;
 
 			core.Start();
-			OnCoreLoaded();
 		}
 
 		private void OnTabs_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )

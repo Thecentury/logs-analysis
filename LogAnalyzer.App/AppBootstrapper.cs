@@ -109,20 +109,17 @@ namespace LogAnalyzer.App
 
 			foreach ( string arg in commandLineArgs )
 			{
-				try
+				bool isForConfig = arg.StartsWith( "/" ) && arg.Contains( ":" );
+				if ( isForConfig )
+					continue;
+
+				if ( File.Exists( arg ) )
 				{
-					if ( File.Exists( arg ) )
-					{
-						result.Add( new FileInfo( arg ) );
-					}
-					else if ( Directory.Exists( arg ) )
-					{
-						result.Add( new DirectoryInfo( arg ) );
-					}
+					result.Add( new FileInfo( arg ) );
 				}
-				catch ( NotSupportedException exc )
+				else if ( Directory.Exists( arg ) )
 				{
-					Logger.WriteInfo( string.Format( "Path '{0}' is not valid", arg ) );
+					result.Add( new DirectoryInfo( arg ) );
 				}
 			}
 
