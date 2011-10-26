@@ -29,9 +29,9 @@
 
 	</LogAnalyzerConfiguration.Directories>
 
-	<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
+	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<MessageTypeEquals Value="E"/>
-	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
+	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<StringContains>

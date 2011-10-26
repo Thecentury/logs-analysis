@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
@@ -85,13 +86,20 @@ namespace LogAnalyzer.Kernel
 		{
 			try
 			{
-				FileStream stream = fileInfo.Open( FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete );
+				Stream stream = fileInfo.Open( FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete );
 				stream.Position = startPosition;
+
+				if ( KeyValueStorage.Instance.Contains( "FileSystemStreamReaderTransformer" ) )
+				{
+					var transformer = (ITransformer<Stream>)KeyValueStorage.Instance["FileSystemStreamReaderTransformer"];
+					stream = transformer.Transform( stream );
+				}
+
 				return stream;
 			}
 			catch ( IOException exc )
 			{
-				throw new LogAnalyzerIOException( "Ошибка при открытии файла \"{0}\"".Format2( fileInfo.FullName ), exc );
+				throw new LogAnalyzerIOException( string.Format( "Ошибка при открытии файла '{0}'", fileInfo.FullName ), exc );
 			}
 		}
 	}
