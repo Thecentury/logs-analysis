@@ -26,8 +26,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			if ( core == null )
 				throw new ArgumentNullException( "core" );
-			if ( !core.IsLoaded )
-				throw new InvalidOperationException( "Core should be loaded by this moment." );
 			if ( applicationViewModel == null )
 				throw new ArgumentNullException( "applicationViewModel" );
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
+using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI;
@@ -53,6 +54,7 @@ namespace LogAnalyzer.App
 				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
 			}
 
+			SetDebugParameters();
 			InitConfig( config );
 			HandleOpenWithCalls( config );
 
@@ -63,6 +65,13 @@ namespace LogAnalyzer.App
 			{
 				Application.Current.MainWindow.DataContext = applicationViewModel;
 			} );
+		}
+
+		private void SetDebugParameters()
+		{
+			// замедление чтения
+			//KeyValueStorage.Instance.Add( "FileSystemStreamReaderTransformer",
+			//    new SlowStreamTransformer( TimeSpan.FromMilliseconds( 1 ) ) );
 		}
 
 		private void HandleOpenWithCalls( LogAnalyzerConfiguration config )

@@ -7,6 +7,14 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class DependencyInjectionContainer : IDependencyInjectionContainer
 	{
+		private static readonly DependencyInjectionContainer instance = new DependencyInjectionContainer();
+		public static DependencyInjectionContainer Instance
+		{
+			get { return instance; }
+		}
+
+		private DependencyInjectionContainer() { }
+
 		private readonly Dictionary<Type, Func<object>> registeredMappings = new Dictionary<Type, Func<object>>();
 
 		public void Register<TContract>( Func<object> createImplementationFunc )

@@ -28,7 +28,7 @@ namespace LogAnalyzer.Config
 			set { defaultEncodingName = value; }
 		}
 
-		private readonly IDependencyInjectionContainer container = new DependencyInjectionContainer();
+		private readonly IDependencyInjectionContainer container = DependencyInjectionContainer.Instance;
 		public IDependencyInjectionContainer Container
 		{
 			get { return container; }
