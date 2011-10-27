@@ -14,6 +14,8 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		static FilterBuilderTemplateSelector()
 		{
+			Register<BooleanCollectionBuilder>();
+
 			Register<LogDateTimeFilterBase>();
 
 			Register<Not>();

@@ -16,7 +16,7 @@ namespace LogAnalyzer.Filters
 			set
 			{
 				if ( expressionBuilder == null )
-					throw new ArgumentNullException( "expressionBuilder" );
+					throw new ArgumentNullException( "ExpressionBuilder" );
 
 				expressionBuilder.PropertyChanged -= OnExpressionBuilder_PropertyChanged;
 				expressionBuilder = value;
@@ -33,7 +33,7 @@ namespace LogAnalyzer.Filters
 
 		private void Recompile()
 		{
-			Func<T, bool> temp = null;
+			Func<T, bool> temp;
 			if ( expressionBuilder.TryCompile( out temp ) )
 			{
 				filter = temp;
@@ -46,7 +46,7 @@ namespace LogAnalyzer.Filters
 			Recompile();
 		}
 
-		private Func<T, bool> filter = null;
+		private Func<T, bool> filter;
 		public bool Include( T entity )
 		{
 			bool include = filter( entity );

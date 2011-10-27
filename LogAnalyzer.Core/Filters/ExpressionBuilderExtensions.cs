@@ -34,12 +34,18 @@ namespace LogAnalyzer.Filters
 
 		public static Func<T, bool> Compile<T>( this ExpressionBuilder builder )
 		{
-			return FilterBuilder.Compile<T>( p => builder.CreateExpression( p ) );
+			return FilterBuilder.Compile<T>( builder.CreateExpression );
 		}
 
 		public static bool TryCompile<T>( this ExpressionBuilder builder, out Func<T, bool> filter )
 		{
 			filter = null;
+
+			if ( !builder.ValidateProperties() )
+			{
+				return false;
+			}
+
 			try
 			{
 				filter = Compile<T>( builder );
@@ -48,7 +54,6 @@ namespace LogAnalyzer.Filters
 			catch ( Exception )
 			{
 				// todo перехватывать не все исключения
-				filter = null;
 				return false;
 			}
 		}

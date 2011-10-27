@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.ComponentModel;
 

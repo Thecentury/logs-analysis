@@ -50,6 +50,7 @@ namespace LogAnalyzer.Tests
 		/// <summary>
 		/// Логирование из 2 директорий.
 		/// </summary>
+		[Timeout( 6000 )]
 		[Test]
 		public void TestSeveralDirectories()
 		{
