@@ -17,6 +17,11 @@ namespace LogAnalyzer.Filters
 			set { Set( "Inner", value ); }
 		}
 
+		protected override bool ValidatePropertiesCore()
+		{
+			return Inner.ValidateProperties();
+		}
+
 		public override Type GetResultType( ParameterExpression target )
 		{
 			return typeof( bool );

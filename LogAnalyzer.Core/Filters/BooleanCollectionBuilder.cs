@@ -24,9 +24,11 @@ namespace LogAnalyzer.Filters
 			return typeof( bool );
 		}
 
-		protected override bool ValidatePropertiesCore()
+		protected sealed override bool ValidatePropertiesCore()
 		{
-			return children.Count >= 2 && children.All( c => c != null );
+			return children.Count >= 2
+				   && children.All( c => c != null )
+				   && children.All( c => c.ValidateProperties() );
 		}
 
 		protected sealed override Expression CreateExpressionCore( ParameterExpression parameterExpression )

@@ -17,5 +17,10 @@ namespace LogAnalyzer.Filters
 		{
 			return Expression.Constant( true, typeof( bool ) );
 		}
+
+		public override string ToString()
+		{
+			return "True";
+		}
 	}
 }

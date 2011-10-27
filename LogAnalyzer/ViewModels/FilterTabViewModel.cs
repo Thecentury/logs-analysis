@@ -62,10 +62,16 @@ namespace LogAnalyzer.GUI.ViewModels
 				int closingBracketsCount = trimmedStart.Count( c => c == ')' );
 
 				string expressionString = trimmedStart;
-				if ( openBracketsCount < closingBracketsCount )
+
+				int closingBracketsToRemove = closingBracketsCount - openBracketsCount;
+				if ( closingBracketsToRemove > 0 )
 				{
-					expressionString = expressionString.TrimEnd( ')' );
+					expressionString = expressionString.Remove( expressionString.Length - closingBracketsToRemove );
 				}
+
+				expressionString = expressionString
+					.Replace( " AndAlso ", " & " )
+					.Replace( " OrElse ", " | " );
 
 				return expressionString;
 			}
