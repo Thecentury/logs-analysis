@@ -203,7 +203,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private string highlightedPropertyName = null;
+		private string highlightedPropertyName;
 		public string HighlightedPropertyName
 		{
 			get { return highlightedPropertyName; }

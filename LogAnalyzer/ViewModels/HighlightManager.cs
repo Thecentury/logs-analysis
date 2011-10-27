@@ -80,18 +80,15 @@ namespace LogAnalyzer.GUI.ViewModels
 					break;
 			}
 
-			if ( highlightFilterBuilder != null )
-			{
-				var filter = highlightFilterBuilder.BuildLogEntriesFilter();
+			var filter = highlightFilterBuilder.BuildLogEntriesFilter();
 
-				SparseLogEntryViewModelList entriesList = (SparseLogEntryViewModelList)sourceEntry.ParentSparseCollection;
+			SparseLogEntryViewModelList entriesList = (SparseLogEntryViewModelList)sourceEntry.ParentSparseCollection;
 
-				LogEntriesListViewModel listViewModel = entriesList.Parent;
-				listViewModel.DynamicHighlightingFilter = filter;
-				listViewModel.HighlightedPropertyName = bindingPath;
+			LogEntriesListViewModel listViewModel = entriesList.Parent;
+			listViewModel.DynamicHighlightingFilter = filter;
+			listViewModel.HighlightedPropertyName = bindingPath;
 
-				listViewModel.UpdateDynamicHighlighting();
-			}
+			listViewModel.UpdateDynamicHighlighting();
 		}
 	}
 }

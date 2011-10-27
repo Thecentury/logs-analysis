@@ -12,7 +12,7 @@ namespace LogAnalyzer.GUI.ViewModels
 	{
 		internal HighlightingViewModel()
 		{
-			filter.Changed += new EventHandler( OnFilter_Changed );
+			filter.Changed += OnFilter_Changed;
 		}
 
 		private Brush brush;
@@ -42,7 +42,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return filter.ExpressionBuilder.ToExpressionString(); }
 		}
 
-		private int highlightedCount = 0;
+		private int highlightedCount;
 		public int HighlightedCount
 		{
 			get { return highlightedCount; }

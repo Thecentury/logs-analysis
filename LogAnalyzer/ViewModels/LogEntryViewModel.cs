@@ -88,7 +88,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private bool isDynamicHighlighted = false;
+		private bool isDynamicHighlighted;
 		public bool IsDynamicHighlighted
 		{
 			get { return isDynamicHighlighted; }
