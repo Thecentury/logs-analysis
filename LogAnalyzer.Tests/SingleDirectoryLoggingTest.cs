@@ -17,6 +17,7 @@ namespace LogAnalyzer.Tests
 			InitEnvironment( Encoding.Unicode, directoriesCount: 1 );
 		}
 
+		[Timeout( 4000 )]
 		[Test]
 		public void TestSingleDirectoryLogging()
 		{

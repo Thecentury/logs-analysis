@@ -52,7 +52,12 @@ namespace LogAnalyzer.Tests
 		public void TestExpressionBuilderManager()
 		{
 			ExpressionBuilder[] buildersReturningBoolean = ExpressionBuilderManager.GetBuildersReturningType( typeof( bool ) );
+			Assert.NotNull( buildersReturningBoolean );
+			Assert.That( buildersReturningBoolean.Length, Is.GreaterThan( 0 ) );
+
 			ExpressionBuilder[] buildersReturningExpression = ExpressionBuilderManager.GetBuildersReturningType( typeof( ExpressionBuilder ) );
+			Assert.NotNull( buildersReturningExpression );
+			Assert.That( buildersReturningExpression.Length, Is.GreaterThan( 0 ) );
 		}
 
 		[Test]
@@ -67,8 +72,8 @@ namespace LogAnalyzer.Tests
 		private static GreaterThan CreateSampleGreaterThanBuilder()
 		{
 			GreaterThan greaterBuilder = BinaryExpressionBuilder.Create<GreaterThan>(
-						 ExpressionBuilder.CreateConstant<int>( 0 ),
-						 ExpressionBuilder.CreateConstant<int>( 1 )
+						 ExpressionBuilder.CreateConstant( 0 ),
+						 ExpressionBuilder.CreateConstant( 1 )
 						 );
 			return greaterBuilder;
 		}
@@ -111,6 +116,19 @@ namespace LogAnalyzer.Tests
 			var compiled = builder.BuildFilter<int>();
 			bool include = compiled.Include( 2 );
 			Assert.IsFalse( include );
+		}
+
+		[Test]
+		public void BinaryBuilderChildrenValidationTest()
+		{
+			And and1 = new And();
+			Assert.IsFalse( and1.ValidateProperties() );
+
+			And and2 = new And { Left = new Argument() };
+			Assert.IsFalse( and2.ValidateProperties() );
+
+			And and3 = new And { Right = new Argument() };
+			Assert.IsFalse( and3.ValidateProperties() );
 		}
 	}
 }
