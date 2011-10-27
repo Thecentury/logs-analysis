@@ -84,15 +84,33 @@ namespace LogAnalyzer.Tests
 		}
 
 		[Test]
-		public void TestDeserialization()
+		public void TestEqualsDeserialization()
 		{
-			string xaml =
-@"<Equals xmlns=""http://www.awad.com/LogAnalyzer"">
-	<GetProperty PropertyName=""ThreadId""/>
-	<IntConstant Value=""62""/>
-</Equals>";
+			const string xaml =
+				@"<Equals xmlns=""http://www.awad.com/LogAnalyzer"">
+					<GetProperty PropertyName=""ThreadId""/>
+					<IntConstant Value=""62""/>
+				</Equals>";
 
 			ExpressionBuilder builder = (ExpressionBuilder)XamlServices.Parse( xaml );
+			Assert.NotNull( builder );
+		}
+
+		[Test]
+		public void TestBinaryOperatorDeserialization()
+		{
+			const string xaml =
+				@"<And xmlns=""http://www.awad.com/LogAnalyzer"">
+					<AlwaysFalse/>
+					<AlwaysTrue/>
+				</And>";
+
+			ExpressionBuilder builder = (ExpressionBuilder)XamlServices.Parse( xaml );
+			Assert.NotNull( builder );
+
+			var compiled = builder.BuildFilter<int>();
+			bool include = compiled.Include( 2 );
+			Assert.IsFalse( include );
 		}
 	}
 }
