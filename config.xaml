@@ -57,9 +57,10 @@
 	<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
 
 	<LogAnalyzerConfiguration.LoggerAcceptedTypes>
-		<MessageType>Debug</MessageType>
 		<MessageType>Error</MessageType>
+		<MessageType>Warning</MessageType>
 		<MessageType>Info</MessageType>
+		<MessageType>Debug</MessageType>
 	</LogAnalyzerConfiguration.LoggerAcceptedTypes>
 
 	<LogAnalyzerConfiguration.LoggerWriters>

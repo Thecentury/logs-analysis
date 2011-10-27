@@ -22,12 +22,8 @@
 
 	<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<And>
-			<And.Left>
-				<LogDateTimeGreater Value="2011.10.25 10:00"/>
-			</And.Left>
-			<And.Right>
-				<LogDateTimeLess Value="2011.10.25 10:45"/>
-			</And.Right>
+			<LogDateTimeGreater Value="2011.10.25 10:00"/>
+			<LogDateTimeLess Value="2011.10.25 10:45"/>
 		</And>
 	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 

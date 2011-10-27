@@ -13,8 +13,7 @@ namespace LogAnalyzer.Filters
 	{
 		protected BinaryExpressionBuilder()
 		{
-			children.Add( null );
-			children.Add( null );
+
 		}
 
 		protected BinaryExpressionBuilder( ExpressionBuilder left, ExpressionBuilder right )
@@ -24,6 +23,9 @@ namespace LogAnalyzer.Filters
 				throw new ArgumentNullException( "left" );
 			if ( right == null )
 				throw new ArgumentNullException( "right" );
+
+			children.Add( null );
+			children.Add( null );
 
 			Left = left;
 			Right = right;
@@ -85,10 +87,7 @@ namespace LogAnalyzer.Filters
 
 		#region ISupportInitialize Members
 
-		void ISupportInitialize.BeginInit()
-		{
-
-		}
+		void ISupportInitialize.BeginInit() { }
 
 		void ISupportInitialize.EndInit()
 		{
