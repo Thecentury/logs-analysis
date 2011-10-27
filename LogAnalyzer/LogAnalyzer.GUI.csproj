@@ -95,6 +95,7 @@
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\RealWindowService.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
     <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />
     <Compile Include="FilterEditing\DelegateBuilderViewModel.cs" />
     <Compile Include="FilterEditing\ExpressionBuilderViewModel.cs" />

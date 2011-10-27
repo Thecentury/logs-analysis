@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.FilterEditor;
 

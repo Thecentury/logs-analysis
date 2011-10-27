@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 using LogAnalyzer.Extensions;
 using System.Reflection;
 
-namespace ExpressionBuilderSample
+namespace LogAnalyzer.GUI.FilterEditing
 {
 	[IgnoreBuilder]
 	internal sealed class DelegateBuilderProxy : ExpressionBuilder
 	{
-		private readonly object inner = null;
-		private readonly PropertyInfo propertyInfo = null;
+		private readonly object inner;
+		private readonly PropertyInfo propertyInfo;
 
 		public DelegateBuilderProxy( object inner, string propertyName )
 		{
 			if ( inner == null )
-				throw new ArgumentNullException( "target" );
+				throw new ArgumentNullException( "inner" );
 			if ( propertyName == null )
 				throw new ArgumentNullException( "propertyName" );
 
@@ -42,6 +39,11 @@ namespace ExpressionBuilderSample
 				return typeof( object );
 			else
 				return Inner.GetResultType( target );
+		}
+
+		protected override bool ValidatePropertiesCore()
+		{
+			return Inner != null;
 		}
 
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )

@@ -1,5 +1,4 @@
-﻿using ExpressionBuilderSample;
-using LogAnalyzer.Filters;
+﻿using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 
 namespace LogAnalyzer.GUI.FilterEditing
@@ -14,6 +13,11 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			this.notBuilder = notBuilder;
 			innerViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( notBuilder, "Inner" ), parameter );
+
+			if ( notBuilder.Inner != null )
+			{
+				innerViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( notBuilder.Inner, parameter );
+			}
 		}
 
 		public ExpressionBuilderViewModel Inner

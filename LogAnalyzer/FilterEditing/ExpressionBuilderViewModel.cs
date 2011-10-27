@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
-using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 using LogAnalyzer.GUI.ViewModels;

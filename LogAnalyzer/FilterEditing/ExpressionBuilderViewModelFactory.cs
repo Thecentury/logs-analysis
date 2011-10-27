@@ -1,12 +1,11 @@
 ﻿using System;
-using ExpressionBuilderSample;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 using LogAnalyzer.GUI.FilterEditor;
 
 namespace LogAnalyzer.GUI.FilterEditing
 {
-	internal sealed class ExpressionBuilderViewModelFactory
+	internal static class ExpressionBuilderViewModelFactory
 	{
 		public static ExpressionBuilderViewModel CreateViewModel( ExpressionBuilder builder, ParameterExpression parameter )
 		{
@@ -38,6 +37,14 @@ namespace LogAnalyzer.GUI.FilterEditing
 			LogDateTimeFilterBase logDateTime = builder as LogDateTimeFilterBase;
 			if ( logDateTime != null )
 				return new LogDateTimeViewModel( logDateTime, parameter );
+
+			BooleanCollectionBuilder booleanCollectionBuilder = builder as BooleanCollectionBuilder;
+			if ( booleanCollectionBuilder != null )
+				return new CollectionBooleanBuilderViewModel( booleanCollectionBuilder, parameter );
+
+			ProxyCollectionElementBuilder collectionProxy = builder as ProxyCollectionElementBuilder;
+			if ( collectionProxy != null )
+				return new CollectionBooleanChildBuilderViewModel( collectionProxy, parameter );
 
 			return new ExpressionBuilderViewModel( builder, parameter );
 		}
