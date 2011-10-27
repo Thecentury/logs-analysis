@@ -113,7 +113,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			get
 			{
-				string description = builder.GetType().Name;
+				string description = builder.ToString();
 				return description;
 			}
 		}

@@ -25,14 +25,8 @@ namespace LogAnalyzer.GUI.FilterEditing
 			this.builder = builder;
 			this.parameter = parameter;
 
-			foreach ( var child in builder.Children )
-			{
-				var childViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( child, parameter );
-				children.Add( childViewModel );
-			}
-
-			// дополняет до 2 детей.
-			while ( children.Count < 2 )
+			int count = Math.Max( 2, builder.Children.Count );
+			for ( int i = 0; i < count; i++ )
 			{
 				var proxyViewModel = CreateProxyViewModel();
 				children.Add( proxyViewModel );
@@ -42,14 +36,20 @@ namespace LogAnalyzer.GUI.FilterEditing
 		private ExpressionBuilderViewModel CreateProxyViewModel()
 		{
 			int index = children.Count;
-			var proxy = new ProxyCollectionElementBuilder( children, index );
+			var proxy = new ProxyCollectionElementBuilder( builder.Children, Children, index );
 			var proxyViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( proxy, parameter );
+
+			if ( index < builder.Children.Count && builder.Children[index] != null )
+			{
+				var selectedViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Children[index], parameter );
+				proxyViewModel.SelectedChild = selectedViewModel;
+			}
+
 			return proxyViewModel;
 		}
 
 		private readonly ObservableCollection<ExpressionBuilderViewModel> children = new ObservableCollection<ExpressionBuilderViewModel>();
-
-		public Collection<ExpressionBuilderViewModel> Children
+		public ObservableCollection<ExpressionBuilderViewModel> Children
 		{
 			get { return children; }
 		}
@@ -90,17 +90,65 @@ namespace LogAnalyzer.GUI.FilterEditing
 			builder.Inner = newBuilder;
 		}
 
-		// todo brinchuk commands for removing
+		private DelegateCommand removeCommand;
+
+		public ICommand RemoveCommand
+		{
+			get
+			{
+				if ( removeCommand == null )
+					removeCommand = new DelegateCommand( ExecuteRemove, CanExecuteRemove );
+
+				return removeCommand;
+			}
+		}
+
+		private void ExecuteRemove()
+		{
+			if ( builder.Index < builder.Builders.Count )
+			{
+				builder.Builders.RemoveAt(builder.Index);
+			}
+
+			builder.ViewModels.RemoveAt( builder.Index );
+
+			for ( int i = builder.Index; i < builder.Builders.Count; i++ )
+			{
+				var proxyBuilder = builder.Builders[i] as ProxyCollectionElementBuilder;
+				if ( proxyBuilder != null )
+				{
+					proxyBuilder.Index--;
+				}
+			}
+		}
+
+		private bool CanExecuteRemove()
+		{
+			return builder.ViewModels.Count > 1;
+		}
 	}
 
 	internal sealed class ProxyCollectionElementBuilder : ExpressionBuilder
 	{
-		private readonly IList<ExpressionBuilderViewModel> collection;
-		public ProxyCollectionElementBuilder( IList<ExpressionBuilderViewModel> collection, int index )
+		private readonly IList<ExpressionBuilder> builders;
+		public IList<ExpressionBuilder> Builders
 		{
-			if ( collection == null ) throw new ArgumentNullException( "collection" );
+			get { return builders; }
+		}
 
-			this.collection = collection;
+		private readonly IList<ExpressionBuilderViewModel> viewModels;
+		public IList<ExpressionBuilderViewModel> ViewModels
+		{
+			get { return viewModels; }
+		}
+
+		public ProxyCollectionElementBuilder( IList<ExpressionBuilder> builders, IList<ExpressionBuilderViewModel> viewModels, int index )
+		{
+			if ( builders == null ) throw new ArgumentNullException( "builders" );
+			if ( viewModels == null ) throw new ArgumentNullException( "viewModels" );
+
+			this.builders = builders;
+			this.viewModels = viewModels;
 			this.index = index;
 		}
 
@@ -128,10 +176,15 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		public ExpressionBuilder Inner
 		{
-			get { return collection[index].Builder; }
+			get { return Builders[index]; }
 			set
 			{
-				//collection[index].Builder = 
+				while ( Builders.Count <= index )
+				{
+					Builders.Add( null );
+				}
+
+				Builders[index] = value;
 				PropertyChangedDelegate.RaiseAllChanged( this );
 			}
 		}

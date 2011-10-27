@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
 {
-	[Timeout( 4000 )]
+	[Timeout( 6000 )]
 	[TestFixture]
 	public class LoggingTests : LoggingTestsBase
 	{
@@ -50,7 +50,6 @@ namespace LogAnalyzer.Tests
 		/// <summary>
 		/// Логирование из 2 директорий.
 		/// </summary>
-		[Timeout( 6000 )]
 		[Test]
 		public void TestSeveralDirectories()
 		{

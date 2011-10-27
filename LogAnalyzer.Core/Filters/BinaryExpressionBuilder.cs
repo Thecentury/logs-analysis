@@ -52,6 +52,11 @@ namespace LogAnalyzer.Filters
 			}
 		}
 
+		protected sealed override bool ValidatePropertiesCore()
+		{
+			return Left.ValidateProperties() && Right.ValidateProperties();
+		}
+
 		private void InsertChild( ExpressionBuilder child, int insertIndex )
 		{
 			while ( children.Count <= insertIndex )

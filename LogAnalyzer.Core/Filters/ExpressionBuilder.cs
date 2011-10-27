@@ -241,10 +241,15 @@ namespace LogAnalyzer.Filters
 			if ( String.IsNullOrWhiteSpace( xamlString ) )
 				return false;
 
-			ExpressionBuilder builder = null;
-			bool canParse = ExpressionBuilder.TryParse( xamlString, out builder );
+			ExpressionBuilder builder;
+			bool canParse = TryParse( xamlString, out builder );
 
 			return canParse;
+		}
+
+		public override string ToString()
+		{
+			return GetType().Name;
 		}
 	}
 }
