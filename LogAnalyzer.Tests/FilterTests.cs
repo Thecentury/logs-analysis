@@ -130,5 +130,84 @@ namespace LogAnalyzer.Tests
 			And and3 = new And { Right = new Argument() };
 			Assert.IsFalse( and3.ValidateProperties() );
 		}
+
+		[Test]
+		public void TestAndCollectionValidation()
+		{
+			AndCollection and1 = new AndCollection();
+			Assert.IsFalse( and1.ValidateProperties() );
+
+			AndCollection and2 = new AndCollection();
+			and2.Children.Add( null );
+			and2.Children.Add( null );
+			Assert.IsFalse( and2.ValidateProperties() );
+
+			AndCollection and3 = new AndCollection();
+			and3.Children.Add( new AlwaysTrue() );
+			and3.Children.Add( new AlwaysTrue() );
+			Assert.IsTrue( and3.ValidateProperties() );
+
+			AndCollection and4 = new AndCollection();
+			and4.Children.Add( new AlwaysTrue() );
+			and4.Children.Add( new AlwaysTrue() );
+			and4.Children.Add( null );
+			Assert.IsFalse( and4.ValidateProperties() );
+		}
+
+		[Test]
+		public void TestAndCollection()
+		{
+			AndCollection and = new AndCollection();
+			and.Children.Add( new AlwaysTrue() );
+			and.Children.Add( new AlwaysTrue() );
+			and.Children.Add( new AlwaysTrue() );
+			and.Children.Add( new AlwaysFalse() );
+
+			var compiled = and.BuildFilter<object>();
+			bool include = compiled.Include( null );
+			Assert.IsFalse( include );
+		}
+
+		[Test]
+		public void TestAndAlso()
+		{
+			AndCollection and = new AndCollection();
+			and.Children.Add( new GetProperty( new Argument(), "False" ) );
+			and.Children.Add( new GetProperty( new Argument(), "Throws" ) );
+
+			var compiled = and.BuildFilter<ThrowingClass>();
+			bool include = compiled.Include( new ThrowingClass() );
+			Assert.IsFalse( include );
+		}
+
+		[Test]
+		public void TestOrElse()
+		{
+			OrCollection or = new OrCollection();
+			or.Children.Add( new GetProperty( new Argument(), "True" ) );
+			or.Children.Add( new GetProperty( new Argument(), "Throws" ) );
+
+			var compiled = or.BuildFilter<ThrowingClass>();
+			bool include = compiled.Include( new ThrowingClass() );
+			Assert.IsTrue( include );
+		}
+
+		private sealed class ThrowingClass
+		{
+			public bool Throws
+			{
+				get { throw new NotSupportedException(); }
+			}
+
+			public bool True
+			{
+				get { return true; }
+			}
+
+			public bool False
+			{
+				get { return false; }
+			}
+		}
 	}
 }
