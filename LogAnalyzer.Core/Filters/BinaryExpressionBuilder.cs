@@ -11,10 +11,7 @@ namespace LogAnalyzer.Filters
 	[ContentProperty( "Children" )]
 	public abstract class BinaryExpressionBuilder : ExpressionBuilder, ISupportInitialize
 	{
-		protected BinaryExpressionBuilder()
-		{
-
-		}
+		protected BinaryExpressionBuilder() { }
 
 		protected BinaryExpressionBuilder( ExpressionBuilder left, ExpressionBuilder right )
 			: this()
@@ -38,7 +35,7 @@ namespace LogAnalyzer.Filters
 			get { return GetExpressionBuilder( "Left" ); }
 			set
 			{
-				children[0] = value;
+				InsertChild( value, 0 );
 				Set( "Left", value );
 			}
 		}
@@ -50,9 +47,18 @@ namespace LogAnalyzer.Filters
 			get { return GetExpressionBuilder( "Right" ); }
 			set
 			{
-				children[1] = value;
+				InsertChild( value, 1 );
 				Set( "Right", value );
 			}
+		}
+
+		private void InsertChild( ExpressionBuilder child, int insertIndex )
+		{
+			while ( children.Count <= insertIndex )
+			{
+				children.Add( null );
+			}
+			children[insertIndex] = child;
 		}
 
 		public readonly List<ExpressionBuilder> children = new List<ExpressionBuilder>( 2 );

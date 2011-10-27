@@ -32,6 +32,11 @@ namespace LogAnalyzer.Tests
 				configBuilder.AddLogDirectory( "Dir2", "*", "Some directory 2" );
 			}
 
+			foreach ( var dir in configBuilder.Directories )
+			{
+				dir.EncodingName = "utf-16";
+			}
+
 			config = configBuilder
 				.AddLogWriter( new DebugLogWriter() )
 				.AcceptAllLogTypes();

@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
 {
+	[Timeout( 4000 )]
 	[TestFixture]
 	public class LoggingTests : LoggingTestsBase
 	{

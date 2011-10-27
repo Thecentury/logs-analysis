@@ -61,7 +61,18 @@ namespace LogAnalyzer.Filters
 
 			bool allPropertiesSet = propertiesToSet.All( HasValue );
 
-			return allPropertiesSet;
+			bool isValid = allPropertiesSet && ValidatePropertiesCore();
+
+			return isValid;
+		}
+
+		/// <summary>
+		/// Выполнить проверку, установлены ли все необходимые свойства, специфичную для конкретного типа построителя фильтров.
+		/// </summary>
+		/// <returns></returns>
+		protected virtual bool ValidatePropertiesCore()
+		{
+			return true;
 		}
 
 		public abstract Type GetResultType( ParameterExpression target );
