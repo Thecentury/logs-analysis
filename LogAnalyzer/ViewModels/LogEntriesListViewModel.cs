@@ -254,7 +254,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void GotFocusExecute( RoutedEventArgs e )
 		{
-			HighlightManager.ProcessCellSelection( e );
+			DynamicHighlightManager.ProcessCellSelection( e );
 		}
 	}
 }

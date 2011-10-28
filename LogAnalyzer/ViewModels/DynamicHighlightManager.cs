@@ -12,18 +12,8 @@ using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	internal class HighlightManager
+	internal class DynamicHighlightManager
 	{
-		public HighlightManager( ObservableCollection<HighlightingViewModel> highlightList )
-		{
-			if ( highlightList == null )
-				throw new ArgumentNullException( "highlightList" );
-		}
-
-		public void Register( LogEntryViewModel entry ) { }
-
-		public void Unregister( LogEntryViewModel entry ) { }
-
 		public static void ProcessCellSelection( RoutedEventArgs e )
 		{
 			DataGridCell cell = e.OriginalSource as DataGridCell;
