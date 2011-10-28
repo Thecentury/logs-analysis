@@ -35,7 +35,7 @@
 								<Button Command="{Binding RemoveCommand}"
 										Width="20" Height="20"
 										ToolTip="Remove filter">
-									x
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-circle.png"/>
 								</Button>
 								<FilterEditor:FilterExpressionView DataContext="{Binding}"/>
 							</StackPanel>
@@ -44,8 +44,9 @@
 				</ItemsControl>
 				<Button Command="{Binding AddChildCommand}"
 						Width="20" Height="20"
-						ToolTip="Add one more filter"
-						>+</Button>
+						ToolTip="Add one more filter">
+					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"/>
+				</Button>
 			</StackPanel>
 		</DataTemplate>
 

@@ -126,9 +126,9 @@
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Commands.cs" />
+    <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
-    <Compile Include="ViewModels\HighlightManager.cs" />
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
     <Compile Include="ViewModels\FilterEditorViewModel.cs" />
@@ -305,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cross-circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

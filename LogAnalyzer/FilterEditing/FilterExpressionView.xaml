@@ -26,6 +26,7 @@
 			<Setter Property="SelectedItem" Value="{Binding SelectedChild, Mode=TwoWay}"/>
 			<Setter Property="ItemTemplate" Value="{StaticResource comboboxItemTemplate}"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="MinWidth" Value="80"/>
 		</Style>
 
 		<ControlTemplate TargetType="Control" x:Key="fullTemplate">
