@@ -14,7 +14,8 @@
 						Width="16" Height="16" 
 						VerticalContentAlignment="Top"
 						Margin="4,0,4,0" Padding="0">
-			<TextBlock VerticalAlignment="Bottom" Foreground="DarkGray">×</TextBlock>
+			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-small.png"/>
+			<!--<TextBlock VerticalAlignment="Bottom" Foreground="DarkGray">×</TextBlock>-->
 		</Button>
 	</StackPanel>
 
