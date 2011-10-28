@@ -12,7 +12,7 @@ namespace LogAnalyzer.Filters
 	{
 		public static IFilter<T> BuildFilter<T>( this ExpressionBuilder builder )
 		{
-			return FilterBuilder.BuildFilter<T>( p => builder.CreateExpression( p ) );
+			return FilterBuilder.BuildFilter<T>( builder.CreateExpression );
 		}
 
 		public static Type GetResultType<T>( this ExpressionBuilder builder )
@@ -24,7 +24,7 @@ namespace LogAnalyzer.Filters
 
 		public static IFilter<LogEntry> BuildLogEntriesFilter( this ExpressionBuilder builder )
 		{
-			return FilterBuilder.BuildLogEntryFilter( p => builder.CreateExpression( p ) );
+			return FilterBuilder.BuildLogEntryFilter( builder.CreateExpression );
 		}
 
 		public static Type GetLogEntriesFilterResultType( this ExpressionBuilder builder )
