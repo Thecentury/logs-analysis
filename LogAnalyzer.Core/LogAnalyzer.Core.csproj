@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllDatesAcceptor.cs" />
+    <Compile Include="Auxilliary\CodeAnnotations.cs" />
     <Compile Include="Auxilliary\SlowStream.cs" />
     <Compile Include="Auxilliary\SlowStreamTransformer.cs" />
     <Compile Include="Caching\CacheManager.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
+    <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />

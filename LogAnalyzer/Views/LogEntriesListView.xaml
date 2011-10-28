@@ -95,6 +95,9 @@
 							<MenuItem Header="{Binding CreateViewForFileCommandHeader}" Command="{Binding CreateFileViewCommand}"/>
 							<MenuItem Header="{Binding CreateViewForDirectoryCommandHeader}" Command="{Binding CreateDirectoryViewCommand}"/>
 						</MenuItem>
+						<MenuItem Header="Exclude:">
+							<MenuItem Header="{Binding ExcludeByCertainFileCommandHeader}" Command="{Binding ExcludeByCertainFileCommand}"/>
+						</MenuItem>
 					</ContextMenu>
 				</Setter.Value>
 			</Setter>

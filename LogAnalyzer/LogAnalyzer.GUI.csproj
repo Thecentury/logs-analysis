@@ -310,7 +310,7 @@
     <Resource Include="Resources\cross-circle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\cross-small.png" />
+    <Resource Include="Resources\cross-small-black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

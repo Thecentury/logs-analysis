@@ -48,6 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -67,6 +68,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationViewModelCommandsTests.cs" />
+    <Compile Include="CollectionBooleanBuildersViewModelTests.cs" />
     <Compile Include="ConfigTests.cs" />
     <Compile Include="DateTimeParsingBenchmark.cs" />
     <Compile Include="DelayedLogRecordsSourceTests.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="LoggingTests.cs" />
     <Compile Include="RealDataTests.cs" />
     <Compile Include="SingleDirectoryLoggingTest.cs" />
+    <Compile Include="VerbatimExpressionBuilderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
@@ -97,6 +101,10 @@
     <ProjectReference Include="..\LogAnalyzer.Tests.Common\LogAnalyzer.Tests.Common.csproj">
       <Project>{5C692517-E5B1-44E7-A0C1-568A50E04D91}</Project>
       <Name>LogAnalyzer.Tests.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.GUI.csproj">
+      <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
+      <Name>LogAnalyzer.GUI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

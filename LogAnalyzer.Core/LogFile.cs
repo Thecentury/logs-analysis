@@ -59,6 +59,11 @@ namespace LogAnalyzer
 			get { return parentDirectory; }
 		}
 
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		internal LogFile() { }
+
 		internal LogFile( IFileInfo fileInfo, LogDirectory parent )
 		{
 			if ( fileInfo == null )

@@ -49,23 +49,25 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private static object GetResourceKey( Type builderType )
 		{
-			Type key = templateMappings.Keys.Where( t => t.IsAssignableFrom( builderType ) ).OrderBy( comparer ).First();
+			Type key = templateMappings.Keys.Where( t => t.IsAssignableFrom( builderType ) ).OrderBy( comparer ).FirstOrDefault();
+			if ( key == null )
+				return null;
 			return templateMappings[key];
 		}
 
 		public override DataTemplate SelectTemplate( object item, DependencyObject container )
 		{
-			if ( item == null )
-			{
-				return base.SelectTemplate( item, container );
-			}
-
 			ExpressionBuilderViewModel vm = (ExpressionBuilderViewModel)item;
 			ExpressionBuilder builder = vm.Builder;
 			Type builderType = builder.GetType();
 
 			FrameworkElement visual = (FrameworkElement)container;
 			object resourceKey = GetResourceKey( builderType );
+			if ( resourceKey == null )
+			{
+				return base.SelectTemplate( item, container );
+			}
+			
 			DataTemplate template = (DataTemplate)visual.FindResource( resourceKey );
 			return template;
 		}

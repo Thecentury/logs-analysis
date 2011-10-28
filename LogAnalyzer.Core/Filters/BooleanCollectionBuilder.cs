@@ -1,18 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Markup;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Filters
 {
 	[ContentProperty( "Children" )]
 	public abstract class BooleanCollectionBuilder : ExpressionBuilder
 	{
-		private readonly Collection<ExpressionBuilder> children = new Collection<ExpressionBuilder>();
+		protected BooleanCollectionBuilder()
+		{
+			children.CollectionChanged += OnChildren_CollectionChanged;
+		}
+
+		private void OnChildren_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			PropertyChangedDelegate.Raise( this, "Children" );
+		}
+
+		private readonly ObservableCollection<ExpressionBuilder> children = new ObservableCollection<ExpressionBuilder>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public Collection<ExpressionBuilder> Children
 		{

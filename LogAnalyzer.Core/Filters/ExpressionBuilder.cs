@@ -52,7 +52,7 @@ namespace LogAnalyzer.Filters
 		{
 			Type myType = GetType();
 
-			var propertiesToSet = from prop in myType.GetProperties( 
+			var propertiesToSet = from prop in myType.GetProperties(
 									  BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.FlattenHierarchy )
 								  let attributes = prop.GetCustomAttributes( typeof( FilterParameterAttribute ), true )
 								  where attributes.Length > 0
@@ -194,6 +194,16 @@ namespace LogAnalyzer.Filters
 		public static ConstantExpressionBuilder<TConstant> CreateConstant<TConstant>( TConstant value )
 		{
 			return new ConstantExpressionBuilder<TConstant>( value );
+		}
+
+		public static VerbatimExpressionBuilder<T> Create<T>( Expression<Func<T, bool>> expression )
+		{
+			return new VerbatimExpressionBuilder<T>( expression );
+		}
+
+		public static VerbatimExpressionBuilder<T> Create<T>( T obj, Expression<Func<T, bool>> expression )
+		{
+			return Create( expression );
 		}
 
 		public static ExpressionBuilder Parse( string str )
