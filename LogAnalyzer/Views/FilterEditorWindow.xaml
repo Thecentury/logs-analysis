@@ -6,9 +6,10 @@
 		Icon="..\Resources\icon.png"
 		WindowStartupLocation="CenterOwner"
 		WindowState="Normal" ResizeMode="NoResize"
+		MinWidth="200" MinHeight="120"
 		>
 
-	<StackPanel Orientation="Vertical">
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<FilterEditing:FilterEditor x:Name="filterEditor"/>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,0,4,8">
 			<StackPanel.Resources>

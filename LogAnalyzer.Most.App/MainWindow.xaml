@@ -42,7 +42,7 @@
 				<Button Command="{Binding Performance.RefreshLogDataCommand}"
 						ToolTip="Refresh"
 						Style="{StaticResource toolbarButtonStyle}">
-					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-retweet.png"
+					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-circle-double.png"
 						   Style="{StaticResource toolbarImageStyle}"/>
 				</Button>
 			</ToolBar>

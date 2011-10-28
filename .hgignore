@@ -12,3 +12,4 @@ Binaries/*
 *.SCC
 *.vsp
 *.psess
+Ext/FugueIcons/*
