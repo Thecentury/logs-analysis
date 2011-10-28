@@ -24,12 +24,21 @@ namespace LogAnalyzer.Filters
 		{
 			ParameterExpression parameter = Expression.Parameter( typeof( T ) );
 			Expression expression = createExpressionHandler( parameter );
-			if ( expression is LambdaExpression )
+
+			Expression<Func<T, bool>> lambda;
+			if ( expression is Expression<Func<T, bool>> )
 			{
-				expression = ( (LambdaExpression)expression ).Body;
+				lambda = (Expression<Func<T, bool>>)expression;
+			}
+			else
+			{
+				if (expression is LambdaExpression)
+				{
+					expression = ((LambdaExpression) expression).Body;
+				}
+				lambda = Expression.Lambda<Func<T, bool>>( expression, parameter );
 			}
 
-			var lambda = Expression.Lambda<Func<T, bool>>( expression, parameter );
 			Func<T, bool> predicate = lambda.Compile();
 			return predicate;
 		}

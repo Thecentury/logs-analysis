@@ -22,7 +22,7 @@ namespace LogAnalyzer
 		public int ThreadId { get; private set; }
 		public DateTime Time { get; private set; }
 		public int LineIndex { get; private set; }
-		
+
 		public LogFile ParentLogFile { get; set; }
 
 		private readonly List<string> textLines = new List<string>();
@@ -42,6 +42,15 @@ namespace LogAnalyzer
 		public int LinesCount
 		{
 			get { return textLines.Count; }
+		}
+
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		/// <param name="parentLogFile"></param>
+		internal LogEntry( LogFile parentLogFile )
+		{
+			ParentLogFile = parentLogFile;
 		}
 
 		// todo хранить тут и номер записи в списке
@@ -214,7 +223,7 @@ namespace LogAnalyzer
 			// already frozen?
 			if ( isFrozen )
 				return;
-				//throw new InvalidOperationException();
+			//throw new InvalidOperationException();
 
 			isFrozen = true;
 

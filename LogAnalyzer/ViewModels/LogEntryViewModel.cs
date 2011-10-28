@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using AdTech.Common.WPF;
 using System.Windows.Input;
@@ -13,7 +14,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private readonly LogEntry logEntry;
 		private readonly LogFileViewModel parentFile;
 		private readonly ILogEntryHost host;
-		private readonly int indexInParentCollection = -1;
+		private readonly int indexInParentCollection = ParallelHelper.IndexNotFound;
+		private readonly LogEntriesListViewModel parentViewModel;
 
 		/// <summary>
 		/// Индекс в коллекции host.
@@ -28,7 +30,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return host; }
 		}
 
-		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host, LogEntriesListViewModel parentList, int indexInParentCollection )
+		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host, LogEntriesListViewModel parentViewModel, int indexInParentCollection )
 			: base( logEntry )
 		{
 			if ( logEntry == null )
@@ -37,13 +39,14 @@ namespace LogAnalyzer.GUI.ViewModels
 				throw new ArgumentNullException( "parentFile" );
 			if ( host == null )
 				throw new ArgumentNullException( "host" );
-			if ( parentList == null )
-				throw new ArgumentNullException( "parentList" );
+			if ( parentViewModel == null )
+				throw new ArgumentNullException( "parentViewModel" );
 
 			this.logEntry = logEntry;
 			this.parentFile = parentFile;
 			this.host = host;
 			this.indexInParentCollection = indexInParentCollection;
+			this.parentViewModel = parentViewModel;
 
 			// todo обдумать, как еще можно сделать
 			if ( logEntry.IsFrozen )
@@ -68,6 +71,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		public LogFileViewModel File { get { return parentFile; } }
 		public LogDirectoryViewModel Directory { get { return parentFile.ParentDirectory; } }
 		public ApplicationViewModel ApplicationViewModel { get { return Directory.CoreViewModel.ApplicationViewModel; } }
+
+		public LogEntriesListViewModel ParentViewModel
+		{
+			get { return parentViewModel; }
+		}
 
 		public LogEntry LogEntry
 		{
@@ -177,6 +185,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		#region File operations
+
+		// Select file in explorer
+
 		public ICommand SelectFileInExplorerCommand
 		{
 			get { return File.SelectFileCommand; }
@@ -186,6 +198,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get { return File.ShowInExplorerCommandHeader; }
 		}
+
+		// Open folder in explorer
 
 		public ICommand OpenFolderInExplorerCommand
 		{
@@ -197,14 +211,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return Directory.OpenFolderInExplorerCommandHeader; }
 		}
 
+		#endregion
+
+		#region Create new view
+
+		// Create view for this file
+
 		public string CreateViewForFileCommandHeader
 		{
 			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
-		}
-
-		public string CreateViewForDirectoryCommandHeader
-		{
-			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
 		}
 
 		public ICommand CreateFileViewCommand
@@ -212,10 +227,19 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return ApplicationViewModel.CreateAddFileViewCommand( File ); }
 		}
 
+		// Create view for directory
+
+		public string CreateViewForDirectoryCommandHeader
+		{
+			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
+		}
+
 		public ICommand CreateDirectoryViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddDirectoryViewCommand( Directory ); }
 		}
+
+		// Create view for thread
 
 		public string CreateThreadViewCommandHeader
 		{
@@ -227,15 +251,35 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return ApplicationViewModel.CreateAddThreadViewCommand( ThreadId ); }
 		}
 
+		// Create view for file name
+
 		public string CreateFileNameViewCommandHeader
 		{
-			get { return "All files with FileName = {0}".Format2( File.Name ); }
+			get { return "All files with FileName = \"{0}\"".Format2( File.Name ); }
 		}
 
 		public ICommand CreateFileNameViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddFileNameViewCommand( File.Name ); }
 		}
+
+		#endregion
+
+		#region Exclude by filters
+
+		// Exclude certain file
+
+		public string ExcludeByCertainFileCommandHeader
+		{
+			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
+		}
+
+		public ICommand ExcludeByCertainFileCommand
+		{
+			get { return ApplicationViewModel.CreateExcludeByCertainFileCommand( this ); }
+		}
+
+		#endregion
 
 		#endregion
 	}

@@ -97,7 +97,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 			get
 			{
 				if ( removeCommand == null )
-					removeCommand = new DelegateCommand( ExecuteRemove, CanExecuteRemove );
+					removeCommand = new DelegateCommand( ExecuteRemove );
 
 				return removeCommand;
 			}
@@ -107,24 +107,19 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			if ( builder.Index < builder.Builders.Count )
 			{
-				builder.Builders.RemoveAt(builder.Index);
+				builder.Builders.RemoveAt( builder.Index );
 			}
 
 			builder.ViewModels.RemoveAt( builder.Index );
 
-			for ( int i = builder.Index; i < builder.Builders.Count; i++ )
+			for ( int i = builder.Index; i < builder.ViewModels.Count; i++ )
 			{
-				var proxyBuilder = builder.Builders[i] as ProxyCollectionElementBuilder;
+				var proxyBuilder = builder.ViewModels[i] as CollectionBooleanChildBuilderViewModel;
 				if ( proxyBuilder != null )
 				{
-					proxyBuilder.Index--;
+					proxyBuilder.builder.Index--;
 				}
 			}
-		}
-
-		private bool CanExecuteRemove()
-		{
-			return builder.ViewModels.Count > 1;
 		}
 	}
 

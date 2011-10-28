@@ -47,6 +47,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return windowService; }
 		}
 
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		internal ApplicationViewModel() { }
+
 		public ApplicationViewModel( LogAnalyzerConfiguration config, IEnvironment environment )
 		{
 			if ( config == null ) throw new ArgumentNullException( "config" );

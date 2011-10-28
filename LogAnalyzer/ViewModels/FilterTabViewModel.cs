@@ -117,7 +117,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			Task.Factory.StartNew( () =>
 			{
-				FilteringResult localResult = FilteringResult.NotStarted;
+				FilteringResult localResult;
 
 				int notificationStep = count / FilteringProgressNotificationsCount;
 				if ( notificationStep == 0 )
@@ -137,7 +137,7 @@ namespace LogAnalyzer.GUI.ViewModels
 							{
 								BeginInvokeInUIDispatcher( () =>
 								{
-									FilteringProgress += 100 / FilterTabViewModel.FilteringProgressNotificationsCount;
+									FilteringProgress += 100.0 / FilteringProgressNotificationsCount;
 								} );
 
 								// для того, чтобы успевать увидеть изменение прогресса
@@ -197,15 +197,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private int filteringProgress;
-		public int FilteringProgress
+		private double filteringProgress;
+		public double FilteringProgress
 		{
 			get { return filteringProgress; }
 			private set
 			{
-				if ( filteringProgress == value )
-					return;
-
 				filteringProgress = value;
 				RaisePropertyChanged( "FilteringProgress" );
 			}

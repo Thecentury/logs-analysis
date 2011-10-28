@@ -17,7 +17,7 @@ namespace LogAnalyzer.GUI.ViewModels
 	{
 		public ICommand CreateAddFileViewCommand( LogFileViewModel logFileViewModel )
 		{
-			DelegateCommand command = new DelegateCommand( () => AddNewTab( logFileViewModel.Clone() ));
+			DelegateCommand command = new DelegateCommand( () => AddNewTab( logFileViewModel.Clone() ) );
 
 			return command;
 		}
@@ -30,7 +30,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public ICommand CreateAddDirectoryViewCommand( LogDirectoryViewModel directoryViewModel )
 		{
-			DelegateCommand command = new DelegateCommand( () => AddNewTab( directoryViewModel.Clone() ));
+			DelegateCommand command = new DelegateCommand( () => AddNewTab( directoryViewModel.Clone() ) );
 
 			return command;
 		}
@@ -96,9 +96,9 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					FilterTabViewModel filterViewModel = new FilterTabViewModel( selectedTab.Entries, this );
 					filterViewModel.Filter.ExpressionBuilder = builder;
-					filterViewModel.StartFiltering();
 
 					AddNewTab( filterViewModel );
+					filterViewModel.StartFiltering();
 				}
 			}
 		}
@@ -129,5 +129,76 @@ namespace LogAnalyzer.GUI.ViewModels
 				AddFilterViewFromCore( filter );
 			} );
 		}
+
+		#region Exclude by commands
+
+		public ExpressionBuilder CreateExcludeFileFilter( LogEntry logEntry )
+		{
+			var file = logEntry.ParentLogFile;
+			var builder =
+				new NotEquals(
+					new GetProperty( new Argument(), "ParentLogFile" ),
+					ExpressionBuilder.CreateConstant( file )
+					);
+			//ExpressionBuilder.Create( logEntry, l => l.ParentLogFile != file );
+
+			return builder;
+		}
+
+		public DelegateCommand CreateExcludeByCertainFileCommand( LogEntryViewModel logEntryViewModel )
+		{
+			return new DelegateCommand( () =>
+											{
+												var filter = CreateExcludeFileFilter( logEntryViewModel.LogEntry );
+
+												UpdateOrAddFilterTab( logEntryViewModel, filter );
+											} );
+		}
+
+		private void UpdateOrAddFilterTab( LogEntryViewModel logEntryViewModel, ExpressionBuilder filter )
+		{
+			FilterTabViewModel filterTab = logEntryViewModel.ParentViewModel as FilterTabViewModel;
+			if ( filterTab != null )
+			{
+				AddExcludeByFilter( filterTab, filter );
+			}
+			else
+			{
+				var selectedTab = tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
+				if ( selectedTab != null )
+				{
+					FilterTabViewModel filterViewModel = new FilterTabViewModel( selectedTab.Entries, this, filter );
+
+					AddNewTab( filterViewModel );
+					filterViewModel.StartFiltering();
+				}
+				else
+				{
+					AddFilterViewFromCore( filter );
+				}
+			}
+		}
+
+		private void AddExcludeByFilter( FilterTabViewModel filterTab, ExpressionBuilder filter )
+		{
+			var current = filterTab.Filter.ExpressionBuilder;
+
+			AndCollection and = current as AndCollection;
+			if ( and != null )
+			{
+				and.Children.Add( filter );
+			}
+			else
+			{
+				and = new AndCollection();
+				and.Children.Add( current );
+				and.Children.Add( filter );
+				filterTab.Filter.ExpressionBuilder = and;
+			}
+
+			//filterTab.StartFiltering();
+		}
+
+		#endregion
 	}
 }
