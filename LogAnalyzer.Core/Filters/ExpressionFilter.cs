@@ -16,7 +16,7 @@ namespace LogAnalyzer.Filters
 			set
 			{
 				if ( expressionBuilder == null )
-					throw new ArgumentNullException( "ExpressionBuilder" );
+					throw new ArgumentNullException();
 
 				expressionBuilder.PropertyChanged -= OnExpressionBuilder_PropertyChanged;
 				expressionBuilder = value;

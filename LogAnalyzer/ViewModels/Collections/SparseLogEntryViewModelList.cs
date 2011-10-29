@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Logging;
@@ -54,12 +55,31 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		#endregion
 
+		protected override void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
+		{
+			switch ( e.Action )
+			{
+				case NotifyCollectionChangedAction.Add:
+				case NotifyCollectionChangedAction.Remove:
+				case NotifyCollectionChangedAction.Replace:
+				case NotifyCollectionChangedAction.Move:
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					viewModelsCache.Clear();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			base.OnCollectionChanged( e );
+		}
+
 		public LogEntryViewModel this[int index]
 		{
 			get
 			{
 				LogEntryViewModel logEntryViewModel;
-				
+
 				if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
 				{
 					LogEntry logEntry = logEntries[index];
@@ -106,7 +126,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				// тут элемент всегда ожидается в коллекции
 				if ( index < 0 )
 				{
-					Condition.BreakIfAttached();	
+					Condition.BreakIfAttached();
 				}
 
 				return index;

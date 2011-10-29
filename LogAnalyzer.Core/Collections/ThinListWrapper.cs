@@ -16,19 +16,19 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "Count = {list.Count}" )]
 	public sealed class ThinListWrapper<T> : ThinObservableCollection, IList<T>, IList
 	{
-		private IList<T> list = null;
+		private IList<T> list;
 		public IList<T> List
 		{
 			get { return list; }
 			set { ReplaceInnerList( value ); }
 		}
 
-		private void ReplaceInnerList( IList<T> value )
+		private void ReplaceInnerList( IList<T> innerList )
 		{
-			if ( value == null )
-				throw new ArgumentNullException( "value" );
+			if ( innerList == null )
+				throw new ArgumentNullException( "innerList" );
 
-			list = value;
+			list = innerList;
 
 			RaiseCollectionReset();
 		}
