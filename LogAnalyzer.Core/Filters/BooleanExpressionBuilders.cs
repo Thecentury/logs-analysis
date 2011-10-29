@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.Windows.Markup;
+using JetBrains.Annotations;
 
 namespace LogAnalyzer.Filters
 {
 	[ContentProperty( "Inner" )]
 	public sealed class Not : ExpressionBuilder
 	{
+		public Not() { }
+		public Not( [NotNull] ExpressionBuilder inner )
+		{
+			if ( inner == null ) throw new ArgumentNullException( "inner" );
+			Inner = inner;
+		}
+
 		[FilterParameter( typeof( ExpressionBuilder ), "Inner", ParameterReturnType = typeof( bool ) )]
 		public ExpressionBuilder Inner
 		{

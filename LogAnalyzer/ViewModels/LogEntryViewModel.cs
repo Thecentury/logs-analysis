@@ -279,6 +279,18 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return ApplicationViewModel.CreateExcludeByCertainFileCommand( this ); }
 		}
 
+		// Exclude thread id
+
+		public string ExcludeByThreadIdCommandHeader
+		{
+			get { return "Thread Id={0}".Format2( ThreadId ); }
+		}
+
+		public ICommand ExcludeByThreadIdCommand
+		{
+			get { return ApplicationViewModel.CreateExcludeByThreadIdCommand( this ); }
+		}
+
 		#endregion
 
 		#endregion

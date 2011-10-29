@@ -89,14 +89,29 @@
 						<MenuItem Header="{Binding SelectFileInExplorerCommandHeader}" Command="{Binding SelectFileInExplorerCommand}"/>
 						<MenuItem Header="{Binding OpenFolderInExplorerCommandHeader}" Command="{Binding OpenFolderInExplorerCommand}"/>
 						<MenuItem Header="Create view for:">
-							<MenuItem Header="{Binding CreateThreadViewCommandHeader}" Command="{Binding CreateThreadViewCommand}"/>
+							<MenuItem Header="{Binding CreateThreadViewCommandHeader}" Command="{Binding CreateThreadViewCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 							<MenuItem Header="{Binding CreateFileNameViewCommandHeader}" Command="{Binding CreateFileNameViewCommand}"/>
 							<Separator/>
 							<MenuItem Header="{Binding CreateViewForFileCommandHeader}" Command="{Binding CreateFileViewCommand}"/>
 							<MenuItem Header="{Binding CreateViewForDirectoryCommandHeader}" Command="{Binding CreateDirectoryViewCommand}"/>
 						</MenuItem>
-						<MenuItem Header="Exclude:">
+						<MenuItem Header="Exclude By:">
 							<MenuItem Header="{Binding ExcludeByCertainFileCommandHeader}" Command="{Binding ExcludeByCertainFileCommand}"/>
+							<MenuItem Header="{Binding ExcludeByThreadIdCommandHeader}" Command="{Binding ExcludeByThreadIdCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Copy to Clipboard:">
+							<MenuItem Header="File Name" IsEnabled="False"/>
+							<MenuItem Header="Full path" IsEnabled="False"/>
+							<MenuItem Header="File location" IsEnabled="False"/>
+							<MenuItem Header="Message" IsEnabled="False"/>
 						</MenuItem>
 					</ContextMenu>
 				</Setter.Value>
@@ -199,14 +214,14 @@
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="T" Binding="{Binding Type}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>
 				<DataGridTextColumn Header="File" Binding="{Binding File.Name}" Width="150" CellStyle="{StaticResource fileCellStyle}"/>
-				
+
 				<DataGridTextColumn Header="Directory" x:Name="directoryColumn"
 									Binding="{Binding Directory.DisplayName}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
-				
+
 				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}'}" 
 									CellStyle="{StaticResource threadCellStyle}" 
 									Width="40"/>
-				
+
 				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="100"
 									CellStyle="{StaticResource timeCellStyle}"/>

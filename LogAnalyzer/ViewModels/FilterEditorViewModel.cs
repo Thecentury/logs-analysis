@@ -34,7 +34,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OkExecute()
 		{
-			window.DialogResult = true;
+			dialogResult = true;
 			window.Close();
 		}
 
@@ -67,7 +67,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void CloseExecute()
 		{
-			window.DialogResult = false;
+			dialogResult = false;
 			window.Close();
 		}
 
@@ -75,6 +75,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get { return window.Builder; }
 			set { window.Builder = value; }
+		}
+
+		private bool dialogResult;
+		public bool DialogResult
+		{
+			get { return dialogResult; }
 		}
 	}
 }

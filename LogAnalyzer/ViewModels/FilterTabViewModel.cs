@@ -135,13 +135,7 @@ namespace LogAnalyzer.GUI.ViewModels
 						{
 							if ( i % notificationStep == 0 )
 							{
-								BeginInvokeInUIDispatcher( () =>
-								{
-									FilteringProgress += 100.0 / FilteringProgressNotificationsCount;
-								} );
-
-								// для того, чтобы успевать увидеть изменение прогресса
-								// Thread.Sleep( 100 );
+								FilteringProgress += 100.0 / FilteringProgressNotificationsCount;
 							}
 
 							return source[i];
@@ -158,11 +152,8 @@ namespace LogAnalyzer.GUI.ViewModels
 					localResult = FilteringResult.Canceled;
 				}
 
-				BeginInvokeInUIDispatcher( () =>
-				{
-					Result = localResult;
-					IsFiltering = false;
-				} );
+				Result = localResult;
+				IsFiltering = false;
 			} );
 		}
 
@@ -241,6 +232,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			throw new NotImplementedException();
 		}
 
+		#region Edit filter
+
+		private bool editingInProgress;
 
 		private DelegateCommand editFilterCommand;
 		public ICommand EditFilterCommand
@@ -249,26 +243,46 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( editFilterCommand == null )
 				{
-					editFilterCommand = new DelegateCommand( EditFilterExecute );
+					editFilterCommand = new DelegateCommand( EditFilterExecute, CanExecuteEditFilter );
 				}
 
 				return editFilterCommand;
 			}
 		}
 
-		public void EditFilterExecute()
+		private bool CanExecuteEditFilter()
 		{
+			return !editingInProgress;
+		}
+
+		private void EditFilterExecute()
+		{
+			if ( editingInProgress )
+				throw new InvalidOperationException( "Already editing" );
+
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
 			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow ) { Builder = filter.ExpressionBuilder };
-			bool? dialogResult = editorWindow.ShowDialog();
-			if ( dialogResult == true )
+			editorWindow.Closed += OnEditorWindow_Closed;
+			editorWindow.Show();
+		}
+
+		private void OnEditorWindow_Closed( object sender, EventArgs e )
+		{
+			Window window = (Window)sender;
+			window.Closed -= OnEditorWindow_Closed;
+			FilterEditorViewModel vm = (FilterEditorViewModel)window.DataContext;
+
+			if ( vm.DialogResult )
 			{
 				// todo передавать информацию о "владельце" коллекции sourceEntries 
 				// (напр., для команды ShowInParentEntriesList)
-				ExpressionBuilder filterBuilder = editorViewModel.Builder;
-				this.filter.ExpressionBuilder = filterBuilder;
+				ExpressionBuilder filterBuilder = vm.Builder;
+				filter.ExpressionBuilder = filterBuilder;
 			}
+			editingInProgress = false;
 		}
+
+		#endregion
 
 		private DelegateCommand refreshCommand;
 		public ICommand RefreshCommand

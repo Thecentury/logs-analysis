@@ -7,15 +7,10 @@ using System.Windows.Markup;
 
 namespace LogAnalyzer.Filters
 {
+	[IgnoreBuilder]
 	[ContentProperty( "ThreadId" )]
-	public sealed class ThreadIdEquals : ExpressionBuilder
+	public abstract class ThreadIdFilterBase : ExpressionBuilder
 	{
-		public ThreadIdEquals() { }
-		public ThreadIdEquals( int threadId )
-		{
-			ThreadId = threadId;
-		}
-
 		[FilterParameter( typeof( int ), "ThreadId" )]
 		public int ThreadId
 		{
@@ -23,9 +18,18 @@ namespace LogAnalyzer.Filters
 			set { Set( "ThreadId", value ); }
 		}
 
-		public override Type GetResultType( ParameterExpression target )
+		public sealed override Type GetResultType( ParameterExpression target )
 		{
 			return typeof( bool );
+		}
+	}
+
+	public sealed class ThreadIdEquals : ThreadIdFilterBase
+	{
+		public ThreadIdEquals() { }
+		public ThreadIdEquals( int threadId )
+		{
+			ThreadId = threadId;
 		}
 
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
@@ -34,6 +38,25 @@ namespace LogAnalyzer.Filters
 				Expression.Property( parameterExpression, "ThreadId" ),
 				Expression.Constant( ThreadId, typeof( int ) )
 				);
+		}
+	}
+
+	public sealed class ThreadIdNotEquals : ThreadIdFilterBase
+	{
+		public ThreadIdNotEquals() { }
+		public ThreadIdNotEquals( int threadId )
+		{
+			ThreadId = threadId;
+		}
+
+		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		{
+			return
+				Expression.Not(
+					Expression.Equal(
+					Expression.Property( parameterExpression, "ThreadId" ),
+					Expression.Constant( ThreadId, typeof( int ) )
+				) );
 		}
 	}
 

@@ -53,8 +53,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
 			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow );
-			bool? dialogResult = editorWindow.ShowDialog();
-			if ( dialogResult == true )
+			editorWindow.ShowDialog();
+			if ( editorViewModel.DialogResult )
 			{
 				// todo передавать информацию о "владельце" коллекции sourceEntries 
 				// (напр., для команды ShowInParentEntriesList)
@@ -132,7 +132,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Exclude by commands
 
-		public ExpressionBuilder CreateExcludeFileFilter( LogEntry logEntry )
+		// Exclude file
+
+		internal ExpressionBuilder CreateExcludeFileFilter( LogEntry logEntry )
 		{
 			var file = logEntry.ParentLogFile;
 			var builder =
@@ -140,7 +142,6 @@ namespace LogAnalyzer.GUI.ViewModels
 					new GetProperty( new Argument(), "ParentLogFile" ),
 					ExpressionBuilder.CreateConstant( file )
 					);
-			//ExpressionBuilder.Create( logEntry, l => l.ParentLogFile != file );
 
 			return builder;
 		}
@@ -154,6 +155,19 @@ namespace LogAnalyzer.GUI.ViewModels
 												UpdateOrAddFilterTab( logEntryViewModel, filter );
 											} );
 		}
+
+		// Exclude ThreadId
+
+		public DelegateCommand CreateExcludeByThreadIdCommand( LogEntryViewModel logEntryViewModel )
+		{
+			return new DelegateCommand( () =>
+										{
+											var filter = new ThreadIdNotEquals( logEntryViewModel.ThreadId );
+											UpdateOrAddFilterTab( logEntryViewModel, filter );
+										} );
+		}
+
+		// Вспомогательные
 
 		private void UpdateOrAddFilterTab( LogEntryViewModel logEntryViewModel, ExpressionBuilder filter )
 		{

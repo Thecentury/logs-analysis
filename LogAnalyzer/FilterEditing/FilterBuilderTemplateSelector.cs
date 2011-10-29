@@ -57,6 +57,15 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		public override DataTemplate SelectTemplate( object item, DependencyObject container )
 		{
+			// ReSharper disable ConditionIsAlwaysTrueOrFalse
+			// ReSharper disable HeuristicUnreachableCode
+			if ( item == null )
+			{
+				return base.SelectTemplate( item, container );
+			}
+			// ReSharper restore HeuristicUnreachableCode
+			// ReSharper restore ConditionIsAlwaysTrueOrFalse
+
 			ExpressionBuilderViewModel vm = (ExpressionBuilderViewModel)item;
 			ExpressionBuilder builder = vm.Builder;
 			Type builderType = builder.GetType();
@@ -67,7 +76,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 			{
 				return base.SelectTemplate( item, container );
 			}
-			
+
 			DataTemplate template = (DataTemplate)visual.FindResource( resourceKey );
 			return template;
 		}

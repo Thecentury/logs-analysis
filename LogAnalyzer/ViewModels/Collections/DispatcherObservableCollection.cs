@@ -1,4 +1,6 @@
 ﻿using System;
+using System;
+using System.Linq;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -9,10 +11,6 @@ using System.ComponentModel;
 
 namespace LogAnalyzer.GUI.ViewModels.Collections
 {
-	/// <summary>
-	using System;
-	using System.Linq;
-
 	/// <summary>
 	/// Передает событие CollectionChanged в UI поток.
 	/// </summary>
