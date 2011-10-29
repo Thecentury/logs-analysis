@@ -52,26 +52,16 @@ namespace LogAnalyzer.Filters
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
 			return
-				Expression.Not(
-					Expression.Equal(
+				Expression.NotEqual(
 					Expression.Property( parameterExpression, "ThreadId" ),
 					Expression.Constant( ThreadId, typeof( int ) )
-				) );
+				);
 		}
 	}
 
 	[ContentProperty( "FileName" )]
-	public sealed class FileNameEquals : ExpressionBuilder
+	public abstract class FileNameFilterBase : ExpressionBuilder
 	{
-		public FileNameEquals() { }
-		public FileNameEquals( string fileName )
-		{
-			if ( fileName == null )
-				throw new ArgumentNullException( "fileName" );
-
-			this.FileName = fileName;
-		}
-
 		[FilterParameter( typeof( string ), "FileName" )]
 		public string FileName
 		{
@@ -82,6 +72,18 @@ namespace LogAnalyzer.Filters
 		public override Type GetResultType( ParameterExpression target )
 		{
 			return typeof( bool );
+		}
+	}
+
+	public sealed class FileNameEquals : FileNameFilterBase
+	{
+		public FileNameEquals() { }
+		public FileNameEquals( string fileName )
+		{
+			if ( fileName == null )
+				throw new ArgumentNullException( "fileName" );
+
+			FileName = fileName;
 		}
 
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
@@ -94,6 +96,30 @@ namespace LogAnalyzer.Filters
 				);
 		}
 	}
+
+	public sealed class FileNameNotEquals : FileNameFilterBase
+	{
+		public FileNameNotEquals() { }
+		public FileNameNotEquals( string fileName )
+		{
+			if ( fileName == null )
+				throw new ArgumentNullException( "fileName" );
+
+			FileName = fileName;
+		}
+
+		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		{
+			return 
+				Expression.NotEqual(
+					Expression.Property(
+						Expression.Property( parameterExpression, "ParentLogFile" ),
+						"Name" ),
+					Expression.Constant( FileName, typeof( string ) )
+				);
+		}
+	}
+
 
 	[ContentProperty( "Substring" )]
 	public sealed class TextContains : ExpressionBuilder

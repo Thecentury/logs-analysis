@@ -116,7 +116,7 @@
 							</MenuItem>
 						</MenuItem>
 						
-						<MenuItem Header="Exclude By:">
+						<MenuItem Header="Exclude:">
 							<MenuItem.Icon>
 								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/funnel.png"/>
 							</MenuItem.Icon>
@@ -126,9 +126,21 @@
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
+							<MenuItem Header="{Binding ExcludeByFilenameCommandHeader}" Command="{Binding ExcludeByFilenameCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/documents-stack.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							
 							<MenuItem Header="{Binding ExcludeByThreadIdCommandHeader}" Command="{Binding ExcludeByThreadIdCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding ExcludeDirectoryCommandHeader}" Command="{Binding ExcludeDirectoryCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>

@@ -167,6 +167,34 @@ namespace LogAnalyzer.GUI.ViewModels
 										} );
 		}
 
+		// Exclude filename
+
+		public DelegateCommand CreateExcludeByFilenameCommand( LogEntryViewModel logEntryViewModel )
+		{
+			return new DelegateCommand( () =>
+											{
+												var filter = new FileNameNotEquals( logEntryViewModel.File.Name );
+												UpdateOrAddFilterTab( logEntryViewModel, filter );
+											} );
+		}
+
+		public DelegateCommand CreateExcludeDirectoryCommand( LogEntryViewModel logEntryViewModel )
+		{
+			return new DelegateCommand( () =>
+										{
+											ExpressionBuilder filter = new NotEquals(
+												new GetProperty(
+													new GetProperty(
+														new GetProperty( new Argument(), "ParentLogFile" ),
+														"ParentDirectory" ),
+													"Path"
+													),
+												new StringConstant( logEntryViewModel.Directory.Path )
+												);
+											UpdateOrAddFilterTab( logEntryViewModel, filter );
+										} );
+		}
+
 		// Вспомогательные
 
 		private void UpdateOrAddFilterTab( LogEntryViewModel logEntryViewModel, ExpressionBuilder filter )
