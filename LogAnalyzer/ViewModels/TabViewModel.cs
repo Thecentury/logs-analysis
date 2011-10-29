@@ -34,6 +34,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return GetType().Name; }
 		}
 
+		public virtual string Tooltip
+		{
+			get { return Header; }
+		}
+
 		public virtual string Header { get { return "<HEADER NOT SET>"; } }
 		public virtual bool IsActive { get; set; }
 		public virtual string IconFile

@@ -52,29 +52,46 @@ namespace LogAnalyzer.GUI.ViewModels
 			return new FilterEntriesCountStatusBarItem( this );
 		}
 
+		private const int MaxHeaderLength = 20;
+
+		public override string Tooltip
+		{
+			get { return CreateExpressionString(); }
+		}
+
 		public override string Header
 		{
 			get
 			{
-				// удаляем начальные и конечные скобки
-				string trimmedStart = filter.ExpressionBuilder.ToExpressionString().Trim( '(' );
-				int openBracketsCount = trimmedStart.Count( c => c == '(' );
-				int closingBracketsCount = trimmedStart.Count( c => c == ')' );
-
-				string expressionString = trimmedStart;
-
-				int closingBracketsToRemove = closingBracketsCount - openBracketsCount;
-				if ( closingBracketsToRemove > 0 )
+				string str = CreateExpressionString();
+				if ( str.Length > MaxHeaderLength )
 				{
-					expressionString = expressionString.Remove( expressionString.Length - closingBracketsToRemove );
+					str = str.Substring( 0, MaxHeaderLength ) + "…";
 				}
-
-				expressionString = expressionString
-					.Replace( " AndAlso ", " & " )
-					.Replace( " OrElse ", " | " );
-
-				return expressionString;
+				return str;
 			}
+		}
+
+		private string CreateExpressionString()
+		{
+			// удаляем начальные и конечные скобки
+			string trimmedStart = filter.ExpressionBuilder.ToExpressionString().Trim( '(' );
+			int openBracketsCount = trimmedStart.Count( c => c == '(' );
+			int closingBracketsCount = trimmedStart.Count( c => c == ')' );
+
+			string expressionString = trimmedStart;
+
+			int closingBracketsToRemove = closingBracketsCount - openBracketsCount;
+			if ( closingBracketsToRemove > 0 )
+			{
+				expressionString = expressionString.Remove( expressionString.Length - closingBracketsToRemove );
+			}
+
+			expressionString = expressionString
+				.Replace( " AndAlso ", " & " )
+				.Replace( " OrElse ", " | " );
+
+			return expressionString;
 		}
 
 		public override string IconFile

@@ -8,7 +8,7 @@ namespace LogAnalyzer.Collections
 {
 	public static class ParallelHelper
 	{
-		public static int AssuredIndexOf<T>( IList<T> collection, T item ) where T : class
+		public static int AssuredParallelIndexOf<T>( IList<T> collection, T item ) where T : class
 		{
 			if ( item == null )
 				throw new ArgumentNullException( "item" );
@@ -25,7 +25,7 @@ namespace LogAnalyzer.Collections
 			} while ( true );
 		}
 
-		public static int IndexOf<T>( IList<T> collection, T item ) where T : class
+		public static int ParallelIndexOf<T>( IList<T> collection, T item ) where T : class
 		{
 			if ( item == null )
 				throw new ArgumentNullException( "item" );

@@ -171,6 +171,36 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		#region Parent tab views
+
+		public List<MenuItemViewModel> ParentTabViews
+		{
+			get
+			{
+				List<MenuItemViewModel> parents = new List<MenuItemViewModel>();
+
+				var parent = parentViewModel.ParentView;
+				while ( parent != null )
+				{
+					MenuItemViewModel vm = new MenuItemViewModel
+											{
+												IconSource = parent.IconFile,
+												Header = parent.Header,
+												Tooltip = parent.Tooltip,
+												Command = ApplicationViewModel.CreateShowInParentViewCommand( this, parent )
+											};
+
+					parents.Add( vm );
+
+					parent = parent.ParentView;
+				}
+
+				return parents;
+			}
+		}
+
+		#endregion
+
 		#region Commands
 
 		#region File operations
@@ -353,7 +383,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( copyMessageCommand == null )
-					copyMessageCommand = new DelegateCommand( () => Clipboard.SetText(UnitedText));
+					copyMessageCommand = new DelegateCommand( () => Clipboard.SetText( UnitedText ) );
 
 				return copyMessageCommand;
 			}

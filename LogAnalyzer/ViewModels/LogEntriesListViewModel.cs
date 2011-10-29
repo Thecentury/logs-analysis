@@ -47,6 +47,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return null; }
 		}
 
+		public LogEntriesListViewModel ParentView { get; set; }
+
 		/// <summary>
 		/// Есть ли несколько загруженных директорий?
 		/// </summary>

@@ -12,8 +12,12 @@ namespace LogAnalyzer.GUI.FilterEditing
 		public GetPropertyBuilderViewModel( GetProperty builder, ParameterExpression parameter )
 			: base( builder, parameter )
 		{
-			this.getPropertyBuilder = builder;
+			getPropertyBuilder = builder;
 			targetViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Target" ), parameter );
+			if ( builder.Target != null )
+			{
+				targetViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Target, parameter );
+			}
 		}
 
 		public ExpressionBuilderViewModel Target

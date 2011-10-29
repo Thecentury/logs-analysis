@@ -8,8 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="300"
 			 
 			 Background="AliceBlue"
-			 BorderBrush="Green"
-			 BorderThickness="1"
 			 Margin="4"
 			 >
 
