@@ -115,24 +115,24 @@
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
-						
+
 						<MenuItem Header="Exclude:">
 							<MenuItem.Icon>
 								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/funnel.png"/>
 							</MenuItem.Icon>
-							
+
 							<MenuItem Header="{Binding ExcludeByCertainFileCommandHeader}" Command="{Binding ExcludeByCertainFileCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							
+
 							<MenuItem Header="{Binding ExcludeByFilenameCommandHeader}" Command="{Binding ExcludeByFilenameCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/documents-stack.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							
+
 							<MenuItem Header="{Binding ExcludeByThreadIdCommandHeader}" Command="{Binding ExcludeByThreadIdCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
@@ -145,12 +145,35 @@
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
-						
+
 						<MenuItem Header="Copy to Clipboard:">
-							<MenuItem Header="File Name" Command="{Binding CopyFileNameCommand}"/>
-							<MenuItem Header="Full path" Command="{Binding CopyFullPathCommand}"/>
-							<MenuItem Header="File location" Command="{Binding CopyFileLocationCommand}"/>
-							<MenuItem Header="Message" Command="{Binding CopyMessageCommand}"/>
+							<MenuItem.Icon>
+								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-copy.png"/>
+							</MenuItem.Icon>
+
+							<MenuItem Header="File Name" Command="{Binding CopyFileNameCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/disk.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="Full path" Command="{Binding CopyFullPathCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="File location" Command="{Binding CopyFileLocationCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="Message" Command="{Binding CopyMessageCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/sticky-note.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 						</MenuItem>
 					</ContextMenu>
 				</Setter.Value>
@@ -158,9 +181,9 @@
 
 			<!--<Style.Triggers>
 				<DataTrigger Binding="{Binding IsDynamicHighlighted}" Value="True">
-					<Setter Property="Background" Value="{StaticResource dynamicHighlightBrush}"/>
-				</DataTrigger>
-			</Style.Triggers>-->
+								<Setter Property="Background" Value="{StaticResource dynamicHighlightBrush}"/>
+								</DataTrigger>
+								</Style.Triggers> -->
 		</Style>
 
 		<Style TargetType="DataGrid" x:Key="dataGridStyle">
