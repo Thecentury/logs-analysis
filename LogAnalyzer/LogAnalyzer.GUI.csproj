@@ -315,6 +315,15 @@
   <ItemGroup>
     <Resource Include="Resources\processor.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\documents-stack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\folder-horizontal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\funnel.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
