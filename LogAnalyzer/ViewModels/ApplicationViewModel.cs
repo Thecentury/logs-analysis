@@ -18,8 +18,6 @@ using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	// todo сделать настраиваемую ширину последней колонки DataGrid'а
-
 	public partial class ApplicationViewModel : BindingObject
 	{
 		private readonly LogAnalyzerConfiguration config;

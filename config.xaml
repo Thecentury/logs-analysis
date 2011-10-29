@@ -2,47 +2,9 @@
 						  DefaultEncodingName="windows-1251">
 
 	<LogAnalyzerConfiguration.Directories>
-		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\"/>-->
 		<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
-
-		<!--<LogDirectoryConfigurationInfo Enabled="True" DisplayName="Logs2" FileNameFilter="*.log" Path="c:\MOST\AWAD\LOGS\Archive\11.07.14\22-43-01\"
-									   UseCache="False"
-									   EncodingName="windows-1251"/>-->
-
-		<!--<LogDirectoryConfigurationInfo DisplayName="Logs" FileNameFilter="*.log" Path="C:\Temp\SchedulerLogs\Merged\"/>-->
-		<!--<LogDirectoryConfigurationInfo DisplayName="Logs" FileNameFilter="*.log" Path="c:\Temp\SchedulerLogs\13-Scheduler\2011.07.28\"/>-->
-
-		<!--<LogDirectoryConfigurationInfo DisplayName="Logs" FileNameFilter="*.log" Path="c:\Temp\SchedulerLogs\13-Scheduler\"/>-->
-		<!--<LogDirectoryConfigurationInfo DisplayName="SchedulerLogs-08.01" FileNameFilter="*.log" Path="c:\Temp\SchedulerLogs-08.01\08.01\"
-									   EncodingName="windows-1251"/>-->
-
-
-		<LogDirectoryConfigurationInfo Enabled="False" DisplayName="ModuleOrderManager-Jet" FileNameFilter="*.log" Path="c:\Temp\ModuleOrderManager-Jet\"
-									   EncodingName="windows-1251"/>
-
-
-		<!--<LogDirectoryConfigurationInfo DisplayName="Jet" FileNameFilter="*.log" Path="x:\AWAD_JET\LOGS\"/>-->
-
-		<!--<LogDirectoryConfigurationInfo DisplayName="101.41" FileNameFilter="*.log" Path="\\192.168.101.41\logs\awad_front\"/>-->
-
-		<!--<LogDirectoryConfigurationInfo DisplayName="Logs1" FileNameFilter="*.log" Path="c:\MOST\AWAD\AWAD_AVIA_SEARCH\logs\"/>-->
-
+		<LogDirectoryConfigurationInfo DisplayName="Logs2" FileNameFilter="*.log" Path="c:\Logs\Logs2" EncodingName="windows-1251"/>
 	</LogAnalyzerConfiguration.Directories>
-
-	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
-		<MessageTypeEquals Value="E"/>
-	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
-
-	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
-		<StringContains>
-			<GetProperty PropertyName="UnitedText">
-				<Argument/>
-			</GetProperty>
-			<StringContains.Substring>
-				<StringConstant Value="deadlocked"/>
-			</StringContains.Substring>
-		</StringContains>
-	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
 		<EqualsBuilder>
@@ -67,13 +29,5 @@
 		<FileLogWriter FilePath="1.log" ShouldCleanLogFile="True"/>
 		<DebugLogWriter/>
 	</LogAnalyzerConfiguration.LoggerWriters>
-
-	<!--<LogAnalyzerConfiguration.AcceptedTypes>
-		<FileLogger FileName="1.log" ShouldCleanLogFile="False">
-			<FileLogger.AcceptedTypes>
-				<MessageType>Debug</MessageType>
-			</FileLogger.AcceptedTypes>
-		</FileLogger>
-	</LogAnalyzerConfiguration.Logger>-->
 
 </LogAnalyzerConfiguration>

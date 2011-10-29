@@ -24,7 +24,7 @@ namespace LogAnalyzer.Extensions
 
 		public static int ParallelIndexOf<T>( this IList<T> collection, T item ) where T : class
 		{
-			return ParallelHelper.IndexOf( collection, item );
+			return ParallelHelper.ParallelIndexOf( collection, item );
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace LogAnalyzer.Extensions
 		/// <returns></returns>
 		public static int ParallelAssuredIndexOf<T>( this IList<T> collection, T item ) where T : class
 		{
-			return ParallelHelper.AssuredIndexOf( collection, item );
+			return ParallelHelper.AssuredParallelIndexOf( collection, item );
 		}
 	}
 }

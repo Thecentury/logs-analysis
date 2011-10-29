@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xaml;
 using AdTech.Common.WPF;
+using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Views;
@@ -24,6 +25,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void AddNewTab( TabViewModel tabViewModel )
 		{
+			var entriesTab = tabViewModel as LogEntriesListViewModel;
+			if ( entriesTab != null )
+			{
+				entriesTab.ParentView = SelectedTab as LogEntriesListViewModel;
+			}
+
 			tabs.Add( tabViewModel );
 			SelectedIndex = tabs.Count - 1;
 		}
@@ -242,5 +249,15 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		#endregion
+
+		public DelegateCommand CreateShowInParentViewCommand( LogEntryViewModel logEntryViewModel, LogEntriesListViewModel parentTab )
+		{
+			return new DelegateCommand( () =>
+											{
+												int index = ParallelHelper.AssuredParallelIndexOf( parentTab.Entries, logEntryViewModel.LogEntry );
+												SelectedIndex = tabs.IndexOf( parentTab );
+												parentTab.SelectedEntryIndex = index;
+											} );
+		}
 	}
 }
