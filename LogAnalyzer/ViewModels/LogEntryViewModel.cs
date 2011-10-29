@@ -291,6 +291,30 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return ApplicationViewModel.CreateExcludeByThreadIdCommand( this ); }
 		}
 
+		// Exclude by filename
+
+		public string ExcludeByFilenameCommandHeader
+		{
+			get { return "All files \"{0}\"".Format2( File.Name ); }
+		}
+
+		public ICommand ExcludeByFilenameCommand
+		{
+			get { return ApplicationViewModel.CreateExcludeByFilenameCommand( this ); }
+		}
+
+		// Exclude directory
+
+		public string ExcludeDirectoryCommandHeader
+		{
+			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
+		}
+
+		public ICommand ExcludeDirectoryCommand
+		{
+			get { return ApplicationViewModel.CreateExcludeDirectoryCommand( this ); }
+		}
+
 		#endregion
 
 		#endregion
