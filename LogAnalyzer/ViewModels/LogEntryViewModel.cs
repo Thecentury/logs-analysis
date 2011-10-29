@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Windows;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using AdTech.Common.WPF;
@@ -171,20 +173,6 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Commands
 
-		private DelegateCommand openFileViewCommand;
-		public ICommand OpenFileViewCommand
-		{
-			get
-			{
-				if ( openFileViewCommand == null )
-				{
-					throw new NotImplementedException();
-				}
-
-				return openFileViewCommand;
-			}
-		}
-
 		#region File operations
 
 		// Select file in explorer
@@ -313,6 +301,62 @@ namespace LogAnalyzer.GUI.ViewModels
 		public ICommand ExcludeDirectoryCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeDirectoryCommand( this ); }
+		}
+
+		#endregion
+
+		#region Copy to clipboard
+
+		private DelegateCommand copyFileNameCommand;
+		public ICommand CopyFileNameCommand
+		{
+			get
+			{
+				if ( copyFileNameCommand == null )
+					copyFileNameCommand = new DelegateCommand( () => Clipboard.SetText( File.Name ) );
+
+				return copyFileNameCommand;
+			}
+		}
+
+		private DelegateCommand copyFullPathCommand;
+		public ICommand CopyFullPathCommand
+		{
+			get
+			{
+				if ( copyFullPathCommand == null )
+					copyFullPathCommand = new DelegateCommand( () => Clipboard.SetText( File.LogFile.FullPath ) );
+
+				return copyFullPathCommand;
+			}
+		}
+
+		private DelegateCommand copyFileLocationCommand;
+		public ICommand CopyFileLocationCommand
+		{
+			get
+			{
+				if ( copyFileLocationCommand == null )
+					copyFileLocationCommand = new DelegateCommand( () =>
+																	{
+																		string location = Path.GetDirectoryName( File.LogFile.FullPath );
+																		Clipboard.SetText( location );
+																	} );
+
+				return copyFileLocationCommand;
+			}
+		}
+
+		private DelegateCommand copyMessageCommand;
+		public ICommand CopyMessageCommand
+		{
+			get
+			{
+				if ( copyMessageCommand == null )
+					copyMessageCommand = new DelegateCommand( () => Clipboard.SetText(UnitedText));
+
+				return copyMessageCommand;
+			}
 		}
 
 		#endregion

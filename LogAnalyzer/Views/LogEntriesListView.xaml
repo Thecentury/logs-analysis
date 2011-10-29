@@ -126,6 +126,7 @@
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
+							
 							<MenuItem Header="{Binding ExcludeByFilenameCommandHeader}" Command="{Binding ExcludeByFilenameCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/documents-stack.png"/>
@@ -144,11 +145,12 @@
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
+						
 						<MenuItem Header="Copy to Clipboard:">
-							<MenuItem Header="File Name" IsEnabled="False"/>
-							<MenuItem Header="Full path" IsEnabled="False"/>
-							<MenuItem Header="File location" IsEnabled="False"/>
-							<MenuItem Header="Message" IsEnabled="False"/>
+							<MenuItem Header="File Name" Command="{Binding CopyFileNameCommand}"/>
+							<MenuItem Header="Full path" Command="{Binding CopyFullPathCommand}"/>
+							<MenuItem Header="File location" Command="{Binding CopyFileLocationCommand}"/>
+							<MenuItem Header="Message" Command="{Binding CopyMessageCommand}"/>
 						</MenuItem>
 					</ContextMenu>
 				</Setter.Value>
