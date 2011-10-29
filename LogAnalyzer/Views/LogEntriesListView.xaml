@@ -89,18 +89,43 @@
 						<MenuItem Header="{Binding SelectFileInExplorerCommandHeader}" Command="{Binding SelectFileInExplorerCommand}"/>
 						<MenuItem Header="{Binding OpenFolderInExplorerCommandHeader}" Command="{Binding OpenFolderInExplorerCommand}"/>
 						<MenuItem Header="Create view for:">
+							<MenuItem.Icon>
+								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"/>
+							</MenuItem.Icon>
+
 							<MenuItem Header="{Binding CreateThreadViewCommandHeader}" Command="{Binding CreateThreadViewCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Header="{Binding CreateFileNameViewCommandHeader}" Command="{Binding CreateFileNameViewCommand}"/>
+							<MenuItem Header="{Binding CreateFileNameViewCommandHeader}" Command="{Binding CreateFileNameViewCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/documents-stack.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 							<Separator/>
-							<MenuItem Header="{Binding CreateViewForFileCommandHeader}" Command="{Binding CreateFileViewCommand}"/>
-							<MenuItem Header="{Binding CreateViewForDirectoryCommandHeader}" Command="{Binding CreateDirectoryViewCommand}"/>
+							<MenuItem Header="{Binding CreateViewForFileCommandHeader}" Command="{Binding CreateFileViewCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="{Binding CreateViewForDirectoryCommandHeader}" Command="{Binding CreateDirectoryViewCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 						</MenuItem>
+						
 						<MenuItem Header="Exclude By:">
-							<MenuItem Header="{Binding ExcludeByCertainFileCommandHeader}" Command="{Binding ExcludeByCertainFileCommand}"/>
+							<MenuItem.Icon>
+								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/funnel.png"/>
+							</MenuItem.Icon>
+							
+							<MenuItem Header="{Binding ExcludeByCertainFileCommandHeader}" Command="{Binding ExcludeByCertainFileCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 							<MenuItem Header="{Binding ExcludeByThreadIdCommandHeader}" Command="{Binding ExcludeByThreadIdCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
