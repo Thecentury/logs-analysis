@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{81905E92
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleLogsProvider.GUI", "MostLogsProvider.GUI\ModuleLogsProvider.GUI.csproj", "{09FFC2ED-1437-4476-9499-1642A7B04565}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalyzer.Zip", "LogAnalyzer.Zip\LogAnalyzer.Zip.csproj", "{E5E2080A-1C25-4847-A068-6102EFD4CE74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -248,6 +250,21 @@ Global
 		{09FFC2ED-1437-4476-9499-1642A7B04565}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{09FFC2ED-1437-4476-9499-1642A7B04565}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{09FFC2ED-1437-4476-9499-1642A7B04565}.Release|x86.ActiveCfg = Release|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.FullDebug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.FullDebug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.FullDebug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.FullDebug|x86.ActiveCfg = Debug|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E5E2080A-1C25-4847-A068-6102EFD4CE74}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@ using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
-	public abstract class LogNotificationsSourceBase : INotifyPropertyChanged
+	public class LogNotificationsSourceBase : INotifyPropertyChanged
 	{
 		public event FileSystemEventHandler Changed;
 		public event FileSystemEventHandler Created;
