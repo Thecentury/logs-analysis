@@ -30,10 +30,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 			Register<TimeSpanConstant>( "ConstantTemplate" );
 
 			Register<StringFilterBuilder>();
-			Register<ThreadIdEquals>();
+			Register<ThreadIdFilterBase>();
 			Register<TextContains>();
 			Register<GetProperty>();
-			Register<FileNameEquals>();
+			Register<FileNameFilterBase>();
 			Register<MessageTypeEquals>();
 		}
 

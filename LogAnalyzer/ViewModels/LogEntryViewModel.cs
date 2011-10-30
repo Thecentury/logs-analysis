@@ -392,5 +392,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		#endregion
 
 		#endregion
+
+		public Visibility ShowInParentViewVisibility
+		{
+			get { return parentViewModel is CoreViewModel ? Visibility.Collapsed : Visibility.Visible; }
+		}
 	}
 }

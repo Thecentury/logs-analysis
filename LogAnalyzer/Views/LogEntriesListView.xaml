@@ -176,8 +176,8 @@
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
-						
-						<MenuItem Header="Show in parent view:" ItemsSource="{Binding ParentTabViews}">
+
+						<MenuItem Header="Show in parent view:" ItemsSource="{Binding ParentTabViews}" Visibility="{Binding ShowInParentViewVisibility, Mode=OneTime}" >
 							<MenuItem.ItemContainerStyle>
 								<Style TargetType="MenuItem">
 									<Setter Property="Command" Value="{Binding Command}"/>
