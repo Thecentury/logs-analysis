@@ -24,13 +24,5 @@ namespace LogAnalyzer.Kernel
 		/// Расширение (с начальной точкой).
 		/// </summary>
 		string Extension { get; }
-
-		// todo they say this is useless - check if it is so.
-		DateTime LastWriteTime { get; }
-
-		/// <summary>
-		/// Gets the date when this log file was written to.
-		/// </summary>
-		DateTime LoggingDate { get; }
 	}
 }

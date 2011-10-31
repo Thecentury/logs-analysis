@@ -54,9 +54,14 @@ namespace ModuleLogsProvider.Logging.Most
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			string logName = Path.GetFileName( fullPath );
+			string logName = System.IO.Path.GetFileName( fullPath );
 
 			return GetOrCreateFile( logName );
+		}
+
+		public string Path
+		{
+			get { return "MOST"; }
 		}
 
 		private MostFileInfo CreateFile( string logName )

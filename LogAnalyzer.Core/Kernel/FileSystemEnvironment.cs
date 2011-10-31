@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
 	public sealed class FileSystemEnvironment : EnvironmentBase
 	{
 		private readonly WorkerThreadOperationsQueue operationsQueue;
-		private readonly List<FileSystemDirectoryInfo> directories;
+		private readonly List<IDirectoryInfo> directories;
 		private readonly ITimeService timeService;
 
 		public FileSystemEnvironment( LogAnalyzerConfiguration config )
@@ -18,8 +19,10 @@ namespace LogAnalyzer.Kernel
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
 
+			IDirectoryFactory directoryFactory = config.ResolveNotNull<IDirectoryFactory>();
+
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
-			this.directories = config.EnabledDirectories.Select( FileSystemDirectoryInfo.Create ).ToList();
+			this.directories = config.EnabledDirectories.Select( directoryFactory.CreateDirectory ).ToList();
 			this.timeService = new ConstIntervalTimeService();
 		}
 
@@ -30,7 +33,7 @@ namespace LogAnalyzer.Kernel
 		/// <returns></returns>
 		public override IDirectoryInfo GetDirectory( string path )
 		{
-			FileSystemDirectoryInfo directoryInfo = directories.First( d => d.Path == path );
+			var directoryInfo = directories.First( d => d.Path == path );
 			return directoryInfo;
 		}
 
