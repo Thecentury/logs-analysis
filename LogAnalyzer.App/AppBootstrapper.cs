@@ -14,6 +14,7 @@ using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Zip;
 
 namespace LogAnalyzer.App
 {
@@ -54,8 +55,10 @@ namespace LogAnalyzer.App
 				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
 			}
 
+
 			SetDebugParameters();
 			InitConfig( config );
+			DirectoryManager.RegisterFactory( new ZipDirectoryFactory() );
 			HandleOpenWithCalls( config );
 
 			var environment = new FileSystemEnvironment( config );

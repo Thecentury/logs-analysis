@@ -13,7 +13,6 @@ namespace LogAnalyzer.Zip
 	internal sealed class ZipDirectoryInfo : IDirectoryInfo
 	{
 		private readonly LogNotificationsSourceBase notificationsSource = new LogNotificationsSourceBase();
-		private readonly LogDirectoryConfigurationInfo config;
 		private readonly string zipFileName;
 		private readonly string rootDirectory;
 		private readonly DirectoriesHierarchyHelper directoriesHierarchyHelper;
@@ -23,7 +22,6 @@ namespace LogAnalyzer.Zip
 			if ( config == null ) throw new ArgumentNullException( "config" );
 			if ( zipFileName == null ) throw new ArgumentNullException( "zipFileName" );
 
-			this.config = config;
 			this.zipFileName = zipFileName;
 			this.rootDirectory = rootDirectory;
 			this.directoriesHierarchyHelper = new DirectoriesHierarchyHelper( rootDirectory, config.IncludeNestedDirectories );
@@ -54,7 +52,7 @@ namespace LogAnalyzer.Zip
 					if ( !includeByDir )
 						continue;
 
-					ZipFileInfo file = null;
+					ZipFileInfo file = new ZipFileInfo( zipFileName, zipEntry.FileName );
 					files.Add( file );
 				}
 			}
@@ -69,7 +67,7 @@ namespace LogAnalyzer.Zip
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			throw new NotImplementedException();
+			return new ZipFileInfo( zipFileName, fullPath );
 		}
 
 		public string Path

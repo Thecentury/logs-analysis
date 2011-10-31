@@ -69,6 +69,7 @@ namespace LogAnalyzer.Zip
 
 			public Stream OpenStream( int startPosition )
 			{
+				// todo brinchuk this is not the best solution
 				MemoryStream memoryStream = new MemoryStream( (int)zipEntry.UncompressedSize );
 				zipEntry.Extract( memoryStream );
 				memoryStream.Position = startPosition;

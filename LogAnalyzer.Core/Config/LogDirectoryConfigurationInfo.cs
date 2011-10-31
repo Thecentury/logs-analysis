@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 
@@ -12,16 +13,13 @@ namespace LogAnalyzer.Config
 			UseCache = false;
 		}
 
-		public LogDirectoryConfigurationInfo( string path, string fileNameFilter, string displayName )
+		public LogDirectoryConfigurationInfo( [NotNull]string path, string fileNameFilter, string displayName )
 		{
 			UseCache = false;
 			if ( path.IsNullOrEmpty() )
 				throw new ArgumentNullException( "path" );
 
-			if ( fileNameFilter.IsNullOrEmpty() )
-				throw new ArgumentNullException( "fileNameFilter" );
-
-			if ( displayName.IsNullOrEmpty() )
+			if ( displayName == null )
 				throw new ArgumentNullException( "displayName" );
 
 			Path = path;

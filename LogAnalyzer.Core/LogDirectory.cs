@@ -119,7 +119,7 @@ namespace LogAnalyzer
 
 			// отсекаем ситуации, когда по фильтру *.log возвращаются файлы *.log__
 			int extensionLength = 100;
-			if ( FileNameFilter != "*" && FileNameFilter.Contains( '.' ) )
+			if ( !String.IsNullOrEmpty( FileNameFilter ) && FileNameFilter != "*" && FileNameFilter.Contains( '.' ) )
 			{
 				// для трехбуквенного extension будет 4
 				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );

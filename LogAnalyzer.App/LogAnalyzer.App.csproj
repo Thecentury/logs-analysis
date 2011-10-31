@@ -120,6 +120,10 @@
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer.Zip\LogAnalyzer.Zip.csproj">
+      <Project>{E5E2080A-1C25-4847-A068-6102EFD4CE74}</Project>
+      <Name>LogAnalyzer.Zip</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.GUI.csproj">
       <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
       <Name>LogAnalyzer.GUI</Name>

@@ -33,6 +33,8 @@ namespace LogAnalyzer.GUI
 			get { return argsParser; }
 		}
 
+		protected readonly DirectoryManager DirectoryManager = new DirectoryManager();
+
 		public void Start( string[] commandLineArgs )
 		{
 			if ( commandLineArgs == null ) throw new ArgumentNullException( "commandLineArgs" );
@@ -69,13 +71,16 @@ namespace LogAnalyzer.GUI
 
 			RegionManager regionManager = new RegionManager();
 
+			DirectoryManager.RegisterCommonFactories();
+
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
 				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
 				.RegisterInstance<RegionManager>( regionManager )
-				.RegisterInstance<IWindowService>( new RealWindowService() );
+				.RegisterInstance<IWindowService>( new RealWindowService() )
+				.RegisterInstance<IDirectoryFactory>( DirectoryManager );
 		}
 	}
 }
