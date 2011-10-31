@@ -23,7 +23,6 @@ namespace LogAnalyzer.Tests
 			this.name = name;
 			this.fullName = fullName;
 			this.logSource = logSource;
-			lastWriteTime = DateTime.Now;
 		}
 
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource, Encoding encoding )
@@ -74,12 +73,6 @@ namespace LogAnalyzer.Tests
 			get { return ".ext"; }
 		}
 
-		private DateTime lastWriteTime;
-		DateTime IFileInfo.LastWriteTime
-		{
-			get { return lastWriteTime; }
-		}
-
 		public string Content
 		{
 			get { return encoding.GetString( bytes.ToArray() ); }
@@ -94,7 +87,6 @@ namespace LogAnalyzer.Tests
 			lock ( sync )
 			{
 				bytes.AddRange( messageBytes );
-				lastWriteTime = DateTime.Now;
 			}
 
 			logSource.RaiseFileChanged( name );

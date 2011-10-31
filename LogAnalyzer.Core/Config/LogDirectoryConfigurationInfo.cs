@@ -44,6 +44,8 @@ namespace LogAnalyzer.Config
 			set { enabled = value; }
 		}
 
+		public bool IncludeNestedDirectories { get; set; }
+
 		public bool UseCache { get; set; }
 
 		private readonly List<string> predefinedFiles = new List<string>();

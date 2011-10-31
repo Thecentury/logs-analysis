@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "LogAnalyzer.Zip" )]
+[assembly: AssemblyTitle( "LogAnalyzer.Zip.Tests" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "LogAnalyzer.Zip" )]
+[assembly: AssemblyProduct( "LogAnalyzer.Zip.Tests" )]
 [assembly: AssemblyCopyright( "Copyright ©  2011" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid( "64295083-8eeb-44a1-8c34-8127d0313ee0" )]
+[assembly: Guid( "cc9d8494-95c6-44e7-8a30-075e15d3e05f" )]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,5 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion( "1.0.0.0" )]
 [assembly: AssemblyFileVersion( "1.0.0.0" )]
-
-[assembly: InternalsVisibleTo( "LogAnalyzer.Zip.Tests" )]

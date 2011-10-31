@@ -74,6 +74,7 @@
     <Compile Include="DateTimeParsingBenchmark.cs" />
     <Compile Include="DelayedLogRecordsSourceTests.cs" />
     <Compile Include="DifferentEncodingsTests.cs" />
+    <Compile Include="DirectoryManagerTests.cs" />
     <Compile Include="FilterTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />

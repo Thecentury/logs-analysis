@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LogAnalyzer.Kernel;
+﻿using System.Collections.Generic;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Kernel
 {
-	// todo probably add a UseCache property
 	public interface IDirectoryInfo
 	{
 		LogNotificationsSourceBase NotificationSource { get; }
 		IEnumerable<IFileInfo> EnumerateFiles( string searchPattern );
 		IFileInfo GetFileInfo( string fullPath );
+
+		string Path { get; }
 	}
 }

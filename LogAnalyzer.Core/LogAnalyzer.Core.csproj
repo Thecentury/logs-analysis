@@ -85,7 +85,10 @@
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
+    <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />
+    <Compile Include="Kernel\DirectoryManager.cs" />
+    <Compile Include="Kernel\IDirectoryFactory.cs" />
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\ErrorMessages.cs" />
     <Compile Include="Kernel\ErrorOccuredEventArgs.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="Kernel\ITransformer.cs" />
     <Compile Include="Kernel\IViewManager.cs" />
     <Compile Include="Auxilliary\KeyValueStorage.cs" />
+    <Compile Include="Kernel\PredefinedFilesDirectoryFactory.cs" />
     <Compile Include="Kernel\PredefinedFilesDirectoryInfo.cs" />
     <Compile Include="Kernel\SameThreadOperationsQueue.cs" />
     <Compile Include="Kernel\WpfViewManager.cs" />

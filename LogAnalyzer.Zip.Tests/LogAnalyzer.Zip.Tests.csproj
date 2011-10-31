@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E5E2080A-1C25-4847-A068-6102EFD4CE74}</ProjectGuid>
+    <ProjectGuid>{AA5A59D4-1872-4CED-AB8F-3117FAC961E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogAnalyzer.Zip</RootNamespace>
-    <AssemblyName>LogAnalyzer.Zip</AssemblyName>
+    <RootNamespace>LogAnalyzer.Zip.Tests</RootNamespace>
+    <AssemblyName>LogAnalyzer.Zip.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,6 +34,9 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\Ext\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\Ext\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,15 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryHierarchyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZipDirectoryFactory.cs" />
-    <Compile Include="ZipDirectoryInfo.cs" />
-    <Compile Include="ZipFileInfo.cs" />
+    <Compile Include="ZipTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Logs.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer.Zip\LogAnalyzer.Zip.csproj">
+      <Project>{E5E2080A-1C25-4847-A068-6102EFD4CE74}</Project>
+      <Name>LogAnalyzer.Zip</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -28,15 +28,7 @@ namespace LogAnalyzer.Kernel
 
 		private readonly LogNotificationsSourceBase notificationSource;
 
-		public static FileSystemDirectoryInfo Create( LogDirectoryConfigurationInfo config )
-		{
-			if ( config.PredefinedFiles.Count == 0 )
-				return new FileSystemDirectoryInfo( config );
-			else
-				return new PredefinedFilesDirectoryInfo( config );
-		}
-
-		protected FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
+		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{
 			if ( directoryConfig == null )
 				throw new ArgumentNullException( "directoryConfig" );
@@ -58,8 +50,10 @@ namespace LogAnalyzer.Kernel
 
 		public virtual IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
-			// todo дать возможность настраивать вложенные папки?
-			return Directory.EnumerateFiles( path, searchPattern, SearchOption.TopDirectoryOnly ).Select( GetFileInfo );
+			SearchOption searchOption = directoryConfig.IncludeNestedDirectories
+			                            	? SearchOption.AllDirectories
+			                            	: SearchOption.TopDirectoryOnly;
+			return Directory.EnumerateFiles( path, searchPattern, searchOption ).Select( GetFileInfo );
 		}
 
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string path, string filesFilter )
