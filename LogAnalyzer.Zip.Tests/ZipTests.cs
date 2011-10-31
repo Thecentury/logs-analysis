@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using LogAnalyzer.Config;
+using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
 using NUnit.Framework;
 
@@ -14,17 +15,6 @@ namespace LogAnalyzer.Zip.Tests
 	public class ZipTests
 	{
 		private const string zipFileName = "Logs.zip";
-
-		[Test]
-		public void Test1()
-		{
-			using ( ZipFile zip = new ZipFile( zipFileName ) )
-			{
-				foreach (ZipEntry zipEntry in zip)
-				{
-				}
-			}
-		}
 
 		[TestCase( "Logs.zip" )]
 		[TestCase( "Logs.zip|Logs1/Inner" )]
@@ -41,6 +31,26 @@ namespace LogAnalyzer.Zip.Tests
 			ZipDirectoryInfo zipDirectory = manager.CreateDirectory( directoryConfiguration ) as ZipDirectoryInfo;
 
 			Assert.NotNull( zipDirectory );
+		}
+
+		[Test]
+		public void GetZippedLogs()
+		{
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, null );
+			var files = zip.EnumerateFiles( "" ).ToList();
+
+			foreach ( IFileInfo fileInfo in files )
+			{
+				Assert.NotNull( fileInfo );
+				var reader = fileInfo.GetReader( new LogFileReaderArguments
+				{
+					Encoding = Encoding.GetEncoding( 1251 ),
+					GlobalEntriesFilter = new DelegateFilter<LogEntry>( logEntry => true )
+				} );
+
+				var entries = reader.ReadEntireFile();
+				Assert.Greater( entries.Count, 0 );
+			}
 		}
 	}
 }
