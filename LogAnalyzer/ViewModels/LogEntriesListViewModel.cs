@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Controls;
-using AdTech.Common.WPF;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -243,6 +242,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		#region Commands
+
 		private DelegateCommand<RoutedEventArgs> gotFocusCommand;
 		public ICommand GotFocusCommand
 		{
@@ -250,6 +251,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( gotFocusCommand == null )
 					gotFocusCommand = new DelegateCommand<RoutedEventArgs>( GotFocusExecute );
+
 				return gotFocusCommand;
 			}
 		}
@@ -258,5 +260,83 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			DynamicHighlightManager.ProcessCellSelection( e );
 		}
+
+		// Scroll commands
+
+		private DelegateCommand scrollDownCommand;
+		public ICommand ScrollDownCommand
+		{
+			get
+			{
+				if ( scrollDownCommand == null )
+					scrollDownCommand = new DelegateCommand( () => SelectedEntryIndex++, () => SelectedEntryIndex < entries.Count - 1 );
+
+				return scrollDownCommand;
+			}
+		}
+
+		private DelegateCommand scrollUpCommand;
+		public ICommand ScrollUpCommand
+		{
+			get
+			{
+				if ( scrollUpCommand == null )
+					scrollUpCommand = new DelegateCommand( () => SelectedEntryIndex--, () => SelectedEntryIndex > 0 );
+
+				return scrollUpCommand;
+			}
+		}
+
+		private const int PageSize = 15;
+
+		private DelegateCommand scrollPageDownCommand;
+		public ICommand ScrollPageDownCommand
+		{
+			get
+			{
+				if ( scrollPageDownCommand == null )
+					scrollPageDownCommand = new DelegateCommand( () => SelectedEntryIndex = Math.Max( SelectedEntryIndex + PageSize, entries.Count - 1 ), () => SelectedEntryIndex < entries.Count - 1 );
+
+				return scrollPageDownCommand;
+			}
+		}
+
+		private DelegateCommand scrollPageUpCommand;
+		public ICommand ScrollPageUpCommand
+		{
+			get
+			{
+				if ( scrollPageUpCommand == null )
+					scrollPageUpCommand = new DelegateCommand( () => SelectedEntryIndex = Math.Max( 0, SelectedEntryIndex - PageSize ), () => SelectedEntryIndex > 0 );
+
+				return scrollPageUpCommand;
+			}
+		}
+
+		private DelegateCommand scrollToTopCommand;
+		public ICommand ScrollToTopCommand
+		{
+			get
+			{
+				if ( scrollToTopCommand == null )
+					scrollToTopCommand = new DelegateCommand( () => SelectedEntryIndex = 0 );
+
+				return scrollToTopCommand;
+			}
+		}
+
+		private DelegateCommand scrollToBottomCommand;
+		public ICommand ScrollToBottomCommand
+		{
+			get
+			{
+				if ( scrollToBottomCommand == null )
+					scrollToBottomCommand = new DelegateCommand( () => SelectedEntryIndex = entries.Count - 1 );
+
+				return scrollToBottomCommand;
+			}
+		}
+
+		#endregion
 	}
 }

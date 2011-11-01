@@ -5,9 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Input;
-using AdTech.Common.WPF;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.FilterEditing
 {

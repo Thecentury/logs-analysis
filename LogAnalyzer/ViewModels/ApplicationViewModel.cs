@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows;
-using AdTech.Common.WPF;
 using LogAnalyzer.Config;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Regions;

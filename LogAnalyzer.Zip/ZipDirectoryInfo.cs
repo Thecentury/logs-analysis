@@ -48,6 +48,10 @@ namespace LogAnalyzer.Zip
 						continue;
 
 					string dir = IOPath.GetDirectoryName( zipEntry.FileName );
+					if ( dir == null )
+						continue;
+
+					dir = dir.Replace( '\\', '/' );
 					bool includeByDir = IncludeByDirectory( dir );
 					if ( !includeByDir )
 						continue;

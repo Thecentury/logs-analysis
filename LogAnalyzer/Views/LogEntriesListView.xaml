@@ -5,13 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
 			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
-			 
-			 xmlns:cmn="http://adtech-dev.com/Common" xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
-             mc:Ignorable="d" 
+			 xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
+             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+	
+	<UserControl.InputBindings>
+		<KeyBinding Command="{Binding ScrollPageDownCommand}" Key="PageDown"/>
+		<KeyBinding Command="{Binding ScrollPageUpCommand}" Key="PageUp"/>
+
+		<KeyBinding Command="{Binding ScrollToBottomCommand}" Key="End" Modifiers="Control"/>
+		<KeyBinding Command="{Binding ScrollToTopCommand}" Key="Home" Modifiers="Control"/>
+	</UserControl.InputBindings>
 
 	<UserControl.Resources>
-
 		<SolidColorBrush Color="#FFEE3A" x:Key="dynamicHighlightBrush"/>
 
 		<local:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
@@ -191,7 +197,7 @@
 								</Style>
 							</MenuItem.ItemContainerStyle>
 						</MenuItem>
-						
+
 					</ContextMenu>
 				</Setter.Value>
 			</Setter>
@@ -207,10 +213,10 @@
 			<Style.Resources>
 				<!--Более приятные для меня цвета-->
 				<!-- SelectedItem with focus -->
-				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#7730AFFF" />
 				<!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#7730AFFF" />-->
 				<!-- SelectedItem without focus -->
-				<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+				<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#7730AFFF" />
 				<!--<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#7730AFFF" />-->
 				<!-- SelectedItem text foreground -->
 				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -286,9 +292,9 @@
 				  Style="{StaticResource dataGridStyle}"
 				  >
 
-			<cmn:AttachedCommandBehaviour.Bindings>
-				<cmn:AttachedCommandBinding Command="{Binding GotFocusCommand}" Event="GotFocus" />
-			</cmn:AttachedCommandBehaviour.Bindings>
+			<Common:AttachedCommandBehaviour.Bindings>
+				<Common:AttachedCommandBinding Command="{Binding GotFocusCommand}" Event="GotFocus" />
+			</Common:AttachedCommandBehaviour.Bindings>
 
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="T" Binding="{Binding Type}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>

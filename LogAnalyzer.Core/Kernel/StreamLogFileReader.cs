@@ -176,6 +176,19 @@ namespace LogAnalyzer.Kernel
 
 		public override IList<LogEntry> ReadEntireFile()
 		{
+			try
+			{
+				return ReadEntireFileUnsafe();
+			}
+			catch ( Exception exc )
+			{
+				logger.WriteError( "Exception while reading file '{0}'", this.Name );
+				throw;
+			}
+		}
+
+		private IList<LogEntry> ReadEntireFileUnsafe()
+		{
 			List<LogEntry> logEntries = new List<LogEntry>();
 
 			using ( Stream stream = OpenStream( 0 ) )
@@ -219,7 +232,7 @@ namespace LogAnalyzer.Kernel
 						prevLine = line;
 
 						bool invalidEncoding = notParsedLinesCount > MaxLinesReadWhenThrowInvalidEncodingException && logEntries.Count == 0
-							|| line.Length > MaxLineLength;
+											   || line.Length > MaxLineLength;
 
 						if ( invalidEncoding )
 						{

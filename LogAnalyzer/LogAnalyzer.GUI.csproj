@@ -24,7 +24,7 @@
     </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -53,9 +53,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.WPF, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\Ext\Common.WPF.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\Ext\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>
@@ -89,7 +86,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AttachedCommandBehaviour.cs" />
+    <Compile Include="Common\AttachedCommandBinding.cs" />
+    <Compile Include="Common\AttachedCommandBindingCollection.cs" />
+    <Compile Include="Common\CommandManagerHelper.cs" />
+    <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\DynamicHighlighting.cs" />
+    <Compile Include="Common\GenericDelegateCommand.cs" />
     <Compile Include="Common\IWindowService.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />

@@ -10,8 +10,8 @@ using System.Windows;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
 using System.Diagnostics;
-using AdTech.Common.WPF;
 using System.Windows.Controls;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.ViewModels
