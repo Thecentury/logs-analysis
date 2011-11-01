@@ -22,6 +22,8 @@ namespace LogAnalyzer.App
 	{
 		protected override void Init()
 		{
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
 			bool breakAtStart = Properties.Settings.Default.BreakAtStart;
 			if ( breakAtStart )
 			{
@@ -31,8 +33,7 @@ namespace LogAnalyzer.App
 			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
-			string defaultSettingsPath =
-				Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
+			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 
 			LogAnalyzerConfiguration config;
@@ -42,6 +43,7 @@ namespace LogAnalyzer.App
 				configPath = Path.Combine( exeLocation, configPath );
 				configPathExists = File.Exists( configPath );
 			}
+			
 			if ( configPathExists )
 			{
 				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
@@ -54,7 +56,6 @@ namespace LogAnalyzer.App
 
 				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
 			}
-
 
 			SetDebugParameters();
 			InitConfig( config );
@@ -70,6 +71,11 @@ namespace LogAnalyzer.App
 			} );
 		}
 
+		private void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
+		{
+			Logger.WriteLine( MessageType.Error, "AppDomain - Unhandled exception: " + e.ExceptionObject );
+		}
+
 		private void SetDebugParameters()
 		{
 			// замедление чтения
@@ -77,6 +83,10 @@ namespace LogAnalyzer.App
 			//    new SlowStreamTransformer( TimeSpan.FromMilliseconds( 1 ) ) );
 		}
 
+		/// <summary>
+		/// Обрабатывает пути к файлам логов, переданные как аргументы командной строки.
+		/// </summary>
+		/// <param name="config"></param>
 		private void HandleOpenWithCalls( LogAnalyzerConfiguration config )
 		{
 			var paths = GetPathsFromCommandArgs( CommandLineArgs );
@@ -91,7 +101,11 @@ namespace LogAnalyzer.App
 												} );
 				}
 
-				var files = paths.OfType<FileInfo>().ToList();
+				var files = paths
+					.OfType<FileInfo>()
+					.Where( f => f.Extension == ".log" )
+					.ToList();
+
 				if ( files.Count > 0 )
 				{
 					LogDirectoryConfigurationInfo directoryForSeparateFiles = new LogDirectoryConfigurationInfo( "Files", "*", "Files" )
@@ -102,6 +116,16 @@ namespace LogAnalyzer.App
 					directoryForSeparateFiles.PredefinedFiles.AddRange( files.Select( f => f.FullName ) );
 
 					config.Directories.Add( directoryForSeparateFiles );
+				}
+
+				var zipFiles = paths.OfType<FileInfo>().Where( f => f.Extension == ".zip" ).ToList();
+				if ( zipFiles.Count > 0 )
+				{
+					foreach ( FileInfo zipFile in zipFiles )
+					{
+						var zipDir = new LogDirectoryConfigurationInfo( zipFile.FullName, "*", zipFile.Name ) { IncludeNestedDirectories = true };
+						config.Directories.Add( zipDir );
+					}
 				}
 			}
 		}

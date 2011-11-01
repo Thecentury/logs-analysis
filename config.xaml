@@ -27,7 +27,7 @@
 	</LogAnalyzerConfiguration.LoggerAcceptedTypes>
 
 	<LogAnalyzerConfiguration.LoggerWriters>
-		<FileLogWriter FilePath="1.log" ShouldCleanLogFile="True"/>
+		<FileLogWriter FilePath="log.log" ShouldCleanLogFile="True"/>
 		<DebugLogWriter/>
 	</LogAnalyzerConfiguration.LoggerWriters>
 

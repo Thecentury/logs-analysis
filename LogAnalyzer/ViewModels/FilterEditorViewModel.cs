@@ -1,7 +1,7 @@
 ﻿using System;
-using AdTech.Common.WPF;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModels

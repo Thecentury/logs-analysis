@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
 using System.Windows;
-using AdTech.Common.WPF;
 using System.Windows.Input;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels

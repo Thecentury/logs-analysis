@@ -16,6 +16,14 @@ namespace LogAnalyzer.Zip.Tests
 	{
 		private const string zipFileName = "Logs.zip";
 
+		// Zip file structure:
+		// XslTransform.log
+		// Logs1/
+		//		PageBuilder-Eticket_Actual.log
+		//		XslTransform.log
+		//		Inner/
+		//				CorporatorManager.log
+
 		[TestCase( "Logs.zip" )]
 		[TestCase( "Logs.zip|Logs1/Inner" )]
 		[Test]
@@ -34,10 +42,12 @@ namespace LogAnalyzer.Zip.Tests
 		}
 
 		[Test]
-		public void GetZippedLogs()
+		public void TestGetZippedLogs()
 		{
 			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, null );
 			var files = zip.EnumerateFiles( "" ).ToList();
+
+			Assert.AreEqual( 4, files.Count );
 
 			foreach ( IFileInfo fileInfo in files )
 			{
@@ -51,6 +61,33 @@ namespace LogAnalyzer.Zip.Tests
 				var entries = reader.ReadEntireFile();
 				Assert.Greater( entries.Count, 0 );
 			}
+		}
+
+		[Test]
+		public void TestSetRootFolder()
+		{
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1" );
+			var files = zip.EnumerateFiles( "" ).ToList();
+
+			Assert.AreEqual( 2, files.Count );
+		}
+
+		[Test]
+		public void TestSetRootFolderWithNestedEnabled()
+		{
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ) { IncludeNestedDirectories = true }, zipFileName, "Logs1" );
+			var files = zip.EnumerateFiles( "" ).ToList();
+
+			Assert.AreEqual( 3, files.Count );
+		}
+
+		[Test]
+		public void TestSetDeepRootFolderWithNestedEnabled()
+		{
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1/Inner" );
+			var files = zip.EnumerateFiles( "" ).ToList();
+
+			Assert.AreEqual( 1, files.Count );
 		}
 	}
 }

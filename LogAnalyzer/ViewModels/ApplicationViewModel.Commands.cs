@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Xaml;
-using AdTech.Common.WPF;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;

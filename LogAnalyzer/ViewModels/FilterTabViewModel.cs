@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using AdTech.Common.WPF;
 using System.Windows;
 using LogAnalyzer.Filters;
 using System.Threading;
 using System.Threading.Tasks;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModels

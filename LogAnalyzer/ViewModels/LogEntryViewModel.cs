@@ -5,8 +5,8 @@ using System.IO;
 using System.Windows;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
-using AdTech.Common.WPF;
 using System.Windows.Input;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
