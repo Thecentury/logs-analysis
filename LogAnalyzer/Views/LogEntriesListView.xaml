@@ -282,6 +282,8 @@
 
 	<DockPanel LastChildFill="True">
 
+		<ToolBar DockPanel.Dock="Top" Margin="4,4,4,4" ItemsSource="{Binding ToolbarItems}"/>
+
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
