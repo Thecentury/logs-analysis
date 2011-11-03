@@ -135,6 +135,7 @@
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
     <Compile Include="ViewModels\FilterEditorViewModel.cs" />
+    <Compile Include="ViewModels\FilterTabToolbarViewModel.cs" />
     <Compile Include="ViewModels\FilterTabViewModel.cs" />
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
@@ -262,6 +263,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="TabViewModelHierarchy.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

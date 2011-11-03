@@ -98,6 +98,47 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		private bool autoScrollToBottom;
+		public bool AutoScrollToBottom
+		{
+			get { return autoScrollToBottom; }
+			set
+			{
+				if ( autoScrollToBottom == value )
+					return;
+
+				autoScrollToBottom = value;
+				RaisePropertyChanged( "AutoScrollToBottom" );
+
+				if ( autoScrollToBottom )
+				{
+					ScrollToBottomCommand.Execute( null );
+				}
+			}
+		}
+
+		#region Toolbar
+
+		private bool toolbarItemsPopulated;
+		private readonly ObservableCollection<object> toolbarItems = new ObservableCollection<object>();
+		public ObservableCollection<object> ToolbarItems
+		{
+			get
+			{
+				if ( !toolbarItemsPopulated )
+				{
+					PopulateToolbarItems();
+					toolbarItemsPopulated = true;
+				}
+
+				return toolbarItems;
+			}
+		}
+
+		protected virtual void PopulateToolbarItems() { }
+
+		#endregion
+
 		#region StatusBar
 
 		private bool statusBarItemsPopulated;
@@ -261,7 +302,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			DynamicHighlightManager.ProcessCellSelection( e );
 		}
 
-		// Scroll commands
+		#region Scroll commands
 
 		private DelegateCommand scrollDownCommand;
 		public ICommand ScrollDownCommand
@@ -295,7 +336,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( scrollPageDownCommand == null )
-					scrollPageDownCommand = new DelegateCommand( () => SelectedEntryIndex = Math.Max( SelectedEntryIndex + PageSize, entries.Count - 1 ), () => SelectedEntryIndex < entries.Count - 1 );
+					scrollPageDownCommand = new DelegateCommand(
+						() => entriesView.MoveCurrentToPosition( Math.Max( SelectedEntryIndex + PageSize, entries.Count - 1 ) ),
+						() => SelectedEntryIndex < entries.Count - 1 );
 
 				return scrollPageDownCommand;
 			}
@@ -307,7 +350,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( scrollPageUpCommand == null )
-					scrollPageUpCommand = new DelegateCommand( () => SelectedEntryIndex = Math.Max( 0, SelectedEntryIndex - PageSize ), () => SelectedEntryIndex > 0 );
+					scrollPageUpCommand = new DelegateCommand(
+						() => SelectedEntryIndex = Math.Max( 0, SelectedEntryIndex - PageSize ),
+						() => SelectedEntryIndex > 0 );
 
 				return scrollPageUpCommand;
 			}
@@ -336,6 +381,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				return scrollToBottomCommand;
 			}
 		}
+
+		#endregion
 
 		#endregion
 	}

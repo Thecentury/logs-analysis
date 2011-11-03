@@ -213,10 +213,10 @@
 			<Style.Resources>
 				<!--Более приятные для меня цвета-->
 				<!-- SelectedItem with focus -->
-				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#7730AFFF" />
+				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#3330AFFF" />
 				<!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#7730AFFF" />-->
 				<!-- SelectedItem without focus -->
-				<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#7730AFFF" />
+				<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#3330AFFF" />
 				<!--<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#7730AFFF" />-->
 				<!-- SelectedItem text foreground -->
 				<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
@@ -232,7 +232,6 @@
 			<Setter Property="EnableRowVirtualization" Value="True"/>
 			<Setter Property="AutoGenerateColumns" Value="False"/>
 
-			<!--todo это надо?-->
 			<Setter Property="ClipboardCopyMode" Value="ExcludeHeader"/>
 
 			<Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>

@@ -2,9 +2,9 @@
 						  DefaultEncodingName="windows-1251">
 
 	<LogAnalyzerConfiguration.Directories>
-		<LogDirectoryConfigurationInfo Enabled="False" DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
+		<LogDirectoryConfigurationInfo Enabled="True" DisplayName="Logs1" FileNameFilter="*.log" Path="c:\Logs\Logs1" EncodingName="windows-1251"/>
 		<LogDirectoryConfigurationInfo Enabled="False" DisplayName="Logs2" FileNameFilter="*.log" Path="c:\Logs\Logs2" EncodingName="windows-1251"/>
-		<LogDirectoryConfigurationInfo EncodingName="windows-1251" DisplayName="Zip" Path="C:\Logs\Logs.zip"/>
+		<LogDirectoryConfigurationInfo Enabled="False" EncodingName="windows-1251" DisplayName="Zip" Path="C:\Logs\Logs.zip"/>
 	</LogAnalyzerConfiguration.Directories>
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
