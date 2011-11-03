@@ -19,8 +19,6 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private void UserControl_Loaded( object sender, RoutedEventArgs e )
 		{
-			rootBuilder.PropertyChanged += OnRootBuilder_PropertyChanged;
-
 			var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
 			var vm = new ExpressionBuilderViewModel( rootBuilder, parameterExpression );
 			if ( Builder != null )
@@ -28,10 +26,6 @@ namespace LogAnalyzer.GUI.FilterEditing
 				vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( Builder, parameterExpression );
 			}
 			DataContext = vm;
-		}
-
-		private void OnRootBuilder_PropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
 		}
 
 		public ExpressionBuilder Builder

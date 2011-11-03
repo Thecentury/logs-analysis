@@ -324,6 +324,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			return !IsFiltering;
 		}
+
+		protected override void PopulateToolbarItems()
+		{
+			base.PopulateToolbarItems();
+			ToolbarItems.Add( new FilterTabToolbarViewModel( this ) );
+		}
 	}
 
 	public enum FilteringResult

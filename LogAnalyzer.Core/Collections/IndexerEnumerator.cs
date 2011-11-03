@@ -12,8 +12,8 @@ namespace LogAnalyzer
 	/// <typeparam name="T"></typeparam>
 	public sealed class IndexerEnumerator<T> : IEnumerator<T>
 	{
-		private readonly IList<T> list = null;
-		private readonly int count = 0;
+		private readonly IList<T> list;
+		private readonly int count;
 		private int index = -1;
 
 		public IndexerEnumerator( IList<T> list )
@@ -55,9 +55,9 @@ namespace LogAnalyzer
 
 	public sealed class IndexerEnumerable<T> : IEnumerable<T>
 	{
-		private readonly IList<T> list = null;
-		
-		public IndexerEnumerable(IList<T> list)
+		private readonly IList<T> list;
+
+		public IndexerEnumerable( IList<T> list )
 		{
 			if ( list == null )
 				throw new ArgumentNullException( "list" );

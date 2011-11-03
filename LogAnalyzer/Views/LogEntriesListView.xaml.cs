@@ -14,6 +14,7 @@ namespace LogAnalyzer.GUI.Views
 		public LogEntriesListView()
 		{
 			InitializeComponent();
+			//entriesDataGrid.SelectionChanged += OnEntriesDataGrid_SelectionChanged;
 		}
 
 		private void DataGrid_DataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
@@ -23,20 +24,18 @@ namespace LogAnalyzer.GUI.Views
 			{
 				directoryColumn.Visibility = vm.DirectoriesColumnVisibility;
 			}
-
-			entriesDataGrid.SelectionChanged += OnEntriesDataGrid_SelectionChanged;
 		}
 
 		private void OnEntriesDataGrid_SelectionChanged( object sender, SelectionChangedEventArgs e )
 		{
-			if ( e.AddedItems.Count > 0 )
-			{
-				var firstSelected = e.AddedItems[0];
-				if ( firstSelected != null )
-				{
-					entriesDataGrid.ScrollIntoView( firstSelected );
-				}
-			}
+			//if ( e.AddedItems.Count > 0 )
+			//{
+			//    var firstSelected = e.AddedItems[0];
+			//    if ( firstSelected != null )
+			//    {
+			//        entriesDataGrid.ScrollIntoView( firstSelected );
+			//    }
+			//}
 		}
 	}
 }

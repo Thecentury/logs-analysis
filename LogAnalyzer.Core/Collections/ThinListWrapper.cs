@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
+using System.Threading;
 using LogAnalyzer.Extensions;
 using System.Diagnostics;
 
@@ -14,7 +15,7 @@ namespace LogAnalyzer
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[DebuggerDisplay( "Count = {list.Count}" )]
-	public sealed class ThinListWrapper<T> : ThinObservableCollection, IList<T>, IList
+	public sealed class ThinListWrapper<T> : ThinObservableCollection, IList<T>, IList where T : class
 	{
 		private IList<T> list;
 		public IList<T> List
@@ -59,7 +60,16 @@ namespace LogAnalyzer
 		{
 			get
 			{
-				return list[index];
+				do
+				{
+					T item = list[index];
+
+					if ( item != null )
+					{
+						return item;
+					}
+					Thread.Yield();
+				} while ( true );
 			}
 			set
 			{

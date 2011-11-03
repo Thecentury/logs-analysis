@@ -45,11 +45,8 @@ namespace LogAnalyzer
 			get { return config; }
 		}
 
-		// todo в видах файла и папки не показывать столбцы, одинаковые для всех записей. То же и для потока и т.п.
 
 		// todo заменить NotImplementedException на NotSupportedException
-		// todo статистика по типам записей
-		// todo записывать число исключений при чтении файлов
 		// todo открывать в VS файл на нужной строке (где исключение)
 
 		//string vsCommandLine = @"c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe";

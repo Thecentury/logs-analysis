@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LogAnalyzer.GUI.ViewModels.TabViewModel" Collapsed="true">
+    <Position X="5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAACAAAAAkAAAgEAAAEBgAEAAAQAAoACAAAQ=</HashCode>
+      <FileName>ViewModels\TabViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.BindingObject" Collapsed="true">
+    <Position X="5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAQADAKAAAAAAAAAAgABBgAAAQIAAAAAABAAAgII=</HashCode>
+      <FileName>ViewModels\BindingObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.CoreViewModel" Collapsed="true">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAQAAAAAACAAAAAAAAAAAwAIBAAAAAQAAAAAAQAEBQ=</HashCode>
+      <FileName>ViewModels\CoreViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.FilterTabViewModel" Collapsed="true">
+    <Position X="7.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAoAAEBIQAOCACMGjIACkIwAIFAAEIIHAAEAIAAAABA=</HashCode>
+      <FileName>ViewModels\FilterTabViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.LoadingViewModel" Collapsed="true">
+    <Position X="6.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAAAACAAAAggAAAIAAAAAAAAAAAAAAABAABAIQ=</HashCode>
+      <FileName>ViewModels\LoadingViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.LogDirectoryViewModel" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FACAEAEEAICSAAIAgAAQAAgAARAAAAEQAAAAAAAAQJg=</HashCode>
+      <FileName>ViewModels\LogDirectoryViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.LogEntriesListViewModel" Collapsed="true">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQkAgCEEB9EhYCCEA2AghEkgAAAAwAWQAAQG0WAAABE=</HashCode>
+      <FileName>ViewModels\LogEntriesListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LogAnalyzer.GUI.ViewModels.LogFileViewModel" Collapsed="true">
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAAAQAAAACAIAgAgAIAAAwAAACAAAABAAAAAAAAABA=</HashCode>
+      <FileName>ViewModels\LogFileViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

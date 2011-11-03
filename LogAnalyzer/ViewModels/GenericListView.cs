@@ -17,4 +17,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// todo probably override some methods or properties
 	}
+
+	internal class MyCollectionView : CollectionView
+	{
+		public MyCollectionView( IEnumerable collection )
+			: base( collection )
+		{
+
+		}
+
+	}
 }
