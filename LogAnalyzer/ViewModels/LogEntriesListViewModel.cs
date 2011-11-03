@@ -127,7 +127,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( !toolbarItemsPopulated )
 				{
-					PopulateToolbarItems();
+					PopulateToolbarItems( toolbarItems );
 					toolbarItemsPopulated = true;
 				}
 
@@ -135,7 +135,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateToolbarItems() { }
+		protected virtual void PopulateToolbarItems( ICollection<object> collection ) { }
 
 		#endregion
 
@@ -149,7 +149,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( !statusBarItemsPopulated )
 				{
-					PopulateStatusBarItems();
+					PopulateStatusBarItems( statusBarItems );
 					statusBarItemsPopulated = true;
 				}
 
@@ -157,15 +157,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateStatusBarItems()
+		protected virtual void PopulateStatusBarItems( ICollection<object> collection )
 		{
-			statusBarItems.Add( GetEntriesCountStatusBarItem() );
-			statusBarItems.Add( new SelectedEntryIndexStatusBarItem( this ) );
+			collection.Add( GetEntriesCountStatusBarItem() );
+			collection.Add( new SelectedEntryIndexStatusBarItem( this ) );
 
 			var messagesCount = MessageSeverityCount;
 			if ( messagesCount != null )
 			{
-				statusBarItems.Add( messagesCount );
+				collection.Add( messagesCount );
 			}
 		}
 

@@ -61,10 +61,6 @@
 								<views:LoadingView/>
 							</DataTemplate>
 							
-							<DataTemplate DataType="{x:Type vm:FilterTabViewModel}">
-								<views:FilterView/>
-							</DataTemplate>
-
 						</DataTemplate.Resources>
 
 						<ContentPresenter Content="{Binding}"/>

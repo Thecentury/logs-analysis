@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows;
@@ -325,10 +326,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			return !IsFiltering;
 		}
 
-		protected override void PopulateToolbarItems()
+		protected override void PopulateToolbarItems( ICollection<object> collection )
 		{
-			base.PopulateToolbarItems();
-			ToolbarItems.Add( new FilterTabToolbarViewModel( this ) );
+			base.PopulateToolbarItems( collection );
+			collection.Add( new FilterTabToolbarViewModel( this ) );
 		}
 	}
 

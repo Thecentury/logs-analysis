@@ -169,9 +169,6 @@
     <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FilterView.xaml.cs">
-      <DependentUpon>FilterView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
@@ -216,10 +213,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FilterEditorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\FilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
