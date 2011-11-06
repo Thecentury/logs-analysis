@@ -377,7 +377,7 @@ namespace LogAnalyzer
 		{
 			get
 			{
-				int result = files.Sum( f => f.TotalLengthInBytes );
+				int result = filesWrapper.Sum( f => f.TotalLengthInBytes );
 				return result;
 			}
 		}

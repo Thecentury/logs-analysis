@@ -91,13 +91,13 @@ namespace LogAnalyzer.Kernel
 
 		protected override void StartCore()
 		{
-			base.StartCore();
-			timer.Start();
-
 			lock ( sync )
 			{
 				files = GetFilesSnapshot();
 			}
+
+			base.StartCore();
+			timer.Start();
 		}
 
 		protected override void StopCore()
