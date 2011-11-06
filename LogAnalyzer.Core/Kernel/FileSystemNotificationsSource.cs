@@ -7,7 +7,7 @@ namespace LogAnalyzer.Kernel
 	{
 		private readonly FileSystemWatcher watcher;
 
-		public FileSystemNotificationsSource( string logsPath, string filesFilter, NotifyFilters notifyFilters )
+		public FileSystemNotificationsSource( string logsPath, string filesFilter, NotifyFilters notifyFilters, bool includeSubdirectories )
 		{
 			if ( !Directory.Exists( logsPath ) )
 				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
@@ -15,7 +15,7 @@ namespace LogAnalyzer.Kernel
 			watcher = new FileSystemWatcher( logsPath, filesFilter )
 			{
 				NotifyFilter = notifyFilters,
-				IncludeSubdirectories = true
+				IncludeSubdirectories = includeSubdirectories
 			};
 
 			watcher.Changed += OnFileChanged;

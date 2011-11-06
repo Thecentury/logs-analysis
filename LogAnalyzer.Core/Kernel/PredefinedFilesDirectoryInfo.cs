@@ -55,8 +55,15 @@ namespace LogAnalyzer.Kernel
 			{
 				string dirName = pair.Key;
 				var files = pair.Value;
-				FileSystemNotificationsSource notificationsSource = new FileSystemNotificationsSource( dirName, "*", NotifyFilters.Size | NotifyFilters.FileName );
-				FileNameFilteringNotificationSource filteringSource = new FileNameFilteringNotificationSource( notificationsSource, files );
+				var notificationsSource = new FileSystemNotificationsSource( dirName, "*",
+					NotifyFilters.Size | NotifyFilters.FileName | NotifyFilters.LastWrite, includeSubdirectories: false );
+				
+				var pollingNotificationSource = new PollingFileSystemNotificationSource( dirName, "*", includeSubdirectories: false );
+				
+				var composite = new CompositeLogNotificationsSource( notificationsSource, pollingNotificationSource );
+
+				var filteringSource = new FileNameFilteringNotificationSource( composite, files );
+
 				notificationsSources.Add( filteringSource );
 			}
 
