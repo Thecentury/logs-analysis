@@ -11,10 +11,17 @@ namespace LogAnalyzer.Tests
 	public sealed class MockFileInfo : IFileInfo
 	{
 		private readonly List<byte> bytes = new List<byte>();
-		private readonly string name = null;
-		private readonly string fullName = null;
-		private readonly MockLogRecordsSource logSource = null;
+		private readonly string name;
+		private readonly string fullName;
+		private readonly MockLogRecordsSource logSource;
 		private readonly Encoding encoding = Encoding.Unicode;
+
+		private string dateFormat = MostLogLineParser.DateTimeFormat;
+		public string DateFormat
+		{
+			get { return dateFormat; }
+			set { dateFormat = value; }
+		}
 
 		private readonly object sync = new object();
 
@@ -99,7 +106,8 @@ namespace LogAnalyzer.Tests
 
 		public void WriteLogMessage( char severity, int threadId, string message )
 		{
-			string logMessage = String.Format( "[{0}] [{1,3}] {2}\t{3}", severity, threadId, DateTime.Now.ToString( LogFile.DateTimeFormat ), message );
+			string logMessage = String.Format( "[{0}] [{1,3}] {2}\t{3}{4}", 
+				severity, threadId, DateTime.Now.ToString( dateFormat ), message, Environment.NewLine );
 			Write( logMessage );
 		}
 
@@ -115,7 +123,7 @@ namespace LogAnalyzer.Tests
 
 		public void WriteInfo( string message, DateTime dateTime )
 		{
-			string logMessage = String.Format( "[I] [123] {0}\t{1}", dateTime.ToString( LogFile.DateTimeFormat ), message );
+			string logMessage = String.Format( "[I] [123] {0}\t{1}", dateTime.ToString( dateFormat ), message );
 			Write( logMessage );
 		}
 

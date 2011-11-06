@@ -309,7 +309,7 @@
 									Width="40"/>
 
 				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
-				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="100"
+				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss.fff}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 

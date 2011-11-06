@@ -32,10 +32,6 @@ namespace LogAnalyzer.Most.App
 
 		protected override void Init()
 		{
-			const string dirName = "MOST";
-			const string filesFilter = "*";
-			const string displayName = "MOST.Local";
-
 			string configName = ArgsParser.GetValueOrDefault( "config", "config.xaml" );
 
 			string configPath = Path.Combine( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ), configName );
@@ -48,7 +44,7 @@ namespace LogAnalyzer.Most.App
 				new NetTcpBindingFactory(), serverUrls.LogsSourceServiceUrl );
 
 			config
-				.AddLogDirectory( dirName, filesFilter, displayName )
+				.AddLogDirectory( "MOST", "*", "MOST" )
 				.WithLogsUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 20 ) ) )
 				.WithPerformanceDataUpdateTimer( new WpfDispatcherTimer( TimeSpan.FromSeconds( 2 ) ) )
 				.SetSelectedUrls( serverUrls )

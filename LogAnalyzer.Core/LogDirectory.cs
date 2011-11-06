@@ -38,6 +38,12 @@ namespace LogAnalyzer
 		private readonly ExpressionFilter<IFileInfo> fileFilter = new ExpressionFilter<IFileInfo>();
 		private readonly IFilter<LogEntry> globalEntriesFilter;
 		private readonly Encoding encoding = Encoding.Unicode;
+		private readonly ILogLineParser lineParser;
+
+		public ILogLineParser LineParser
+		{
+			get { return lineParser; }
+		}
 
 		public IFilter<LogEntry> GlobalEntriesFilter
 		{
@@ -93,6 +99,7 @@ namespace LogAnalyzer
 			this.core = core;
 			this.filesWrapper = new ThinListWrapper<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
+			this.lineParser = directoryConfigurationInfo.LineParser ?? new MostLogLineParser();
 
 			fileFilter.Changed += OnFileFilterChanged;
 
@@ -237,10 +244,7 @@ namespace LogAnalyzer
 			if ( addedEntries.Count == 0 )
 				return;
 
-			operationsQueue.EnqueueOperation( () =>
-			{
-				OnLogEntryAddedToFileHandler( addedEntries );
-			} );
+			operationsQueue.EnqueueOperation( () => OnLogEntryAddedToFileHandler( addedEntries ) );
 		}
 
 		/// <summary>

@@ -7,7 +7,7 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Tests
 {
-	internal sealed class MockDirectoryInfo : IDirectoryInfo
+	public sealed class MockDirectoryInfo : IDirectoryInfo
 	{
 		private readonly List<MockFileInfo> files = new List<MockFileInfo>();
 		private readonly Encoding encoding = Encoding.Unicode;
@@ -17,9 +17,13 @@ namespace LogAnalyzer.Tests
 			get { return files; }
 		}
 
-		private readonly MockLogRecordsSource recordsSource = null;
+		private readonly MockLogRecordsSource recordsSource;
+		public MockLogRecordsSource MockNotificationSource
+		{
+			get { return recordsSource; }
+		}
 
-		private readonly string path = null;
+		private readonly string path;
 		public string Path
 		{
 			get { return path; }
@@ -28,7 +32,7 @@ namespace LogAnalyzer.Tests
 		public MockDirectoryInfo( string path )
 		{
 			this.path = path;
-			this.recordsSource = new MockLogRecordsSource( path );
+			recordsSource = new MockLogRecordsSource( path );
 		}
 
 		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
@@ -36,10 +40,25 @@ namespace LogAnalyzer.Tests
 			return files;
 		}
 
+		private LogNotificationsSourceBase notificationsSource;
 		public LogNotificationsSourceBase NotificationSource
 		{
-			get { return recordsSource; }
+			get
+			{
+				if ( notificationsSource == null )
+				{
+					notificationsSource = recordsSource;
+					if ( CreateRecordsSourceHandler != null )
+					{
+						notificationsSource = CreateRecordsSourceHandler( recordsSource );
+					}
+				}
+
+				return notificationsSource;
+			}
 		}
+
+		public Func<LogNotificationsSourceBase, LogNotificationsSourceBase> CreateRecordsSourceHandler { get; set; }
 
 		public MockFileInfo AddFile( string name )
 		{

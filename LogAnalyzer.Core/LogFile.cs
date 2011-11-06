@@ -14,8 +14,6 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "LogFile {FullPath}" )]
 	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress
 	{
-		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
-
 		private readonly Logger logger;
 		private readonly LogDirectory parentDirectory;
 		private readonly Encoding encoding;
@@ -87,7 +85,8 @@ namespace LogAnalyzer
 					Encoding = encoding,
 					Logger = logger,
 					ParentLogFile = this,
-					GlobalEntriesFilter = parent.GlobalEntriesFilter
+					GlobalEntriesFilter = parent.GlobalEntriesFilter,
+					LineParser = ParentDirectory.LineParser
 				} );
 
 			logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;

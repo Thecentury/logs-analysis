@@ -20,13 +20,13 @@ namespace LogAnalyzer.Tests
 		/// <summary>
 		/// Проверка того, что DelayedLogRecordsSource работает правильно, объединяя уведомление о последовательных во времени записях.
 		/// </summary>
+		[TestCase( 10 )]
+		[TestCase( 1000 )]
 		[Test]
-		public void TestDelayedLogRecordsSource()
+		public void TestDelayedLogRecordsSource( int notificationDelay )
 		{
-			const int notificationInterval = 50; // ms
-
 			MockLogRecordsSource mockSource = new MockLogRecordsSource( "Dir" );
-			DelayedLogRecordsSource delayedSource = new DelayedLogRecordsSource( mockSource, TimeSpan.FromMilliseconds( notificationInterval ) );
+			DelayedLogRecordsSource delayedSource = new DelayedLogRecordsSource( mockSource, TimeSpan.FromMilliseconds( notificationDelay ) );
 			delayedSource.Start();
 
 			ConcurrentDictionary<string, int> calledTimes = new ConcurrentDictionary<string, int>();
@@ -39,7 +39,7 @@ namespace LogAnalyzer.Tests
 				.Do( name => Debug.WriteLine( "Called " + name ) )
 				.Subscribe( name => calledTimes[name] = calledTimes[name] + 1 );
 
-			Task task = Task.Factory.StartNew( () =>
+			using ( Task task = Task.Factory.StartNew( () =>
 			{
 				mockSource.RaiseFileChanged( "1" );
 				mockSource.RaiseFileChanged( "1" );
@@ -50,16 +50,17 @@ namespace LogAnalyzer.Tests
 				mockSource.RaiseFileChanged( "3" );
 				mockSource.RaiseFileChanged( "3" );
 
-				Thread.Sleep( notificationInterval * 2 );
+				Thread.Sleep( notificationDelay * 2 + 100 );
 
 				mockSource.RaiseFileChanged( "1" );
 				mockSource.RaiseFileChanged( "1" );
-			} );
+			} ) )
+			{
+				task.Wait();
+			}
 
-			task.Wait();
-			task.Dispose();
+			Thread.Sleep( notificationDelay * 4 );
 
-			Thread.Sleep( notificationInterval * 4 );
 			Assert.AreEqual( 2, calledTimes["1"] );
 			Assert.AreEqual( 1, calledTimes["2"] );
 			Assert.AreEqual( 1, calledTimes["3"] );

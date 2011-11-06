@@ -86,6 +86,7 @@
     <Compile Include="Mock\MockFileInfo.cs" />
     <Compile Include="Mock\MockLogRecordsSource.cs" />
     <Compile Include="Mock\ByteListWrapperStream.cs" />
+    <Compile Include="Mock\MockLogWriter.cs" />
     <Compile Include="Mock\MockStreamProvider.cs" />
     <Compile Include="Mock\MockTimeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
