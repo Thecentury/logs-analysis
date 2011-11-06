@@ -32,7 +32,7 @@ namespace LogAnalyzer.Kernel
 			this.filesFilter = filesFilter;
 			this.includeSubdirectories = includeSubdirectories;
 
-			timer = new Timer { Interval = updateInterval.TotalMilliseconds, Enabled = false };
+			timer = new Timer { Interval = updateInterval.TotalMilliseconds };
 			timer.Elapsed += OnTimerElapsed;
 		}
 
@@ -92,7 +92,7 @@ namespace LogAnalyzer.Kernel
 		protected override void StartCore()
 		{
 			base.StartCore();
-			timer.Enabled = true;
+			timer.Start();
 
 			lock ( sync )
 			{
@@ -103,7 +103,7 @@ namespace LogAnalyzer.Kernel
 		protected override void StopCore()
 		{
 			base.StopCore();
-			timer.Enabled = false;
+			timer.Stop();
 		}
 	}
 }
