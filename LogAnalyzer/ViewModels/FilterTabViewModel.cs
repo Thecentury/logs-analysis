@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows;
+using LogAnalyzer.Collections;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,15 +19,10 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class FilterTabViewModel : LogEntriesListViewModel
 	{
+		private readonly object sourceReplaceLock = new object();
 		private readonly IList<LogEntry> source;
-		private List<LogEntry> filteredEntries = new List<LogEntry>();
-		private readonly ThinListWrapper<LogEntry> observableFilteredEntries;
+		private readonly ReadonlyObservableList<LogEntry> observableFilteredEntries;
 		private CancellationTokenSource cancellationSource = new CancellationTokenSource();
-
-		public int SourceCount
-		{
-			get { return source.Count; }
-		}
 
 		public FilterTabViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel, ExpressionBuilder builder )
 			: this( source, applicationViewModel )
@@ -41,11 +41,31 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			this.source = source;
 
-			observableFilteredEntries = new ThinListWrapper<LogEntry>( filteredEntries );
+			INotifyCollectionChanged observable = source as INotifyCollectionChanged;
+			if ( observable != null )
+			{
+				observable.CollectionChanged += OnSourceCollectionChanged;
+			}
+
+			observableFilteredEntries = new ReadonlyObservableList<LogEntry>( new List<LogEntry>() );
 
 			Init( observableFilteredEntries );
 
 			filter.Changed += OnFilter_Changed;
+		}
+
+		private void OnSourceCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action == NotifyCollectionChangedAction.Add )
+			{
+				// тут считаем, что элементы были добавлены в конец
+				var passedItems = e.NewItems.Cast<LogEntry>().Where( filter.Include ).ToList();
+
+				observableFilteredEntries.List.AddRange( passedItems );
+				observableFilteredEntries.RaiseCollectionItemsAdded( (IList)passedItems );
+			}
+
+			RaisePropertyChanged( "SourceCount" );
 		}
 
 		protected override EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
@@ -107,12 +127,23 @@ namespace LogAnalyzer.GUI.ViewModels
 			// todo handle filter changes
 		}
 
-		protected override void OnClosing()
+		protected override void OnTabClosing()
 		{
 			if ( IsFiltering && cancellationSource != null )
 			{
 				cancellationSource.Cancel();
 			}
+
+			INotifyCollectionChanged observable = source as INotifyCollectionChanged;
+			if ( observable != null )
+			{
+				observable.CollectionChanged -= OnSourceCollectionChanged;
+			}
+		}
+
+		public int SourceCount
+		{
+			get { return source.Count; }
 		}
 
 		private readonly ExpressionFilter<LogEntry> filter = new ExpressionFilter<LogEntry>();
@@ -124,7 +155,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		const int FilteringProgressNotificationsCount = 20;
 		public void StartFiltering()
 		{
-			// todo this is temp solution
 			if ( IsFiltering )
 				return;
 
@@ -146,22 +176,29 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				try
 				{
-					filteredEntries = ParallelEnumerable.Range( 0, count )
-						.AsOrdered()
-						.WithCancellation( cancellationSource.Token )
-						.Select( i =>
+					List<LogEntry> filtered = new List<LogEntry>( count );
+
+					for ( int i = 0; i < count; i++ )
+					{
+						if ( i % notificationStep == 0 )
 						{
-							if ( i % notificationStep == 0 )
-							{
-								FilteringProgress += 100.0 / FilteringProgressNotificationsCount;
-							}
+							FilteringProgress += 100.0 / FilteringProgressNotificationsCount;
+							if ( cancellationSource.IsCancellationRequested )
+								break;
+						}
 
-							return source[i];
-						} )
-						.Where( entry => filter.Include( entry ) )
-						.ToList();
+						var entry = source[i];
+						bool include = filter.Include( entry );
+						if ( include )
+						{
+							filtered.Add( entry );
+						}
+					}
 
-					observableFilteredEntries.List = filteredEntries;
+					lock ( sourceReplaceLock )
+					{
+						observableFilteredEntries.List = filtered;
+					}
 
 					localResult = FilteringResult.Completed;
 				}
@@ -191,7 +228,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		// todo notify about properties change
 		private bool isFiltering;
 		public bool IsFiltering
 		{
@@ -217,6 +253,27 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
+		{
+			var logFileViewModel = ApplicationViewModel.CoreViewModel.GetFileViewModel( logEntry );
+			return logFileViewModel;
+		}
+
+		public override LogEntriesListViewModel Clone()
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override void PopulateToolbarItems( ICollection<object> collection )
+		{
+			base.PopulateToolbarItems( collection );
+			collection.Add( new FilterTabToolbarViewModel( this ) );
+		}
+
+		#region Commands
+
+		#region Cancel filtering command
+
 		private DelegateCommand<RoutedEventArgs> cancelFilteringCommand;
 		public ICommand CancelFilteringCommand
 		{
@@ -239,18 +296,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			return isFiltering;
 		}
 
-		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
-		{
-			var logFileViewModel = ApplicationViewModel.CoreViewModel.GetFileViewModel( logEntry );
-			return logFileViewModel;
-		}
+		#endregion
 
-		public override LogEntriesListViewModel Clone()
-		{
-			throw new NotImplementedException();
-		}
-
-		#region Edit filter
+		#region Edit filter command
 
 		private bool editingInProgress;
 
@@ -302,6 +350,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		#region Refresh command
+
 		private DelegateCommand refreshCommand;
 		public ICommand RefreshCommand
 		{
@@ -326,11 +376,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			return !IsFiltering;
 		}
 
-		protected override void PopulateToolbarItems( ICollection<object> collection )
-		{
-			base.PopulateToolbarItems( collection );
-			collection.Add( new FilterTabToolbarViewModel( this ) );
-		}
+		#endregion
+
+		#endregion
 	}
 
 	public enum FilteringResult

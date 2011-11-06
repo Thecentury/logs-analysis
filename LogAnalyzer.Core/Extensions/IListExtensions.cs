@@ -22,11 +22,6 @@ namespace LogAnalyzer.Extensions
 			return list[1];
 		}
 
-		public static int ParallelIndexOf<T>( this IList<T> collection, T item ) where T : class
-		{
-			return ParallelHelper.ParallelIndexOf( collection, item );
-		}
-
 		/// <summary>
 		/// Поиск индекса, уверенный в том, что коллекция содержит искомый элемент.
 		/// </summary>
@@ -34,9 +29,15 @@ namespace LogAnalyzer.Extensions
 		/// <param name="collection"></param>
 		/// <param name="item"></param>
 		/// <returns></returns>
+		[Obsolete( "Use SequentialIndexOf", true )]
 		public static int ParallelAssuredIndexOf<T>( this IList<T> collection, T item ) where T : class
 		{
 			return ParallelHelper.AssuredParallelIndexOf( collection, item );
+		}
+
+		public static int SequentialIndexOf<T>( this IList<T> collection, T item ) where T : class
+		{
+			return ParallelHelper.SequentialIndexOf( collection, item );
 		}
 	}
 }

@@ -9,11 +9,28 @@ namespace LogAnalyzer.Extensions
 {
 	public static class ObservableExtensions
 	{
+		/// <summary>
+		/// Возвращает задержанную последовательность - если за указанный промежуток времени происходит несколько событий,
+		/// то возвращается только последнее из них.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="delay"></param>
+		/// <returns></returns>
 		public static IObservable<T> Delayed<T>( this IObservable<T> source, TimeSpan delay )
 		{
 			return Delayed( source, delay, Scheduler.ThreadPool );
 		}
 
+		/// <summary>
+		/// Возвращает задержанную последовательность - если за указанный промежуток времени происходит несколько событий,
+		/// то возвращается только последнее из них.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="delay"></param>
+		/// <param name="scheduler"></param>
+		/// <returns></returns>
 		public static IObservable<T> Delayed<T>( this IObservable<T> source, TimeSpan delay, IScheduler scheduler )
 		{
 			return Observable.Create<T>( observer =>

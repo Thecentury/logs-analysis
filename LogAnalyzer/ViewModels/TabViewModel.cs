@@ -64,12 +64,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			if ( CanBeClosedCore() )
 			{
-				OnClosing();
+				OnTabClosing();
 				applicationViewModel.Tabs.Remove( this );
 			}
 		}
 
-		protected virtual void OnClosing() { }
+		protected virtual void OnTabClosing() { }
 
 		private DelegateCommand closeCommand;
 		public ICommand CloseCommand

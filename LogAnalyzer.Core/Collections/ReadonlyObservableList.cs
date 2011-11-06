@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Specialized;
 using System.Collections;
 using System.Threading;
-using LogAnalyzer.Extensions;
 using System.Diagnostics;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	/// <summary>
 	/// Добавляет в IList поддержку INotifyCollectionChanged.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[DebuggerDisplay( "Count = {list.Count}" )]
-	public sealed class ThinListWrapper<T> : ThinObservableCollection, IList<T>, IList where T : class
+	public sealed class ReadonlyObservableList<T> : ThinObservableCollection, IList<T>, IList where T : class
 	{
 		private IList<T> list;
 		public IList<T> List
@@ -34,7 +30,7 @@ namespace LogAnalyzer
 			RaiseCollectionReset();
 		}
 
-		public ThinListWrapper( IList<T> list )
+		public ReadonlyObservableList( IList<T> list )
 		{
 			ReplaceInnerList( list );
 		}

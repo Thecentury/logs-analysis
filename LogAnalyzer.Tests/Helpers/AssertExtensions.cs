@@ -17,9 +17,9 @@ namespace LogAnalyzer.Tests
 		/// <param name="collection"></param>
 		/// <param name="comparer"></param>
 		[DebuggerStepThrough]
-		public static void AssertAreSorted<T>( this IEnumerable<T> collection, IComparer<T> comparer )
+		public static void AssertIsSorted<T>( this IEnumerable<T> collection, IComparer<T> comparer )
 		{
-			Assert.IsTrue( collection.AreSorted( comparer ) );
+			Assert.IsTrue( collection.IsSorted( comparer ) );
 		}
 
 		[DebuggerStepThrough]

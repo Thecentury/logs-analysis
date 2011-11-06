@@ -15,7 +15,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	public sealed class SparseLogEntryViewModelList : DispatcherObservableCollection, IList<LogEntryViewModel>, IList, ILogEntryHost
 	{
 		private readonly IList<LogEntry> logEntries;
-		private readonly Func<LogEntry, LogFileViewModel> getFileViewModel;
+		private readonly Func<LogEntry, LogFileViewModel> fileViewModelFactory;
 		private readonly Dictionary<int, LogEntryViewModel> viewModelsCache = new Dictionary<int, LogEntryViewModel>();
 		private readonly LogEntriesListViewModel parent;
 
@@ -24,17 +24,17 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			get { return parent; }
 		}
 
-		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> getFileViewModel )
+		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> fileViewModelFactory )
 			: base( parentViewModel.Entries, parentViewModel.Scheduler )
 		{
 			if ( parentViewModel == null )
 				throw new ArgumentNullException( "parentViewModel" );
-			if ( getFileViewModel == null )
-				throw new ArgumentNullException( "getFileViewModel" );
+			if ( fileViewModelFactory == null )
+				throw new ArgumentNullException( "fileViewModelFactory" );
 
 			this.parent = parentViewModel;
 			this.logEntries = parentViewModel.Entries;
-			this.getFileViewModel = getFileViewModel;
+			this.fileViewModelFactory = fileViewModelFactory;
 		}
 
 		internal ICollection<LogEntryViewModel> CreatedEntries
@@ -67,8 +67,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				case NotifyCollectionChangedAction.Reset:
 					viewModelsCache.Clear();
 					break;
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 
 			base.OnCollectionChanged( e );
@@ -83,7 +81,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
 				{
 					LogEntry logEntry = logEntries[index];
-					LogFileViewModel fileViewModel = getFileViewModel( logEntry );
+					LogFileViewModel fileViewModel = fileViewModelFactory( logEntry );
 
 					logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
 					viewModelsCache.Add( index, logEntryViewModel );
@@ -122,7 +120,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			{
 				LogEntry logEntry = (LogEntry)value;
 
-				int index = logEntries.ParallelAssuredIndexOf( logEntry );
+				int index = logEntries.SequentialIndexOf( logEntry );
 				// тут элемент всегда ожидается в коллекции
 				if ( index < 0 )
 				{

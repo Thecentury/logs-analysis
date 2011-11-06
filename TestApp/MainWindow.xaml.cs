@@ -45,17 +45,17 @@ namespace TestApp
 
 			MockLogRecordsSource notificationSource = dir1.MockNotificationSource;
 
-			MockLogWriter writer = new MockLogWriter( notificationSource, file );
+			MockLogWriter writer = new MockLogWriter( notificationSource, file, TimeSpan.FromMilliseconds( 800 ) );
 			writers.Add( writer );
 			writer.Start();
 		}
 
 		private void PauseAllButton_Click( object sender, RoutedEventArgs e )
 		{
-			SetSleepDurationForAll( 10000 );
+			SetSleepDurationForAll( TimeSpan.FromSeconds( 1000 ) );
 		}
 
-		private void SetSleepDurationForAll( int sleepDuration )
+		private void SetSleepDurationForAll( TimeSpan sleepDuration )
 		{
 			foreach ( var writer in writers )
 			{
@@ -65,7 +65,7 @@ namespace TestApp
 
 		private void ResumeAllButton_Click( object sender, RoutedEventArgs e )
 		{
-			SetSleepDurationForAll( 100 );
+			SetSleepDurationForAll( TimeSpan.FromMilliseconds( 800 ) );
 		}
 	}
 }

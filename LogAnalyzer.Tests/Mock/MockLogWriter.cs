@@ -13,22 +13,22 @@ namespace LogAnalyzer.Tests.Mock
 		private readonly MockFileInfo file;
 		private readonly Thread loggingThread;
 
-
-		public MockLogWriter( [NotNull] MockLogRecordsSource notificationSource, [NotNull] MockFileInfo file )
+		public MockLogWriter( [NotNull] MockLogRecordsSource notificationSource, [NotNull] MockFileInfo file, TimeSpan sleepDuration )
 		{
 			if ( notificationSource == null ) throw new ArgumentNullException( "notificationSource" );
 			if ( file == null ) throw new ArgumentNullException( "file" );
 
 			this.notificationSource = notificationSource;
 			this.file = file;
+			this.sleepDuration = sleepDuration;
 
 			loggingThread = new Thread( ThreadProc );
 			loggingThread.Priority = ThreadPriority.Lowest;
 			loggingThread.IsBackground = true;
 		}
 
-		private int sleepDuration = 10;
-		public int SleepDuration
+		private TimeSpan sleepDuration = TimeSpan.FromMilliseconds(10);
+		public TimeSpan SleepDuration
 		{
 			get { return sleepDuration; }
 			set { sleepDuration = value; }
@@ -54,7 +54,7 @@ namespace LogAnalyzer.Tests.Mock
 				notificationSource.RaiseFileChanged( file.FullName );
 				count++;
 
-				Thread.Sleep( SleepDuration );
+				Thread.Sleep( sleepDuration );
 			}
 		}
 	}

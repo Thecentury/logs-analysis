@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using LogAnalyzer.Extensions;
 using System.Windows.Threading;
@@ -15,10 +16,11 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	/// Передает событие CollectionChanged в UI поток.
 	/// </summary>
 	[IgnoreMissingProperty( "Count" )]
-	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged
+	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged, IDisposable
 	{
 		private readonly IScheduler scheduler;
 		private readonly object collection;
+		private readonly CompositeDisposable unsubscruber;
 
 		public DispatcherObservableCollection( object collection, IScheduler scheduler )
 		{
@@ -33,13 +35,14 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			var collectionChanged = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection, "CollectionChanged" )
 				.ObserveOn( scheduler );
 
-			collectionChanged.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
-				//.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
+			var unsubscribeAdd = collectionChanged.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
 				.SelectMany( e => e.EventArgs.NewItems.Cast<object>() )
 				.Subscribe( addedItem => OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem ) ) );
 
-			collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
+			var unsubscriveOthers = collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
 				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
+
+			unsubscruber = new CompositeDisposable( unsubscribeAdd, unsubscriveOthers );
 		}
 
 		// todo прореживать частоту событий
@@ -65,5 +68,13 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion
+
+		/// <summary>
+		/// Отписывается от событий вложенной коллекции.
+		/// </summary>
+		public void Dispose()
+		{
+			unsubscruber.Dispose();
+		}
 	}
 }

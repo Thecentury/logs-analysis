@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using AdTech.Common.WPF;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
-using LogAnalyzer.Logging;
-using LogAnalyzer.Operations;
 using ModuleLogsProvider.Logging;
-using ModuleLogsProvider.Logging.Most;
-using Windows7.DesktopIntegration;
 using LogAnalyzer.Extensions;
 
 namespace ModuleLogsProvider.GUI.ViewModels
