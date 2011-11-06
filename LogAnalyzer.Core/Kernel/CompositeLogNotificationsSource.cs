@@ -40,5 +40,25 @@ namespace LogAnalyzer.Kernel
 			return Observable.FromEventPattern<FileSystemEventArgs>( child, eventName )
 				.Select( e => e.EventArgs );
 		}
+
+		protected override void StartCore()
+		{
+			base.StartCore();
+
+			foreach (var child in children)
+			{
+				child.Start();
+			}
+		}
+
+		protected override void StopCore()
+		{
+			foreach (var child in children)
+			{
+				child.Stop();
+			}
+
+			base.StopCore();
+		}
 	}
 }
