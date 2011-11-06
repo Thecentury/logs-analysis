@@ -69,8 +69,6 @@ namespace LogAnalyzer.GUI
 
 			var operationsQueue = new WorkerThreadOperationsQueue( logger );
 
-			RegionManager regionManager = new RegionManager();
-
 			DirectoryManager.RegisterCommonFactories();
 
 			config
@@ -78,7 +76,7 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
 				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
-				.RegisterInstance<RegionManager>( regionManager )
+				.RegisterInstance<RegionManager>( new RegionManager() )
 				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager );
 		}

@@ -7,14 +7,14 @@ using System.Text.RegularExpressions;
 
 namespace LogAnalyzer.Kernel
 {
-	public static class LogLineParser
+	public class MostLogLineParser : ILogLineParser
 	{
 		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
 		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled | RegexOptions.Multiline );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		public static bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )
+		public bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )
 		{
 			// инициализация некорректными данными
 			type = null;

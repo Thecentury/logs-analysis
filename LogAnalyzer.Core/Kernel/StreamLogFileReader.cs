@@ -24,6 +24,7 @@ namespace LogAnalyzer.Kernel
 		private LogEntry lastCreatedEntry;
 		private readonly LogFile parentLogFile;
 		private readonly IStreamProvider streamProvider;
+		private readonly ILogLineParser lineParser;
 
 		private string Name
 		{
@@ -39,6 +40,7 @@ namespace LogAnalyzer.Kernel
 			parentLogFile = args.ParentLogFile;
 			encoding = args.Encoding;
 			globalEntriesFilter = args.GlobalEntriesFilter;
+			lineParser = args.LineParser;
 
 			this.streamProvider = streamProvider;
 		}
@@ -58,7 +60,7 @@ namespace LogAnalyzer.Kernel
 			return new List<LogEntry>();
 		}
 
-		private bool WasLineBreakAtTheEnd( string str )
+		private static bool WasLineBreakAtTheEnd( string str )
 		{
 			if ( String.IsNullOrEmpty( str ) )
 				return false;
@@ -71,7 +73,7 @@ namespace LogAnalyzer.Kernel
 
 		private string ReadAddedText()
 		{
-			string addedText = null;
+			string addedText;
 			using ( Stream fs = OpenStream( (int)lastLineBreakByteIndex ) )
 			{
 				// todo use ReadTimeout
@@ -204,9 +206,9 @@ namespace LogAnalyzer.Kernel
 				{
 					string line;
 					string prevLine = String.Empty;
-					long prevLineBreakIndex = 0;
+					long prevLineBreakIndex;
 					int notParsedLinesCount = 0;
-					int bytesReadDelta = 0;
+					int bytesReadDelta;
 					while ( (line = reader.ReadLine()) != null )
 					{
 						LogEntryAppendResult lineAppendResult = AppendLine( line, lineIndex, logEntries.LastOrDefault(), logEntries );
@@ -285,10 +287,10 @@ namespace LogAnalyzer.Kernel
 				throw new ArgumentNullException( "line" );
 
 			// некорректные значения
-			string type = null;
-			int tid = -1;
+			string type;
+			int tid;
 			DateTime time = DateTime.MinValue;
-			string lineText = null;
+			string lineText;
 
 			bool isLastLineChanged = lineIndex == (linesCount - 1) && linesCount > 0 && !lastLineWasEmpty;
 
@@ -296,7 +298,7 @@ namespace LogAnalyzer.Kernel
 			if ( isLastLineChanged )
 			{
 				// в последней строке было начало LogEntry?
-				if ( LogLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( lineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					LogEntry lastEntry = lastCreatedEntry;
 					// последняя запись состоит только из заголовка?
@@ -330,7 +332,7 @@ namespace LogAnalyzer.Kernel
 			else // добавилась новая строка
 			{
 				// в добавленной строке было начало нового LogEntry?
-				if ( LogLineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( lineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
 				{
 					lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
 

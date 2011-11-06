@@ -54,5 +54,7 @@ namespace LogAnalyzer.Config
 		{
 			get { return predefinedFiles; }
 		}
+
+		public ILogLineParser LineParser { get; set; }
 	}
 }

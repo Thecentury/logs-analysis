@@ -10,14 +10,30 @@
 		<Setter Property="Stretch" Value="None"/>
 	</Style>
 
+	<DataTemplate DataType="{x:Type ViewModels:LogEntryListToolbarViewModel}">
+		<StackPanel Orientation="Horizontal">
+			<Button Command="{Binding ScrollToBottomCommand}"
+					Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
+					ToolTip="Scroll to bottom">
+				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/control-stop-270.png" Stretch="None"/>
+			</Button>
+			<ToggleButton Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ToggleButtonStyleKey}}"
+						  ToolTip="Auto scroll to bottom"
+						  IsChecked="{Binding AutoScrollToBottom, Mode=TwoWay}">
+				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/control-double-270.png" Stretch="None"/>
+			</ToggleButton>
+		</StackPanel>
+	</DataTemplate>
+	
+	<!-- Template for filter tab's toolbar items -->
 	<DataTemplate DataType="{x:Type ViewModels:FilterTabToolbarViewModel}">
 		<StackPanel Orientation="Horizontal">
-			<Button Style="{StaticResource toolbarButtonStyle}"
+			<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 					Command="{Binding EditFilterCommand}" 
 					ToolTip="Edit current filter">
 				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/pencil.png" Stretch="None"/>
 			</Button>
-			<Button Style="{StaticResource toolbarButtonStyle}"
+			<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 					Command="{Binding RefreshCommand}" 
 					ToolTip="Refresh view">
 				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-circle-double.png" Stretch="None"/>

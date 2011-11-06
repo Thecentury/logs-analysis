@@ -10,7 +10,7 @@ namespace LogAnalyzer.Tests
 {
 	public sealed class MockLogRecordsSource : LogNotificationsSourceBase
 	{
-		private readonly string directoryName = null;
+		private readonly string directoryName;
 
 		public MockLogRecordsSource( string directoryName )
 		{
@@ -22,7 +22,8 @@ namespace LogAnalyzer.Tests
 
 		public void RaiseFileChanged( string fileName )
 		{
-			RaiseFileSystemEvent( fileName, directoryName, WatcherChangeTypes.Changed, ChangedHandler );
+			string theFileName = Path.GetFileName( fileName );
+			RaiseFileSystemEvent( theFileName, directoryName, WatcherChangeTypes.Changed, ChangedHandler );
 		}
 
 		public void RaiseFileCreated( string fileName )

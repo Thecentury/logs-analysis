@@ -17,6 +17,7 @@ namespace ModuleLogsProvider.Logging.Most
 		public MostLogMessagesStorage( MostDirectoryInfo directory )
 		{
 			if ( directory == null ) throw new ArgumentNullException( "directory" );
+
 			this.directory = directory;
 		}
 
@@ -70,6 +71,7 @@ namespace ModuleLogsProvider.Logging.Most
 	internal sealed class OneFileMessages
 	{
 		private readonly List<LogEntry> entries = new List<LogEntry>();
+		private readonly ILogLineParser lineParser = new MostLogLineParser();
 		private LogFile logFile;
 
 		public List<LogEntry> Entries
@@ -97,7 +99,7 @@ namespace ModuleLogsProvider.Logging.Most
 				DateTime time;
 				string text;
 
-				if ( !LogLineParser.TryExtractLogEntryData( logMessageInfo.Message, out type, out threadId, out time, out text ) )
+				if ( !lineParser.TryExtractLogEntryData( logMessageInfo.Message, out type, out threadId, out time, out text ) )
 				{
 					// todo brinchuk ???
 					throw new NotImplementedException();

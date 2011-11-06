@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
@@ -98,7 +99,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private bool autoScrollToBottom;
+		private bool autoScrollToBottom = true;
 		public bool AutoScrollToBottom
 		{
 			get { return autoScrollToBottom; }
@@ -135,7 +136,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateToolbarItems( ICollection<object> collection ) { }
+		protected virtual void PopulateToolbarItems( ICollection<object> collection )
+		{
+			collection.Add( new LogEntryListToolbarViewModel( this ) );
+		}
 
 		#endregion
 
@@ -226,6 +230,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		internal virtual void OnEntriesChanged()
 		{
+			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
+			{
+				ScrollToBottomCommand.Execute( null );
+			}
+
 			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
 		}
 
@@ -304,6 +313,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Scroll commands
 
+		public ScrollViewer ScrollViewer { get; set; }
+
 		private DelegateCommand scrollDownCommand;
 		public ICommand ScrollDownCommand
 		{
@@ -328,8 +339,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private const int PageSize = 15;
-
 		private DelegateCommand scrollPageDownCommand;
 		public ICommand ScrollPageDownCommand
 		{
@@ -337,7 +346,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( scrollPageDownCommand == null )
 					scrollPageDownCommand = new DelegateCommand(
-						() => entriesView.MoveCurrentToPosition( Math.Max( SelectedEntryIndex + PageSize, entries.Count - 1 ) ),
+						() => ScrollViewer.PageDown(),
 						() => SelectedEntryIndex < entries.Count - 1 );
 
 				return scrollPageDownCommand;
@@ -351,7 +360,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( scrollPageUpCommand == null )
 					scrollPageUpCommand = new DelegateCommand(
-						() => SelectedEntryIndex = Math.Max( 0, SelectedEntryIndex - PageSize ),
+						() => ScrollViewer.PageUp(),
 						() => SelectedEntryIndex > 0 );
 
 				return scrollPageUpCommand;
@@ -364,7 +373,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( scrollToTopCommand == null )
-					scrollToTopCommand = new DelegateCommand( () => SelectedEntryIndex = 0 );
+					scrollToTopCommand = new DelegateCommand( () => ScrollViewer.ScrollToTop(), () => ScrollViewer != null );
 
 				return scrollToTopCommand;
 			}
@@ -376,7 +385,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( scrollToBottomCommand == null )
-					scrollToBottomCommand = new DelegateCommand( () => SelectedEntryIndex = entries.Count - 1 );
+					scrollToBottomCommand = new DelegateCommand( () => ScrollViewer.ScrollToBottom(), () => ScrollViewer != null );
 
 				return scrollToBottomCommand;
 			}

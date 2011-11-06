@@ -14,7 +14,15 @@ namespace LogAnalyzer.GUI.Views
 		public LogEntriesListView()
 		{
 			InitializeComponent();
-			//entriesDataGrid.SelectionChanged += OnEntriesDataGrid_SelectionChanged;
+			Loaded += LogEntriesListView_Loaded;
+		}
+
+		private void LogEntriesListView_Loaded( object sender, RoutedEventArgs e )
+		{
+			var border = VisualTreeHelper.GetChild( entriesDataGrid, 0 );
+			ScrollViewer viewer = VisualTreeHelper.GetChild( border, 0 ) as ScrollViewer;
+			LogEntriesListViewModel vm = (LogEntriesListViewModel)DataContext;
+			vm.ScrollViewer = viewer;
 		}
 
 		private void DataGrid_DataContextChanged( object sender, DependencyPropertyChangedEventArgs e )

@@ -22,20 +22,6 @@ namespace LogAnalyzer.App
 		public MainWindow()
 		{
 			InitializeComponent();
-			// todo что-то не то с виртуализацией списков!
-			Loaded += new RoutedEventHandler( MainWindow_Loaded );
-		}
-
-		private void MainWindow_Loaded( object sender, RoutedEventArgs e )
-		{
-			EventManager.RegisterClassHandler( typeof( DataGridCell ),
-				UIElement.MouseLeftButtonDownEvent,
-				new MouseButtonEventHandler( OnCellMouseLeftButtonDown ), true );
-		}
-
-		private void OnCellMouseLeftButtonDown( object sender, MouseButtonEventArgs e )
-		{
-			// do nothing here
 		}
 	}
 }

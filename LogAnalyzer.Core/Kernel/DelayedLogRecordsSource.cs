@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reactive.Linq;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
@@ -20,8 +21,8 @@ namespace LogAnalyzer.Kernel
 			this.updateInterval = updateInterval;
 
 			CreateDelayed( "Changed" ).Subscribe( RaiseChanged );
-			CreateObservable( "Deleted" ).Subscribe( RaiseChanged );
-			CreateObservable( "Created" ).Subscribe( RaiseChanged );
+			CreateObservable( "Deleted" ).Subscribe( RaiseDeleted );
+			CreateObservable( "Created" ).Subscribe( RaiseCreated );
 			Observable.FromEventPattern<RenamedEventArgs>( inner, "Renamed" ).Subscribe( e => RaiseRenamed( e.EventArgs ) );
 			Observable.FromEventPattern<ErrorEventArgs>( inner, "Error" ).Subscribe( e => RaiseError( e.EventArgs ) );
 		}
@@ -36,7 +37,7 @@ namespace LogAnalyzer.Kernel
 			return Observable.FromEventPattern<FileSystemEventArgs>( inner, eventName )
 				.Select( e => e.EventArgs )
 				.GroupBy( e => e.FullPath )
-				.SelectMany( g => g.Throttle( updateInterval ) );
+				.SelectMany( g => g.Delayed( updateInterval ) );
 		}
 
 		private IObservable<FileSystemEventArgs> CreateObservable( string eventName )

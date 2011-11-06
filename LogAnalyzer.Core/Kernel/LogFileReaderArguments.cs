@@ -10,5 +10,6 @@ namespace LogAnalyzer.Kernel
 		public Encoding Encoding { get; set; }
 		public LogFile ParentLogFile { get; set; }
 		public IFilter<LogEntry> GlobalEntriesFilter { get; set; }
+		public ILogLineParser LineParser { get; set; }
 	}
 }
