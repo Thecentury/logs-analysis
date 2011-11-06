@@ -7,7 +7,7 @@ namespace LogAnalyzer.Extensions
 {
 	public static class EnumerableExtensions
 	{
-		public static bool AreSorted<T>( this IEnumerable<T> collection, IComparer<T> comparer )
+		public static bool IsSorted<T>( this IEnumerable<T> collection, IComparer<T> comparer )
 		{
 			return collection.Zip( collection.Skip( 1 ), ( t1, t2 ) => new { T1 = t1, T2 = t2 } )
 				.All( t =>

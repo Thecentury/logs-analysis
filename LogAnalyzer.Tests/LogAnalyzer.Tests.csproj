@@ -89,6 +89,7 @@
     <Compile Include="Mock\MockLogWriter.cs" />
     <Compile Include="Mock\MockStreamProvider.cs" />
     <Compile Include="Mock\MockTimeService.cs" />
+    <Compile Include="ParallelIndexOfBenchmark.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggingTests.cs" />
     <Compile Include="RealDataTests.cs" />

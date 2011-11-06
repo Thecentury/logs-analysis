@@ -112,7 +112,7 @@ namespace LogAnalyzer
 
 					int sortedSetLength = sortedLogEntries.Count;
 					sortedLogEntries.Remove( min );
-					Condition.DebugAssert( sortedLogEntries.Count == ( sortedSetLength - 1 ), "" );
+					Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
 
 					awaitingEntries.Remove( min.ParentLogFile, min );
 				}
@@ -164,7 +164,7 @@ namespace LogAnalyzer
 		[Conditional( "DEBUG" )]
 		private void AssertParentMergedEntriesAreSorted()
 		{
-			Condition.DebugAssert( parent.MergedEntries.AreSorted( LogEntryByDateComparer.Instance ),
+			Condition.DebugAssert( parent.MergedEntries.IsSorted( LogEntryByDateComparer.Instance ),
 				"Коллекция parent.MergedEntries должна быть отсортирована." );
 		}
 
@@ -290,8 +290,14 @@ namespace LogAnalyzer
 			{
 				get
 				{
+					if ( !isOld )
+						return array.Length;
+
 					lock ( syncRoot )
 					{
+						if ( !isOld )
+							return array.Length;
+
 						UpdateCopy();
 
 						return array.Length;

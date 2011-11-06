@@ -46,10 +46,10 @@ namespace LogAnalyzer
 
 		private readonly IList<LogEntry> logEntries = CollectionHelper.CreateList<LogEntry>();
 
-		private readonly ThinListWrapper<LogEntry> entriesWrapper;
-		public ThinListWrapper<LogEntry> LogEntries
+		private readonly ReadonlyObservableList<LogEntry> entries;
+		public ReadonlyObservableList<LogEntry> LogEntries
 		{
-			get { return entriesWrapper; }
+			get { return entries; }
 		}
 
 		public LogDirectory ParentDirectory
@@ -73,7 +73,7 @@ namespace LogAnalyzer
 			logger = parentDirectory.Config.Logger;
 			encoding = parentDirectory.Encoding;
 
-			entriesWrapper = new ThinListWrapper<LogEntry>( logEntries );
+			entries = new ReadonlyObservableList<LogEntry>( logEntries );
 
 			this.fileInfo = fileInfo;
 			Name = fileInfo.Name;
@@ -109,7 +109,7 @@ namespace LogAnalyzer
 
 			logEntries.AddRange( addedEntries );
 
-			entriesWrapper.RaiseCollectionItemsAdded( addedEntries );
+			entries.RaiseCollectionItemsAdded( addedEntries );
 			parentDirectory.OnLogEntriesAddedToFile( addedEntries );
 
 			PropertyChanged.RaiseAllChanged( this );

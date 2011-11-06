@@ -191,16 +191,22 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			this.entries = entries;
 
-			this.logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
+			logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
 			logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
 			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
-
-			this.logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
+			logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
 
 			InvokeInUIDispatcher( () =>
 			{
-				this.entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
+				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
 			} );
+		}
+
+		protected override void OnTabClosing()
+		{
+			base.OnTabClosing();
+
+			logEntriesViewModels.Dispose();
 		}
 
 		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
@@ -225,10 +231,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
-			OnEntriesChanged();
+			OnLogEntriesViewModelsCollectionChanged( e );
 		}
 
-		internal virtual void OnEntriesChanged()
+		/// <summary>
+		/// <remarks>Вызывается в UI потоке.</remarks>
+		/// </summary>
+		/// <param name="e"></param>
+		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
 			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
 			{
@@ -240,7 +250,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Highlighting
 
-		private IFilter<LogEntry> dynamicHighlightingFilter = null;
+		private IFilter<LogEntry> dynamicHighlightingFilter;
 		public IFilter<LogEntry> DynamicHighlightingFilter
 		{
 			get { return dynamicHighlightingFilter; }

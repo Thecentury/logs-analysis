@@ -17,8 +17,8 @@ namespace LogAnalyzer
 		private readonly object sync = new object();
 		private readonly IList<LogFile> files = CollectionHelper.CreateList<LogFile>();
 
-		private readonly ThinListWrapper<LogFile> filesWrapper;
-		public ThinListWrapper<LogFile> Files
+		private readonly ReadonlyObservableList<LogFile> filesWrapper;
+		public ReadonlyObservableList<LogFile> Files
 		{
 			get { return filesWrapper; }
 		}
@@ -97,7 +97,7 @@ namespace LogAnalyzer
 			this.operationsQueue = environment.OperationsQueue;
 			this.config = config;
 			this.core = core;
-			this.filesWrapper = new ThinListWrapper<LogFile>( files );
+			this.filesWrapper = new ReadonlyObservableList<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
 			this.lineParser = directoryConfigurationInfo.LineParser ?? new MostLogLineParser();
 

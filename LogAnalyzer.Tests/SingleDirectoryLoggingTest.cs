@@ -26,7 +26,7 @@ namespace LogAnalyzer.Tests
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
 			core.WaitForMergedEntriesCount( 4, timeout: 2000 ).AssertIsTrueOrFailWithMessage( "Превышено время ожидания." );
 
-			core.MergedEntries.AssertAreSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
 
 			ExpressionAssert.That( core, c => c.Directories.Count == 1 );
 			ExpressionAssert.That( core, c => c.MergedEntries.Count == core.Directories[0].MergedEntries.Count );

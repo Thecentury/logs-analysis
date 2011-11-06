@@ -57,7 +57,7 @@ namespace LogAnalyzer.Kernel
 				return false;
 			}
 
-			// выдираем данные
+			// извлекаем данные
 			type = match.Groups[1].Value;
 			if ( String.IsNullOrWhiteSpace( type ) || type.Length > 1 )
 			{

@@ -250,7 +250,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			return new DelegateCommand( () =>
 											{
-												int index = ParallelHelper.AssuredParallelIndexOf( parentTab.Entries, logEntryViewModel.LogEntry );
+												int index = ParallelHelper.SequentialIndexOf( parentTab.Entries, logEntryViewModel.LogEntry );
 												SelectedIndex = tabs.IndexOf( parentTab );
 												parentTab.SelectedEntryIndex = index;
 											} );
