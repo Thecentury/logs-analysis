@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections.Specialized;
 using LogAnalyzer.Extensions;
 using System.ComponentModel;
 using System.Collections;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	public abstract class ThinObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged
 	{

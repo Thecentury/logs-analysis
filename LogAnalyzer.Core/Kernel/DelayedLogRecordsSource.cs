@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reactive.Linq;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Kernel
 {
@@ -10,7 +11,7 @@ namespace LogAnalyzer.Kernel
 		private readonly LogNotificationsSourceBase inner;
 		private readonly TimeSpan updateInterval = TimeSpan.FromMilliseconds( 500 );
 
-		public DelayedLogRecordsSource( LogNotificationsSourceBase inner ) : this( inner, TimeSpan.FromMilliseconds( 500 ) ) { }
+		public DelayedLogRecordsSource( LogNotificationsSourceBase inner ) : this( inner, Settings.Default.FileSystemNotificationsDelayInterval ) { }
 
 		public DelayedLogRecordsSource( LogNotificationsSourceBase inner, TimeSpan updateInterval )
 		{

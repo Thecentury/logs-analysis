@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Diagnostics;
+using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer

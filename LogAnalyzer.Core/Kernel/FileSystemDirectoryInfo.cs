@@ -51,15 +51,22 @@ namespace LogAnalyzer.Kernel
 		public virtual IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
 			SearchOption searchOption = directoryConfig.IncludeNestedDirectories
-			                            	? SearchOption.AllDirectories
-			                            	: SearchOption.TopDirectoryOnly;
+											? SearchOption.AllDirectories
+											: SearchOption.TopDirectoryOnly;
 			return Directory.EnumerateFiles( path, searchPattern, searchOption ).Select( GetFileInfo );
 		}
 
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string path, string filesFilter )
 		{
-			return new DelayedLogRecordsSource( new FileSystemNotificationsSource( path, filesFilter,
-				NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName ) );
+			return
+				new CompositeLogNotificationsSource(
+					new DelayedLogRecordsSource(
+						new FileSystemNotificationsSource( path, filesFilter,
+														  NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName,
+														  directoryConfig.IncludeNestedDirectories )
+						),
+						new PollingFileSystemNotificationSource( path, filesFilter, directoryConfig.IncludeNestedDirectories )
+					);
 		}
 
 		public LogNotificationsSourceBase NotificationSource
