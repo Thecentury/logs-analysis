@@ -30,7 +30,14 @@ namespace LogAnalyzer.Kernel
 
 		protected override void StartCore()
 		{
+			base.StartCore();
 			inner.Start();
+		}
+
+		protected override void StopCore()
+		{
+			inner.Stop();
+			base.StopCore();
 		}
 
 		private IObservable<FileSystemEventArgs> CreateDelayed( string eventName )
