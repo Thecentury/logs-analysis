@@ -90,6 +90,26 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return CanBeClosed ? Visibility.Visible : Visibility.Collapsed; }
 		}
 
-		// todo Clone and Close and CloseAll and others similar commands
+		#region Loaded command
+
+		private DelegateCommand loadedCommand;
+		public ICommand LoadedCommand
+		{
+			get
+			{
+				if ( loadedCommand == null )
+					loadedCommand = new DelegateCommand( OnLoaded );
+
+				return loadedCommand;
+			}
+		}
+
+		protected virtual void OnLoaded()
+		{
+		}
+
+		#endregion
+
+		// todo Clone and CloseAll and others similar commands
 	}
 }

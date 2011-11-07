@@ -405,6 +405,16 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		protected override void OnLoaded()
+		{
+			base.OnLoaded();
+
+			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
+			{
+				ScrollToBottomCommand.Execute( null );
+			}
+		}
+
 		#endregion
 	}
 }
