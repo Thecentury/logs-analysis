@@ -1,4 +1,5 @@
 <LogAnalyzerConfiguration xmlns="http://www.awad.com/LogAnalyzer" 
+						  xmlns:s="clr-namespace:System;assembly=mscorlib"
 						  DefaultEncodingName="windows-1251">
 
 	<LogAnalyzerConfiguration.Directories>
@@ -19,6 +20,12 @@
 		</EqualsBuilder>
 	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
 	<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
+
+	<LogAnalyzerConfiguration.GlobalFilesFilterBuilder>
+		<ExcludeFilesByNameFilter>
+			<s:String>Security.log</s:String>
+		</ExcludeFilesByNameFilter>
+	</LogAnalyzerConfiguration.GlobalFilesFilterBuilder>
 
 	<LogAnalyzerConfiguration.LoggerAcceptedTypes>
 		<MessageType>Error</MessageType>
