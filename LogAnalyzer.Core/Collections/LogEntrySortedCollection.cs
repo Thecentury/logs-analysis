@@ -120,13 +120,12 @@ namespace LogAnalyzer
 
 			// переносит в parent.MergedEntries записи относительно старые записи лога,
 			// т.к. мы считаем, что такие старые записи больше не появятся.
-			DateTime now = DateTime.Now;
-			bool hasRemoved = false;
 			LogEntry max = sortedLogEntries.Max;
 			if ( max != null )
 			{
 				DateTime maxTime = max.Time;
 
+				bool hasRemoved;
 				do
 				{
 					LogEntry min = sortedLogEntries.Min;
@@ -144,6 +143,10 @@ namespace LogAnalyzer
 						parent.AppendLogEntryToMergedList( min );
 						sortedLogEntries.Remove( min );
 						hasRemoved = true;
+					}
+					else
+					{
+						hasRemoved = false;
 					}
 				} while ( hasRemoved );
 			}

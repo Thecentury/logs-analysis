@@ -49,5 +49,14 @@ namespace LogAnalyzer.Properties {
                 return ((global::System.TimeSpan)(this["FileSystemNotificationsDelayInterval"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:40")]
+        public global::System.TimeSpan ConstIntervalTimeServiceDefaultDelay {
+            get {
+                return ((global::System.TimeSpan)(this["ConstIntervalTimeServiceDefaultDelay"]));
+            }
+        }
     }
 }

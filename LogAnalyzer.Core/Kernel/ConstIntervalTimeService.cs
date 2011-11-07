@@ -1,10 +1,15 @@
 ﻿using System;
+using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Kernel
 {
 	public sealed class ConstIntervalTimeService : ITimeService
 	{
-		public ConstIntervalTimeService() { }
+		public ConstIntervalTimeService()
+		{
+			this.sortingDelay = Settings.Default.ConstIntervalTimeServiceDefaultDelay;
+		}
+
 		public ConstIntervalTimeService( TimeSpan sortingDelay )
 		{
 			this.sortingDelay = sortingDelay;
@@ -13,7 +18,7 @@ namespace LogAnalyzer.Kernel
 		/// <summary>
 		/// Разница по времени, после прошествия которой будет считаться, что более ранние LogEntry не будут добавлены.
 		/// </summary>
-		private readonly TimeSpan sortingDelay = TimeSpan.FromSeconds( 20 );
+		private readonly TimeSpan sortingDelay;
 		public TimeSpan SortingDelay
 		{
 			get { return sortingDelay; }
@@ -21,11 +26,9 @@ namespace LogAnalyzer.Kernel
 
 		public bool IsRelativelyOld( DateTime current, DateTime max )
 		{
-			TimeSpan intervalToNow = DateTime.Now - current;
 			TimeSpan intervalToMax = max - current;
-			TimeSpan maxInterval = intervalToNow > intervalToMax ? intervalToNow : intervalToMax;
 
-			return maxInterval > sortingDelay;
+			return intervalToMax > sortingDelay;
 		}
 	}
 }

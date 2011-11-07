@@ -23,7 +23,7 @@ namespace LogAnalyzer.Kernel
 
 			this.operationsQueue = new WorkerThreadOperationsQueue( config.Logger );
 			this.directories = config.EnabledDirectories.Select( directoryFactory.CreateDirectory ).ToList();
-			this.timeService = new ConstIntervalTimeService();
+			this.timeService = config.ResolveNotNull<ITimeService>();
 		}
 
 		/// <summary>

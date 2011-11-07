@@ -286,12 +286,6 @@ namespace LogAnalyzer
 					// todo обработка исключений
 					AddFile( fullPath );
 				}
-				else
-				{
-					// error!
-					logger.WriteError( "Watcher notified that the file \"{0}\" was created, but it is already present in 'files' dictionary.", fullPath );
-					throw new InvalidOperationException( "Надо делать обработку на несуществование" );
-				}
 			} );
 		}
 
