@@ -19,6 +19,7 @@ namespace LogAnalyzer.Kernel
 		private readonly Timer timer;
 		private readonly object sync = new object();
 		private HashSet<FileInfo> files = new HashSet<FileInfo>();
+		private HashSet<string> fileNames = new HashSet<string>();
 
 		public PollingFileSystemNotificationSource( string logsPath, string filesFilter, bool includeSubdirectories )
 			: this( logsPath, filesFilter, includeSubdirectories, Settings.Default.FileSystemPollInterval ) { }
@@ -40,38 +41,55 @@ namespace LogAnalyzer.Kernel
 		{
 			var currentFiles = Directory.GetFiles( logsPath, filesFilter,
 				includeSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly );
+
 			var snapshot = new HashSet<FileInfo>( currentFiles.Select( f => new FileInfo( f ) ) );
 
 			return snapshot;
+		}
+
+		private HashSet<string> GetFileNamesSnapshot()
+		{
+			return
+				new HashSet<string>(
+					Directory.EnumerateFiles( logsPath, filesFilter,
+						includeSubdirectories
+						? SearchOption.AllDirectories
+						: SearchOption.TopDirectoryOnly ) );
 		}
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
 			lock ( sync )
 			{
-				var current = GetFilesSnapshot();
+				var currentFileNames = GetFileNamesSnapshot();
 
-				var added = GetAdded( current, files );
-				foreach ( var fileInfo in added )
+				var added = GetAdded( currentFileNames, fileNames );
+				foreach ( var fullPath in added )
 				{
-					RaiseCreated( new FileSystemEventArgs( WatcherChangeTypes.Created, logsPath, fileInfo.Name ) );
+					RaiseCreated( new FileSystemEventArgs( WatcherChangeTypes.Created,
+						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
+
+					files.Add( new FileInfo( fullPath ) );
 				}
 
-				var deleted = GetDeleted( current, files );
-				foreach ( var fileInfo in deleted )
+				var deleted = GetDeleted( currentFileNames, fileNames );
+				foreach ( var fullPath in deleted )
 				{
-					RaiseDeleted( new FileSystemEventArgs( WatcherChangeTypes.Deleted, logsPath, fileInfo.Name ) );
+					RaiseDeleted( new FileSystemEventArgs( WatcherChangeTypes.Deleted,
+						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
+
+					files.RemoveWhere( f => f.FullName == fullPath );
 				}
 
-				files = current;
+				fileNames = currentFileNames;
 
 				foreach ( var fileInfo in files )
 				{
-					var length = fileInfo.Length;
+					var prevLength = fileInfo.Length;
 					fileInfo.Refresh();
-					var actualLength = fileInfo.Length;
+					var currentLength = fileInfo.Length;
 
-					if ( actualLength != length )
+					if ( currentLength != prevLength )
 					{
 						RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, logsPath, fileInfo.Name ) );
 					}
@@ -79,12 +97,12 @@ namespace LogAnalyzer.Kernel
 			}
 		}
 
-		private IEnumerable<FileInfo> GetAdded( IEnumerable<FileInfo> current, HashSet<FileInfo> prev )
+		private IEnumerable<string> GetAdded( IEnumerable<string> current, HashSet<string> prev )
 		{
 			return current.Where( f => !prev.Contains( f ) );
 		}
 
-		private IEnumerable<FileInfo> GetDeleted( HashSet<FileInfo> current, IEnumerable<FileInfo> prev )
+		private IEnumerable<string> GetDeleted( HashSet<string> current, IEnumerable<string> prev )
 		{
 			return prev.Where( f => !current.Contains( f ) );
 		}
