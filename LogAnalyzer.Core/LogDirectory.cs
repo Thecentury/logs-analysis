@@ -35,7 +35,7 @@ namespace LogAnalyzer
 
 		private readonly LogAnalyzerConfiguration config;
 		private readonly LogAnalyzerCore core;
-		private readonly ExpressionFilter<IFileInfo> fileFilter = new ExpressionFilter<IFileInfo>();
+		private readonly ExpressionFilter<IFileInfo> fileFilter;
 		private readonly IFilter<LogEntry> globalEntriesFilter;
 		private readonly Encoding encoding = Encoding.Unicode;
 		private readonly ILogLineParser lineParser;
@@ -50,7 +50,6 @@ namespace LogAnalyzer
 			get { return globalEntriesFilter; }
 		}
 
-		// todo внести в настройки
 		public ExpressionFilter<IFileInfo> FileFilter
 		{
 			get { return fileFilter; }
@@ -100,6 +99,7 @@ namespace LogAnalyzer
 			this.filesWrapper = new ReadonlyObservableList<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
 			this.lineParser = directoryConfigurationInfo.LineParser ?? new MostLogLineParser();
+			this.fileFilter = config.GlobalFilesFilter;
 
 			fileFilter.Changed += OnFileFilterChanged;
 
@@ -140,7 +140,7 @@ namespace LogAnalyzer
 		}
 
 		private int initialFilesLoadedCount;
-		private bool loadStarted = false;
+		private bool loadStarted;
 		private int initialFilesLoadingCount;
 		private void BeginLoadFiles( IEnumerable<IFileInfo> filesInDirectory )
 		{
@@ -148,7 +148,6 @@ namespace LogAnalyzer
 			{
 				file.Refresh();
 
-				// do not analyze files that were updated too long ago
 				if ( !fileFilter.Include( file ) )
 					continue;
 
@@ -156,22 +155,19 @@ namespace LogAnalyzer
 
 				LogFile logFile = CreateLogFile( local );
 
-				operationsQueue.EnqueueOperation( () =>
-				{
-					AddFile( logFile );
-				} );
+				operationsQueue.EnqueueOperation( () => AddFile( logFile ) );
 
 				environment.Scheduler.StartNewOperation( () =>
-					{
-						logFile.ReadFile();
+				{
+					logFile.ReadFile();
 
-						operationsQueue.EnqueueOperation( () =>
-						{
-							logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
-							Interlocked.Increment( ref initialFilesLoadedCount );
-							AnalyzeIfLoaded();
-						} );
+					operationsQueue.EnqueueOperation( () =>
+					{
+						logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
+						Interlocked.Increment( ref initialFilesLoadedCount );
+						AnalyzeIfLoaded();
 					} );
+				} );
 
 				//// todo какая-то обработка ошибки чтения файла
 				//fileReadTask.ContinueWith( parentTask =>
@@ -197,18 +193,18 @@ namespace LogAnalyzer
 			if ( initialFilesLoadedCount == initialFilesLoadingCount )
 			{
 				environment.Scheduler.StartNewOperation( () =>
-														{
-															PerformInitialMerge();
+				{
+					PerformInitialMerge();
 
-															operationsSource.Start();
-															operationsQueue.EnqueueOperation( () =>
-																								{
-																									logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
-																													 this.DisplayName, files.Count );
+					operationsSource.Start();
+					operationsQueue.EnqueueOperation( () =>
+					{
+						logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
+											this.DisplayName, files.Count );
 
-																									RaiseLoadedEvent();
-																								} );
-														} );
+						RaiseLoadedEvent();
+					} );
+				} );
 			}
 		}
 
@@ -294,6 +290,11 @@ namespace LogAnalyzer
 			lock ( sync )
 			{
 				IFileInfo file = directoryInfo.GetFileInfo( fullPath );
+
+				bool exclude = !fileFilter.Include( file );
+				if ( exclude )
+					return;
+
 				LogFile logFile = CreateLogFile( file );
 
 				// todo brinchuk this should be done async!
@@ -310,8 +311,6 @@ namespace LogAnalyzer
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
 		{
 			logger.WriteInfo( "Core.OnFileDelete: '{0}' '{1}'", e.ChangeType, e.Name );
-			// todo implement Core.OnFileDeleted!
-			throw new NotImplementedException();
 		}
 
 		private void OnFileChanged( object sender, FileSystemEventArgs e )
@@ -330,6 +329,10 @@ namespace LogAnalyzer
 				else
 				{
 					var changedFile = files.Single( f => f.FullPath == fullPath );
+
+					if ( !fileFilter.Include( changedFile.FileInfo ) )
+						return;
+
 					changedFile.OnFileChanged();
 				}
 			} );
@@ -348,7 +351,6 @@ namespace LogAnalyzer
 		}
 
 		#endregion
-
 
 		public bool ContainsFile( string fullPath )
 		{

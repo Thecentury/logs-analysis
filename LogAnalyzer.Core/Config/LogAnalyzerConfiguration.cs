@@ -94,6 +94,23 @@ namespace LogAnalyzer.Config
 			set { globalEntryFilter.ExpressionBuilder = value; }
 		}
 
+		#region Files filter
+
+		private readonly ExpressionFilter<IFileInfo> globalFilesFilter = new ExpressionFilter<IFileInfo>();
+		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+		public ExpressionFilter<IFileInfo> GlobalFilesFilter
+		{
+			get { return globalFilesFilter; }
+		}
+
+		public ExpressionBuilder GlobalFilesFilterBuilder
+		{
+			get { return globalFilesFilter.ExpressionBuilder; }
+			set { globalFilesFilter.ExpressionBuilder = value; }
+		}
+
+		#endregion
+
 		#region Methods
 
 		public static LogAnalyzerConfiguration CreateNew()

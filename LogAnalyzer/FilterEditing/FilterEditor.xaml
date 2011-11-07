@@ -106,6 +106,15 @@
 			<TextBox Text="{Binding Builder.Substring, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 					 Margin="0,4,4,4"/>
 		</DataTemplate>
+		
+		<DataTemplate x:Key="{x:Type log:FileNameFilterBase}">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="FileName" Margin="0,4,4,4" VerticalAlignment="Center"/>
+				<TextBox Text="{Binding Builder.FileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="150"
+						 Margin="0,4,4,4"/>
+			</StackPanel>
+		</DataTemplate>
 
 		<DataTemplate x:Key="{x:Type log:GetProperty}">
 			<Grid>
