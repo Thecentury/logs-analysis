@@ -199,6 +199,7 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
+    <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />
     <Compile Include="Bootstrapper.cs" />
