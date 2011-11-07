@@ -24,7 +24,7 @@
 			</ToggleButton>
 		</StackPanel>
 	</DataTemplate>
-	
+
 	<!-- Template for filter tab's toolbar items -->
 	<DataTemplate DataType="{x:Type ViewModels:FilterTabToolbarViewModel}">
 		<StackPanel Orientation="Horizontal">
@@ -38,6 +38,15 @@
 					ToolTip="Refresh view">
 				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-circle-double.png" Stretch="None"/>
 			</Button>
+		</StackPanel>
+	</DataTemplate>
+
+	<DataTemplate DataType="{x:Type ViewModels:SelfWorkingSetStatusBarItem}">
+		<StackPanel Orientation="Horizontal">
+			<TextBlock ToolTip="Working Set">
+				<Run Text="{Binding MemoryWorkingSet, Mode=OneWay}" FontWeight="Bold"/>
+				<Run>MB</Run>
+			</TextBlock>
 		</StackPanel>
 	</DataTemplate>
 

@@ -171,6 +171,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				collection.Add( messagesCount );
 			}
+
+			collection.Add( new SelfWorkingSetStatusBarItem() );
 		}
 
 		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
