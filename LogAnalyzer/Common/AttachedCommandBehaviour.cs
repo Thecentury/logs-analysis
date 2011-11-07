@@ -10,27 +10,31 @@ namespace LogAnalyzer.GUI.Common
 	public class AttachedCommandBehaviour
 	{
 		private static readonly DependencyPropertyKey BindingsPropertyKey = DependencyProperty.RegisterAttachedReadOnly( "BindingsInternal", typeof( AttachedCommandBindingCollection ), typeof( AttachedCommandBehaviour ), new FrameworkPropertyMetadata( null ) );
-		public static readonly DependencyProperty BindingsProperty = AttachedCommandBehaviour.BindingsPropertyKey.DependencyProperty;
+
+		public static readonly DependencyProperty BindingsProperty = BindingsPropertyKey.DependencyProperty;
+
 		public static AttachedCommandBindingCollection GetBindings( DependencyObject d )
 		{
 			if ( d == null )
 			{
 				throw new InvalidOperationException( "The dependency object trying to attach to is set to null" );
 			}
-			AttachedCommandBindingCollection attachedCommandBindingCollection = d.GetValue( AttachedCommandBehaviour.BindingsProperty ) as AttachedCommandBindingCollection;
+			AttachedCommandBindingCollection attachedCommandBindingCollection = d.GetValue( BindingsProperty ) as AttachedCommandBindingCollection;
 			if ( attachedCommandBindingCollection == null )
 			{
 				attachedCommandBindingCollection = new AttachedCommandBindingCollection();
 				attachedCommandBindingCollection.Owner = d;
-				AttachedCommandBehaviour.SetBindings( d, attachedCommandBindingCollection );
+				SetBindings( d, attachedCommandBindingCollection );
 			}
 			return attachedCommandBindingCollection;
 		}
-		private static void SetBindings( DependencyObject d, AttachedCommandBindingCollection value )
+
+		public static void SetBindings( DependencyObject d, AttachedCommandBindingCollection value )
 		{
-			d.SetValue( AttachedCommandBehaviour.BindingsPropertyKey, value );
-			((INotifyCollectionChanged)value).CollectionChanged += new NotifyCollectionChangedEventHandler( AttachedCommandBehaviour.CollectionChanged );
+			d.SetValue( BindingsPropertyKey, value );
+			((INotifyCollectionChanged)value).CollectionChanged += CollectionChanged;
 		}
+
 		private static void CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			AttachedCommandBindingCollection attachedCommandBindingCollection = (AttachedCommandBindingCollection)sender;

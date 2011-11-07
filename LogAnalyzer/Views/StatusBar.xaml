@@ -11,7 +11,7 @@
 		<SolidColorBrush Color="#FF626875" x:Key="labelForeground"/>
 
 		<DataTemplate DataType="{x:Type vm:EntriesCountStatusBarItem}">
-			<TextBlock>
+			<TextBlock ToolTip="Total Entries">
 				<Run Foreground="{StaticResource labelForeground}">Total: </Run>
 				<Run Text="{Binding TotalEntries, Mode=OneWay}"/>
 			</TextBlock>
@@ -27,7 +27,7 @@
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type vm:SelectedEntryIndexStatusBarItem}">
-			<TextBlock>
+			<TextBlock ToolTip="Selected Entry #">
 				<Run Foreground="{StaticResource labelForeground}">#</Run><Run Text="{Binding SelectedEntryIndex, Mode=OneWay}"/>
 			</TextBlock>
 		</DataTemplate>

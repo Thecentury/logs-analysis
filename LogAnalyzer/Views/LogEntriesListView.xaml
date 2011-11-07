@@ -18,7 +18,7 @@
 	</UserControl.InputBindings>
 
 	<UserControl.Resources>
-		<SolidColorBrush Color="#FFEE3A" x:Key="dynamicHighlightBrush"/>
+		<SolidColorBrush Color="#99FFEE3A" x:Key="dynamicHighlightBrush"/>
 
 		<local:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
 
@@ -295,6 +295,7 @@
 
 			<Common:AttachedCommandBehaviour.Bindings>
 				<Common:AttachedCommandBinding Command="{Binding GotFocusCommand}" Event="GotFocus" />
+				<Common:AttachedCommandBinding Command="{Binding LoadedCommand}" Event="Loaded"/>
 			</Common:AttachedCommandBehaviour.Bindings>
 
 			<DataGrid.Columns>
