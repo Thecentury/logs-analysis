@@ -34,8 +34,9 @@ namespace LogAnalyzer.Logging
 
 			string fullMessage = CreateFullMessage( message, messageType );
 
-			foreach ( var writer in writers )
+			for ( int i = 0; i < writers.Count; i++ )
 			{
+				var writer = writers[i];
 				writer.WriteLine( fullMessage );
 			}
 		}

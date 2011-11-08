@@ -420,6 +420,17 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		private DelegateCommand toggleAutoScrollToBottomCommand;
+		public ICommand ToggleAutoScrollToBottomCommand
+		{
+			get
+			{
+				if ( toggleAutoScrollToBottomCommand == null )
+					toggleAutoScrollToBottomCommand = new DelegateCommand( () => AutoScrollToBottom = !AutoScrollToBottom );
+				return toggleAutoScrollToBottomCommand;
+			}
+		}
+
 		#endregion
 
 		protected override void OnLoaded()
