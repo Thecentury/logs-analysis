@@ -24,6 +24,7 @@ namespace LogAnalyzer.Extensions
 			WriteInfo( logger, message );
 		}
 
+		[StringFormatMethod( "format" )]
 		public static void WriteInfo( this Logger logger, string format, params object[] parameters )
 		{
 			if ( logger == null )

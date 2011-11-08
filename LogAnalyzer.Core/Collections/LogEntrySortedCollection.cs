@@ -112,6 +112,7 @@ namespace LogAnalyzer.Collections
 					int sortedSetLength = sortedLogEntries.Count;
 					sortedLogEntries.Remove( min );
 					Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
+					AssertParentMergedEntriesAreSorted();
 
 					awaitingEntries.Remove( min.ParentLogFile, min );
 				}
@@ -150,6 +151,7 @@ namespace LogAnalyzer.Collections
 				} while ( hasRemoved );
 			}
 
+			AssertParentMergedEntriesAreSorted();
 			unappendedSetWrapper.MarkDirty();
 
 #if DEBUGCHECK
@@ -282,7 +284,12 @@ namespace LogAnalyzer.Collections
 			{
 				if ( isOld )
 				{
-					this.array = new T[collection.Count];
+
+					if ( array == null || array.Length != collection.Count )
+					{
+						this.array = new T[collection.Count];
+					}
+
 					collection.CopyTo( this.array, 0 );
 					isOld = false;
 				}

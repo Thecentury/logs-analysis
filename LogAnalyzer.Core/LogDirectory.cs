@@ -293,7 +293,10 @@ namespace LogAnalyzer
 
 				bool exclude = !fileFilter.Include( file );
 				if ( exclude )
+				{
+					logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
 					return;
+				}
 
 				LogFile logFile = CreateLogFile( file );
 
@@ -323,7 +326,6 @@ namespace LogAnalyzer
 			{
 				if ( !ContainsFile( fullPath ) )
 				{
-					logger.WriteError( "Core.OnFileChanged: files doesn't contain file \"{0}\"", fullPath );
 					AddFile( fullPath );
 				}
 				else

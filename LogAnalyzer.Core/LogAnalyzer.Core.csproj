@@ -85,7 +85,9 @@
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
-    <Compile Include="Filters\FileFilters.cs" />
+    <Compile Include="Filters\FileFilters\ExcludeFilesByNameFilter.cs" />
+    <Compile Include="Filters\FileFilters\PreviousDayFileFilter.cs" />
+    <Compile Include="Filters\FileFilters\SizeLessThanFilter.cs" />
     <Compile Include="Filters\FilterTargetAttribute.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
