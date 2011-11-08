@@ -51,11 +51,11 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestExpressionBuilderManager()
 		{
-			ExpressionBuilder[] buildersReturningBoolean = ExpressionBuilderManager.GetBuildersReturningType( typeof( bool ) );
+			ExpressionBuilder[] buildersReturningBoolean = ExpressionBuilderManager.GetBuilders( typeof( bool ), typeof(object) );
 			Assert.NotNull( buildersReturningBoolean );
 			Assert.That( buildersReturningBoolean.Length, Is.GreaterThan( 0 ) );
 
-			ExpressionBuilder[] buildersReturningExpression = ExpressionBuilderManager.GetBuildersReturningType( typeof( ExpressionBuilder ) );
+			ExpressionBuilder[] buildersReturningExpression = ExpressionBuilderManager.GetBuilders( typeof( ExpressionBuilder ), typeof(object) );
 			Assert.NotNull( buildersReturningExpression );
 			Assert.That( buildersReturningExpression.Length, Is.GreaterThan( 0 ) );
 		}

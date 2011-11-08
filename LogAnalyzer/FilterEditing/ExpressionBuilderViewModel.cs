@@ -51,7 +51,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				{
 					Type resultType = GetResultType();
 					ExpressionBuilder[] builders = ExpressionBuilderManager
-						.GetBuildersReturningType( resultType )
+						.GetBuilders( resultType, typeof(LogEntry) )
 						.OrderBy( b => b.GetType().Name )
 						.ToArray();
 					builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();

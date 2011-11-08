@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -60,23 +61,26 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override string Header
 		{
-			get
-			{
-				return "Main";
-			}
+			get { return "Main"; }
 		}
 
 		public override string IconFile
 		{
-			get
-			{
-				return MakePackUri( "/Resources/home.png" );
-			}
+			get { return MakePackUri( "/Resources/home.png" ); }
 		}
 
 		protected override bool CanBeClosedCore()
 		{
 			return false;
+		}
+
+		protected override void PopulateStatusBarItems( ICollection<object> collection )
+		{
+			base.PopulateStatusBarItems( collection );
+
+#if DEBUG
+			collection.Add( new MergedEntriesDebugStatusBarItem( core.MergedEntries ) );
+#endif
 		}
 
 		ApplicationViewModel IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>.Parent

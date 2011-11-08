@@ -29,17 +29,18 @@ namespace LogAnalyzer.Filters
 			return types.ToArray();
 		}
 
-		public static ExpressionBuilder[] GetBuildersReturningType( Type desiredType )
+		public static ExpressionBuilder[] GetBuilders( Type returnType, Type inputType )
 		{
-			if ( desiredType == null )
-				throw new ArgumentNullException( "desiredType" );
+			if ( returnType == null )
+				throw new ArgumentNullException( "returnType" );
 
 			ParameterExpression target = Expression.Parameter( typeof( LogEntry ) );
 
 			var result = (from builderType in expressionBuilderTypes
-						  let builder = CreateExpressionBuilder( builderType, desiredType )
+						  let builder = CreateExpressionBuilder( builderType, returnType )
 						  let resultType = builder.GetResultType( target )
-						  where IsAppropriateType( desiredType, resultType )
+						  where IsAppropriateType( returnType, resultType )
+						  where AcceptsInput( builderType, inputType )
 						  select builder)
 					.ToArray();
 
@@ -48,14 +49,13 @@ namespace LogAnalyzer.Filters
 
 		private static ExpressionBuilder CreateExpressionBuilder( Type builderType, Type desiredType )
 		{
-			ExpressionBuilder result = null;
 			Type actualType = builderType;
 			if ( builderType.ContainsGenericParameters )
 			{
 				actualType = builderType.MakeGenericType( desiredType );
 			}
 
-			result = (ExpressionBuilder)Activator.CreateInstance( actualType );
+			ExpressionBuilder result = (ExpressionBuilder)Activator.CreateInstance( actualType );
 			return result;
 		}
 
@@ -63,6 +63,15 @@ namespace LogAnalyzer.Filters
 		{
 			bool result = actualType == desiredType || actualType.IsSubclassOf( desiredType ) || actualType == typeof( object );
 			return result;
+		}
+
+		private static bool AcceptsInput( Type filterType, Type inputType )
+		{
+			var attributes = filterType.GetCustomAttributes( typeof( FilterTargetAttribute ), true );
+			if ( attributes.Length == 0 )
+				return true;
+			else
+				return attributes.Cast<FilterTargetAttribute>().Any( attr => attr.TargetType.IsAssignableFrom( inputType ) );
 		}
 	}
 }

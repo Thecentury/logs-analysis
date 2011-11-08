@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using LogAnalyzer.Extensions;
@@ -14,7 +13,7 @@ using LogAnalyzer.Logging;
 using LogAnalyzer.Misc;
 using System.Collections;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	/// <summary>
 	/// Осуществляет упорядочивание LogEntry.
