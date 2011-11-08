@@ -50,4 +50,12 @@
 		</StackPanel>
 	</DataTemplate>
 
+	<DataTemplate DataType="{x:Type ViewModels:MergedEntriesDebugStatusBarItem}">
+		<TextBlock Text="{Binding Text}"/>
+	</DataTemplate>
+
+	<DataTemplate DataType="{x:Type ViewModels:LogStatusBarItem}">
+		<TextBlock Text="{Binding Message}"/>
+	</DataTemplate>
+
 </ResourceDictionary>

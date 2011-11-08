@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -103,11 +104,18 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( e.Action != NotifyCollectionChangedAction.Add )
 				return;
 
-			BeginInvokeInUIDispatcher( () =>
-			{
-				filesViewModels.RaiseCollectionReset();
-			} );
+			BeginInvokeInUIDispatcher( () => filesViewModels.RaiseCollectionReset() );
 		}
+
+		protected override void PopulateStatusBarItems( ICollection<object> collection )
+		{
+			base.PopulateStatusBarItems( collection );
+
+#if DEBUG
+			collection.Add( new MergedEntriesDebugStatusBarItem( directory.MergedEntries ) );
+#endif
+		}
+
 
 		#region Commands
 

@@ -7,6 +7,7 @@
 		<LogDirectoryConfigurationInfo Enabled="False" DisplayName="Logs2" FileNameFilter="*.log" Path="c:\Logs\Logs2" EncodingName="windows-1251"/>
 		<LogDirectoryConfigurationInfo Enabled="False" EncodingName="windows-1251" DisplayName="Zip" Path="C:\Logs\Logs.zip"/>
 		<LogDirectoryConfigurationInfo Enabled="False" FileNameFilter="*.log" DisplayName="MOST" Path="\\hp-brinchuk.mo.msk\C$\MOST\AWAD\LOGS\"/>
+		<LogDirectoryConfigurationInfo Enabled="False" FileNameFilter="*.log" DisplayName="Jet" Path="\\srv-king.mo.msk\MOST\AWAD_JET\LOGS"/>
 	</LogAnalyzerConfiguration.Directories>
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
@@ -22,9 +23,12 @@
 	<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
 
 	<LogAnalyzerConfiguration.GlobalFilesFilterBuilder>
-		<ExcludeFilesByNameFilter>
-			<s:String>Security.log</s:String>
-		</ExcludeFilesByNameFilter>
+		<AndCollection>
+			<ExcludeFilesByNameFilter>
+				<s:String>Security.log</s:String>
+			</ExcludeFilesByNameFilter>
+			<PreviousDayFileFilter/>
+		</AndCollection>
 	</LogAnalyzerConfiguration.GlobalFilesFilterBuilder>
 
 	<LogAnalyzerConfiguration.LoggerAcceptedTypes>

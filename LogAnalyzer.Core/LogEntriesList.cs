@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using System.Diagnostics;
 using System.ComponentModel;

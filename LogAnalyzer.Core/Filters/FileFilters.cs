@@ -9,7 +9,7 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Filters
 {
-	[IgnoreBuilder]
+	[FilterTarget( typeof( IFileInfo ) )]
 	[ContentProperty( "FileNames" )]
 	public sealed class ExcludeFilesByNameFilter : ExpressionBuilder
 	{
@@ -35,10 +35,32 @@ namespace LogAnalyzer.Filters
 					Expression.Call(
 						Expression.Constant( fileNames ),
 						typeof( List<string> ).GetMethod( "Contains" ),
-						Expression.Property(
-							parameterExpression, "Name" )
+						Expression.Property( parameterExpression, "Name" )
 						)
 					);
+		}
+	}
+
+	[FilterTarget( typeof( IFileInfo ) )]
+	public sealed class PreviousDayFileFilter : ExpressionBuilder
+	{
+		public override Type GetResultType( ParameterExpression target )
+		{
+			return typeof( bool );
+		}
+
+		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		{
+			if ( parameterExpression.Type != typeof( IFileInfo ) )
+				throw new NotSupportedException( "PreviousDayFilter is for IFileInfo only." );
+
+			var filter = new Not( new StringStartsWith
+			{
+				Inner = new GetProperty( new Argument(), "Name" ),
+				Substring = new StringConstant( DateTime.Now.Year.ToString() ),
+				Comparison = StringComparison.InvariantCultureIgnoreCase
+			} );
+			return filter.CreateExpression( parameterExpression );
 		}
 	}
 }

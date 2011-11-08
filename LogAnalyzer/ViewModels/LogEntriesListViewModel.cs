@@ -9,6 +9,7 @@ using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -173,6 +174,22 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 
 			collection.Add( new SelfWorkingSetStatusBarItem() );
+#if DEBUG
+			StatusBarLogWriter writer = GetOrCreateLogWriter();
+			collection.Add( new LogStatusBarItem( writer ) );
+#endif
+		}
+
+		private StatusBarLogWriter GetOrCreateLogWriter()
+		{
+			StatusBarLogWriter writer = Logger.Instance.Writers.OfType<StatusBarLogWriter>().FirstOrDefault();
+			if ( writer == null )
+			{
+				writer = new StatusBarLogWriter();
+				Logger.Instance.Writers.Add( writer );
+			}
+
+			return writer;
 		}
 
 		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()

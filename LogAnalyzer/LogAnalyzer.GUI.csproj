@@ -196,10 +196,13 @@
     <Compile Include="ViewModels\LogDirectoryViewModel.cs" />
     <Compile Include="ViewModels\LogEntriesListViewModel.cs" />
     <Compile Include="ViewModels\LogEntryListToolbarViewModel.cs" />
+    <Compile Include="ViewModels\LogStatusBarItem.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />
+    <Compile Include="ViewModels\StatusBarLogWriter.cs" />
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />
     <Compile Include="Bootstrapper.cs" />
