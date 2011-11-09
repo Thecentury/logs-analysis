@@ -13,3 +13,4 @@ Binaries/*
 *.vsp
 *.psess
 Ext/FugueIcons/*
+*.DotSettings.user
