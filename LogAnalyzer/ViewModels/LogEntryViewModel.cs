@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
@@ -124,6 +125,22 @@ namespace LogAnalyzer.GUI.ViewModels
 				// todo probably optimize for frozen state
 				bool isException = LinesCount > 1 && UnitedText.Contains( ":line " );
 				return isException;
+			}
+		}
+
+		private SolidColorBrush logNameBackground;
+		public Brush LogNameBackground
+		{
+			get
+			{
+				if ( logNameBackground == null )
+				{
+					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
+					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
+					logNameBackground = new SolidColorBrush( hsbColor.ToArgbColor() );
+				}
+
+				return logNameBackground;
 			}
 		}
 
