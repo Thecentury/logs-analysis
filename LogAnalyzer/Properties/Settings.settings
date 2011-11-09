@@ -3,7 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="SelfMemoryStatusBarItemUpdateInterval" Type="System.TimeSpan" Scope="Application">
-      <Value Profile="(Default)">00:00:01</Value>
+      <Value Profile="(Default)">00:00:02</Value>
+    </Setting>
+    <Setting Name="AddedCountUpdateInterval" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>
