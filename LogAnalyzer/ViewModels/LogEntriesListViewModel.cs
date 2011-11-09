@@ -5,9 +5,11 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using LogAnalyzer.Filters;
 using System.Collections.ObjectModel;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.Logging;
 
@@ -199,6 +201,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		private DispatcherTimer updateAddedCountTimer;
+
 		protected internal abstract LogFileViewModel GetFileViewModel( LogEntry logEntry );
 
 		public abstract LogEntriesListViewModel Clone();
@@ -218,6 +222,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			InvokeInUIDispatcher( () =>
 			{
 				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
+				updateAddedCountTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval ) };
+				updateAddedCountTimer.Tick += OnUpdateAddedCountTimer_Tick;
+				updateAddedCountTimer.Start();
 			} );
 		}
 
@@ -265,6 +272,42 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 
 			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
+
+			UpdateAddedCount( e );
+		}
+
+		private void OnUpdateAddedCountTimer_Tick( object sender, EventArgs e )
+		{
+			AddedEntriesCountString = "+" + addedEntriesCount;
+			addedEntriesCount = 0;
+		}
+
+		private void UpdateAddedCount( NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action == NotifyCollectionChangedAction.Add )
+			{
+				addedEntriesCount += e.NewItems.Count;
+			}
+			else if ( e.Action == NotifyCollectionChangedAction.Reset )
+			{
+				addedEntriesCount = 0;
+			}
+		}
+
+		private int addedEntriesCount;
+
+		private string addedEntriesCountString;
+		public string AddedEntriesCountString
+		{
+			get { return addedEntriesCountString; }
+			set
+			{
+				if ( addedEntriesCountString == value )
+					return;
+
+				addedEntriesCountString = value;
+				RaisePropertyChanged( "AddedEntriesCountString" );
+			}
 		}
 
 		#region Highlighting

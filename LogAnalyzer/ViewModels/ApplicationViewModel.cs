@@ -102,6 +102,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				windowService.SetProgressValue( 0 );
 				windowService.SetProgressState( Windows7Taskbar.ThumbnailProgressState.NoProgress );
+				RaisePropertyChanged( "SelectedTab" );
 			} );
 		}
 

@@ -25,10 +25,19 @@ namespace LogAnalyzer.GUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:00:01")]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:02")]
         public global::System.TimeSpan SelfMemoryStatusBarItemUpdateInterval {
             get {
                 return ((global::System.TimeSpan)(this["SelfMemoryStatusBarItemUpdateInterval"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int AddedCountUpdateInterval {
+            get {
+                return ((int)(this["AddedCountUpdateInterval"]));
             }
         }
     }
