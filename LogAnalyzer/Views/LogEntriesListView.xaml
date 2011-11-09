@@ -71,9 +71,18 @@
 		</Style>
 
 		<!-- Стиль ячейки имени файла -->
-		<Style TargetType="DataGridCell" x:Key="fileCellStyle" BasedOn="{StaticResource cellDynamicHighlightStyle}">
+		<Style TargetType="DataGridCell" x:Key="fileCellStyle">
 			<Setter Property="local:DynamicHighlighting.PropertyName" Value="File.Name"/>
 			<Setter Property="ToolTip" Value="{Binding File.Name}"/>
+			<Setter Property="Background" Value="{Binding LogNameBackground}"/>
+
+			<Setter Property="BorderThickness" Value="0"/>
+
+			<Style.Triggers>
+				<Trigger Property="IsFocused" Value="True">
+					<Setter Property="BorderThickness" Value="1"/>
+				</Trigger>
+			</Style.Triggers>
 		</Style>
 
 		<!-- Стиль ячейки имени директории -->
