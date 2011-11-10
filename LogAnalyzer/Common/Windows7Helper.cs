@@ -112,6 +112,5 @@ namespace LogAnalyzer.GUI.Common
 		  new FrameworkPropertyMetadata( IntPtr.Zero ) );
 
 		#endregion
-
 	}
 }

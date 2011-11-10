@@ -12,6 +12,11 @@
 
 	<DataTemplate DataType="{x:Type ViewModels:LogEntryListToolbarViewModel}">
 		<StackPanel Orientation="Horizontal">
+			<Button Command="{Binding ScrollToTopCommand}"
+					Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
+					ToolTip="Scroll to top">
+				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/control-stop-090.png" Stretch="None"/>
+			</Button>
 			<Button Command="{Binding ScrollToBottomCommand}"
 					Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 					ToolTip="Scroll to bottom">

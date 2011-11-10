@@ -25,6 +25,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return parent.ScrollToBottomCommand; }
 		}
 
+		public ICommand ScrollToTopCommand
+		{
+			get { return parent.ScrollToTopCommand; }
+		}
+
 		public bool AutoScrollToBottom
 		{
 			get { return parent.AutoScrollToBottom; }
