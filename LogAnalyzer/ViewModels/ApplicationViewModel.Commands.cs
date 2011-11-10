@@ -133,6 +133,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			} );
 		}
 
+		public DelegateCommand CreateAddMessageTypeViewCommand( string messageType )
+		{
+			return new DelegateCommand( () =>
+										{
+											var filter = new MessageTypeEquals( messageType );
+											AddFilterViewFromCore( filter );
+										} );
+		}
+
 		#region Exclude by commands
 
 		// Exclude file
@@ -181,6 +190,8 @@ namespace LogAnalyzer.GUI.ViewModels
 											} );
 		}
 
+		// Exclude directory
+
 		public DelegateCommand CreateExcludeDirectoryCommand( LogEntryViewModel logEntryViewModel )
 		{
 			return new DelegateCommand( () =>
@@ -196,6 +207,17 @@ namespace LogAnalyzer.GUI.ViewModels
 												);
 											UpdateOrAddFilterTab( logEntryViewModel, filter );
 										} );
+		}
+
+		// Exclude by message type
+
+		public DelegateCommand CreateExcludeByMessageTypeCommand( LogEntryViewModel logEntryViewModel )
+		{
+			return new DelegateCommand( () =>
+											{
+												var filter = new Not( new MessageTypeEquals( logEntryViewModel.Type ) );
+												UpdateOrAddFilterTab( logEntryViewModel, filter );
+											} );
 		}
 
 		// Вспомогательные

@@ -135,7 +135,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( logNameBackground == null )
 				{
-					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
+					double hue = ( File.Name.GetHashCode() - (double)Int32.MinValue ) / ( (double)Int32.MaxValue - Int32.MinValue ) * 360;
 					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
 					logNameBackground = new SolidColorBrush( hsbColor.ToArgbColor() );
 				}
@@ -298,6 +298,18 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return ApplicationViewModel.CreateAddFileNameViewCommand( File.Name ); }
 		}
 
+		// Create view for message type
+
+		public string CreateMessageTypeViewCommandHeader
+		{
+			get { return string.Format( "MessageType \"{0}\"", Type ); }
+		}
+
+		public ICommand CreateMessageTypeViewCommand
+		{
+			get { return ApplicationViewModel.CreateAddMessageTypeViewCommand( Type ); }
+		}
+
 		#endregion
 
 		#region Exclude by filters
@@ -348,6 +360,18 @@ namespace LogAnalyzer.GUI.ViewModels
 		public ICommand ExcludeDirectoryCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeDirectoryCommand( this ); }
+		}
+
+		// Exclude by message severity
+
+		public string ExcludeByMessageTypeCommandHeader
+		{
+			get { return String.Format( "MessageType \"{0}\"", this.Type ); }
+		}
+
+		public ICommand ExcludeByMessageTypeCommand
+		{
+			get { return ApplicationViewModel.CreateExcludeByMessageTypeCommand( this ); }
 		}
 
 		#endregion

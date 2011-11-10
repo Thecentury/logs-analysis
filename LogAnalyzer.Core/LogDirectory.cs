@@ -359,7 +359,7 @@ namespace LogAnalyzer
 			return files.Any( f => f.FullPath == fullPath );
 		}
 
-		public void AddFile( LogFile logFile )
+		private void AddFile( LogFile logFile )
 		{
 			if ( logFile == null )
 				throw new ArgumentNullException( "logFile" );

@@ -104,8 +104,10 @@
 			<Setter Property="ContextMenu">
 				<Setter.Value>
 					<ContextMenu>
+						
 						<MenuItem Header="{Binding SelectFileInExplorerCommandHeader}" Command="{Binding SelectFileInExplorerCommand}"/>
 						<MenuItem Header="{Binding OpenFolderInExplorerCommandHeader}" Command="{Binding OpenFolderInExplorerCommand}"/>
+						
 						<MenuItem Header="Create view for:">
 							<MenuItem.Icon>
 								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"/>
@@ -130,6 +132,11 @@
 							<MenuItem Header="{Binding CreateViewForDirectoryCommandHeader}" Command="{Binding CreateDirectoryViewCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="{Binding CreateMessageTypeViewCommandHeader}" Command="{Binding CreateMessageTypeViewCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/burn.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
@@ -160,6 +167,12 @@
 							<MenuItem Header="{Binding ExcludeDirectoryCommandHeader}" Command="{Binding ExcludeDirectoryCommand}">
 								<MenuItem.Icon>
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding ExcludeByMessageTypeCommandHeader}" Command="{Binding ExcludeByMessageTypeCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/burn.png"/>
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>

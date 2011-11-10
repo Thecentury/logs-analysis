@@ -244,11 +244,6 @@
     </Compile>
     <Compile Include="WindowsInterop.cs" />
     <Compile Include="XmlNamespaces.cs" />
-    <Page Include="..\config.xaml">
-      <Link>config.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="FilterEditing\FilterEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -394,6 +389,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\control-double-270.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\burn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

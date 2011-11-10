@@ -49,20 +49,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				loadingProgress = value;
 				RaisePropertyChanged( "LoadingProgress" );
-				
+
 				applicationViewModel.WindowService.SetProgressValue( (int)value );
 			}
 		}
 
 		private void OnCore_ReadProgress( object sender, FileReadEventArgs e )
-		{
-			BeginInvokeInUIDispatcher( () =>
-			{
-				UpdateProgress( e );
-			} );
-		}
-
-		private void UpdateProgress( FileReadEventArgs e )
 		{
 			loadedBytes += e.BytesReadSincePreviousCall;
 			LoadingProgress = 100.0 * loadedBytes / applicationViewModel.Core.TotalLengthInBytes;
