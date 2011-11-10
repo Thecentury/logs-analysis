@@ -31,9 +31,21 @@ namespace LogAnalyzer.Config
 		/// Path to directory.
 		/// </summary>
 		public string Path { get; set; }
-		public string FileNameFilter { get; set; }
+
+		private string fileNameFilter = "*.log";
+		public string FileNameFilter
+		{
+			get { return fileNameFilter; }
+			set { fileNameFilter = value; }
+		}
+
 		public string DisplayName { get; set; }
-		public string EncodingName { get; set; }
+		private string encodingName = "windows-1251";
+		public string EncodingName
+		{
+			get { return encodingName; }
+			set { encodingName = value; }
+		}
 
 		private bool enabled = true;
 		public bool Enabled
@@ -45,6 +57,17 @@ namespace LogAnalyzer.Config
 		public bool IncludeNestedDirectories { get; set; }
 
 		public bool UseCache { get; set; }
+
+		// todo brinchuk use this
+		private bool isDynamic = true;
+		/// <summary>
+		/// Может ли содержимое директории обновляться?
+		/// </summary>
+		public bool IsDynamic
+		{
+			get { return isDynamic; }
+			set { isDynamic = value; }
+		}
 
 		private readonly List<string> predefinedFiles = new List<string>();
 		/// <summary>
