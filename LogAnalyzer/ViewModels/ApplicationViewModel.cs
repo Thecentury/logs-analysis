@@ -38,12 +38,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return coreViewModel; }
 		}
 
-		private readonly IWindowService windowService;
-		public IWindowService WindowService
-		{
-			get { return windowService; }
-		}
-
 		/// <summary>
 		/// Для тестов.
 		/// </summary>
@@ -62,8 +56,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			core.Loaded += OnCore_Loaded;
 
-			windowService = config.ResolveNotNull<IWindowService>();
-			windowService.SetProgressState( Windows7Taskbar.ThumbnailProgressState.Normal );
+			ProgressState = Windows7Taskbar.ThumbnailProgressState.Normal;
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
@@ -100,8 +93,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				tabs.RemoveAt( 0 );
 				tabs.Add( coreViewModel );
 
-				windowService.SetProgressValue( 0 );
-				windowService.SetProgressState( Windows7Taskbar.ThumbnailProgressState.NoProgress );
+				ProgressValue = 0;
+				ProgressState = Windows7Taskbar.ThumbnailProgressState.NoProgress;
 				RaisePropertyChanged( "SelectedTab" );
 			} );
 		}
@@ -110,6 +103,34 @@ namespace LogAnalyzer.GUI.ViewModels
 		public ObservableCollection<TabViewModel> Tabs
 		{
 			get { return tabs; }
+		}
+
+		private int progressValue;
+		public int ProgressValue
+		{
+			get { return progressValue; }
+			set
+			{
+				if ( progressValue == value )
+					return;
+
+				progressValue = value;
+				RaisePropertyChanged( "ProgressValue" );
+			}
+		}
+
+		private Windows7Taskbar.ThumbnailProgressState progressState;
+		public Windows7Taskbar.ThumbnailProgressState ProgressState
+		{
+			get { return progressState; }
+			set
+			{
+				if ( progressState == value )
+					return;
+
+				progressState = value;
+				RaisePropertyChanged( "ProgressState" );
+			}
 		}
 
 		private int selectedIndex;

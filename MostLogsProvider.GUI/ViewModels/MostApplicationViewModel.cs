@@ -19,7 +19,7 @@ namespace ModuleLogsProvider.GUI.ViewModels
 
 			var errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 			errorReportingViewModel = new ErrorReportingViewModel( errorReportingService, config.Container );
-			performanceViewModel = new ServerPerformanceViewModel( config );
+			performanceViewModel = new ServerPerformanceViewModel( config, this );
 		}
 
 		protected override void OnCoreLoaded()

@@ -73,11 +73,9 @@ namespace LogAnalyzer.GUI
 
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
-				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
 				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
 				.RegisterInstance<RegionManager>( new RegionManager() )
-				.RegisterInstance<IWindowService>( new RealWindowService() )
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager )
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() );
 		}

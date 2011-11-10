@@ -56,7 +56,7 @@ using LogAnalyzer.Properties;
 [assembly: AssemblyVersion( "1.0.0.0" )]
 [assembly: AssemblyFileVersion( "1.0.0.0" )]
 
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Regions" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Regions" )]
 
 [assembly: InternalsVisibleTo( "LogAnalyzer.Tests" )]
 
