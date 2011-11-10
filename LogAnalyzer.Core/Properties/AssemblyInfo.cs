@@ -37,16 +37,16 @@ using LogAnalyzer.Properties;
 [assembly: AssemblyVersion( "1.0.0.0" )]
 [assembly: AssemblyFileVersion( "1.0.0.0" )]
 
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer" )]
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Logging" )]
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Filters" )]
-[assembly: XmlnsDefinition( GlobalConstants.XmlNamespace, "LogAnalyzer.Config" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.Logging" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.Filters" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.Config" )]
 
 [assembly: InternalsVisibleTo( "LogAnalyzer.Tests" )]
 
 namespace LogAnalyzer.Properties
 {
-	public static class GlobalConstants
+	public static class LogAnalyzerGlobalConstants
 	{
 		public const string XmlNamespace = "http://www.awad.com/LogAnalyzer";
 	}

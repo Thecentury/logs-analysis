@@ -1,10 +1,13 @@
 ﻿<Window x:Class="LogAnalyzer.App.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:awad="http://www.awad.com/LogAnalyzer"
         xmlns:Views="clr-namespace:LogAnalyzer.GUI.Views;assembly=LogAnalyzer.GUI" 
 		
 		Title="{Binding SelectedTab.AddedEntriesCountString}" 
 		WindowState="Maximized"
+		awad:Windows7Helper.ProgressState="{Binding ProgressState}"
+		awad:Windows7Helper.ProgressValue="{Binding ProgressValue}"
 		Icon="pack://application:,,,/LogAnalyzer.GUI;component/Resources/icon.png">
 	
 	<Window.InputBindings>

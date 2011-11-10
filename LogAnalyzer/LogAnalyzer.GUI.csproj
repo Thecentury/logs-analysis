@@ -145,10 +145,9 @@
     <Compile Include="Common\DynamicHighlighting.cs" />
     <Compile Include="Common\GenericDelegateCommand.cs" />
     <Compile Include="Common\HSBColor.cs" />
-    <Compile Include="Common\IWindowService.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
-    <Compile Include="Common\RealWindowService.cs" />
+    <Compile Include="Common\Windows7Helper.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
     <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />

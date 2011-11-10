@@ -217,7 +217,7 @@ namespace LogAnalyzer.Filters
 					string prefix = str.Substring( 0, firstTagCloseIndex );
 					string postfix = str.Substring( firstTagCloseIndex );
 
-					str = prefix + " xmlns=\"" + GlobalConstants.XmlNamespace + "\"" + postfix;
+					str = prefix + " xmlns=\"" + LogAnalyzerGlobalConstants.XmlNamespace + "\"" + postfix;
 				}
 			}
 

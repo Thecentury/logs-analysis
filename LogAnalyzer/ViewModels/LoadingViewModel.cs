@@ -41,7 +41,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			IsActive = true;
 		}
 
-		private double loadingProgress = 0;
+		private double loadingProgress;
 		public double LoadingProgress
 		{
 			get { return loadingProgress; }
@@ -50,7 +50,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				loadingProgress = value;
 				RaisePropertyChanged( "LoadingProgress" );
 
-				applicationViewModel.WindowService.SetProgressValue( (int)value );
+				applicationViewModel.ProgressValue = (int)value;
 			}
 		}
 

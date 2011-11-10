@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Regions;
@@ -18,16 +19,18 @@ namespace ModuleLogsProvider.GUI.ViewModels
 	public sealed class ServerPerformanceViewModel : BindingObject
 	{
 		private readonly MostLogAnalyzerConfiguration config;
+		private readonly MostApplicationViewModel parentViewModel;
 		private readonly MostServiceFactory<IPerformanceInfoService> performanceInfoServiceFactory;
 		private readonly OperationScheduler operationScheduler;
-		private readonly IWindowService windowService;
 		private readonly IErrorReportingService errorReportingService;
 
-		public ServerPerformanceViewModel( MostLogAnalyzerConfiguration config )
+		public ServerPerformanceViewModel( [NotNull] MostLogAnalyzerConfiguration config, [NotNull] MostApplicationViewModel parentViewModel )
 		{
 			if ( config == null ) throw new ArgumentNullException( "config" );
+			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
 
 			this.config = config;
+			this.parentViewModel = parentViewModel;
 			config.PerformanceDataUpdateTimer.Tick += OnPerformanceDataUpdateTimerTick;
 			var bindingFactory = new NetTcpBindingFactory();
 
@@ -35,7 +38,6 @@ namespace ModuleLogsProvider.GUI.ViewModels
 				config.SelectedUrls.PerformanceDataServiceUrl );
 
 			operationScheduler = config.ResolveNotNull<OperationScheduler>();
-			windowService = config.ResolveNotNull<IWindowService>();
 			errorReportingService = config.ResolveNotNull<IErrorReportingService>();
 
 			var view = config.ViewManager.ResolveView( this );
@@ -66,10 +68,10 @@ namespace ModuleLogsProvider.GUI.ViewModels
 					if ( cpuLoadRounded < 1 )
 						cpuLoadInt = 0;
 
-					windowService.SetProgressValue( cpuLoadInt );
+					parentViewModel.ProgressValue = cpuLoadInt;
 
 					var progressState = GetTaskbarProgressState( cpuLoadInt );
-					windowService.SetProgressState( progressState );
+					parentViewModel.ProgressState = progressState;
 				}
 				catch ( Exception exc )
 				{
