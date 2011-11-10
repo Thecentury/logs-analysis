@@ -17,7 +17,11 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public abstract class LogEntriesListViewModel : TabViewModel
 	{
-		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel ) : base( applicationViewModel ) { }
+		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
+			: base( applicationViewModel )
+		{
+			highlightingFilters.CollectionChanged += OnHighlightingFilters_CollectionChanged;
+		}
 
 		public int TotalEntries
 		{
@@ -120,6 +124,51 @@ namespace LogAnalyzer.GUI.ViewModels
 				}
 			}
 		}
+
+		#region Highlighting
+
+		private readonly ObservableCollection<HighlightingViewModel> highlightingFilters =
+			new ObservableCollection<HighlightingViewModel>();
+
+		public ObservableCollection<HighlightingViewModel> HighlightingFilters
+		{
+			get { return highlightingFilters; }
+		}
+
+		private void OnHighlightingFilters_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.NewItems != null )
+			{
+				foreach ( var added in e.NewItems.Cast<HighlightingViewModel>() )
+				{
+					added.Changed += OnHighlightingFilter_Changed;
+				}
+			}
+			if ( e.OldItems != null )
+			{
+				foreach ( var removed in e.OldItems.Cast<HighlightingViewModel>() )
+				{
+					removed.Changed -= OnHighlightingFilter_Changed;
+				}
+			}
+		}
+
+		private void OnHighlightingFilter_Changed( object sender, EventArgs e )
+		{
+			HighlightingViewModel filter = (HighlightingViewModel)sender;
+			
+			foreach ( var entryViewModel in this.LogEntriesViewModels.CreatedEntries )
+			{
+				entryViewModel.HighlightedByList.Remove( filter );
+
+				if ( filter.Filter.Include( entryViewModel.LogEntry ) )
+				{
+					entryViewModel.HighlightedByList.Add( filter );
+				}
+			}
+		}
+
+		#endregion
 
 		#region Toolbar
 
@@ -243,6 +292,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnLogEntryViewModelCreated( LogEntryViewModel createdViewModel )
 		{
 			UpdateDynamicHighlighting();
+
+			foreach ( var filter in highlightingFilters )
+			{
+				if ( filter.Filter.Include( createdViewModel.LogEntry ) )
+				{
+					createdViewModel.HighlightedByList.Add( filter );
+				}
+			}
 		}
 
 		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
@@ -253,6 +310,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnLogEntryViewModelRemoved( LogEntryViewModel removedViewModel )
 		{
 			UpdateDynamicHighlighting();
+			removedViewModel.HighlightedByList.Clear();
 		}
 
 		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -310,7 +368,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		#region Highlighting
+		#region Dynamic highlighting
 
 		private IFilter<LogEntry> dynamicHighlightingFilter;
 		public IFilter<LogEntry> DynamicHighlightingFilter
@@ -354,12 +412,6 @@ namespace LogAnalyzer.GUI.ViewModels
 				logEntryViewModel.IsDynamicHighlighted = include;
 				logEntryViewModel.HighlightedColumnName = include ? highlightedPropertyName : null;
 			}
-		}
-
-		private readonly ObservableCollection<HighlightingViewModel> highlightingViewModels = new ObservableCollection<HighlightingViewModel>();
-		public ObservableCollection<HighlightingViewModel> HighlightingViewModels
-		{
-			get { return highlightingViewModels; }
 		}
 
 		#endregion

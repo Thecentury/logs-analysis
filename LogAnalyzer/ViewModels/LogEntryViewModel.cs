@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -142,6 +143,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				return logNameBackground;
 			}
+		}
+
+		private readonly ObservableCollection<HighlightingViewModel> highlightedByList = new ObservableCollection<HighlightingViewModel>();
+		/// <summary>
+		/// Список фильтров, которыми подсвечена данная запись.
+		/// </summary>
+		public ObservableCollection<HighlightingViewModel> HighlightedByList
+		{
+			get { return highlightedByList; }
 		}
 
 		#endregion
