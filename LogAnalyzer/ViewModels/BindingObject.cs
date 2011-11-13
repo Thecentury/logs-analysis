@@ -121,8 +121,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region IDisposable Members
 
-		// todo надо ли это?
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			// отписка от событий вложенного объекта
 			if ( observableObject != null )

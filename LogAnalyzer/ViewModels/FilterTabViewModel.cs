@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Windows.Input;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
-using System.Threading;
-using System.Threading.Tasks;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Views;
 
@@ -19,10 +17,16 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class FilterTabViewModel : LogEntriesListViewModel
 	{
-		private readonly object sourceReplaceLock = new object();
-		private readonly IList<LogEntry> source;
+		private const int MaxHeaderLength = 20;
+		private const int FilteringProgressNotificationsCount = 20;
+		private readonly ExpressionFilter<LogEntry> filter = new ExpressionFilter<LogEntry>();
 		private readonly ReadonlyObservableList<LogEntry> observableFilteredEntries;
+		private readonly IList<LogEntry> source;
+		private readonly object sourceReplaceLock = new object();
 		private CancellationTokenSource cancellationSource = new CancellationTokenSource();
+		private double filteringProgress;
+		private bool isFiltering;
+		private FilteringResult result = FilteringResult.NotStarted;
 
 		public FilterTabViewModel( IList<LogEntry> source, ApplicationViewModel applicationViewModel, ExpressionBuilder builder )
 			: this( source, applicationViewModel )
@@ -41,7 +45,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			this.source = source;
 
-			INotifyCollectionChanged observable = source as INotifyCollectionChanged;
+			var observable = source as INotifyCollectionChanged;
 			if ( observable != null )
 			{
 				observable.CollectionChanged += OnSourceCollectionChanged;
@@ -53,27 +57,6 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			filter.Changed += OnFilter_Changed;
 		}
-
-		private void OnSourceCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
-		{
-			if ( e.Action == NotifyCollectionChangedAction.Add )
-			{
-				// тут считаем, что элементы были добавлены в конец
-				var passedItems = e.NewItems.Cast<LogEntry>().Where( filter.Include ).ToList();
-
-				observableFilteredEntries.List.AddRange( passedItems );
-				observableFilteredEntries.RaiseCollectionItemsAdded( (IList)passedItems );
-			}
-
-			RaisePropertyChanged( "SourceCount" );
-		}
-
-		protected override EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
-		{
-			return new FilterEntriesCountStatusBarItem( this );
-		}
-
-		private const int MaxHeaderLength = 20;
 
 		public override string Tooltip
 		{
@@ -91,6 +74,73 @@ namespace LogAnalyzer.GUI.ViewModels
 				}
 				return str;
 			}
+		}
+
+		public override string IconFile
+		{
+			get { return MakePackUri( "/Resources/universal.png" ); }
+		}
+
+		public int SourceCount
+		{
+			get { return source.Count; }
+		}
+
+		public ExpressionFilter<LogEntry> Filter
+		{
+			get { return filter; }
+		}
+
+		public FilteringResult Result
+		{
+			get { return result; }
+			private set
+			{
+				result = value;
+				RaisePropertyChanged( "Result" );
+			}
+		}
+
+		public bool IsFiltering
+		{
+			get { return isFiltering; }
+			private set
+			{
+				if ( isFiltering == value )
+					return;
+
+				isFiltering = value;
+				RaisePropertyChanged( "IsFiltering" );
+			}
+		}
+
+		public double FilteringProgress
+		{
+			get { return filteringProgress; }
+			private set
+			{
+				filteringProgress = value;
+				RaisePropertyChanged( "FilteringProgress" );
+			}
+		}
+
+		private void OnSourceCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action == NotifyCollectionChangedAction.Add )
+			{
+				// тут считаем, что элементы были добавлены в конец
+				List<LogEntry> passedItems = e.NewItems.Cast<LogEntry>().Where( filter.Include ).ToList();
+
+				observableFilteredEntries.List.AddRange( passedItems );
+				observableFilteredEntries.RaiseCollectionItemsAdded( (IList)passedItems );
+			}
+
+			RaisePropertyChanged( "SourceCount" );
+		}
+
+		protected override EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
+		{
+			return new FilterEntriesCountStatusBarItem( this );
 		}
 
 		private string CreateExpressionString()
@@ -115,16 +165,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			return expressionString;
 		}
 
-		public override string IconFile
-		{
-			get { return MakePackUri( "/Resources/universal.png" ); }
-		}
-
 		private void OnFilter_Changed( object sender, EventArgs e )
 		{
 			RaisePropertyChanged( "Header" );
 			StartFiltering();
-			// todo handle filter changes
 		}
 
 		protected override void OnTabClosing()
@@ -134,25 +178,13 @@ namespace LogAnalyzer.GUI.ViewModels
 				cancellationSource.Cancel();
 			}
 
-			INotifyCollectionChanged observable = source as INotifyCollectionChanged;
+			var observable = source as INotifyCollectionChanged;
 			if ( observable != null )
 			{
 				observable.CollectionChanged -= OnSourceCollectionChanged;
 			}
 		}
 
-		public int SourceCount
-		{
-			get { return source.Count; }
-		}
-
-		private readonly ExpressionFilter<LogEntry> filter = new ExpressionFilter<LogEntry>();
-		public ExpressionFilter<LogEntry> Filter
-		{
-			get { return filter; }
-		}
-
-		const int FilteringProgressNotificationsCount = 20;
 		public void StartFiltering()
 		{
 			if ( IsFiltering )
@@ -176,7 +208,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				try
 				{
-					List<LogEntry> filtered = new List<LogEntry>( count );
+					var filtered = new List<LogEntry>( count );
 
 					for ( int i = 0; i < count; i++ )
 					{
@@ -187,7 +219,7 @@ namespace LogAnalyzer.GUI.ViewModels
 								break;
 						}
 
-						var entry = source[i];
+						LogEntry entry = source[i];
 						bool include = filter.Include( entry );
 						if ( include )
 						{
@@ -217,45 +249,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			cancellationSource.Cancel();
 		}
 
-		private FilteringResult result = FilteringResult.NotStarted;
-		public FilteringResult Result
-		{
-			get { return result; }
-			private set
-			{
-				result = value;
-				RaisePropertyChanged( "Result" );
-			}
-		}
-
-		private bool isFiltering;
-		public bool IsFiltering
-		{
-			get { return isFiltering; }
-			private set
-			{
-				if ( isFiltering == value )
-					return;
-
-				isFiltering = value;
-				RaisePropertyChanged( "IsFiltering" );
-			}
-		}
-
-		private double filteringProgress;
-		public double FilteringProgress
-		{
-			get { return filteringProgress; }
-			private set
-			{
-				filteringProgress = value;
-				RaisePropertyChanged( "FilteringProgress" );
-			}
-		}
-
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
 		{
-			var logFileViewModel = ApplicationViewModel.CoreViewModel.GetFileViewModel( logEntry );
+			LogFileViewModel logFileViewModel = ApplicationViewModel.CoreViewModel.GetFileViewModel( logEntry );
 			return logFileViewModel;
 		}
 
@@ -275,12 +271,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Cancel filtering command
 
 		private DelegateCommand<RoutedEventArgs> cancelFilteringCommand;
+
 		public ICommand CancelFilteringCommand
 		{
 			get
 			{
 				if ( cancelFilteringCommand == null )
-					cancelFilteringCommand = new DelegateCommand<RoutedEventArgs>( ExecuteCancelFilterCommand, CanExecuteCancelFilterCommand );
+					cancelFilteringCommand = new DelegateCommand<RoutedEventArgs>( ExecuteCancelFilterCommand,
+																				  CanExecuteCancelFilterCommand );
 
 				return cancelFilteringCommand;
 			}
@@ -300,9 +298,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Edit filter command
 
+		private DelegateCommand editFilterCommand;
 		private bool editingInProgress;
 
-		private DelegateCommand editFilterCommand;
 		public ICommand EditFilterCommand
 		{
 			get
@@ -326,17 +324,17 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( editingInProgress )
 				throw new InvalidOperationException( "Already editing" );
 
-			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
-			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow ) { Builder = filter.ExpressionBuilder };
+			var editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
+			var editorViewModel = new FilterEditorViewModel( editorWindow ) { Builder = filter.ExpressionBuilder };
 			editorWindow.Closed += OnEditorWindow_Closed;
 			editorWindow.Show();
 		}
 
 		private void OnEditorWindow_Closed( object sender, EventArgs e )
 		{
-			Window window = (Window)sender;
+			var window = (Window)sender;
 			window.Closed -= OnEditorWindow_Closed;
-			FilterEditorViewModel vm = (FilterEditorViewModel)window.DataContext;
+			var vm = (FilterEditorViewModel)window.DataContext;
 
 			if ( vm.DialogResult )
 			{
@@ -353,6 +351,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Refresh command
 
 		private DelegateCommand refreshCommand;
+
 		public ICommand RefreshCommand
 		{
 			get

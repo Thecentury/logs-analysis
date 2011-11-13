@@ -63,4 +63,12 @@
 		<TextBlock Text="{Binding Message}"/>
 	</DataTemplate>
 
+	<DataTemplate DataType="{x:Type ViewModels:ToolBarItemViewModel}">
+		<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
+				Command="{Binding Command}"
+				ToolTip="{Binding Tooltip}">
+			<Image Source="{Binding IconSource}" Stretch="None"/>
+		</Button>
+	</DataTemplate>
+
 </ResourceDictionary>

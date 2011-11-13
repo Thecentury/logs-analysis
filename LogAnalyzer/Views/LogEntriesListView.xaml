@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
-			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
-			 xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
-             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
+			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views" 
+			 xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-	
+
 	<UserControl.InputBindings>
 		<KeyBinding Command="{Binding ScrollPageDownCommand}" Key="PageDown"/>
 		<KeyBinding Command="{Binding ScrollPageUpCommand}" Key="PageUp"/>
@@ -49,6 +48,22 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
+
+		<!-- Стиль ячейки подсветки -->
+		<DataTemplate x:Key="highlightedCellTemplate">
+			<ItemsControl ItemsSource="{Binding HighlightedByList}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Rectangle Width="10" Height="10" Fill="{Binding Brush}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel IsItemsHost="True" Orientation="Horizontal"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
 
 		<!-- Стиль ячейки Type -->
 		<Style TargetType="DataGridCell" x:Key="typeCellStyle" BasedOn="{StaticResource cellDynamicHighlightStyle}">
@@ -104,10 +119,10 @@
 			<Setter Property="ContextMenu">
 				<Setter.Value>
 					<ContextMenu>
-						
+
 						<MenuItem Header="{Binding SelectFileInExplorerCommandHeader}" Command="{Binding SelectFileInExplorerCommand}"/>
 						<MenuItem Header="{Binding OpenFolderInExplorerCommandHeader}" Command="{Binding OpenFolderInExplorerCommand}"/>
-						
+
 						<MenuItem Header="Create view for:">
 							<MenuItem.Icon>
 								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"/>
@@ -278,8 +293,9 @@
 
 					<ControlTemplate TargetType="ContentControl" x:Key="textTemplate">
 						<TextBox Text="{Binding UnitedText, Mode=OneWay}" 
-						 IsReadOnly="True" TextWrapping="Wrap"
-						 BorderBrush="{x:Null}" BorderThickness="0"/>
+								 Background="Transparent"
+								 IsReadOnly="True" TextWrapping="Wrap"
+								 BorderBrush="{x:Null}" BorderThickness="0"/>
 					</ControlTemplate>
 
 					<ControlTemplate TargetType="ContentControl" x:Key="exceptionCellTemplate">
@@ -323,7 +339,10 @@
 			</Common:AttachedCommandBehaviour.Bindings>
 
 			<DataGrid.Columns>
+				<DataGridTemplateColumn CellTemplate="{StaticResource highlightedCellTemplate}"/>
+
 				<DataGridTextColumn Header="T" Binding="{Binding Type}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>
+
 				<DataGridTextColumn Header="File" Binding="{Binding File.Name}" Width="150" CellStyle="{StaticResource fileCellStyle}"/>
 
 				<DataGridTextColumn Header="Directory" x:Name="directoryColumn"
@@ -336,6 +355,7 @@
 				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
+
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->

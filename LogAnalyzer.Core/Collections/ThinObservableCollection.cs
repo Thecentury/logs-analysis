@@ -36,7 +36,7 @@ namespace LogAnalyzer.Collections
 			RaiseCountChanged();
 		}
 
-		public void RaiseCollectionItemsAdded<T>( IList<T> addedItems )
+		public void RaiseGenericCollectionItemsAdded<T>( IList<T> addedItems )
 		{
 			RaiseCollectionItemsAdded( (IList)addedItems );
 		}

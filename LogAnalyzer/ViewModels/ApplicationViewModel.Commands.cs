@@ -44,9 +44,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( createFilterAndViewCommand == null )
-				{
 					createFilterAndViewCommand = new DelegateCommand( CreateFilterAndViewCommandExecute );
-				}
 
 				return createFilterAndViewCommand;
 			}
@@ -54,19 +52,29 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void CreateFilterAndViewCommandExecute()
 		{
+			ExpressionBuilder filterBuilder = ShowFilterEditorWindow();
+			if ( filterBuilder == null )
+				return;
+
+			FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this );
+			filterViewModel.Filter.ExpressionBuilder = filterBuilder;
+
+			AddNewTab( filterViewModel );
+			filterViewModel.StartFiltering();
+		}
+
+		public ExpressionBuilder ShowFilterEditorWindow()
+		{
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
 			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow );
 			editorWindow.ShowDialog();
 			if ( editorViewModel.DialogResult )
 			{
-				// todo передавать информацию о "владельце" коллекции sourceEntries 
-				// (напр., для команды ShowInParentEntriesList)
-				ExpressionBuilder filterBuilder = editorViewModel.Builder;
-				FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this );
-				filterViewModel.Filter.ExpressionBuilder = filterBuilder;
-
-				AddNewTab( filterViewModel );
-				filterViewModel.StartFiltering();
+				return editorViewModel.Builder;
+			}
+			else
+			{
+				return null;
 			}
 		}
 
@@ -76,15 +84,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( newViewFromSavedFilterCommand == null )
-				{
 					newViewFromSavedFilterCommand = new DelegateCommand( NewViewFromSavedFilterCommandExecute );
-				}
 
 				return newViewFromSavedFilterCommand;
 			}
 		}
 
-		public void NewViewFromSavedFilterCommandExecute()
+		private void NewViewFromSavedFilterCommandExecute()
 		{
 			OpenFileDialog openDialog = new OpenFileDialog();
 			if ( openDialog.ShowDialog( Application.Current.MainWindow ) == true )
@@ -105,6 +111,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				}
 			}
 		}
+
+		// Add view from core 
 
 		public DelegateCommand CreateAddThreadViewCommand( int threadId )
 		{
