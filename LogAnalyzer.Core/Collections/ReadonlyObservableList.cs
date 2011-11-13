@@ -20,6 +20,11 @@ namespace LogAnalyzer.Collections
 			set { ReplaceInnerList( value ); }
 		}
 
+		public ReadonlyObservableList( IList<T> list )
+		{
+			ReplaceInnerList( list );
+		}
+
 		private void ReplaceInnerList( IList<T> innerList )
 		{
 			if ( innerList == null )
@@ -28,11 +33,6 @@ namespace LogAnalyzer.Collections
 			list = innerList;
 
 			RaiseCollectionReset();
-		}
-
-		public ReadonlyObservableList( IList<T> list )
-		{
-			ReplaceInnerList( list );
 		}
 
 		#region IList<T> Members

@@ -206,6 +206,7 @@
     <Compile Include="ViewModels\TabViewModel.cs" />
     <Compile Include="ViewModels\MessageLineViewModel.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ViewModels\ToolBarItemViewModel.cs" />
     <Compile Include="Views\DefaultTabHeaderControl.xaml.cs">
       <DependentUpon>DefaultTabHeaderControl.xaml</DependentUpon>
     </Compile>
@@ -394,6 +395,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\control-stop-090.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\flag--plus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

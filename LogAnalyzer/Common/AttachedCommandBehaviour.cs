@@ -9,9 +9,9 @@ namespace LogAnalyzer.GUI.Common
 {
 	public class AttachedCommandBehaviour
 	{
-		private static readonly DependencyPropertyKey BindingsPropertyKey = DependencyProperty.RegisterAttachedReadOnly( "BindingsInternal", typeof( AttachedCommandBindingCollection ), typeof( AttachedCommandBehaviour ), new FrameworkPropertyMetadata( null ) );
+		private static readonly DependencyPropertyKey bindingsPropertyKey = DependencyProperty.RegisterAttachedReadOnly( "BindingsInternal", typeof( AttachedCommandBindingCollection ), typeof( AttachedCommandBehaviour ), new FrameworkPropertyMetadata( null ) );
 
-		public static readonly DependencyProperty BindingsProperty = BindingsPropertyKey.DependencyProperty;
+		public static readonly DependencyProperty BindingsProperty = bindingsPropertyKey.DependencyProperty;
 
 		public static AttachedCommandBindingCollection GetBindings( DependencyObject d )
 		{
@@ -31,7 +31,7 @@ namespace LogAnalyzer.GUI.Common
 
 		public static void SetBindings( DependencyObject d, AttachedCommandBindingCollection value )
 		{
-			d.SetValue( BindingsPropertyKey, value );
+			d.SetValue( bindingsPropertyKey, value );
 			((INotifyCollectionChanged)value).CollectionChanged += CollectionChanged;
 		}
 

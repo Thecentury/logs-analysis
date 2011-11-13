@@ -47,7 +47,7 @@ namespace LogAnalyzer
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
 		{
 			logEntrySortedCollection.Enqueue( addedEntries );
-			MergedEntries.RaiseCollectionItemsAdded( addedEntries );
+			MergedEntries.RaiseGenericCollectionItemsAdded( addedEntries );
 
 			messageSeverityCount.Update( addedEntries );
 		}

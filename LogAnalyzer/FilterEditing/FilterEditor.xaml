@@ -93,7 +93,7 @@
 			</Grid>
 		</DataTemplate>
 
-		<DataTemplate x:Key="{x:Type log:ThreadIdEquals}">
+		<DataTemplate x:Key="{x:Type log:ThreadIdFilterBase}">
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="ThreadId" Margin="0,4,4,4" VerticalAlignment="Center"/>
 				<TextBox Text="{Binding Builder.ThreadId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

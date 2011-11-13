@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using LogAnalyzer.Filters;
-using System.Collections.ObjectModel;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
@@ -17,6 +18,17 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public abstract class LogEntriesListViewModel : TabViewModel
 	{
+		private int addedEntriesCount;
+
+		private string addedEntriesCountString;
+		private bool autoScrollToBottom = true;
+		private IList<LogEntry> entries;
+		private GenericListView<LogEntryViewModel> entriesView;
+		private SparseLogEntryViewModelList logEntriesViewModels;
+		private LogEntryViewModel selectedEntry;
+		private int selectedEntryIndex;
+		private DispatcherTimer updateAddedCountTimer;
+
 		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
@@ -37,13 +49,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private SparseLogEntryViewModelList logEntriesViewModels;
 		protected SparseLogEntryViewModelList LogEntriesViewModels
 		{
 			get { return logEntriesViewModels; }
 		}
 
-		private GenericListView<LogEntryViewModel> entriesView;
 		public GenericListView<LogEntryViewModel> EntriesView
 		{
 			get { return entriesView; }
@@ -72,13 +82,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return HasSeveralDirectories ? Visibility.Visible : Visibility.Collapsed; }
 		}
 
-		private IList<LogEntry> entries;
 		public IList<LogEntry> Entries
 		{
 			get { return entries; }
 		}
 
-		private LogEntryViewModel selectedEntry;
 		public LogEntryViewModel SelectedEntry
 		{
 			get { return selectedEntry; }
@@ -92,7 +100,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private int selectedEntryIndex;
 		public int SelectedEntryIndex
 		{
 			get { return selectedEntryIndex; }
@@ -106,7 +113,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private bool autoScrollToBottom = true;
 		public bool AutoScrollToBottom
 		{
 			get { return autoScrollToBottom; }
@@ -118,243 +124,10 @@ namespace LogAnalyzer.GUI.ViewModels
 				autoScrollToBottom = value;
 				RaisePropertyChanged( "AutoScrollToBottom" );
 
-				if ( autoScrollToBottom )
-				{
-					ScrollToBottomCommand.Execute( null );
-				}
+				ScrollDownIfShould();
 			}
 		}
 
-		#region Highlighting
-
-		private readonly ObservableCollection<HighlightingViewModel> highlightingFilters =
-			new ObservableCollection<HighlightingViewModel>();
-
-		public ObservableCollection<HighlightingViewModel> HighlightingFilters
-		{
-			get { return highlightingFilters; }
-		}
-
-		private void OnHighlightingFilters_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
-		{
-			if ( e.NewItems != null )
-			{
-				foreach ( var added in e.NewItems.Cast<HighlightingViewModel>() )
-				{
-					added.Changed += OnHighlightingFilter_Changed;
-				}
-			}
-			if ( e.OldItems != null )
-			{
-				foreach ( var removed in e.OldItems.Cast<HighlightingViewModel>() )
-				{
-					removed.Changed -= OnHighlightingFilter_Changed;
-				}
-			}
-		}
-
-		private void OnHighlightingFilter_Changed( object sender, EventArgs e )
-		{
-			HighlightingViewModel filter = (HighlightingViewModel)sender;
-			
-			foreach ( var entryViewModel in this.LogEntriesViewModels.CreatedEntries )
-			{
-				entryViewModel.HighlightedByList.Remove( filter );
-
-				if ( filter.Filter.Include( entryViewModel.LogEntry ) )
-				{
-					entryViewModel.HighlightedByList.Add( filter );
-				}
-			}
-		}
-
-		#endregion
-
-		#region Toolbar
-
-		private bool toolbarItemsPopulated;
-		private readonly ObservableCollection<object> toolbarItems = new ObservableCollection<object>();
-		public ObservableCollection<object> ToolbarItems
-		{
-			get
-			{
-				if ( !toolbarItemsPopulated )
-				{
-					PopulateToolbarItems( toolbarItems );
-					toolbarItemsPopulated = true;
-				}
-
-				return toolbarItems;
-			}
-		}
-
-		protected virtual void PopulateToolbarItems( ICollection<object> collection )
-		{
-			collection.Add( new LogEntryListToolbarViewModel( this ) );
-		}
-
-		#endregion
-
-		#region StatusBar
-
-		private bool statusBarItemsPopulated;
-		private readonly ObservableCollection<object> statusBarItems = new ObservableCollection<object>();
-		public ObservableCollection<object> StatusBarItems
-		{
-			get
-			{
-				if ( !statusBarItemsPopulated )
-				{
-					PopulateStatusBarItems( statusBarItems );
-					statusBarItemsPopulated = true;
-				}
-
-				return statusBarItems;
-			}
-		}
-
-		protected virtual void PopulateStatusBarItems( ICollection<object> collection )
-		{
-			collection.Add( GetEntriesCountStatusBarItem() );
-			collection.Add( new SelectedEntryIndexStatusBarItem( this ) );
-
-			var messagesCount = MessageSeverityCount;
-			if ( messagesCount != null )
-			{
-				collection.Add( messagesCount );
-			}
-
-			collection.Add( new SelfWorkingSetStatusBarItem() );
-#if DEBUG
-			StatusBarLogWriter writer = GetOrCreateLogWriter();
-			collection.Add( new LogStatusBarItem( writer ) );
-#endif
-		}
-
-		private StatusBarLogWriter GetOrCreateLogWriter()
-		{
-			StatusBarLogWriter writer = Logger.Instance.Writers.OfType<StatusBarLogWriter>().FirstOrDefault();
-			if ( writer == null )
-			{
-				writer = new StatusBarLogWriter();
-				Logger.Instance.Writers.Add( writer );
-			}
-
-			return writer;
-		}
-
-		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
-		{
-			return new EntriesCountStatusBarItem( this );
-		}
-
-		#endregion
-
-		private DispatcherTimer updateAddedCountTimer;
-
-		protected internal abstract LogFileViewModel GetFileViewModel( LogEntry logEntry );
-
-		public abstract LogEntriesListViewModel Clone();
-
-		protected void Init( IList<LogEntry> entries )
-		{
-			if ( entries == null )
-				throw new ArgumentNullException( "entries" );
-
-			this.entries = entries;
-
-			logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
-			logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
-			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
-			logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
-
-			InvokeInUIDispatcher( () =>
-			{
-				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
-				updateAddedCountTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval ) };
-				updateAddedCountTimer.Tick += OnUpdateAddedCountTimer_Tick;
-				updateAddedCountTimer.Start();
-			} );
-		}
-
-		protected override void OnTabClosing()
-		{
-			base.OnTabClosing();
-
-			logEntriesViewModels.Dispose();
-		}
-
-		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
-		{
-			OnLogEntryViewModelCreated( e.LogEntryViewModel );
-		}
-
-		protected virtual void OnLogEntryViewModelCreated( LogEntryViewModel createdViewModel )
-		{
-			UpdateDynamicHighlighting();
-
-			foreach ( var filter in highlightingFilters )
-			{
-				if ( filter.Filter.Include( createdViewModel.LogEntry ) )
-				{
-					createdViewModel.HighlightedByList.Add( filter );
-				}
-			}
-		}
-
-		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
-		{
-			OnLogEntryViewModelRemoved( e.LogEntryViewModel );
-		}
-
-		protected virtual void OnLogEntryViewModelRemoved( LogEntryViewModel removedViewModel )
-		{
-			UpdateDynamicHighlighting();
-			removedViewModel.HighlightedByList.Clear();
-		}
-
-		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
-		{
-			OnLogEntriesViewModelsCollectionChanged( e );
-		}
-
-		/// <summary>
-		/// <remarks>Вызывается в UI потоке.</remarks>
-		/// </summary>
-		/// <param name="e"></param>
-		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
-		{
-			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
-			{
-				ScrollToBottomCommand.Execute( null );
-			}
-
-			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
-
-			UpdateAddedCount( e );
-		}
-
-		private void OnUpdateAddedCountTimer_Tick( object sender, EventArgs e )
-		{
-			AddedEntriesCountString = "+" + addedEntriesCount;
-			addedEntriesCount = 0;
-		}
-
-		private void UpdateAddedCount( NotifyCollectionChangedEventArgs e )
-		{
-			if ( e.Action == NotifyCollectionChangedAction.Add )
-			{
-				addedEntriesCount += e.NewItems.Count;
-			}
-			else if ( e.Action == NotifyCollectionChangedAction.Reset )
-			{
-				addedEntriesCount = 0;
-			}
-		}
-
-		private int addedEntriesCount;
-
-		private string addedEntriesCountString;
 		public string AddedEntriesCountString
 		{
 			get { return addedEntriesCountString; }
@@ -371,6 +144,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Dynamic highlighting
 
 		private IFilter<LogEntry> dynamicHighlightingFilter;
+
+		private string highlightedPropertyName;
+
 		public IFilter<LogEntry> DynamicHighlightingFilter
 		{
 			get { return dynamicHighlightingFilter; }
@@ -384,7 +160,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private string highlightedPropertyName;
 		public string HighlightedPropertyName
 		{
 			get { return highlightedPropertyName; }
@@ -419,6 +194,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Commands
 
 		private DelegateCommand<RoutedEventArgs> gotFocusCommand;
+
 		public ICommand GotFocusCommand
 		{
 			get
@@ -435,11 +211,25 @@ namespace LogAnalyzer.GUI.ViewModels
 			DynamicHighlightManager.ProcessCellSelection( e );
 		}
 
+		protected override void OnLoaded()
+		{
+			base.OnLoaded();
+			ScrollDownIfShould();
+		}
+
 		#region Scroll commands
+
+		private DelegateCommand scrollDownCommand;
+		private DelegateCommand scrollPageDownCommand;
+		private DelegateCommand scrollPageUpCommand;
+		private DelegateCommand scrollToBottomCommand;
+		private DelegateCommand scrollToTopCommand;
+
+		private DelegateCommand scrollUpCommand;
+		private DelegateCommand toggleAutoScrollToBottomCommand;
 
 		public ScrollViewer ScrollViewer { get; set; }
 
-		private DelegateCommand scrollDownCommand;
 		public ICommand ScrollDownCommand
 		{
 			get
@@ -451,7 +241,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand scrollUpCommand;
 		public ICommand ScrollUpCommand
 		{
 			get
@@ -463,7 +252,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand scrollPageDownCommand;
 		public ICommand ScrollPageDownCommand
 		{
 			get
@@ -477,7 +265,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand scrollPageUpCommand;
 		public ICommand ScrollPageUpCommand
 		{
 			get
@@ -491,7 +278,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand scrollToTopCommand;
 		public ICommand ScrollToTopCommand
 		{
 			get
@@ -503,7 +289,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand scrollToBottomCommand;
 		public ICommand ScrollToBottomCommand
 		{
 			get
@@ -515,7 +300,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private DelegateCommand toggleAutoScrollToBottomCommand;
 		public ICommand ToggleAutoScrollToBottomCommand
 		{
 			get
@@ -526,18 +310,267 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		#endregion // Scroll commands
+
+		private DelegateCommand addHighlightingCommand;
+		public ICommand AddHighlightingCommand
+		{
+			get
+			{
+				if ( addHighlightingCommand == null )
+					addHighlightingCommand = new DelegateCommand( AddHighlighting );
+
+				return addHighlightingCommand;
+			}
+		}
+
+		private void AddHighlighting()
+		{
+			var filter = ApplicationViewModel.ShowFilterEditorWindow();
+			if ( filter == null )
+				return;
+
+			HighlightingViewModel vm = new HighlightingViewModel( entries, logEntriesViewModels, filter )
+										{
+											Brush = Brushes.Red
+										};
+			highlightingFilters.Add( vm );
+		}
+
+
+		#endregion // commands
+
+		#region Highlighting
+
+		private readonly ObservableCollection<HighlightingViewModel> highlightingFilters =
+			new ObservableCollection<HighlightingViewModel>();
+
+		public ObservableCollection<HighlightingViewModel> HighlightingFilters
+		{
+			get { return highlightingFilters; }
+		}
+
+		private void OnHighlightingFilters_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.NewItems != null )
+			{
+				foreach ( HighlightingViewModel added in e.NewItems )
+				{
+					added.Changed += OnHighlightingFilter_Changed;
+				}
+			}
+			if ( e.OldItems != null )
+			{
+				foreach ( HighlightingViewModel removed in e.OldItems )
+				{
+					removed.Changed -= OnHighlightingFilter_Changed;
+				}
+			}
+		}
+
+		private void OnHighlightingFilter_Changed( object sender, EventArgs e )
+		{
+			var filter = (HighlightingViewModel)sender;
+
+			foreach ( LogEntryViewModel entryViewModel in LogEntriesViewModels.CreatedEntries )
+			{
+				entryViewModel.HighlightedByList.Remove( filter );
+
+				if ( filter.Filter.Include( entryViewModel.LogEntry ) )
+				{
+					entryViewModel.HighlightedByList.Add( filter );
+				}
+			}
+		}
+
 		#endregion
 
-		protected override void OnLoaded()
-		{
-			base.OnLoaded();
+		#region Toolbar
 
+		private readonly ObservableCollection<object> toolbarItems = new ObservableCollection<object>();
+		private bool toolbarItemsPopulated;
+
+		public ObservableCollection<object> ToolbarItems
+		{
+			get
+			{
+				if ( !toolbarItemsPopulated )
+				{
+					PopulateToolbarItems( toolbarItems );
+					toolbarItemsPopulated = true;
+				}
+
+				return toolbarItems;
+			}
+		}
+
+		protected virtual void PopulateToolbarItems( ICollection<object> collection )
+		{
+			collection.Add( new LogEntryListToolbarViewModel( this ) );
+			collection.Add( new ToolBarItemViewModel
+								{
+									Tooltip = "Add highlighting",
+									Command = AddHighlightingCommand,
+									IconSource = MakePackUri( "/Resources/flag--plus.png" )
+								} );
+		}
+
+		#endregion
+
+		#region StatusBar
+
+		private readonly ObservableCollection<object> statusBarItems = new ObservableCollection<object>();
+		private bool statusBarItemsPopulated;
+
+		public ObservableCollection<object> StatusBarItems
+		{
+			get
+			{
+				if ( !statusBarItemsPopulated )
+				{
+					PopulateStatusBarItems( statusBarItems );
+					statusBarItemsPopulated = true;
+				}
+
+				return statusBarItems;
+			}
+		}
+
+		protected virtual void PopulateStatusBarItems( ICollection<object> collection )
+		{
+			collection.Add( GetEntriesCountStatusBarItem() );
+			collection.Add( new SelectedEntryIndexStatusBarItem( this ) );
+
+			MessageSeverityCountViewModel messagesCount = MessageSeverityCount;
+			if ( messagesCount != null )
+			{
+				collection.Add( messagesCount );
+			}
+
+			collection.Add( new SelfWorkingSetStatusBarItem() );
+#if DEBUG
+			StatusBarLogWriter writer = GetOrCreateLogWriter();
+			collection.Add( new LogStatusBarItem( writer ) );
+#endif
+		}
+
+		private StatusBarLogWriter GetOrCreateLogWriter()
+		{
+			StatusBarLogWriter writer = Logger.Instance.Writers.OfType<StatusBarLogWriter>().FirstOrDefault();
+			if ( writer == null )
+			{
+				writer = new StatusBarLogWriter();
+				Logger.Instance.Writers.Add( writer );
+			}
+
+			return writer;
+		}
+
+		protected virtual EntriesCountStatusBarItem GetEntriesCountStatusBarItem()
+		{
+			return new EntriesCountStatusBarItem( this );
+		}
+
+		#endregion
+
+		protected internal abstract LogFileViewModel GetFileViewModel( LogEntry logEntry );
+
+		public abstract LogEntriesListViewModel Clone();
+
+		protected void Init( IList<LogEntry> entries )
+		{
+			if ( entries == null )
+				throw new ArgumentNullException( "entries" );
+
+			this.entries = entries;
+
+			logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
+			logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
+			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
+			logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
+
+			InvokeInUIDispatcher( () =>
+			{
+				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
+				updateAddedCountTimer = new DispatcherTimer
+											{
+												Interval =
+													TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
+											};
+				updateAddedCountTimer.Tick += OnUpdateAddedCountTimer_Tick;
+				updateAddedCountTimer.Start();
+			} );
+		}
+
+		protected override void OnTabClosing()
+		{
+			base.OnTabClosing();
+
+			logEntriesViewModels.Dispose();
+		}
+
+		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
+		{
+			OnLogEntryViewModelCreated( e.LogEntryViewModel );
+		}
+
+		protected virtual void OnLogEntryViewModelCreated( LogEntryViewModel createdViewModel )
+		{
+			UpdateDynamicHighlighting();
+		}
+
+		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
+		{
+			OnLogEntryViewModelRemoved( e.LogEntryViewModel );
+		}
+
+		protected virtual void OnLogEntryViewModelRemoved( LogEntryViewModel removedViewModel )
+		{
+			UpdateDynamicHighlighting();
+		}
+
+		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			OnLogEntriesViewModelsCollectionChanged( e );
+		}
+
+		/// <summary>
+		/// <remarks>Вызывается в UI потоке.</remarks>
+		/// </summary>
+		/// <param name="e"></param>
+		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
+		{
+			ScrollDownIfShould();
+
+			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
+
+			UpdateAddedCount( e );
+		}
+
+		private void ScrollDownIfShould()
+		{
 			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
 			{
 				ScrollToBottomCommand.Execute( null );
 			}
 		}
 
-		#endregion
+		private void OnUpdateAddedCountTimer_Tick( object sender, EventArgs e )
+		{
+			AddedEntriesCountString = "+" + addedEntriesCount;
+			addedEntriesCount = 0;
+		}
+
+		private void UpdateAddedCount( NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action == NotifyCollectionChangedAction.Add )
+			{
+				addedEntriesCount += e.NewItems.Count;
+			}
+			else if ( e.Action == NotifyCollectionChangedAction.Reset )
+			{
+				addedEntriesCount = 0;
+			}
+		}
 	}
 }

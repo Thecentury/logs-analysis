@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Text;
 using System.Reactive.Linq;
@@ -65,6 +67,11 @@ namespace LogAnalyzer.Extensions
 
 				return () => { };
 			} );
+		}
+
+		public static IObservable<EventPattern<NotifyCollectionChangedEventArgs>> ToObservable( this INotifyCollectionChanged collection )
+		{
+			return Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( collection, "CollectionChanged" );
 		}
 	}
 }
