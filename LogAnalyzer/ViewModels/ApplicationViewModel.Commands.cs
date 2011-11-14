@@ -78,6 +78,21 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		public HighlightEditorWindowViewModel ShowHighlightEditorWindow()
+		{
+			HighlightFilterEditorWindow window = new HighlightFilterEditorWindow();
+			HighlightEditorWindowViewModel vm = new HighlightEditorWindowViewModel( window );
+			window.ShowDialog();
+			if ( vm.DialogResult )
+			{
+				return vm;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 		private DelegateCommand newViewFromSavedFilterCommand;
 		public ICommand NewViewFromSavedFilterCommand
 		{
