@@ -51,10 +51,10 @@
 
 		<!-- Стиль ячейки подсветки -->
 		<DataTemplate x:Key="highlightedCellTemplate">
-			<ItemsControl ItemsSource="{Binding HighlightedByList}">
+			<ItemsControl ItemsSource="{Binding HighlightedByList}" VerticalAlignment="Top">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Rectangle Width="10" Height="10" Fill="{Binding Brush}"/>
+						<Rectangle Width="10" Height="10" Fill="{Binding Brush}" Stroke="Black" StrokeThickness="1" Margin="2"/>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 				<ItemsControl.ItemsPanel>

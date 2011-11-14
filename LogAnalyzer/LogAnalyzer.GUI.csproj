@@ -135,6 +135,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\Ext\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AttachedCommandBehaviour.cs" />
@@ -180,6 +183,8 @@
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Commands.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
+    <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
@@ -189,6 +194,7 @@
     <Compile Include="ViewModels\FilterTabToolbarViewModel.cs" />
     <Compile Include="ViewModels\FilterTabViewModel.cs" />
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
+    <Compile Include="ViewModels\HighlightEditorWindowViewModel.cs" />
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
     <Compile Include="ViewModels\IHierarchyMember.cs" />
     <Compile Include="ViewModels\ITypeName.cs" />
@@ -225,6 +231,12 @@
     <Compile Include="ViewModels\GenericListView.cs" />
     <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HighlightFilterEditor.xaml.cs">
+      <DependentUpon>HighlightFilterEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HighlightFilterEditorWindow.xaml.cs">
+      <DependentUpon>HighlightFilterEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
@@ -265,6 +277,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FilterEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HighlightFilterEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HighlightFilterEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

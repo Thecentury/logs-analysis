@@ -326,13 +326,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void AddHighlighting()
 		{
-			var filter = ApplicationViewModel.ShowFilterEditorWindow();
-			if ( filter == null )
+			var highlightVM = ApplicationViewModel.ShowHighlightEditorWindow();
+			if ( highlightVM == null )
 				return;
 
-			HighlightingViewModel vm = new HighlightingViewModel( entries, logEntriesViewModels, filter )
+			HighlightingViewModel vm = new HighlightingViewModel( entries, logEntriesViewModels, highlightVM.SelectedBuilder )
 										{
-											Brush = Brushes.Red
+											Brush = new SolidColorBrush( highlightVM.SelectedColor )
 										};
 			highlightingFilters.Add( vm );
 		}

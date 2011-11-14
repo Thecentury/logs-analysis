@@ -1,44 +1,23 @@
 ﻿using System;
 using System.Windows.Input;
+using JetBrains.Annotations;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Views;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	internal sealed class FilterEditorViewModel : BindingObject
+	internal sealed class FilterEditorViewModel : DialogWindowViewModel
 	{
 		private readonly FilterEditorWindow window;
 
-		public FilterEditorViewModel( FilterEditorWindow window )
+		public FilterEditorViewModel([NotNull] FilterEditorWindow window ) : base( window )
 		{
-			if ( window == null )
-				throw new ArgumentNullException( "window" );
-
+			if (window == null) throw new ArgumentNullException("window");
 			this.window = window;
-			window.DataContext = this;
 		}
 
-		private DelegateCommand okCommand;
-		public ICommand OkCommand
-		{
-			get
-			{
-				if ( okCommand == null )
-				{
-					okCommand = new DelegateCommand( OkExecute, CanOkExecute );
-				}
-				return okCommand;
-			}
-		}
-
-		private void OkExecute()
-		{
-			dialogResult = true;
-			window.Close();
-		}
-
-		private bool CanOkExecute()
+		protected override bool CanOkExecute()
 		{
 			var builder = window.Builder;
 
@@ -47,40 +26,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				isBuilderFull = builder.ValidateProperties();
 			}
-			
+
 			return isBuilderFull;
-		}
-
-		private DelegateCommand closeCommand;
-		public ICommand CloseCommand
-		{
-			get
-			{
-				if ( closeCommand == null )
-				{
-					closeCommand = new DelegateCommand( CloseExecute );
-				}
-
-				return closeCommand;
-			}
-		}
-
-		public void CloseExecute()
-		{
-			dialogResult = false;
-			window.Close();
 		}
 
 		public ExpressionBuilder Builder
 		{
 			get { return window.Builder; }
 			set { window.Builder = value; }
-		}
-
-		private bool dialogResult;
-		public bool DialogResult
-		{
-			get { return dialogResult; }
 		}
 	}
 }
