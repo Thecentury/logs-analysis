@@ -1,11 +1,14 @@
 ﻿<Window x:Class="LogAnalyzer.GUI.Views.FilterEditorWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:FilterEditing="clr-namespace:LogAnalyzer.GUI.FilterEditing" Title="LogAnalyzer Filter Editor" SizeToContent="WidthAndHeight"
+        xmlns:FilterEditing="clr-namespace:LogAnalyzer.GUI.FilterEditing" 
+		Title="LogAnalyzer Filter Editor" 
+		SizeToContent="WidthAndHeight"
 		ShowInTaskbar="False"
 		Icon="..\Resources\icon.png"
 		WindowStartupLocation="CenterOwner"
-		WindowState="Normal" ResizeMode="NoResize"
+		WindowState="Normal" 
+		ResizeMode="NoResize"
 		MinWidth="200" MinHeight="120"
 		>
 

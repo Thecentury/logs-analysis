@@ -20,7 +20,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private void OnRootBuilder_PropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
-			CoerceValue( SelectedBuilderProperty );
+			SelectedBuilder = Builder;
 		}
 
 		private void UserControl_Loaded( object sender, RoutedEventArgs e )
@@ -37,7 +37,11 @@ namespace LogAnalyzer.GUI.FilterEditing
 		public ExpressionBuilder Builder
 		{
 			get { return rootBuilder.Inner; }
-			set { rootBuilder.Inner = value; }
+			set
+			{
+				rootBuilder.Inner = value;
+				SelectedBuilder = value;
+			}
 		}
 
 		public ExpressionBuilder SelectedBuilder
@@ -50,7 +54,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		  "SelectedBuilder",
 		  typeof( ExpressionBuilder ),
 		  typeof( FilterEditor ),
-		  new FrameworkPropertyMetadata( null, OnSelectedBuilderChanged, CoerceSelectedBuilder ) );
+		  new FrameworkPropertyMetadata( null, OnSelectedBuilderChanged ) );
 
 		private static void OnSelectedBuilderChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{

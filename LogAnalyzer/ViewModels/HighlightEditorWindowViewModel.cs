@@ -13,6 +13,19 @@ namespace LogAnalyzer.GUI.ViewModels
 	{
 		public HighlightEditorWindowViewModel( [NotNull] Window window ) : base( window ) { }
 
+		protected override bool CanOkExecute()
+		{
+			var builder = SelectedBuilder;
+
+			bool isBuilderFull = false;
+			if ( builder != null )
+			{
+				isBuilderFull = builder.ValidateProperties();
+			}
+
+			return isBuilderFull;
+		}
+
 		private ExpressionBuilder selectedBuilder;
 		public ExpressionBuilder SelectedBuilder
 		{
@@ -27,7 +40,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private Color selectedColor;
+		private Color selectedColor = Colors.OrangeRed;
 		public Color SelectedColor
 		{
 			get { return selectedColor; }

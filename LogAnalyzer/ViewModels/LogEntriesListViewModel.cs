@@ -337,7 +337,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			highlightingFilters.Add( vm );
 		}
 
-
 		#endregion // commands
 
 		#region Highlighting
