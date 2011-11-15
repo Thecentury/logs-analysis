@@ -39,7 +39,7 @@
 			HorizontalAlignment="Left" VerticalAlignment="Top" 
 			Margin="5"
 			ShowStandardColors="False"
-			ShowAvailableColors="True" AvailableColors="{x:Static Member=Common:SortedColors.Colors}"
+			ShowAvailableColors="True" AvailableColors="{x:Static Member=Common:ColorHelper.SortedColors}"
 			SelectedColor="{Binding SelectedColor, Mode=TwoWay, 
 			RelativeSource={RelativeSource AncestorType={x:Type Views:HighlightFilterEditor}, Mode=FindAncestor}}"/>
 	</Grid>

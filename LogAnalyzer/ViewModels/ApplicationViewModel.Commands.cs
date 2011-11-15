@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xaml;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
@@ -78,10 +79,20 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		public HighlightEditorWindowViewModel ShowHighlightEditorWindow()
+		public HighlightEditorWindowViewModel ShowHighlightEditorWindow( HighlightingViewModel existingHighlighting = null )
 		{
-			HighlightFilterEditorWindow window = new HighlightFilterEditorWindow();
+			HighlightFilterEditorWindow window = new HighlightFilterEditorWindow { Owner = Application.Current.MainWindow };
 			HighlightEditorWindowViewModel vm = new HighlightEditorWindowViewModel( window );
+			if ( existingHighlighting != null )
+			{
+				vm.SelectedBuilder = existingHighlighting.Filter.ExpressionBuilder;
+				SolidColorBrush brush = existingHighlighting.Brush as SolidColorBrush;
+				if ( brush != null )
+				{
+					vm.SelectedColor = brush.Color;
+				}
+			}
+
 			window.ShowDialog();
 			if ( vm.DialogResult )
 			{
