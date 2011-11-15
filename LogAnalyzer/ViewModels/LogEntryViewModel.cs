@@ -386,6 +386,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		#region Highlight by commands
+
+
+
+		#endregion
+
 		#region Copy to clipboard
 
 		private DelegateCommand copyFileNameCommand;

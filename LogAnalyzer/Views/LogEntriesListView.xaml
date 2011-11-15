@@ -54,10 +54,27 @@
 			<ItemsControl ItemsSource="{Binding HighlightedByList}" VerticalAlignment="Top">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
+						
 						<Rectangle Width="10" Height="10" 
 								   Fill="{Binding Brush}" Stroke="DarkGray" 
 								   StrokeThickness="1" Margin="2"
-								   ToolTip="{Binding Description}"/>
+								   ToolTip="{Binding Description}">
+							<Rectangle.ContextMenu>
+								<ContextMenu>
+									<MenuItem Header="Remove highlighting" Command="{Binding RemoveHighlightingCommand}">
+										<MenuItem.Icon>
+											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/flag--minus.png"/>
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Edit highlighting" Command="{Binding ShowEditorCommand}">
+										<MenuItem.Icon>
+											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/flag--pencil.png"/>
+										</MenuItem.Icon>
+									</MenuItem>
+								</ContextMenu>
+							</Rectangle.ContextMenu>	
+						</Rectangle>
+						
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 				<ItemsControl.ItemsPanel>
@@ -195,6 +212,10 @@
 							</MenuItem>
 						</MenuItem>
 
+						<MenuItem Header="Highlight by:" IsEnabled="False">
+							
+						</MenuItem>
+
 						<MenuItem Header="Copy to Clipboard:">
 							<MenuItem.Icon>
 								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-copy.png"/>
@@ -243,12 +264,6 @@
 					</ContextMenu>
 				</Setter.Value>
 			</Setter>
-
-			<!--<Style.Triggers>
-				<DataTrigger Binding="{Binding IsDynamicHighlighted}" Value="True">
-								<Setter Property="Background" Value="{StaticResource dynamicHighlightBrush}"/>
-								</DataTrigger>
-								</Style.Triggers> -->
 		</Style>
 
 		<Style TargetType="DataGrid" x:Key="dataGridStyle">
@@ -325,7 +340,10 @@
 
 	<DockPanel LastChildFill="True">
 
-		<ToolBar DockPanel.Dock="Top" Margin="4,4,4,4" ItemsSource="{Binding ToolbarItems}"/>
+		<DockPanel DockPanel.Dock="Top" LastChildFill="True">
+			<views:SearchControl DockPanel.Dock="Right"/>
+			<ToolBar DockPanel.Dock="Left" Margin="4,4,4,4" ItemsSource="{Binding ToolbarItems}"/>
+		</DockPanel>
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 

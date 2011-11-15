@@ -147,10 +147,10 @@
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\DynamicHighlighting.cs" />
     <Compile Include="Common\GenericDelegateCommand.cs" />
-    <Compile Include="Common\HSBColor.cs" />
+    <Compile Include="Common\HsbColor.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
-    <Compile Include="Common\SortedColors.cs" />
+    <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
@@ -207,6 +207,7 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />
     <Compile Include="ViewModels\StatusBarLogWriter.cs" />
@@ -247,6 +248,9 @@
     </Compile>
     <Compile Include="Views\MessageSeverityCountView.xaml.cs">
       <DependentUpon>MessageSeverityCountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchControl.xaml.cs">
+      <DependentUpon>SearchControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
@@ -298,6 +302,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MessageSeverityCountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -419,6 +427,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\flag--plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\magnifier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow-270.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow-090.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\flag--minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\flag--pencil.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

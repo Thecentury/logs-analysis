@@ -8,15 +8,15 @@ using Microsoft.Windows.Controls;
 
 namespace LogAnalyzer.GUI.Common
 {
-	internal static class SortedColors
+	internal static class ColorHelper
 	{
 		private static readonly ObservableCollection<ColorItem> sortedColors;
-		public static ObservableCollection<ColorItem> Colors
+		public static ObservableCollection<ColorItem> SortedColors
 		{
 			get { return sortedColors; }
 		}
 
-		static SortedColors()
+		static ColorHelper()
 		{
 			var colors = from property in typeof( Colors ).GetProperties()
 						 where property.PropertyType == typeof( Color )
@@ -28,6 +28,16 @@ namespace LogAnalyzer.GUI.Common
 						 select new ColorItem( color, name );
 
 			sortedColors = new ObservableCollection<ColorItem>( colors );
+		}
+
+		private static readonly Random rnd = new Random();
+
+		public static Color GetRandomColor()
+		{
+			double hue = rnd.NextDouble() * 360;
+			double saturation = rnd.NextDouble() * 0.2 + 0.8;
+			HsbColor color = new HsbColor( hue, saturation, 1 );
+			return color.ToArgbColor();
 		}
 	}
 }

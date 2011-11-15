@@ -6,12 +6,16 @@ using System.Windows;
 using System.Windows.Media;
 using JetBrains.Annotations;
 using LogAnalyzer.Filters;
+using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class HighlightEditorWindowViewModel : DialogWindowViewModel
 	{
-		public HighlightEditorWindowViewModel( [NotNull] Window window ) : base( window ) { }
+		public HighlightEditorWindowViewModel( [NotNull] Window window ) : base( window )
+		{
+			selectedColor = ColorHelper.GetRandomColor();
+		}
 
 		protected override bool CanOkExecute()
 		{
@@ -40,7 +44,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private Color selectedColor = Colors.OrangeRed;
+		private Color selectedColor;
 		public Color SelectedColor
 		{
 			get { return selectedColor; }

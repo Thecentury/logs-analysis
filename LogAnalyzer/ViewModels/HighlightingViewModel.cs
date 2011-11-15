@@ -4,11 +4,13 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
+using System.Windows.Input;
 using System.Windows.Media;
 using JetBrains.Annotations;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
@@ -18,18 +20,22 @@ namespace LogAnalyzer.GUI.ViewModels
 	{
 		private readonly IList<LogEntry> entriesSource;
 		private readonly SparseLogEntryViewModelList logEntriesViewModels;
+		private readonly LogEntriesListViewModel parentViewModel;
 		private readonly IDisposable collectionChangedSubscription;
 
-		internal HighlightingViewModel( [NotNull] IList<LogEntry> entriesSource, [NotNull] SparseLogEntryViewModelList logEntriesViewModels, 
+		internal HighlightingViewModel( [NotNull] IList<LogEntry> entriesSource, [NotNull] SparseLogEntryViewModelList logEntriesViewModels,
+			[NotNull] LogEntriesListViewModel parentViewModel,
 			[NotNull] ExpressionBuilder builder, [NotNull] Brush brush )
 		{
 			if ( entriesSource == null ) throw new ArgumentNullException( "entriesSource" );
 			if ( logEntriesViewModels == null ) throw new ArgumentNullException( "logEntriesViewModels" );
-			if (builder == null) throw new ArgumentNullException("builder");
-			if (brush == null) throw new ArgumentNullException("brush");
+			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
+			if ( builder == null ) throw new ArgumentNullException( "builder" );
+			if ( brush == null ) throw new ArgumentNullException( "brush" );
 
 			this.entriesSource = entriesSource;
 			this.logEntriesViewModels = logEntriesViewModels;
+			this.parentViewModel = parentViewModel;
 			logEntriesViewModels.ItemCreated += OnLogEntriesViewModels_ItemCreated;
 			this.Filter.ExpressionBuilder = builder;
 			this.brush = brush;
@@ -46,7 +52,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			observableFilteredEntries = new ReadonlyObservableList<LogEntry>( acceptedEntries );
 			FillAcceptedEntries( entriesSource );
 
-			foreach (var logEntryViewModel in logEntriesViewModels.CreatedEntries)
+			foreach ( var logEntryViewModel in logEntriesViewModels.CreatedEntries )
 			{
 				if ( filter.Include( logEntryViewModel.LogEntry ) )
 				{
@@ -168,5 +174,51 @@ namespace LogAnalyzer.GUI.ViewModels
 			collectionChangedSubscription.Dispose();
 			logEntriesViewModels.ItemCreated -= OnLogEntriesViewModels_ItemCreated;
 		}
+
+		#region Commands
+
+		// Show editor
+
+		private DelegateCommand showEditorCommand;
+		public ICommand ShowEditorCommand
+		{
+			get
+			{
+				if ( showEditorCommand == null )
+					showEditorCommand = new DelegateCommand( ShowEditorExecute );
+
+				return showEditorCommand;
+			}
+		}
+
+		private void ShowEditorExecute()
+		{
+			var vm = parentViewModel.ApplicationViewModel.ShowHighlightEditorWindow( this );
+			if ( vm == null )
+				return;
+
+			Brush = new SolidColorBrush( vm.SelectedColor );
+			Filter.ExpressionBuilder = vm.SelectedBuilder;
+		}
+
+		// Remove highlighting command
+
+		private DelegateCommand removeHighlightingCommand;
+		public ICommand RemoveHighlightingCommand
+		{
+			get
+			{
+				if ( removeHighlightingCommand == null )
+					removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute );
+				return removeHighlightingCommand;
+			}
+		}
+
+		private void RemoveHighlightingExecute()
+		{
+			parentViewModel.HighlightingFilters.Remove( this );
+		}
+
+		#endregion
 	}
 }

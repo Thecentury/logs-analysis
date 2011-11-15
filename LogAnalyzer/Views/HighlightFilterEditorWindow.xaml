@@ -5,8 +5,9 @@
 		Icon="..\Resources\icon.png"
 		Topmost="True"
 		SizeToContent="WidthAndHeight"
+		WindowStartupLocation="CenterOwner"
 		ResizeMode="NoResize"
-        Title="HighlightFilterEditorWindow" Height="300" Width="300">
+        Title="Highlighting Editor">
 	
     <Grid>
 		<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">

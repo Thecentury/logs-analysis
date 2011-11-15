@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace LogAnalyzer.GUI.Common
 {
-	[DebuggerDisplay( "HSBColor A={Alpha} H={Hue} S={Saturation} B={Brightness}" )]
+	[DebuggerDisplay( "HsbColor A={Alpha} H={Hue} S={Saturation} B={Brightness}" )]
 	public struct HsbColor
 	{
 		private double hue;
