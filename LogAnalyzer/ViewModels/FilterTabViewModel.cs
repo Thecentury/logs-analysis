@@ -132,7 +132,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				List<LogEntry> passedItems = e.NewItems.Cast<LogEntry>().Where( filter.Include ).ToList();
 
 				observableFilteredEntries.List.AddRange( passedItems );
-				observableFilteredEntries.RaiseCollectionItemsAdded( (IList)passedItems );
+				observableFilteredEntries.RaiseCollectionItemsAdded( passedItems );
 			}
 
 			RaisePropertyChanged( "SourceCount" );
@@ -157,10 +157,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				expressionString = expressionString.Remove( expressionString.Length - closingBracketsToRemove );
 			}
-
-			expressionString = expressionString
-				.Replace( " AndAlso ", " & " )
-				.Replace( " OrElse ", " | " );
 
 			return expressionString;
 		}
