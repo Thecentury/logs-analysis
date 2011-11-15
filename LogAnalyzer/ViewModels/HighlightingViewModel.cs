@@ -164,12 +164,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-
 		public override void Dispose()
 		{
 			base.Dispose();
 			collectionChangedSubscription.Dispose();
 			logEntriesViewModels.ItemCreated -= OnLogEntriesViewModels_ItemCreated;
+			foreach ( var createdEntry in logEntriesViewModels.CreatedEntries )
+			{
+				createdEntry.HighlightedByList.Remove( this );
+			}
 		}
 
 		#region Commands

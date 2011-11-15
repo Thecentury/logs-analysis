@@ -8,6 +8,7 @@ using System.Windows.Media;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
+using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
@@ -136,7 +137,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( logNameBackground == null )
 				{
-					double hue = ( File.Name.GetHashCode() - (double)Int32.MinValue ) / ( (double)Int32.MaxValue - Int32.MinValue ) * 360;
+					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
 					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
 					logNameBackground = new SolidColorBrush( hsbColor.ToArgbColor() );
 				}
@@ -376,7 +377,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public string ExcludeByMessageTypeCommandHeader
 		{
-			get { return String.Format( "MessageType \"{0}\"", this.Type ); }
+			get { return String.Format( "MessageType \"{0}\"", Type ); }
 		}
 
 		public ICommand ExcludeByMessageTypeCommand
@@ -388,7 +389,89 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Highlight by commands
 
+		private ICommand CreateHighlightCommand( ExpressionBuilder filter )
+		{
+			DelegateCommand command = new DelegateCommand( () =>
+			{
+				HighlightingViewModel vm = new HighlightingViewModel( parentViewModel, filter, new SolidColorBrush( ColorHelper.GetRandomColor() ) );
+				parentViewModel.HighlightingFilters.Add( vm );
+			} );
 
+			return command;
+		}
+
+		// Highlight by certain file
+
+		public string HighlightByCertainFileCommandHeader
+		{
+			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
+		}
+
+		public ICommand HighlightByCertainFileCommand
+		{
+			get
+			{
+				return CreateHighlightCommand(
+						new Argument().GetProperty( "ParentLogFile" ).IsEqual( ExpressionBuilder.CreateConstant( logEntry.ParentLogFile ) )
+					);
+			}
+		}
+
+		// Highlight thread id
+
+		public string HighlightByThreadIdCommandHeader
+		{
+			get { return "Thread Id={0}".Format2( ThreadId ); }
+		}
+
+		public ICommand HighlightByThreadIdCommand
+		{
+			get { return CreateHighlightCommand( new ThreadIdEquals( ThreadId ) ); }
+		}
+
+		// Highlight by filename
+
+		public string HighlightByFilenameCommandHeader
+		{
+			get { return "All files \"{0}\"".Format2( File.Name ); }
+		}
+
+		public ICommand HighlightByFilenameCommand
+		{
+			get { return CreateHighlightCommand( new FileNameEquals( File.Name ) ); }
+		}
+
+		// Highlight directory
+
+		public string HighlightDirectoryCommandHeader
+		{
+			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
+		}
+
+		public ICommand HighlightDirectoryCommand
+		{
+			get
+			{
+				return CreateHighlightCommand(
+					new Argument()
+					.GetProperty( "ParentLogFile" )
+					.GetProperty( "ParentDirectory" )
+					.GetProperty( "Path" )
+					.IsEqual( new StringConstant( Directory.Path ) ) );
+			}
+		}
+
+		// Highlight by message severity
+
+		public string HighlightByMessageTypeCommandHeader
+		{
+			get { return String.Format( "MessageType \"{0}\"", Type ); }
+		}
+
+		public ICommand HighlightByMessageTypeCommand
+		{
+			get { return CreateHighlightCommand( new MessageTypeEquals( Type ) ); }
+		}
 
 		#endregion
 
