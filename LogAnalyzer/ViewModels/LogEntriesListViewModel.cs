@@ -8,10 +8,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
+using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -361,6 +363,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				foreach ( HighlightingViewModel removed in e.OldItems )
 				{
 					removed.Changed -= OnHighlightingFilter_Changed;
+					removed.Dispose();
 				}
 			}
 		}
@@ -537,6 +540,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		/// <param name="e"></param>
 		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
+#if DEBUG
+			var dispatcher = DispatcherHelper.GetDispatcher();
+			if ( dispatcher != null )
+			{
+				dispatcher.VerifyAccess();
+			}
+#endif
+
 			ScrollDownIfShould();
 
 			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
@@ -546,9 +557,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ScrollDownIfShould()
 		{
-			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute( null ) )
+			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute() )
 			{
-				ScrollToBottomCommand.Execute( null );
+				ScrollToBottomCommand.Execute();
 			}
 		}
 

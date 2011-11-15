@@ -55,7 +55,7 @@ namespace LogAnalyzer.GUI
 		{
 			var exception = parentTask.Exception;
 
-			Extensions.Condition.BreakIfAttached();
+			LogAnalyzer.Extensions.Condition.BreakIfAttached();
 			Logger.WriteError( "Crash. Exception: {0}", exception );
 
 			MessageBox.Show( "Unhandled exception: " + exception, "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );

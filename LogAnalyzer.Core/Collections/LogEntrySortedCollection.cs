@@ -284,7 +284,6 @@ namespace LogAnalyzer.Collections
 			{
 				if ( isOld )
 				{
-
 					if ( array == null || array.Length != collection.Count )
 					{
 						this.array = new T[collection.Count];

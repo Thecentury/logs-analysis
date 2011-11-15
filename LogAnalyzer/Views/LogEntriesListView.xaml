@@ -61,14 +61,14 @@
 								   ToolTip="{Binding Description}">
 							<Rectangle.ContextMenu>
 								<ContextMenu>
-									<MenuItem Header="Remove highlighting" Command="{Binding RemoveHighlightingCommand}">
+									<MenuItem Header="Remove" Command="{Binding RemoveHighlightingCommand}">
 										<MenuItem.Icon>
-											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/flag--minus.png"/>
+											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/minus.png"/>
 										</MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Edit highlighting" Command="{Binding ShowEditorCommand}">
+									<MenuItem Header="Edit" Command="{Binding ShowEditorCommand}">
 										<MenuItem.Icon>
-											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/flag--pencil.png"/>
+											<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/pencil.png"/>
 										</MenuItem.Icon>
 									</MenuItem>
 								</ContextMenu>
@@ -212,8 +212,40 @@
 							</MenuItem>
 						</MenuItem>
 
-						<MenuItem Header="Highlight by:" IsEnabled="False">
-							
+						<MenuItem Header="Highlight by:">
+							<MenuItem.Icon>
+								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/flag.png"/>
+							</MenuItem.Icon>
+
+							<MenuItem Header="{Binding HighlightByCertainFileCommandHeader}" Command="{Binding HighlightByCertainFileCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/document-text.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding HighlightByFilenameCommandHeader}" Command="{Binding HighlightByFilenameCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/documents-stack.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding HighlightByThreadIdCommandHeader}" Command="{Binding HighlightByThreadIdCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/processor.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding HighlightDirectoryCommandHeader}" Command="{Binding HighlightDirectoryCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
+
+							<MenuItem Header="{Binding HighlightByMessageTypeCommandHeader}" Command="{Binding HighlightByMessageTypeCommand}">
+								<MenuItem.Icon>
+									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/burn.png"/>
+								</MenuItem.Icon>
+							</MenuItem>
 						</MenuItem>
 
 						<MenuItem Header="Copy to Clipboard:">

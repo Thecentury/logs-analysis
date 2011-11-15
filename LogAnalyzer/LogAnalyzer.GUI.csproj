@@ -152,6 +152,7 @@
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
+    <Compile Include="Extensions\ICommandExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
     <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />
@@ -438,10 +439,10 @@
     <Resource Include="Resources\arrow-090.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\flag--minus.png" />
+    <Resource Include="Resources\minus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\flag--pencil.png" />
+    <Resource Include="Resources\flag.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
