@@ -60,11 +60,15 @@ namespace LogAnalyzer.Filters
 
 		public static string ToExpressionString( this ExpressionBuilder builder )
 		{
-			ParameterExpression param = Expression.Parameter( typeof( LogEntry ), "LogEntry" );
+			ParameterExpression param = Expression.Parameter( typeof( LogEntry ), "record" );
 
 			Expression expr = builder.CreateExpression( param );
 
-			return expr.ToString();
+			var str = expr.ToString()
+				.Replace( " AndAlso ", " & " )
+				.Replace( " OrElse ", " | " );
+
+			return str;
 		}
 
 		public static string SerializeToXaml( this ExpressionBuilder builder )

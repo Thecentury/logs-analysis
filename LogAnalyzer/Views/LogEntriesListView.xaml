@@ -54,7 +54,10 @@
 			<ItemsControl ItemsSource="{Binding HighlightedByList}" VerticalAlignment="Top">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Rectangle Width="10" Height="10" Fill="{Binding Brush}" Stroke="Black" StrokeThickness="1" Margin="2"/>
+						<Rectangle Width="10" Height="10" 
+								   Fill="{Binding Brush}" Stroke="DarkGray" 
+								   StrokeThickness="1" Margin="2"
+								   ToolTip="{Binding Description}"/>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 				<ItemsControl.ItemsPanel>

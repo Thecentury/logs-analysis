@@ -330,10 +330,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( highlightVM == null )
 				return;
 
-			HighlightingViewModel vm = new HighlightingViewModel( entries, logEntriesViewModels, highlightVM.SelectedBuilder )
-										{
-											Brush = new SolidColorBrush( highlightVM.SelectedColor )
-										};
+			var vm = new HighlightingViewModel( entries, logEntriesViewModels, highlightVM.SelectedBuilder,
+																 new SolidColorBrush( highlightVM.SelectedColor ) );
 			highlightingFilters.Add( vm );
 		}
 
