@@ -23,18 +23,15 @@ namespace LogAnalyzer.GUI.ViewModels
 		private readonly LogEntriesListViewModel parentViewModel;
 		private readonly IDisposable collectionChangedSubscription;
 
-		internal HighlightingViewModel( [NotNull] IList<LogEntry> entriesSource, [NotNull] SparseLogEntryViewModelList logEntriesViewModels,
-			[NotNull] LogEntriesListViewModel parentViewModel,
+		internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
 			[NotNull] ExpressionBuilder builder, [NotNull] Brush brush )
 		{
-			if ( entriesSource == null ) throw new ArgumentNullException( "entriesSource" );
-			if ( logEntriesViewModels == null ) throw new ArgumentNullException( "logEntriesViewModels" );
 			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
 			if ( builder == null ) throw new ArgumentNullException( "builder" );
 			if ( brush == null ) throw new ArgumentNullException( "brush" );
 
-			this.entriesSource = entriesSource;
-			this.logEntriesViewModels = logEntriesViewModels;
+			this.entriesSource = parentViewModel.Entries;
+			this.logEntriesViewModels = parentViewModel.LogEntriesViewModels;
 			this.parentViewModel = parentViewModel;
 			logEntriesViewModels.ItemCreated += OnLogEntriesViewModels_ItemCreated;
 			this.Filter.ExpressionBuilder = builder;

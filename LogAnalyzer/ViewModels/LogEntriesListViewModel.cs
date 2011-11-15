@@ -49,7 +49,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected SparseLogEntryViewModelList LogEntriesViewModels
+		protected internal SparseLogEntryViewModelList LogEntriesViewModels
 		{
 			get { return logEntriesViewModels; }
 		}
@@ -330,9 +330,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( highlightVM == null )
 				return;
 
-			var vm = new HighlightingViewModel( entries, logEntriesViewModels, this,
-				highlightVM.SelectedBuilder, new SolidColorBrush( highlightVM.SelectedColor ) );
-			
+			var vm = new HighlightingViewModel( this, highlightVM.SelectedBuilder, new SolidColorBrush( highlightVM.SelectedColor ) );
+
 			highlightingFilters.Add( vm );
 		}
 
