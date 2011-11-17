@@ -4,6 +4,7 @@ using LogAnalyzer.Extensions;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Kernel
 {
@@ -37,6 +38,11 @@ namespace LogAnalyzer.Kernel
 
 			workerThread = new Thread( MainThreadProcedure );
 			workerThread.IsBackground = true;
+
+			if ( Settings.Default.DecreaseWorkerThreadsPriorities )
+			{
+				workerThread.Priority = ThreadPriority.BelowNormal;
+			}
 			workerThread.Name = "OperationsQueueThread";
 			workerThread.Start();
 		}

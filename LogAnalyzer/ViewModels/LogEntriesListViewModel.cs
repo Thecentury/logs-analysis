@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -119,8 +120,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				if ( DataGrid != null )
 				{
+					//Stopwatch timer = Stopwatch.StartNew();
 					var selectedValue = logEntriesViewModels[value];
+					//var elapsed = timer.ElapsedMilliseconds;
+					//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
+
+					//timer.Restart();
 					DataGrid.ScrollIntoView( selectedValue );
+					//elapsed = timer.ElapsedMilliseconds;
+					//Logger.Instance.WriteInfo( "Scrolled into view in {0}", elapsed );
 				}
 			}
 		}

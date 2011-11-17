@@ -85,7 +85,7 @@ namespace LogAnalyzer
 
 			TimeSpan loadingDuration = DateTime.Now - loadStartTime;
 
-			logger.WriteInfo( "{0}: loaded in {1} seconds", this.ToString(), loadingDuration.TotalSeconds );
+			logger.WriteInfo( "{0}: loaded in {1} seconds", ToString(), loadingDuration.TotalSeconds );
 
 			// не держим ссылки на подписчиков, 
 			// все равно это событие больше вызвано не будет
