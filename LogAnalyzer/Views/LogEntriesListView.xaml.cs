@@ -23,6 +23,7 @@ namespace LogAnalyzer.GUI.Views
 			ScrollViewer viewer = VisualTreeHelper.GetChild( border, 0 ) as ScrollViewer;
 			LogEntriesListViewModel vm = (LogEntriesListViewModel)DataContext;
 			vm.ScrollViewer = viewer;
+			vm.DataGrid = entriesDataGrid;
 		}
 
 		private void DataGrid_DataContextChanged( object sender, DependencyPropertyChangedEventArgs e )

@@ -4,8 +4,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Reactive.Linq;
+using System.Threading;
 
 namespace LogAnalyzer.Extensions
 {
@@ -69,9 +71,24 @@ namespace LogAnalyzer.Extensions
 			} );
 		}
 
-		public static IObservable<EventPattern<NotifyCollectionChangedEventArgs>> ToObservable( this INotifyCollectionChanged collection )
+		public static IObservable<EventPattern<NotifyCollectionChangedEventArgs>> ToNotifyCollectionChangedObservable(
+			this INotifyCollectionChanged collection )
 		{
-			return Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( collection, "CollectionChanged" );
+			return Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+				h => collection.CollectionChanged += h,
+				h => collection.CollectionChanged -= h );
+		}
+
+		public static IDisposable WaitForCount<T>( this IObservable<T> observable, int times )
+		{
+			CountdownEvent evt = new CountdownEvent( times );
+			var subscription = observable.Take( times ).Subscribe( e => evt.Signal() );
+
+			return Disposable.Create( () =>
+			{
+				evt.Wait();
+				subscription.Dispose();
+			} );
 		}
 	}
 }

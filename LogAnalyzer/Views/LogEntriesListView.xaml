@@ -345,6 +345,8 @@
 						<TextBox Text="{Binding UnitedText, Mode=OneWay}" 
 								 Background="Transparent"
 								 IsReadOnly="True" TextWrapping="Wrap"
+								 MaxHeight="200"
+								 VerticalScrollBarVisibility="Auto"
 								 BorderBrush="{x:Null}" BorderThickness="0"/>
 					</ControlTemplate>
 
@@ -373,7 +375,7 @@
 	<DockPanel LastChildFill="True">
 
 		<DockPanel DockPanel.Dock="Top" LastChildFill="True">
-			<views:SearchControl DockPanel.Dock="Right"/>
+			<views:SearchControl DockPanel.Dock="Right" DataContext="{Binding SearchViewModel}"/>
 			<ToolBar DockPanel.Dock="Left" Margin="4,4,4,4" ItemsSource="{Binding ToolbarItems}"/>
 		</DockPanel>
 

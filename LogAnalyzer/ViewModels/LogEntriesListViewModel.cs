@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -30,6 +31,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private LogEntryViewModel selectedEntry;
 		private int selectedEntryIndex;
 		private DispatcherTimer updateAddedCountTimer;
+		private SearchViewModel searchViewModel;
 
 		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
@@ -59,6 +61,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		public GenericListView<LogEntryViewModel> EntriesView
 		{
 			get { return entriesView; }
+		}
+
+		public SearchViewModel SearchViewModel
+		{
+			get { return searchViewModel; }
 		}
 
 		public virtual MessageSeverityCountViewModel MessageSeverityCount
@@ -107,11 +114,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return selectedEntryIndex; }
 			set
 			{
-				if ( selectedEntryIndex == value )
-					return;
-
 				selectedEntryIndex = value;
 				RaisePropertyChanged( "SelectedEntryIndex" );
+
+				if ( DataGrid != null )
+				{
+					var selectedValue = logEntriesViewModels[value];
+					DataGrid.ScrollIntoView( selectedValue );
+				}
 			}
 		}
 
@@ -231,6 +241,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private DelegateCommand toggleAutoScrollToBottomCommand;
 
 		public ScrollViewer ScrollViewer { get; set; }
+
+		public DataGrid DataGrid { get; set; }
 
 		public ICommand ScrollDownCommand
 		{
@@ -489,6 +501,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
 			logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
 
+			searchViewModel = new SearchViewModel( this );
+
 			InvokeInUIDispatcher( () =>
 			{
 				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
@@ -541,11 +555,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
 #if DEBUG
-			var dispatcher = DispatcherHelper.GetDispatcher();
-			if ( dispatcher != null )
-			{
-				dispatcher.VerifyAccess();
-			}
+			//var dispatcher = DispatcherHelper.GetDispatcher();
+			//if ( dispatcher != null )
+			//{
+			//    dispatcher.VerifyAccess();
+			//}
 #endif
 
 			ScrollDownIfShould();
