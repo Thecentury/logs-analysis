@@ -16,7 +16,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		public SearchViewModel( LogEntriesListViewModel parentList )
 			: base( parentList, new AlwaysFalse() )
 		{
-			base.Filter.ExpressionBuilder = textContainsFilter;
+			Filter.ExpressionBuilder = textContainsFilter;
 			Brush = Brushes.RoyalBlue;
 		}
 
@@ -51,6 +51,16 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		#region Commands
+
+		protected override bool RemoveHighlightingCanExecute()
+		{
+			return false;
+		}
+
+		protected override bool ShowEditorCanExecute()
+		{
+			return false;
+		}
 
 		// LaunchSearch command
 

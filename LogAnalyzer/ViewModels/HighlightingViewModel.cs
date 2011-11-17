@@ -238,7 +238,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( showEditorCommand == null )
-					showEditorCommand = new DelegateCommand( ShowEditorExecute );
+					showEditorCommand = new DelegateCommand( ShowEditorExecute, ShowEditorCanExecute );
 
 				return showEditorCommand;
 			}
@@ -254,6 +254,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			Filter.ExpressionBuilder = vm.SelectedBuilder;
 		}
 
+		protected virtual bool ShowEditorCanExecute()
+		{
+			return true;
+		}
+
 		// Remove highlighting command
 
 		private DelegateCommand removeHighlightingCommand;
@@ -262,7 +267,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( removeHighlightingCommand == null )
-					removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute );
+					removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute, RemoveHighlightingCanExecute );
 				return removeHighlightingCommand;
 			}
 		}
@@ -270,6 +275,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void RemoveHighlightingExecute()
 		{
 			parentViewModel.HighlightingFilters.Remove( this );
+		}
+
+		protected virtual bool RemoveHighlightingCanExecute()
+		{
+			return true;
 		}
 
 		// Move to first highlighted
