@@ -47,7 +47,7 @@ namespace LogAnalyzer.Collections
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void RaiseCountChanged()
+		public void RaiseCountChanged()
 		{
 			PropertyChanged.Raise( this, "Count" );
 		}

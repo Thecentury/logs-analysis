@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using LogAnalyzer.Filters;
@@ -29,7 +30,24 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				substring = value;
 				RaisePropertyChanged( "Substring" );
+				HaveSearched = false;
 			}
+		}
+
+		private bool haveSearched;
+		private bool HaveSearched
+		{
+			get { return haveSearched; }
+			set
+			{
+				haveSearched = value;
+				RaisePropertyChanged( "FoundBarVisibility" );
+			}
+		}
+
+		public Visibility FoundBarVisibility
+		{
+			get { return !haveSearched ? Visibility.Collapsed : Visibility.Visible; }
 		}
 
 		#region Commands
@@ -51,10 +69,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void LaunchSearchExecute()
 		{
 			textContainsFilter.Substring = substring;
-			if ( MoveToFirstHighlightedCommand.CanExecute() )
-			{
-				MoveToFirstHighlightedCommand.Execute();
-			}
+			HaveSearched = true;
+			MoveToFirstHighlightedCommand.ExecuteIfCan();
 		}
 
 		private bool LaunchSearchCanExecute()
