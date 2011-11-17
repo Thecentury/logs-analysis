@@ -6,11 +6,11 @@
              xmlns:ShaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-	
+
 	<UserControl.Resources>
 
 		<ShaderEffectLibrary:MonochromeEffect x:Key="monochromeEffect"/>
-		
+
 		<Style TargetType="{x:Type Image}" x:Key="imageStyle">
 			<Setter Property="Stretch" Value="None"/>
 			<Style.Triggers>
@@ -19,23 +19,52 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
-		
+
+		<Style TargetType="{x:Type ButtonBase}" x:Key="findButtonStyle">
+			<Setter Property="Margin" Value="2"/>
+		</Style>
+
+		<Style TargetType="{x:Type Control}" x:Key="foundBarStyle">
+			<Setter Property="Visibility" Value="{Binding FoundBarVisibility}"/>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding AcceptedEntries.Count}" Value="0">
+					<Setter Property="Background" Value="#A0FF0000"/>
+					<Setter Property="Foreground" Value="White"/>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+
 	</UserControl.Resources>
-	
-    <StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Center">
+
+	<StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Center">
 		<TextBox MinWidth="100" Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-		
-		<RepeatButton 
+
+		<Control Style="{StaticResource foundBarStyle}">
+			<Control.Template>
+				<ControlTemplate TargetType="{x:Type Control}">
+					<Grid Margin="2">
+						<Rectangle RadiusX="5" RadiusY="5" Fill="{TemplateBinding Background}"/>
+						<TextBlock Margin="2" VerticalAlignment="Center">
+							<Run Text="{Binding CurrentIndex, Mode=OneWay}"/>
+							<Run>of</Run>
+							<Run Text="{Binding AcceptedEntries.Count, Mode=OneWay}"/>
+						</TextBlock>
+					</Grid>					
+				</ControlTemplate>
+			</Control.Template>
+		</Control>
+
+		<RepeatButton Style="{StaticResource findButtonStyle}"
 				ToolTip="Find Previous"
 				Command="{Binding MoveToPreviousHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-090.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
-		<RepeatButton 
+		<RepeatButton Style="{StaticResource findButtonStyle}"
 				ToolTip="Find Next"
 				Command="{Binding MoveToNextHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-270.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
-		<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
+		<Button Style="{StaticResource findButtonStyle}"
 				ToolTip="Search"
 				Command="{Binding LaunchSearchCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/magnifier.png" Style="{StaticResource imageStyle}"/>

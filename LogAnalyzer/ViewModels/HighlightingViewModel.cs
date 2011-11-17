@@ -59,11 +59,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ScanCreatedEntries()
 		{
-			foreach (var logEntryViewModel in logEntriesViewModels.CreatedEntries)
+			foreach ( var logEntryViewModel in logEntriesViewModels.CreatedEntries )
 			{
-				if (filter.Include(logEntryViewModel.LogEntry))
+				if ( filter.Include( logEntryViewModel.LogEntry ) )
 				{
-					logEntryViewModel.HighlightedByList.Add(this);
+					logEntryViewModel.HighlightedByList.Add( this );
 				}
 			}
 		}
@@ -132,7 +132,19 @@ namespace LogAnalyzer.GUI.ViewModels
 				int indexInParentView = ParallelHelper.SequentialIndexOf( parentViewModel.Entries, entry );
 				parentViewModel.SelectedEntryIndex = indexInParentView;
 
+				CurrentIndex = value + 1;
 				RaisePropertyChanged( "SelectedAcceptedEntryIndex" );
+			}
+		}
+
+		private int currentIndex;
+		public int CurrentIndex
+		{
+			get { return currentIndex; }
+			set
+			{
+				currentIndex = value;
+				RaisePropertyChanged( "CurrentIndex" );
 			}
 		}
 
@@ -163,6 +175,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					acceptedEntries.AddRange( acceptedAddedEntries );
 					observableFilteredEntries.RaiseGenericCollectionItemsAdded( acceptedAddedEntries );
+					observableFilteredEntries.RaiseCountChanged();
 				}
 			}
 			else if ( e.Action == NotifyCollectionChangedAction.Reset )
@@ -172,19 +185,23 @@ namespace LogAnalyzer.GUI.ViewModels
 					acceptedEntries.Clear();
 					FillAcceptedEntries( entriesSource );
 					observableFilteredEntries.RaiseCollectionReset();
+					observableFilteredEntries.RaiseCountChanged();
 				}
 			}
 		}
 
 		private void FillAcceptedEntries( IEnumerable<LogEntry> entries )
 		{
+			var added = new List<LogEntry>();
 			foreach ( var logEntry in entries )
 			{
 				if ( filter.Include( logEntry ) )
 				{
 					acceptedEntries.Add( logEntry );
+					added.Add( logEntry );
 				}
 			}
+			this.observableFilteredEntries.RaiseCollectionItemsAdded( added );
 		}
 
 		private void OnLogEntriesViewModels_ItemCreated( object sender, LogEntryHostChangedEventArgs e )
@@ -205,9 +222,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void RemoveSelfFromCreatedEntries()
 		{
-			foreach (var createdEntry in logEntriesViewModels.CreatedEntries)
+			foreach ( var createdEntry in logEntriesViewModels.CreatedEntries )
 			{
-				createdEntry.HighlightedByList.Remove(this);
+				createdEntry.HighlightedByList.Remove( this );
 			}
 		}
 

@@ -20,5 +20,14 @@ namespace LogAnalyzer.GUI.Extensions
 		{
 			return command.CanExecute( null );
 		}
+
+		[DebuggerStepThrough]
+		public static void ExecuteIfCan(this ICommand command)
+		{
+			if ( command.CanExecute() )
+			{
+				command.Execute();
+			}
+		}
 	}
 }
