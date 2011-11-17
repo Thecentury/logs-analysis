@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace LogAnalyzer.GUI.Common
 		private readonly Func<bool> canExecuteMethod = null;
 		private bool isAutomaticRequeryDisabled = false;
 		private List<WeakReference> canExecuteChangedHandlers;
+
 		public event EventHandler CanExecuteChanged
 		{
 			add
@@ -31,6 +33,7 @@ namespace LogAnalyzer.GUI.Common
 				CommandManagerHelper.RemoveWeakReferenceHandler( this.canExecuteChangedHandlers, value );
 			}
 		}
+
 		public bool IsAutomaticRequeryDisabled
 		{
 			get
@@ -53,14 +56,17 @@ namespace LogAnalyzer.GUI.Common
 				}
 			}
 		}
+
 		public DelegateCommand( Action executeMethod )
 			: this( executeMethod, null, false )
 		{
 		}
+
 		public DelegateCommand( Action executeMethod, Func<bool> canExecuteMethod )
 			: this( executeMethod, canExecuteMethod, false )
 		{
 		}
+
 		public DelegateCommand( Action executeMethod, Func<bool> canExecuteMethod, bool isAutomaticRequeryDisabled )
 		{
 			if ( executeMethod == null )
@@ -71,32 +77,49 @@ namespace LogAnalyzer.GUI.Common
 			this.canExecuteMethod = canExecuteMethod;
 			this.isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
 		}
+
+		[DebuggerStepThrough]
 		public bool CanExecute()
 		{
-			return this.canExecuteMethod == null || this.canExecuteMethod();
+			return canExecuteMethod == null || canExecuteMethod();
 		}
+
+		[DebuggerStepThrough]
 		public void Execute()
 		{
-			if ( this.executeMethod != null )
+#if DEBUG
+			if ( !CanExecute() )
 			{
-				this.executeMethod();
+				throw new InvalidOperationException( "Command.CanExecute() is false." );
+			}
+#endif
+
+			if ( executeMethod != null )
+			{
+				executeMethod();
 			}
 		}
+
 		public void RaiseCanExecuteChanged()
 		{
 			this.OnCanExecuteChanged();
 		}
+
 		protected virtual void OnCanExecuteChanged()
 		{
-			CommandManagerHelper.CallWeakReferenceHandlers( this.canExecuteChangedHandlers );
+			CommandManagerHelper.CallWeakReferenceHandlers( canExecuteChangedHandlers );
 		}
+
+		[DebuggerStepThrough]
 		bool ICommand.CanExecute( object parameter )
 		{
-			return this.CanExecute();
+			return CanExecute();
 		}
+
+		[DebuggerStepThrough]
 		void ICommand.Execute( object parameter )
 		{
-			this.Execute();
+			Execute();
 		}
 	}
 }

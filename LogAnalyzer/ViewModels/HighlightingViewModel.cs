@@ -16,19 +16,22 @@ using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public sealed class HighlightingViewModel : BindingObject
+	public class HighlightingViewModel : BindingObject
 	{
 		private readonly IList<LogEntry> entriesSource;
 		private readonly SparseLogEntryViewModelList logEntriesViewModels;
 		private readonly LogEntriesListViewModel parentViewModel;
 		private readonly IDisposable collectionChangedSubscription;
 
-		internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
-			[NotNull] ExpressionBuilder builder, [NotNull] Brush brush )
+		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
+			[NotNull] ExpressionBuilder builder )
+			: this( parentViewModel, builder, null ) { }
+
+		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
+			[NotNull] ExpressionBuilder builder, Brush brush )
 		{
 			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
 			if ( builder == null ) throw new ArgumentNullException( "builder" );
-			if ( brush == null ) throw new ArgumentNullException( "brush" );
 
 			this.entriesSource = parentViewModel.Entries;
 			this.logEntriesViewModels = parentViewModel.LogEntriesViewModels;
@@ -40,7 +43,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			INotifyCollectionChanged observableCollection = entriesSource as INotifyCollectionChanged;
 			if ( observableCollection != null )
 			{
-				collectionChangedSubscription = observableCollection.ToObservable()
+				collectionChangedSubscription = observableCollection.ToNotifyCollectionChangedObservable()
 					.ObserveOn( DispatcherHelper.GetDispatcher() )
 					.Select( o => o.EventArgs )
 					.Subscribe( OnSourceCollectionChanged );
@@ -49,15 +52,20 @@ namespace LogAnalyzer.GUI.ViewModels
 			observableFilteredEntries = new ReadonlyObservableList<LogEntry>( acceptedEntries );
 			FillAcceptedEntries( entriesSource );
 
-			foreach ( var logEntryViewModel in logEntriesViewModels.CreatedEntries )
-			{
-				if ( filter.Include( logEntryViewModel.LogEntry ) )
-				{
-					logEntryViewModel.HighlightedByList.Add( this );
-				}
-			}
+			ScanCreatedEntries();
 
 			filter.Changed += OnFilter_Changed;
+		}
+
+		private void ScanCreatedEntries()
+		{
+			foreach (var logEntryViewModel in logEntriesViewModels.CreatedEntries)
+			{
+				if (filter.Include(logEntryViewModel.LogEntry))
+				{
+					logEntryViewModel.HighlightedByList.Add(this);
+				}
+			}
 		}
 
 		private Brush brush;
@@ -79,6 +87,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnFilter_Changed( object sender, EventArgs e )
 		{
+			RemoveSelfFromCreatedEntries();
+
+			acceptedEntries.Clear();
+			FillAcceptedEntries( entriesSource );
+
+			ScanCreatedEntries();
+
 			RaisePropertyChanged( "Description" );
 			Changed.Raise( this );
 		}
@@ -104,6 +119,22 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// todo brinchuk is this neccesary?
 		public event EventHandler Changed;
+
+		private int selectedAcceptedEntryIndex = -1;
+		public int SelectedAcceptedEntryIndex
+		{
+			get { return selectedAcceptedEntryIndex; }
+			set
+			{
+				selectedAcceptedEntryIndex = value;
+
+				var entry = acceptedEntries[value];
+				int indexInParentView = ParallelHelper.SequentialIndexOf( parentViewModel.Entries, entry );
+				parentViewModel.SelectedEntryIndex = indexInParentView;
+
+				RaisePropertyChanged( "SelectedAcceptedEntryIndex" );
+			}
+		}
 
 		private readonly List<LogEntry> acceptedEntries = new List<LogEntry>();
 		private readonly ReadonlyObservableList<LogEntry> observableFilteredEntries;
@@ -169,9 +200,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			base.Dispose();
 			collectionChangedSubscription.Dispose();
 			logEntriesViewModels.ItemCreated -= OnLogEntriesViewModels_ItemCreated;
-			foreach ( var createdEntry in logEntriesViewModels.CreatedEntries )
+			RemoveSelfFromCreatedEntries();
+		}
+
+		private void RemoveSelfFromCreatedEntries()
+		{
+			foreach (var createdEntry in logEntriesViewModels.CreatedEntries)
 			{
-				createdEntry.HighlightedByList.Remove( this );
+				createdEntry.HighlightedByList.Remove(this);
 			}
 		}
 
@@ -217,6 +253,104 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void RemoveHighlightingExecute()
 		{
 			parentViewModel.HighlightingFilters.Remove( this );
+		}
+
+		// Move to first highlighted
+
+		private DelegateCommand moveToFirstHighlightedCommand;
+		public ICommand MoveToFirstHighlightedCommand
+		{
+			get
+			{
+				if ( moveToFirstHighlightedCommand == null )
+					moveToFirstHighlightedCommand = new DelegateCommand( MoveToFirstHighlightedExecute, MoveToFirstHighlightedCanExecute );
+
+				return moveToFirstHighlightedCommand;
+			}
+		}
+
+		private void MoveToFirstHighlightedExecute()
+		{
+			SelectedAcceptedEntryIndex = 0;
+		}
+
+		private bool MoveToFirstHighlightedCanExecute()
+		{
+			bool canExecute = acceptedEntries.Count > 0 && selectedAcceptedEntryIndex != 0;
+			return canExecute;
+		}
+
+		// Move to last highlighted
+
+		private DelegateCommand moveToLastHighlightedCommand;
+		public ICommand MoveToLastHighlightedCommand
+		{
+			get
+			{
+				if ( moveToLastHighlightedCommand == null )
+					moveToLastHighlightedCommand = new DelegateCommand( MoveToLastHighlightedExecute, MoveToLastHighlightedCanExecute );
+
+				return moveToLastHighlightedCommand;
+			}
+		}
+
+		private void MoveToLastHighlightedExecute()
+		{
+			SelectedAcceptedEntryIndex = acceptedEntries.Count - 1;
+		}
+
+		private bool MoveToLastHighlightedCanExecute()
+		{
+			bool canExecute = acceptedEntries.Count > 0 && selectedAcceptedEntryIndex != acceptedEntries.Count - 1;
+			return canExecute;
+		}
+
+		// Move to next highlighted
+
+		private DelegateCommand moveToNextHighlightedCommand;
+		public ICommand MoveToNextHighlightedCommand
+		{
+			get
+			{
+				if ( moveToNextHighlightedCommand == null )
+					moveToNextHighlightedCommand = new DelegateCommand( MoveToNextHighlightedExecute, MoveToNextHighlightedCanExecute );
+
+				return moveToNextHighlightedCommand;
+			}
+		}
+
+		private void MoveToNextHighlightedExecute()
+		{
+			SelectedAcceptedEntryIndex++;
+		}
+
+		private bool MoveToNextHighlightedCanExecute()
+		{
+			return acceptedEntries.Count > 0 && selectedAcceptedEntryIndex < acceptedEntries.Count - 1;
+		}
+
+		// Move to previous highlighted
+
+		private DelegateCommand moveToPreviousHighlightedCommand;
+		public ICommand MoveToPreviousHighlightedCommand
+		{
+			get
+			{
+				if ( moveToPreviousHighlightedCommand == null )
+					moveToPreviousHighlightedCommand = new DelegateCommand( MoveToPreviousHighlightedExecute, MoveToPreviousHighlightedCanExecute );
+
+				return moveToPreviousHighlightedCommand;
+			}
+		}
+
+		private void MoveToPreviousHighlightedExecute()
+		{
+			SelectedAcceptedEntryIndex--;
+		}
+
+		private bool MoveToPreviousHighlightedCanExecute()
+		{
+			return acceptedEntries.Count > 0 && selectedAcceptedEntryIndex > 0;
 		}
 
 		#endregion

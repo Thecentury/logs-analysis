@@ -11,6 +11,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 	public partial class FilterEditor : UserControl
 	{
 		private readonly TransparentBuilder rootBuilder = new TransparentBuilder();
+		private ExpressionBuilderViewModel vm;
 
 		public FilterEditor()
 		{
@@ -26,7 +27,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		private void UserControl_Loaded( object sender, RoutedEventArgs e )
 		{
 			var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
-			var vm = new ExpressionBuilderViewModel( rootBuilder, parameterExpression );
+			vm = new ExpressionBuilderViewModel( rootBuilder, parameterExpression );
 			if ( Builder != null )
 			{
 				vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( Builder, parameterExpression );
@@ -58,13 +59,17 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private static void OnSelectedBuilderChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{
-
-		}
-
-		private static object CoerceSelectedBuilder( DependencyObject d, object baseValue )
-		{
 			FilterEditor editor = (FilterEditor)d;
-			return editor.rootBuilder.Inner;
+			var newBuilder = (ExpressionBuilder)e.NewValue;
+			if ( editor.Builder != newBuilder )
+			{
+				editor.Builder = newBuilder;
+				if ( editor.vm != null )
+				{
+					var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
+					editor.vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( newBuilder, parameterExpression );
+				}
+			}
 		}
 	}
 }
