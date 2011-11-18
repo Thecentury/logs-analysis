@@ -187,6 +187,7 @@
     <Compile Include="Regions\RegionCollection.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Collections\LogEntryViewModelLight.cs" />
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
     <Compile Include="ViewModels\HighlightEditorWindowViewModel.cs" />
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
+    <Compile Include="ViewModels\IAwareOfIndex.cs" />
     <Compile Include="ViewModels\IHierarchyMember.cs" />
     <Compile Include="ViewModels\ITypeName.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />
@@ -234,7 +236,7 @@
     <Compile Include="ViewModels\Collections\DispatcherObservableCollection.cs" />
     <Compile Include="ViewModels\Collections\DispatcherEnumerable.cs" />
     <Compile Include="ViewModels\Collections\DispatcherList.cs" />
-    <Compile Include="ViewModels\GenericListView.cs" />
+    <Compile Include="ViewModels\LogEntryViewModelCollectionView.cs" />
     <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
     </Compile>

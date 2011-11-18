@@ -60,16 +60,30 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			switch ( e.Action )
 			{
 				case NotifyCollectionChangedAction.Add:
+					ProcessItemsAdded( e );
+					break;
 				case NotifyCollectionChangedAction.Remove:
 				case NotifyCollectionChangedAction.Replace:
 				case NotifyCollectionChangedAction.Move:
-					break;
+					throw new NotSupportedException();
 				case NotifyCollectionChangedAction.Reset:
 					viewModelsCache.Clear();
+					base.OnCollectionChanged( e );
 					break;
 			}
+		}
 
-			base.OnCollectionChanged( e );
+		private void ProcessItemsAdded( NotifyCollectionChangedEventArgs e )
+		{
+			List<LogEntryViewModelLight> addedLight = new List<LogEntryViewModelLight>( e.NewItems.Count );
+
+			for ( int i = 0; i < e.NewItems.Count; i++ )
+			{
+				int index = e.NewStartingIndex + i;
+				addedLight.Add( new LogEntryViewModelLight( index ) );
+			}
+
+			base.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedLight, e.NewStartingIndex ) );
 		}
 
 		public LogEntryViewModel this[int index]
@@ -223,7 +237,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		public bool Contains( object value )
 		{
 			// todo это правильно?
-			return false;
+			return true;
 		}
 
 		public void Insert( int index, object value )

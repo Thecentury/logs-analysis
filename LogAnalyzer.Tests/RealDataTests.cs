@@ -43,11 +43,11 @@ namespace LogAnalyzer.Tests
 			core.Start();
 			core.WaitForLoaded();
 
-			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 			var merged1 = core.Directories.First().MergedEntries;
-			merged1.AssertIsSorted( LogEntryByDateComparer.Instance );
+			merged1.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 			var merged2 = core.Directories.Second().MergedEntries;
-			merged2.AssertIsSorted( LogEntryByDateComparer.Instance );
+			merged2.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 
 			Assert.IsTrue( merged1.Count > 0 );
 			Assert.IsTrue( merged2.Count > 0 );

@@ -32,7 +32,7 @@ namespace LogAnalyzer.Collections
 			get { return unappendedSetWrapper; }
 		}
 
-		private readonly SortedSet<LogEntry> sortedLogEntries = new SortedSet<LogEntry>( LogEntryByDateComparer.Instance );
+		private readonly SortedSet<LogEntry> sortedLogEntries = new SortedSet<LogEntry>( LogEntryByDateAndIndexComparer.Instance );
 
 		public LogEntrySortedCollection( LogEntriesList parent, IEnvironment environment )
 		{
@@ -136,7 +136,7 @@ namespace LogAnalyzer.Collections
 					{
 #if DEBUGCHECK
 						LogEntry last = parent.MergedEntries.Last();
-						int comparison = LogEntryByDateComparer.Instance.Compare( last, min );
+						int comparison = LogEntryByDateAndIndexComparer.Instance.Compare( last, min );
 						Condition.DebugAssert( comparison <= 0, "Добавляемый элемент меньше последнего в списке parent.MergedEntries." );
 #endif
 
@@ -164,12 +164,11 @@ namespace LogAnalyzer.Collections
 			parent.RaiseLogEntryAdded( addedEntries );
 		}
 
-		[DebuggerStepThrough]
 		[Conditional( "DEBUG" )]
 		private void AssertParentMergedEntriesAreSorted()
 		{
 			Condition.DebugAssert( parent.MergedEntries.IsSorted( LogEntryByDateComparer.Instance ),
-				"Коллекция parent.MergedEntries должна быть отсортирована." );
+				"Коллекция parent.MergedEntries должна быть отсортирована по времени." );
 		}
 
 		private string ParentName

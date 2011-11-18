@@ -14,7 +14,7 @@ using LogAnalyzer.GUI.ViewModels.Collections;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public sealed class LogEntryViewModel : BindingObject
+	public sealed class LogEntryViewModel : BindingObject, IAwareOfIndex
 	{
 		private readonly LogEntry logEntry;
 		private readonly LogFileViewModel parentFile;
@@ -537,5 +537,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get { return parentViewModel is CoreViewModel ? Visibility.Collapsed : Visibility.Visible; }
 		}
+
+		#region IAwareOfIndex Members
+
+		int IAwareOfIndex.IndexInParentCollection
+		{
+			get { return indexInParentCollection; }
+		}
+
+		#endregion
 	}
 }

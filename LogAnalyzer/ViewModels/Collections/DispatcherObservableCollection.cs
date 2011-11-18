@@ -36,13 +36,22 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				.ObserveOn( scheduler );
 
 			var unsubscribeAdd = collectionChanged.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
-				.SelectMany( e => e.EventArgs.NewItems.Cast<object>() )
-				.Subscribe( addedItem => OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem ) ) );
+				.Subscribe( e => OnAdded( e.EventArgs ) );
 
 			var unsubscriveOthers = collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
 				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
 
 			unsubscruber = new CompositeDisposable( unsubscribeAdd, unsubscriveOthers );
+		}
+
+		private void OnAdded( NotifyCollectionChangedEventArgs e )
+		{
+			int index = e.NewStartingIndex;
+			for ( int i = 0; i < e.NewItems.Count; i++ )
+			{
+				var addedItem = e.NewItems[i];
+				OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem, index + i ) );
+			}
 		}
 
 		// todo прореживать частоту событий
