@@ -186,7 +186,7 @@
     <Compile Include="LogEntry.cs" />
     <Compile Include="LogEntryAddedEventArgs.cs" />
     <Compile Include="LogEntryAppendResult.cs" />
-    <Compile Include="LogEntryByDateComparer.cs" />
+    <Compile Include="LogEntryComparers.cs" />
     <Compile Include="Collections\LogEntrySortedCollection.cs" />
     <Compile Include="LogFile.cs" />
     <Compile Include="Logging\ConsoleLogWriter.cs" />

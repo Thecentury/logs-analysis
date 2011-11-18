@@ -151,7 +151,7 @@ namespace LogAnalyzer
 			LogEntry[] sortedEntries = Directories
 				.SelectMany( d => d.Files.SelectMany( f => f.LogEntries ) )
 				.AsParallel()
-				.OrderBy( LogEntryByDateComparer.Instance )
+				.OrderBy( LogEntryByDateAndIndexComparer.Instance )
 				.ToArray();
 
 #if ASSERT

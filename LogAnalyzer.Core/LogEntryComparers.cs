@@ -9,16 +9,16 @@ namespace LogAnalyzer
 	/// Сравнивает 2 LogEntry по полю Time.
 	/// <remarks>
 	/// <para/>
-	/// Никогда не возвращает 0 как результат сравнения.
+	/// Возвращает 0 как результат сравнения только если у двух записей совпадают файлы и индексы в них.
 	/// Так сделано потому, что у нас вполне могут быть разные записи лога с совершенно одинаковым временем.
 	/// </remarks>
 	/// </summary>
-	public sealed class LogEntryByDateComparer : IComparer<LogEntry>
+	public sealed class LogEntryByDateAndIndexComparer : IComparer<LogEntry>
 	{
-		private LogEntryByDateComparer() { }
+		private LogEntryByDateAndIndexComparer() { }
 
-		private static readonly LogEntryByDateComparer instance = new LogEntryByDateComparer();
-		public static LogEntryByDateComparer Instance
+		private static readonly LogEntryByDateAndIndexComparer instance = new LogEntryByDateAndIndexComparer();
+		public static LogEntryByDateAndIndexComparer Instance
 		{
 			get { return instance; }
 		}
@@ -38,6 +38,23 @@ namespace LogAnalyzer
 					}
 				}
 			}
+			return comparison;
+		}
+	}
+
+	public sealed class LogEntryByDateComparer : IComparer<LogEntry>
+	{
+		private LogEntryByDateComparer() { }
+
+		private static readonly LogEntryByDateComparer instance = new LogEntryByDateComparer();
+		public static LogEntryByDateComparer Instance
+		{
+			get { return instance; }
+		}
+
+		public int Compare( LogEntry x, LogEntry y )
+		{
+			int comparison = x.Time.CompareTo( y.Time );
 			return comparison;
 		}
 	}

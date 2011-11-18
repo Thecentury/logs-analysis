@@ -29,8 +29,8 @@ namespace LogAnalyzer.Tests
 			core.OperationsQueue.WaitAllRunningOperationsToComplete();
 			core.WaitForMergedEntriesCount( 4, timeout: 2000 ).AssertIsTrueOrFailWithMessage( "Превышено время ожидания." );
 
-			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
-			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
+			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 
 			Assert.AreEqual( core.MergedEntries.Count, core.Directories.First().MergedEntries.Count );
 		}
@@ -62,9 +62,9 @@ namespace LogAnalyzer.Tests
 			logger1.WriteInfo( "5", 5 );
 
 			core.WaitForMergedEntriesCount( 7, 6000 ).AssertIsTrueOrFailWithMessage( "Истекло время ожидания." );
-			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
-			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
-			core.Directories.Second().MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
+			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
+			core.Directories.Second().MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 		}
 
 		/// <summary>
@@ -85,9 +85,9 @@ namespace LogAnalyzer.Tests
 
 			core.WaitForMergedEntriesCount( 7, 2000 ).AssertIsTrueOrFailWithMessage( "Timeout" );
 
-			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
-			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
-			core.Directories.Second().MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
+			core.Directories.First().MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
+			core.Directories.Second().MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 
 			Assert.AreEqual( 5, core.Directories.First().MergedEntries.Count );
 			Assert.AreEqual( 2, core.Directories.Second().MergedEntries.Count );
@@ -105,7 +105,7 @@ namespace LogAnalyzer.Tests
 
 			Thread.Sleep( 300 );
 
-			core.MergedEntries.AssertIsSorted( LogEntryByDateComparer.Instance );
+			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
 			Assert.AreEqual( 2 * messagesCount, core.MergedEntries.Count );
 		}
 

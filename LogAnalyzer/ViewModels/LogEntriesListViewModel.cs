@@ -27,7 +27,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private string addedEntriesCountString;
 		private bool autoScrollToBottom = true;
 		private IList<LogEntry> entries;
-		private GenericListView<LogEntryViewModel> entriesView;
+		private LogEntryViewModelCollectionView entriesView;
 		private SparseLogEntryViewModelList logEntriesViewModels;
 		private LogEntryViewModel selectedEntry;
 		private int selectedEntryIndex;
@@ -59,7 +59,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return logEntriesViewModels; }
 		}
 
-		public GenericListView<LogEntryViewModel> EntriesView
+		public LogEntryViewModelCollectionView EntriesView
 		{
 			get { return entriesView; }
 		}
@@ -513,7 +513,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			InvokeInUIDispatcher( () =>
 			{
-				entriesView = new GenericListView<LogEntryViewModel>( logEntriesViewModels );
+				entriesView = new LogEntryViewModelCollectionView( logEntriesViewModels );
 				updateAddedCountTimer = new DispatcherTimer
 											{
 												Interval =
