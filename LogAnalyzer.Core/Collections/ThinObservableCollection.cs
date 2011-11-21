@@ -30,15 +30,16 @@ namespace LogAnalyzer.Collections
 			RaiseCountChanged();
 		}
 
-		public void RaiseCollectionItemsAdded( IList addedItems )
+		public void RaiseCollectionItemsAdded( IList addedItems, int startingIndex )
 		{
-			CollectionChanged.RaiseCollectionChanged( this, new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItems ) );
+			var args = new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItems, startingIndex );
+			CollectionChanged.RaiseCollectionChanged( this, args );
 			RaiseCountChanged();
 		}
 
-		public void RaiseGenericCollectionItemsAdded<T>( IList<T> addedItems )
+		public void RaiseGenericCollectionItemsAdded<T>( IList<T> addedItems, int startingIndex )
 		{
-			RaiseCollectionItemsAdded( (IList)addedItems );
+			RaiseCollectionItemsAdded( (IList)addedItems, startingIndex );
 		}
 
 		#endregion

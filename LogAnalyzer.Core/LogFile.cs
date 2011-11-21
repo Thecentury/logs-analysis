@@ -100,16 +100,16 @@ namespace LogAnalyzer
 		public void ReadFile()
 		{
 			IList<LogEntry> addedEntries = logFileReader.ReadEntireFile();
-			ProcessAddedEntries( addedEntries );
+			ProcessAddedEntries( addedEntries, 0 );
 		}
 
-		private void ProcessAddedEntries( IList<LogEntry> addedEntries )
+		private void ProcessAddedEntries( IList<LogEntry> addedEntries, int startingIndex )
 		{
-			linesCount = addedEntries.Sum( e => e.LinesCount );
+			this.linesCount = addedEntries.Sum( e => e.LinesCount );
 
 			logEntries.AddRange( addedEntries );
 
-			entries.RaiseGenericCollectionItemsAdded( addedEntries );
+			entries.RaiseGenericCollectionItemsAdded( addedEntries, startingIndex );
 			parentDirectory.OnLogEntriesAddedToFile( addedEntries );
 
 			PropertyChanged.RaiseAllChanged( this );
@@ -117,9 +117,10 @@ namespace LogAnalyzer
 
 		internal void OnFileChanged()
 		{
+			int startingIndex = entries.Count;
 			IList<LogEntry> addedLogEntries = logFileReader.ReadToEnd( logEntries.LastOrDefault() );
 
-			ProcessAddedEntries( addedLogEntries );
+			ProcessAddedEntries( addedLogEntries, startingIndex );
 		}
 
 		public event EventHandler<FileReadEventArgs> ReadProgress;

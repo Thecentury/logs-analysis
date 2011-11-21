@@ -75,12 +75,13 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		private void ProcessItemsAdded( NotifyCollectionChangedEventArgs e )
 		{
-			List<LogEntryViewModelLight> addedLight = new List<LogEntryViewModelLight>( e.NewItems.Count );
+			var addedLight = new List<LogEntryViewModel>( e.NewItems.Count );
 
 			for ( int i = 0; i < e.NewItems.Count; i++ )
 			{
 				int index = e.NewStartingIndex + i;
-				addedLight.Add( new LogEntryViewModelLight( index ) );
+				var addedItem = GetLogEntryViewModelByIndex(index, addTocache: false);
+				addedLight.Add( addedItem );
 			}
 
 			base.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedLight, e.NewStartingIndex ) );
@@ -90,25 +91,33 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		{
 			get
 			{
-				LogEntryViewModel logEntryViewModel;
-
-				if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
-				{
-					LogEntry logEntry = logEntries[index];
-					LogFileViewModel fileViewModel = fileViewModelFactory( logEntry );
-
-					logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
-					viewModelsCache.Add( index, logEntryViewModel );
-
-					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
-				}
-
-				return logEntryViewModel;
+				return GetLogEntryViewModelByIndex( index, addTocache: true );
 			}
 			set
 			{
 				throw new NotSupportedException();
 			}
+		}
+
+		private LogEntryViewModel GetLogEntryViewModelByIndex( int index, bool addTocache )
+		{
+			LogEntryViewModel logEntryViewModel;
+
+			if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
+			{
+				LogEntry logEntry = logEntries[index];
+				LogFileViewModel fileViewModel = fileViewModelFactory( logEntry );
+
+				logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
+
+				if ( addTocache )
+				{
+					viewModelsCache.Add(index, logEntryViewModel);
+					ItemCreated.Raise(this, new LogEntryHostChangedEventArgs(logEntryViewModel));
+				}
+			}
+
+			return logEntryViewModel;
 		}
 
 		object IList.this[int index]

@@ -25,7 +25,7 @@ namespace TestApp
 			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
 
 			var config = new LogAnalyzerConfiguration()
-								.AcceptAllLogTypes()
+								.AddLoggerAcceptedMessageType( MessageType.Error )
 								.AddLogDirectory( new LogDirectoryConfigurationInfo( "Dir1", "*", "Dir1" )
 								{
 									EncodingName = "utf-16",

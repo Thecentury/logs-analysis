@@ -1,8 +1,12 @@
-﻿using System;
+﻿//#define MEASURE_CREATED_COUNT
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using LogAnalyzer.Collections;
@@ -11,10 +15,11 @@ using System.Windows.Input;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public sealed class LogEntryViewModel : BindingObject, IAwareOfIndex
+	public sealed class LogEntryViewModel : BindingObject, IAwareOfIndex, IEquatable<LogEntryViewModel>
 	{
 		private readonly LogEntry logEntry;
 		private readonly LogFileViewModel parentFile;
@@ -35,6 +40,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return host; }
 		}
 
+#if MEASURE_CREATED_COUNT
+		private static int createdCount;
+#endif
+
 		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host, LogEntriesListViewModel parentViewModel, int indexInParentCollection )
 			: base( logEntry )
 		{
@@ -53,11 +62,50 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.indexInParentCollection = indexInParentCollection;
 			this.parentViewModel = parentViewModel;
 
+#if MEASURE_CREATED_COUNT
+			Interlocked.Increment( ref createdCount );
+			Logger.Instance.WriteInfo( "LogEntryViewModel.ctor: CreatedCount = {0}", createdCount );
+#endif
+
 			// todo обдумать, как еще можно сделать
 			if ( logEntry.IsFrozen )
 			{
 				// Freeze();
 			}
+		}
+
+#if MEASURE_CREATED_COUNT
+		~LogEntryViewModel()
+		{
+			Interlocked.Decrement(ref createdCount);
+			Logger.Instance.WriteInfo( "LogEntryViewModel.~dtor: CreatedCount = {0}", createdCount );
+
+		}
+#endif
+
+		public bool Equals( LogEntryViewModel other )
+		{
+			if ( ReferenceEquals( null, other ) ) 
+				return false;
+			if ( ReferenceEquals( this, other ) ) 
+				return true;
+			bool equals = Equals( other.logEntry, logEntry );
+			return equals;
+		}
+
+		public override bool Equals( object obj )
+		{
+			if ( ReferenceEquals( null, obj ) ) 
+				return false;
+			if ( ReferenceEquals( this, obj ) ) return true;
+			if ( obj.GetType() != typeof( LogEntryViewModel ) ) return false;
+			bool equals = Equals( (LogEntryViewModel)obj );
+			return equals;
+		}
+
+		public override int GetHashCode()
+		{
+			return logEntry.GetHashCode();
 		}
 
 		protected override void OnPropertyChangedUnsubscribe()
@@ -146,6 +194,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private readonly ObservableCollection<HighlightingViewModel> highlightedByList = new ObservableCollection<HighlightingViewModel>();
 		/// <summary>
 		/// Список фильтров, которыми подсвечена данная запись.
@@ -235,11 +284,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Select file in explorer
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand SelectFileInExplorerCommand
 		{
 			get { return File.SelectFileCommand; }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string SelectFileInExplorerCommandHeader
 		{
 			get { return File.ShowInExplorerCommandHeader; }
@@ -247,11 +298,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Open folder in explorer
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand OpenFolderInExplorerCommand
 		{
 			get { return Directory.OpenFolderCommand; }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string OpenFolderInExplorerCommandHeader
 		{
 			get { return Directory.OpenFolderInExplorerCommandHeader; }
@@ -263,11 +316,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Create view for this file
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string CreateViewForFileCommandHeader
 		{
 			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CreateFileViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddFileViewCommand( File ); }
@@ -275,11 +330,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Create view for directory
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string CreateViewForDirectoryCommandHeader
 		{
 			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CreateDirectoryViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddDirectoryViewCommand( Directory ); }
@@ -287,11 +344,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Create view for thread
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string CreateThreadViewCommandHeader
 		{
 			get { return "Thread Id={0}".Format2( ThreadId ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CreateThreadViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddThreadViewCommand( ThreadId ); }
@@ -299,11 +358,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Create view for file name
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string CreateFileNameViewCommandHeader
 		{
 			get { return "All files with FileName = \"{0}\"".Format2( File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CreateFileNameViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddFileNameViewCommand( File.Name ); }
@@ -311,11 +372,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Create view for message type
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string CreateMessageTypeViewCommandHeader
 		{
 			get { return string.Format( "MessageType \"{0}\"", Type ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CreateMessageTypeViewCommand
 		{
 			get { return ApplicationViewModel.CreateAddMessageTypeViewCommand( Type ); }
@@ -327,11 +390,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Exclude certain file
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string ExcludeByCertainFileCommandHeader
 		{
 			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand ExcludeByCertainFileCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeByCertainFileCommand( this ); }
@@ -339,11 +404,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Exclude thread id
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string ExcludeByThreadIdCommandHeader
 		{
 			get { return "Thread Id={0}".Format2( ThreadId ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand ExcludeByThreadIdCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeByThreadIdCommand( this ); }
@@ -351,11 +418,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Exclude by filename
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string ExcludeByFilenameCommandHeader
 		{
 			get { return "All files \"{0}\"".Format2( File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand ExcludeByFilenameCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeByFilenameCommand( this ); }
@@ -363,11 +432,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Exclude directory
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string ExcludeDirectoryCommandHeader
 		{
 			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand ExcludeDirectoryCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeDirectoryCommand( this ); }
@@ -375,11 +446,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Exclude by message severity
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string ExcludeByMessageTypeCommandHeader
 		{
 			get { return String.Format( "MessageType \"{0}\"", Type ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand ExcludeByMessageTypeCommand
 		{
 			get { return ApplicationViewModel.CreateExcludeByMessageTypeCommand( this ); }
@@ -402,11 +475,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Highlight by certain file
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string HighlightByCertainFileCommandHeader
 		{
 			get { return "File \"{0}\\{1}\"".Format2( Directory.DisplayName, File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand HighlightByCertainFileCommand
 		{
 			get
@@ -419,11 +494,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Highlight thread id
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string HighlightByThreadIdCommandHeader
 		{
 			get { return "Thread Id={0}".Format2( ThreadId ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand HighlightByThreadIdCommand
 		{
 			get { return CreateHighlightCommand( new ThreadIdEquals( ThreadId ) ); }
@@ -431,11 +508,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Highlight by filename
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string HighlightByFilenameCommandHeader
 		{
 			get { return "All files \"{0}\"".Format2( File.Name ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand HighlightByFilenameCommand
 		{
 			get { return CreateHighlightCommand( new FileNameEquals( File.Name ) ); }
@@ -443,11 +522,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Highlight directory
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string HighlightDirectoryCommandHeader
 		{
 			get { return "Directory \"{0}\"".Format2( Directory.DisplayName ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand HighlightDirectoryCommand
 		{
 			get
@@ -463,11 +544,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Highlight by message severity
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public string HighlightByMessageTypeCommandHeader
 		{
 			get { return String.Format( "MessageType \"{0}\"", Type ); }
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand HighlightByMessageTypeCommand
 		{
 			get { return CreateHighlightCommand( new MessageTypeEquals( Type ) ); }
@@ -477,7 +560,10 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Copy to clipboard
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private DelegateCommand copyFileNameCommand;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFileNameCommand
 		{
 			get
@@ -489,7 +575,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private DelegateCommand copyFullPathCommand;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFullPathCommand
 		{
 			get
@@ -501,7 +590,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private DelegateCommand copyFileLocationCommand;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFileLocationCommand
 		{
 			get
@@ -517,7 +609,10 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private DelegateCommand copyMessageCommand;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyMessageCommand
 		{
 			get
@@ -546,5 +641,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		#endregion
+
 	}
 }

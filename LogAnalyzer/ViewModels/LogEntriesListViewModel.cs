@@ -515,10 +515,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				entriesView = new LogEntryViewModelCollectionView( logEntriesViewModels );
 				updateAddedCountTimer = new DispatcherTimer
-											{
-												Interval =
-													TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
-											};
+				{
+					Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
+				};
 				updateAddedCountTimer.Tick += OnUpdateAddedCountTimer_Tick;
 				updateAddedCountTimer.Start();
 			} );
@@ -569,6 +568,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			//    dispatcher.VerifyAccess();
 			//}
 #endif
+			Logger.Instance.WriteError( "{0}: {1} +{2} starting from {3}", GetType().Name,
+				e.Action, e.NewItems != null ? e.NewItems.Count : 0, e.NewStartingIndex );
 
 			ScrollDownIfShould();
 
@@ -579,9 +580,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ScrollDownIfShould()
 		{
-			if ( autoScrollToBottom && ScrollToBottomCommand.CanExecute() )
+			if ( autoScrollToBottom )
 			{
-				ScrollToBottomCommand.Execute();
+				Dispatcher.CurrentDispatcher.BeginInvoke( ScrollToBottomCommand.ExecuteIfCan );
 			}
 		}
 
