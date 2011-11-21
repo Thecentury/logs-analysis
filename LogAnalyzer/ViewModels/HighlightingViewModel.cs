@@ -173,8 +173,10 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				lock ( acceptedEntriesSync )
 				{
+					int startingIndex = acceptedEntries.Count;
+
 					acceptedEntries.AddRange( acceptedAddedEntries );
-					observableFilteredEntries.RaiseGenericCollectionItemsAdded( acceptedAddedEntries );
+					observableFilteredEntries.RaiseGenericCollectionItemsAdded( acceptedAddedEntries, startingIndex );
 					observableFilteredEntries.RaiseCountChanged();
 				}
 			}
@@ -193,6 +195,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void FillAcceptedEntries( IEnumerable<LogEntry> entries )
 		{
 			var added = new List<LogEntry>();
+
+			int startingIndex = acceptedEntries.Count;
+
 			foreach ( var logEntry in entries )
 			{
 				if ( filter.Include( logEntry ) )
@@ -201,7 +206,7 @@ namespace LogAnalyzer.GUI.ViewModels
 					added.Add( logEntry );
 				}
 			}
-			this.observableFilteredEntries.RaiseCollectionItemsAdded( added );
+			this.observableFilteredEntries.RaiseCollectionItemsAdded( added, startingIndex );
 		}
 
 		private void OnLogEntriesViewModels_ItemCreated( object sender, LogEntryHostChangedEventArgs e )

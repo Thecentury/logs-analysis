@@ -23,6 +23,7 @@ namespace TestApp
 	{
 		private TestBootstrapper bootstrapper;
 		private readonly List<MockLogWriter> writers = new List<MockLogWriter>();
+		private const int millis = 100;
 
 		public MainWindow()
 		{
@@ -41,11 +42,11 @@ namespace TestApp
 			MockDirectoryInfo dir1 = (MockDirectoryInfo)bootstrapper.Environment.GetDirectory( "Dir1" );
 			string fileName = "File" + writers.Count;
 			MockFileInfo file = dir1.AddFile( fileName );
-			file.DateFormat = "dd.MM.yyyy H:mm:ss.fff";
+			file.DateFormat = @"dd.MM.yyyy H:mm:ss\.fff";
 
 			MockLogRecordsSource notificationSource = dir1.MockNotificationSource;
 
-			MockLogWriter writer = new MockLogWriter( notificationSource, file, TimeSpan.FromMilliseconds( 800 ) );
+			MockLogWriter writer = new MockLogWriter( notificationSource, file, TimeSpan.FromMilliseconds( millis ) );
 			writers.Add( writer );
 			writer.Start();
 		}
@@ -65,7 +66,7 @@ namespace TestApp
 
 		private void ResumeAllButton_Click( object sender, RoutedEventArgs e )
 		{
-			SetSleepDurationForAll( TimeSpan.FromMilliseconds( 800 ) );
+			SetSleepDurationForAll( TimeSpan.FromMilliseconds( millis ) );
 		}
 	}
 }

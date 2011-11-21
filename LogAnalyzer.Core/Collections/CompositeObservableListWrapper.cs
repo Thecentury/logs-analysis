@@ -170,7 +170,7 @@ namespace LogAnalyzer
 			{
 				get
 				{
-					TItem result = default( TItem );
+					TItem result;
 
 					if ( index < firstCount )
 					{

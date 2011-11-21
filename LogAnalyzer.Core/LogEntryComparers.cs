@@ -54,7 +54,9 @@ namespace LogAnalyzer
 
 		public int Compare( LogEntry x, LogEntry y )
 		{
-			int comparison = x.Time.CompareTo( y.Time );
+			int xSeconds = (int) x.Time.TimeOfDay.TotalSeconds;
+			int ySeconds = (int) y.Time.TimeOfDay.TotalSeconds;
+			int comparison = xSeconds.CompareTo( ySeconds );
 			return comparison;
 		}
 	}

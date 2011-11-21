@@ -32,21 +32,27 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
-			var collectionChanged = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection, "CollectionChanged" )
-				.ObserveOn( scheduler );
+			var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection,
+																						   "CollectionChanged" );
 
-			var unsubscribeAdd = collectionChanged.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
+			var unsubscribeAdd = observable.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
+				//.Buffer( TimeSpan.FromSeconds( 1 ) )
+				.ObserveOn( scheduler )
+				//.SelectMany( e => e )
 				.Subscribe( e => OnAdded( e.EventArgs ) );
 
-			var unsubscriveOthers = collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
+			var collectionChanged = observable
+				.ObserveOn( scheduler );
+			var unsubscribeOthers = collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
 				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
 
-			unsubscruber = new CompositeDisposable( unsubscribeAdd, unsubscriveOthers );
+			unsubscriber = new CompositeDisposable( unsubscribeAdd, unsubscribeOthers );
 		}
 
 		private void OnAdded( NotifyCollectionChangedEventArgs e )
 		{
 			int index = e.NewStartingIndex;
+
 			for ( int i = 0; i < e.NewItems.Count; i++ )
 			{
 				var addedItem = e.NewItems[i];
@@ -54,7 +60,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			}
 		}
 
-		// todo прореживать частоту событий
 		protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
 			CollectionChanged.RaiseCollectionChanged( this, e );
@@ -85,5 +90,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		{
 			unsubscruber.Dispose();
 		}
+
+		public CompositeDisposable unsubscriber { get; set; }
 	}
 }

@@ -131,8 +131,9 @@ namespace LogAnalyzer.GUI.ViewModels
 				// тут считаем, что элементы были добавлены в конец
 				List<LogEntry> passedItems = e.NewItems.Cast<LogEntry>().Where( filter.Include ).ToList();
 
+				int startingIndex = observableFilteredEntries.List.Count;
 				observableFilteredEntries.List.AddRange( passedItems );
-				observableFilteredEntries.RaiseCollectionItemsAdded( passedItems );
+				observableFilteredEntries.RaiseCollectionItemsAdded( passedItems, startingIndex );
 			}
 
 			RaisePropertyChanged( "SourceCount" );
