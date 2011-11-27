@@ -9,14 +9,18 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using LogAnalyzer.ColorOverviews;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
+using Microsoft.Research.DynamicDataDisplay.Common.Palettes;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -210,6 +214,29 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		#endregion
+
+		#region Overviews
+
+		private BitmapSource densityImage;
+		public BitmapSource DensityImage
+		{
+			get
+			{
+				if ( densityImage == null )
+				{
+					var collector = new DensityOverviewCollector<LogEntry>( e => true );
+					var builder = new DensityOverviewBuilder<LogEntry>();
+					var map = builder.CreateOverviewMap( collector.Build( entries ) );
+
+					var bitmapBuilder = new OverviewBitmapBuilder();
+					densityImage = bitmapBuilder.CreateBitmap( map, new LinearPalette( Colors.White, Colors.DarkBlue ) );
+				}
+
+				return densityImage;
+			}
+		}
+
+		#endregion Overviews
 
 		#region Commands
 

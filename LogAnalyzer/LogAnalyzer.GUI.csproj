@@ -175,6 +175,7 @@
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
+    <Compile Include="OverviewGui\OverviewBitmapBuilder.cs" />
     <Compile Include="Regions\FutureRegion.cs" />
     <Compile Include="Regions\GenericRegionAdapter.cs" />
     <Compile Include="Regions\IRegion.cs" />
@@ -351,6 +352,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicDataDisplay\DynamicDataDisplay.csproj">
+      <Project>{ECD37682-DF7E-409F-912D-0965634556B5}</Project>
+      <Name>DynamicDataDisplay</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
@@ -449,6 +454,7 @@
   <ItemGroup>
     <Resource Include="Resources\flag.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

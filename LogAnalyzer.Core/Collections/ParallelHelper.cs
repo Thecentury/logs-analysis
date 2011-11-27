@@ -43,9 +43,14 @@ namespace LogAnalyzer.Collections
 
 		public static int SequentialIndexOf<T>( IList<T> collection, T item ) where T : class
 		{
-			for ( int i = 0; i < collection.Count; i++ )
+			return SequentialIndexOf( collection, item, 0 );
+		}
+
+		public static int SequentialIndexOf<T>( IList<T> list, T item, int startingIndex ) where T : class
+		{
+			for ( int i = startingIndex; i < list.Count; i++ )
 			{
-				T currentItem = collection[i];
+				T currentItem = list[i];
 				if ( ReferenceEquals( item, currentItem ) )
 					return i;
 			}

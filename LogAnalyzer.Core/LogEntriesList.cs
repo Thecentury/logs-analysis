@@ -46,7 +46,7 @@ namespace LogAnalyzer
 
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
 		{
-			int startingIndex = this.mergedEntriesList.Count;
+			int startingIndex = MergedEntries.Count;
 			
 			logEntrySortedCollection.Enqueue( addedEntries );
 			

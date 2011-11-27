@@ -85,9 +85,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public bool Equals( LogEntryViewModel other )
 		{
-			if ( ReferenceEquals( null, other ) ) 
+			if ( ReferenceEquals( null, other ) )
 				return false;
-			if ( ReferenceEquals( this, other ) ) 
+			if ( ReferenceEquals( this, other ) )
 				return true;
 			bool equals = Equals( other.logEntry, logEntry );
 			return equals;
@@ -95,7 +95,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override bool Equals( object obj )
 		{
-			if ( ReferenceEquals( null, obj ) ) 
+			if ( ReferenceEquals( null, obj ) )
 				return false;
 			if ( ReferenceEquals( this, obj ) ) return true;
 			if ( obj.GetType() != typeof( LogEntryViewModel ) ) return false;
@@ -178,7 +178,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private SolidColorBrush logNameBackground;
+		private Brush logNameBackground;
 		public Brush LogNameBackground
 		{
 			get
@@ -187,7 +187,9 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
 					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
-					logNameBackground = new SolidColorBrush( hsbColor.ToArgbColor() );
+					HsbColor darkerColor = new HsbColor( hue, 0.2, 0.9 );
+					logNameBackground = new LinearGradientBrush( hsbColor.ToArgbColor(), darkerColor.ToArgbColor(), 90 );
+					logNameBackground.Freeze();
 				}
 
 				return logNameBackground;

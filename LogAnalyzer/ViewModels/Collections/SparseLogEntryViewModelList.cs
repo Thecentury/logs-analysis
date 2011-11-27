@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Logging;
 
@@ -75,23 +76,45 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		private void ProcessItemsAdded( NotifyCollectionChangedEventArgs e )
 		{
-			var addedLight = new List<LogEntryViewModel>( e.NewItems.Count );
+			if ( e.NewItems.Count != 1 )
+				throw new InvalidOperationException( "Should add only by one new item at a time." );
 
-			for ( int i = 0; i < e.NewItems.Count; i++ )
+			int index = e.NewStartingIndex;
+			LogEntry entry = (LogEntry)e.NewItems[0];
+
+			int actualIndex = AdjustIndex( entry, index );
+
+			var addedItem = GetLogEntryViewModelByIndex( actualIndex, addToCache: false );
+
+			base.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem,
+																		  actualIndex ) );
+		}
+
+		private int AdjustIndex( LogEntry entry, int index )
+		{
+			var compositeList = logEntries as CompositeObservableListWrapper<LogEntry>;
+			if ( compositeList == null )
+				return index;
+
+			int listItemsCount = compositeList.First.Count;
+			if ( index < listItemsCount )
+				return index;
+
+			int adjustedIndex = ParallelHelper.SequentialIndexOf( compositeList, entry, 0 );
+
+			if ( adjustedIndex != index )
 			{
-				int index = e.NewStartingIndex + i;
-				var addedItem = GetLogEntryViewModelByIndex(index, addTocache: false);
-				addedLight.Add( addedItem );
+				Logger.Instance.WriteError( "Adjusted index: was {0}, now {1}", index, adjustedIndex );
 			}
 
-			base.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedLight, e.NewStartingIndex ) );
+			return adjustedIndex;
 		}
 
 		public LogEntryViewModel this[int index]
 		{
 			get
 			{
-				return GetLogEntryViewModelByIndex( index, addTocache: true );
+				return GetLogEntryViewModelByIndex( index, addToCache: true );
 			}
 			set
 			{
@@ -99,7 +122,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			}
 		}
 
-		private LogEntryViewModel GetLogEntryViewModelByIndex( int index, bool addTocache )
+		private LogEntryViewModel GetLogEntryViewModelByIndex( int index, bool addToCache )
 		{
 			LogEntryViewModel logEntryViewModel;
 
@@ -110,10 +133,10 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 				logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
 
-				if ( addTocache )
+				if ( addToCache )
 				{
-					viewModelsCache.Add(index, logEntryViewModel);
-					ItemCreated.Raise(this, new LogEntryHostChangedEventArgs(logEntryViewModel));
+					viewModelsCache.Add( index, logEntryViewModel );
+					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 				}
 			}
 

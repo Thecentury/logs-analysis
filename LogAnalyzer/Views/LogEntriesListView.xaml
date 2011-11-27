@@ -380,6 +380,8 @@
 		</DockPanel>
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
+		
+		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
