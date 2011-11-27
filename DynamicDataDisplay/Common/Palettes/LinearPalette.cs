@@ -70,7 +70,7 @@ namespace Microsoft.Research.DynamicDataDisplay.Common.Palettes
 		/// <returns>Color.</returns>
 		public Color GetColor(double t)
 		{
-			if (t < 0) return steps[0].Color;
+			if (t <= 0) return steps[0].Color;
 			if (t >= 1) return steps[steps.Count - 1].Color;
 
 			int i = 0;

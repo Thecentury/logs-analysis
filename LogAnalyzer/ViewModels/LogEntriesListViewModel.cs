@@ -228,11 +228,29 @@ namespace LogAnalyzer.GUI.ViewModels
 					var builder = new DensityOverviewBuilder<LogEntry>();
 					var map = builder.CreateOverviewMap( collector.Build( entries ) );
 
-					var bitmapBuilder = new OverviewBitmapBuilder();
-					densityImage = bitmapBuilder.CreateBitmap( map, new LinearPalette( Colors.White, Colors.DarkBlue ) );
+					var bitmapBuilder = new PaletteOverviewBitmapBuilder( new LinearPalette( Colors.White, Colors.DarkBlue ) );
+					densityImage = bitmapBuilder.CreateBitmap( map );
 				}
 
 				return densityImage;
+			}
+		}
+
+		private BitmapSource messageTypeImage;
+		public BitmapSource MessageTypeImage
+		{
+			get
+			{
+				if ( messageTypeImage == null )
+				{
+					var collector = new GroupingOverviewCollector<LogEntry>( e => true );
+					var builder = new MessageTypeOverviewBuilder();
+					var map = builder.CreateOverviewMap( collector.Build( entries ) );
+
+					var bitmapBuilder = new MessageTypeBitmapBuilder();
+					messageTypeImage = bitmapBuilder.CreateBitmap( map );
+				}
+				return messageTypeImage;
 			}
 		}
 

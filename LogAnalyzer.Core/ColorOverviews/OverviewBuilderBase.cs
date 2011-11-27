@@ -1,20 +1,20 @@
 namespace LogAnalyzer.ColorOverviews
 {
-	public abstract class OverviewBuilderBase<T> : IOverviewBuilder<T>
+	public abstract class OverviewBuilderBase<T, TResult> : IOverviewBuilder<T, TResult>
 	{
-		public double[] CreateOverviewMap( T[] source )
+		public TResult[] CreateOverviewMap( T[] source )
 		{
-			double[] map = new double[source.Length];
+			TResult[] map = new TResult[source.Length];
 
 			for ( int i = 0; i < map.Length; i++ )
 			{
-				double value = GetValue( source[i] );
+				TResult value = GetValue( source[i] );
 				map[i] = value;
 			}
 
 			return map;
 		}
 
-		protected abstract double GetValue( T item );
+		protected abstract TResult GetValue( T item );
 	}
 }

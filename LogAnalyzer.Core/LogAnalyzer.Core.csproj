@@ -87,6 +87,7 @@
     <Compile Include="ColorOverviews\IOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\IOverviewCollector.cs" />
     <Compile Include="ColorOverviews\LastMatchingOverviewCollector.cs" />
+    <Compile Include="ColorOverviews\MessageTypeOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\OverviewBuilderBase.cs" />
     <Compile Include="ColorOverviews\OverviewCollectorBase.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
