@@ -187,7 +187,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
 					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
-					HsbColor darkerColor = new HsbColor( hue, 0.2, 0.9 );
+					HsbColor darkerColor = new HsbColor( hue, 0.2, 0.95 );
 					logNameBackground = new LinearGradientBrush( hsbColor.ToArgbColor(), darkerColor.ToArgbColor(), 90 );
 					logNameBackground.Freeze();
 				}

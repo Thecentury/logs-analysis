@@ -3,8 +3,8 @@ using System.Text;
 
 namespace LogAnalyzer.ColorOverviews
 {
-	public interface IOverviewBuilder<in T>
+	public interface IOverviewBuilder<in T, out TResult>
 	{
-		double[] CreateOverviewMap( T[] source );
+		TResult[] CreateOverviewMap( T[] source );
 	}
 }

@@ -1,6 +1,6 @@
 namespace LogAnalyzer.ColorOverviews
 {
-	public sealed class DiscreteOverviewBuilder<T> : OverviewBuilderBase<T>
+	public sealed class DiscreteOverviewBuilder<T> : OverviewBuilderBase<T, double>
 		where T : class
 	{
 		protected override double GetValue( T item )

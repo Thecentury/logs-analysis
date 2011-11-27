@@ -6,22 +6,25 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.Common.Palettes;
+
 
 namespace LogAnalyzer.GUI.OverviewGui
 {
-	public sealed class OverviewBitmapBuilder
+	public abstract class OverviewBitmapBuilderBase<T> : IOverviewBitmapBuilder<T>
 	{
-		public BitmapSource CreateBitmap( double[] map, IPalette palette )
+		protected abstract Color GetColor( T item );
+
+		public BitmapSource CreateBitmap( T[] map )
 		{
+			if ( map == null ) throw new ArgumentNullException( "map" );
+
 			int width = map.Length;
 			const int height = 1;
 
 			int[] pixels = new int[width];
 			for ( int i = 0; i < map.Length; i++ )
 			{
-				var color = palette.GetColor( map[i] );
-				pixels[i] = color.ToArgb();
+				pixels[i] = GetColor( map[i] ).ToArgb();
 			}
 
 			WriteableBitmap bmp = new WriteableBitmap( width, height, 96, 96, PixelFormats.Pbgra32, null );

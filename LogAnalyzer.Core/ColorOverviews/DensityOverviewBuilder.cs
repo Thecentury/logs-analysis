@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LogAnalyzer.ColorOverviews
 {
-	public sealed class DensityOverviewBuilder<T> : IOverviewBuilder<ICollection<T>>
+	public sealed class DensityOverviewBuilder<T> : IOverviewBuilder<ICollection<T>, double>
 	{
 		public double[] CreateOverviewMap( ICollection<T>[] source )
 		{
