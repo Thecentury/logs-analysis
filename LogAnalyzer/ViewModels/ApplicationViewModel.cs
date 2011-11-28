@@ -5,6 +5,7 @@ using System.Windows;
 using LogAnalyzer.Config;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Regions;
+using LogAnalyzer.GUI.ViewModels.FilesTree;
 using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;
 using Microsoft.Win32;
@@ -87,6 +88,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			onCoreLoadedCalled = true;
 
 			coreViewModel = new CoreViewModel( core, this ) { IsActive = true };
+			FilesTree = new CoreTreeItem( core );
 
 			BeginInvokeInUIDispatcher( () =>
 			{
@@ -158,5 +160,20 @@ namespace LogAnalyzer.GUI.ViewModels
 				return tabs[selectedIndex];
 			}
 		}
+
+		#region Files tree
+
+		private CoreTreeItem filesTree;
+		public CoreTreeItem FilesTree
+		{
+			get { return filesTree; }
+			private set
+			{
+				filesTree = value;
+				RaisePropertyChanged( "FilesTree" );
+			}
+		}
+
+		#endregion
 	}
 }

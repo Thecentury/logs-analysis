@@ -226,7 +226,9 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					var collector = new DensityOverviewCollector<LogEntry>( e => true );
 					var builder = new DensityOverviewBuilder<LogEntry>();
-					var map = builder.CreateOverviewMap( collector.Build( entries ) );
+					var map = builder.CreateOverviewMap( collector.Build( entries ) )
+						.Select( e => Math.Pow( e, 0.33 ) )
+						.ToArray();
 
 					var bitmapBuilder = new PaletteOverviewBitmapBuilder( new LinearPalette( Colors.White, Colors.DarkBlue ) );
 					densityImage = bitmapBuilder.CreateBitmap( map );

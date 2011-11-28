@@ -198,6 +198,7 @@
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
+    <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />
     <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
@@ -242,6 +243,9 @@
     <Compile Include="ViewModels\Collections\DispatcherEnumerable.cs" />
     <Compile Include="ViewModels\Collections\DispatcherList.cs" />
     <Compile Include="ViewModels\LogEntryViewModelCollectionView.cs" />
+    <Compile Include="Views\FileTreeView.xaml.cs">
+      <DependentUpon>FileTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FilterEditorWindow.xaml.cs">
       <DependentUpon>FilterEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -289,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ExceptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FileTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -458,7 +466,45 @@
   <ItemGroup>
     <Resource Include="Resources\flag.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Documents\document-attribute-b.png" />
+    <Resource Include="Resources\Documents\document-attribute-c.png" />
+    <Resource Include="Resources\Documents\document-attribute-d.png" />
+    <Resource Include="Resources\Documents\document-attribute-e.png" />
+    <Resource Include="Resources\Documents\document-attribute-f.png" />
+    <Resource Include="Resources\Documents\document-attribute-g.png" />
+    <Resource Include="Resources\Documents\document-attribute-h.png" />
+    <Resource Include="Resources\Documents\document-attribute-i.png" />
+    <Resource Include="Resources\Documents\document-attribute-j.png" />
+    <Resource Include="Resources\Documents\document-attribute-k.png" />
+    <Resource Include="Resources\Documents\document-attribute-l.png" />
+    <Resource Include="Resources\Documents\document-attribute-m.png" />
+    <Resource Include="Resources\Documents\document-attribute-n.png" />
+    <Resource Include="Resources\Documents\document-attribute-o.png" />
+    <Resource Include="Resources\Documents\document-attribute-p.png" />
+    <Resource Include="Resources\Documents\document-attribute-q.png" />
+    <Resource Include="Resources\Documents\document-attribute-r.png" />
+    <Resource Include="Resources\Documents\document-attribute-s.png" />
+    <Resource Include="Resources\Documents\document-attribute-t.png" />
+    <Resource Include="Resources\Documents\document-attribute-u.png" />
+    <Resource Include="Resources\Documents\document-attribute-v.png" />
+    <Resource Include="Resources\Documents\document-attribute-w.png" />
+    <Resource Include="Resources\Documents\document-attribute-x.png" />
+    <Resource Include="Resources\Documents\document-attribute-y.png" />
+    <Resource Include="Resources\Documents\document-attribute-z.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Documents\document-attribute-a.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Documents\document-globe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\box-document.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

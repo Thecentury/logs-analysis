@@ -60,7 +60,7 @@
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
 								<views:LoadingView/>
 							</DataTemplate>
-							
+
 						</DataTemplate.Resources>
 
 						<ContentPresenter Content="{Binding}"/>
@@ -80,8 +80,16 @@
 		</ad:ResizingPanel>
 	</ad:DockingManager>-->
 
-		<views:TabControlEx ItemsSource="{Binding Tabs}" SelectedIndex="{Binding SelectedIndex}"
-				ItemContainerStyle="{StaticResource tabStyle}">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<views:TabControlEx Grid.Column="0"
+			ItemsSource="{Binding Tabs}" 
+			SelectedIndex="{Binding SelectedIndex}"
+			ItemContainerStyle="{StaticResource tabStyle}">
 			<TabControl.Template>
 				<ControlTemplate TargetType="TabControl">
 					<DockPanel>
@@ -92,4 +100,9 @@
 				</ControlTemplate>
 			</TabControl.Template>
 		</views:TabControlEx>
+
+		<views:FileTreeView Grid.Column="1" DataContext="{Binding FilesTree}"/>
+
+	</Grid>
+
 </UserControl>
