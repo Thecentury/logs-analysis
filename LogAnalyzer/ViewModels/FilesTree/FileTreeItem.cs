@@ -35,7 +35,15 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		private static readonly Dictionary<string, string> fileNameToIconMap = new Dictionary<string, string>
 		{
 		    {"security", "lock"},
-			{"pagebuilder-eticket_actual", "box-document"}
+			{"pagebuilder-eticket_actual", "box-document"},
+			{"cacheproxy", "server-cast"},
+			{"schedule", "alarm-clock-blue"},
+			{"modulenotification", "at-sign"},
+			{"muscat", "database"},
+			{"kernel", "leaf"},
+			{"corporatormanager", "briefcase"},
+			{"usermanager", "users"},
+			{"moduleantifraud", "user-thief-baldie"}
 		};
 
 		public override string IconSource
@@ -49,19 +57,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 					return PackUriHelper.MakePackUri( String.Format( "/Resources/{0}.png", icon ) );
 				}
 
-				char firstLetter = Char.ToLower( logFile.Name[0] );
-
-				bool isLatinLetter = 'a' <= firstLetter && firstLetter <= 'z';
-				if ( isLatinLetter )
-				{
-					string path = logFile.Name[0].ToString().ToLower();
-					string uri = PackUriHelper.MakePackUri( string.Format( "/Resources/Documents/document-attribute-{0}.png", path ) );
-					return uri;
-				}
-				else
-				{
-					return PackUriHelper.MakePackUri( "/Resources/Document/document-globe.png" );
-				}
+				return PackUriHelper.MakePackUri( "/Resources/document-globe.png" );
 			}
 		}
 

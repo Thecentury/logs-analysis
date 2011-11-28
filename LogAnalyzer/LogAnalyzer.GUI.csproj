@@ -467,43 +467,35 @@
     <Resource Include="Resources\flag.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Documents\document-attribute-b.png" />
-    <Resource Include="Resources\Documents\document-attribute-c.png" />
-    <Resource Include="Resources\Documents\document-attribute-d.png" />
-    <Resource Include="Resources\Documents\document-attribute-e.png" />
-    <Resource Include="Resources\Documents\document-attribute-f.png" />
-    <Resource Include="Resources\Documents\document-attribute-g.png" />
-    <Resource Include="Resources\Documents\document-attribute-h.png" />
-    <Resource Include="Resources\Documents\document-attribute-i.png" />
-    <Resource Include="Resources\Documents\document-attribute-j.png" />
-    <Resource Include="Resources\Documents\document-attribute-k.png" />
-    <Resource Include="Resources\Documents\document-attribute-l.png" />
-    <Resource Include="Resources\Documents\document-attribute-m.png" />
-    <Resource Include="Resources\Documents\document-attribute-n.png" />
-    <Resource Include="Resources\Documents\document-attribute-o.png" />
-    <Resource Include="Resources\Documents\document-attribute-p.png" />
-    <Resource Include="Resources\Documents\document-attribute-q.png" />
-    <Resource Include="Resources\Documents\document-attribute-r.png" />
-    <Resource Include="Resources\Documents\document-attribute-s.png" />
-    <Resource Include="Resources\Documents\document-attribute-t.png" />
-    <Resource Include="Resources\Documents\document-attribute-u.png" />
-    <Resource Include="Resources\Documents\document-attribute-v.png" />
-    <Resource Include="Resources\Documents\document-attribute-w.png" />
-    <Resource Include="Resources\Documents\document-attribute-x.png" />
-    <Resource Include="Resources\Documents\document-attribute-y.png" />
-    <Resource Include="Resources\Documents\document-attribute-z.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Documents\document-attribute-a.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Documents\document-globe.png" />
+    <Resource Include="Resources\document-globe.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\lock.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\box-document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alarm-clock-blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\at-sign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\briefcase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\leaf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\server-cast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\user-thief-baldie.png" />
+    <Resource Include="Resources\users.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
