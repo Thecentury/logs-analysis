@@ -381,8 +381,8 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 		
-		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill"/>
-		<Image Source="{Binding MessageTypeImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill"/>
+		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
+		<Image Source="{Binding MessageTypeImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
