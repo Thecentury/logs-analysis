@@ -60,6 +60,10 @@
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
 								<views:LoadingView/>
 							</DataTemplate>
+							
+							<DataTemplate DataType="{x:Type vm:DropFilesViewModel}">
+								<views:DropFilesView/>
+							</DataTemplate>
 
 						</DataTemplate.Resources>
 

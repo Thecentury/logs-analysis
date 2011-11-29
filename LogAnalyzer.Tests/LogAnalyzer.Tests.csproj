@@ -73,7 +73,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationViewModelCommandsTests.cs" />
+    <Compile Include="Gui\ApplicationViewModelCommandsTests.cs" />
     <Compile Include="CollectionBooleanBuildersViewModelTests.cs" />
     <Compile Include="ConfigTests.cs" />
     <Compile Include="DateTimeParsingBenchmark.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="DifferentEncodingsTests.cs" />
     <Compile Include="DirectoryManagerTests.cs" />
     <Compile Include="FilterTests.cs" />
+    <Compile Include="Gui\ApplicationViewModelTests.cs" />
     <Compile Include="Gui\TreeItemsTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />

@@ -7,7 +7,7 @@ using LogAnalyzer.GUI.Common;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public class TabViewModel : BindingObject, ITypeName
+	public abstract class TabViewModel : BindingObject, ITypeName
 	{
 		private readonly ApplicationViewModel applicationViewModel;
 		public ApplicationViewModel ApplicationViewModel
@@ -40,10 +40,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public virtual string Header { get { return "<HEADER NOT SET>"; } }
 		public virtual bool IsActive { get; set; }
-		public virtual string IconFile
-		{
-			get { return null; }
-		}
+		public abstract string IconFile { get; }
 
 		protected string MakePackUri( string uri )
 		{

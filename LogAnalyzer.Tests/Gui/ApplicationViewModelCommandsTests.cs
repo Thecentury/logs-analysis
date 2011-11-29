@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LogAnalyzer.GUI.ViewModels;
+﻿using LogAnalyzer.GUI.ViewModels;
 using NUnit.Framework;
 using LogAnalyzer.Filters;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Gui
 {
 	[TestFixture]
 	public class ApplicationViewModelCommandsTests
