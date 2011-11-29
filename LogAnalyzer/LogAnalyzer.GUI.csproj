@@ -196,6 +196,7 @@
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
+    <Compile Include="ViewModels\DropFilesViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />
@@ -229,6 +230,9 @@
     <Compile Include="ViewModels\ToolBarItemViewModel.cs" />
     <Compile Include="Views\DefaultTabHeaderControl.xaml.cs">
       <DependentUpon>DefaultTabHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DropFilesView.xaml.cs">
+      <DependentUpon>DropFilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExceptionView.xaml.cs">
       <DependentUpon>ExceptionView.xaml</DependentUpon>
@@ -289,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DefaultTabHeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DropFilesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -496,6 +504,12 @@
   <ItemGroup>
     <Resource Include="Resources\user-thief-baldie.png" />
     <Resource Include="Resources\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\battery-low.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\battery-charge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

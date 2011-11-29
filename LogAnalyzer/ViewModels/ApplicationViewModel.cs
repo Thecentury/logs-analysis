@@ -27,7 +27,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return config; }
 		}
 
-		private readonly LogAnalyzerCore core;
+		private LogAnalyzerCore core;
 		public LogAnalyzerCore Core
 		{
 			get { return core; }
@@ -50,9 +50,22 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( environment == null ) throw new ArgumentNullException( "environment" );
 
 			this.config = config;
+			tabs.CollectionChanged += OnTabsCollectionChanged;
 
+			if ( config.EnabledDirectories.Any() )
+			{
+				Start( environment );
+			}
+			else
+			{
+				DropFilesViewModel dropViewModel = new DropFilesViewModel( this );
+				AddNewTab( dropViewModel );
+			}
+		}
+
+		private void Start( IEnvironment environment )
+		{
 			config.Logger.WriteInfo( "Starting..." );
-
 			core = new LogAnalyzerCore( config, environment );
 
 			core.Loaded += OnCore_Loaded;
@@ -61,12 +74,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
-			tabs.CollectionChanged += OnTabs_CollectionChanged;
 
 			core.Start();
 		}
 
-		private void OnTabs_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnTabsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( SelectedIndex >= tabs.Count )
 			{

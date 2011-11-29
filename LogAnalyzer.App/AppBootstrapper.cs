@@ -22,7 +22,7 @@ namespace LogAnalyzer.App
 	{
 		protected override void Init()
 		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
 			bool breakAtStart = Properties.Settings.Default.BreakAtStart;
 			if ( breakAtStart )
@@ -31,6 +31,10 @@ namespace LogAnalyzer.App
 			}
 
 			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
+			if ( exeLocation == null )
+			{
+				throw new InvalidOperationException("Exe location should not be null.");
+			}
 
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
@@ -71,7 +75,7 @@ namespace LogAnalyzer.App
 			} );
 		}
 
-		private void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
+		private void CurrentDomainUnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
 			Logger.WriteLine( MessageType.Error, "AppDomain - Unhandled exception: " + e.ExceptionObject );
 		}

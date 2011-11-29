@@ -1,14 +1,10 @@
 ﻿using System;
-using System;
-using System.Linq;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
-using System.Windows.Threading;
-using System.Windows;
 using System.ComponentModel;
 using LogAnalyzer.Logging;
 
