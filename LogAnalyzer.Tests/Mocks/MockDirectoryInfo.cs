@@ -5,7 +5,7 @@ using System.Text;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockDirectoryInfo : IDirectoryInfo
 	{

@@ -6,7 +6,7 @@ using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Tests.Helpers;
-using LogAnalyzer.Tests.Mock;
+using LogAnalyzer.Tests.Mocks;
 
 namespace LogAnalyzer.Tests
 {

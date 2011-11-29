@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
 using System.Threading;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockFileInfo : IFileInfo
 	{

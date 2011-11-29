@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Threading;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class ByteListWrapperStream : Stream
 	{
-		private readonly IList<byte> bytes = null;
-		private readonly object sync = null;
+		private readonly IList<byte> bytes;
+		private readonly object sync;
 
 		public ByteListWrapperStream( IList<byte> bytes, object sync )
 		{

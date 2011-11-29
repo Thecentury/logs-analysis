@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.Tests.Mock
+namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockEnvironment : EnvironmentBase
 	{

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using JetBrains.Annotations;
 
-namespace LogAnalyzer.Tests.Mock
+namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockLogWriter
 	{
