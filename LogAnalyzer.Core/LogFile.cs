@@ -12,7 +12,7 @@ using LogAnalyzer.Logging;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogFile {FullPath}" )]
-	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress
+	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile
 	{
 		private readonly Logger logger;
 		private readonly LogDirectory parentDirectory;

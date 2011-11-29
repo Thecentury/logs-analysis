@@ -18,6 +18,12 @@
 			</HierarchicalDataTemplate.ItemContainerStyle>
 			
 			<StackPanel Orientation="Horizontal">
+				<StackPanel.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
+					</ContextMenu>	
+				</StackPanel.ContextMenu>
+				
 				<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
 				<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"
@@ -28,6 +34,12 @@
 
 		<DataTemplate DataType="{x:Type FilesTree:FileTreeItem}">
 			<StackPanel Orientation="Horizontal">
+				<StackPanel.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
+					</ContextMenu>
+				</StackPanel.ContextMenu>
+				
 				<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
 				<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"

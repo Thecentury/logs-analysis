@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using JetBrains.Annotations;
 using LogAnalyzer.GUI.Common;
@@ -19,9 +21,9 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 
 	public sealed class FileTreeItem : FileTreeItemBase
 	{
-		private readonly LogFile logFile;
+		private readonly ILogFile logFile;
 
-		public FileTreeItem( [NotNull] LogFile logFile )
+		public FileTreeItem( [NotNull] ILogFile logFile )
 		{
 			if ( logFile == null ) throw new ArgumentNullException( "logFile" );
 			this.logFile = logFile;
@@ -46,11 +48,26 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			{"moduleantifraud", "user-thief-baldie"}
 		};
 
+		public static IDictionary<string, string> FileNameToIconMap
+		{
+			get { return fileNameToIconMap; }
+		}
+
+		private static readonly Regex startsWithDigitsRegex = new Regex( @"^\d{4}-\d{2}-\d{2}-(?<name>.*)", RegexOptions.Compiled );
+
 		public override string IconSource
 		{
 			get
 			{
-				string cleanFileName = logFile.Name.ToLower().Replace( ".log", "" );
+				string logFileName = logFile.Name;
+
+				Match match = startsWithDigitsRegex.Match( logFileName );
+				if ( match.Success )
+				{
+					logFileName = match.Groups["name"].Value;
+				}
+
+				string cleanFileName = logFileName.ToLower().Replace( ".log", "" );
 				if ( fileNameToIconMap.ContainsKey( cleanFileName ) )
 				{
 					string icon = fileNameToIconMap[cleanFileName];
@@ -61,7 +78,16 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 		}
 
-		public bool IsChecked { get; set; }
+		private bool isChecked;
+		public bool IsChecked
+		{
+			get { return isChecked; }
+			set
+			{
+				isChecked = value;
+				RaisePropertyChanged( "IsChecked" );
+			}
+		}
 	}
 
 	public sealed class DirectoryTreeItem : FileTreeItemBase
@@ -75,7 +101,39 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 
 			this.directory = directory;
 			directory.Files.CollectionChanged += OnFiles_CollectionChanged;
-			files = new ObservableCollection<FileTreeItem>( directory.Files.Select( file => new FileTreeItem( file ) ) );
+			files = new ObservableCollection<FileTreeItem>( directory.Files.Select( file => new FileTreeItem( file ) ).OrderBy( f => f.Header ) );
+
+			foreach ( var file in files )
+			{
+				file.PropertyChanged += OnFilePropertyChanged;
+			}
+		}
+
+		private void OnFilePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			if ( e.PropertyName == "IsChecked" )
+			{
+				UpdateIsChecked();
+			}
+		}
+
+		private void UpdateIsChecked()
+		{
+			bool allChecked = files.All( f => f.IsChecked );
+			if ( allChecked )
+			{
+				IsChecked = true;
+				return;
+			}
+
+			bool allUnchecked = files.All( f => !f.IsChecked );
+			if ( allUnchecked )
+			{
+				IsChecked = false;
+				return;
+			}
+
+			IsChecked = null;
 		}
 
 		private void OnFiles_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -93,7 +151,29 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			get { return PackUriHelper.MakePackUri( "/Resources/folder.png" ); }
 		}
 
-		public bool? IsChecked { get; set; }
+		private bool? isChecked;
+		public bool? IsChecked
+		{
+			get { return isChecked; }
+			set
+			{
+				if ( isChecked == value )
+					return;
+
+				isChecked = value;
+
+				if ( value.HasValue )
+				{
+					bool actualValue = value.Value;
+					foreach ( var file in files )
+					{
+						file.IsChecked = actualValue;
+					}
+				}
+
+				RaisePropertyChanged( "IsChecked" );
+			}
+		}
 
 		public ObservableCollection<FileTreeItem> Files
 		{

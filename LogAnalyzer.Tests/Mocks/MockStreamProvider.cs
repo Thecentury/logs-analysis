@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.Tests
+namespace LogAnalyzer.Tests.Mocks
 {
 	internal sealed class MockStreamProvider : IStreamProvider
 	{

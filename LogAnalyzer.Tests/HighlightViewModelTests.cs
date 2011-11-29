@@ -14,8 +14,8 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels;
-using LogAnalyzer.Tests.Mock;
 using LogAnalyzer.Tests.Common;
+using LogAnalyzer.Tests.Mocks;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests

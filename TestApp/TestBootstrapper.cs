@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
@@ -11,8 +8,7 @@ using LogAnalyzer.GUI;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
-using LogAnalyzer.Tests;
-using LogAnalyzer.Tests.Mock;
+using LogAnalyzer.Tests.Mocks;
 
 namespace TestApp
 {

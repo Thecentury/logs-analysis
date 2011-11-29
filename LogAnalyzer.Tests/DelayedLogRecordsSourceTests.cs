@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Tests.Mocks;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
-using LogAnalyzer.Tests.Mock;
+using LogAnalyzer.Tests.Mocks;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
