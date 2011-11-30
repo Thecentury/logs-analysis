@@ -42,7 +42,7 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestDynamicAddFile()
 		{
-			var file3 = env.Directories.First().AddFile( "3" );
+			var file3 = env.MockDirectories.First().AddFile( "3" );
 			file3.WriteInfo( "test" );
 
 			core.WaitForMergedEntriesCount( 1, timeout: 1500 ).AssertIsTrueOrFailWithMessage( "Истекло время ожидания." );

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.IO;
 using System.Reactive.Concurrency;
@@ -50,9 +51,10 @@ namespace LogAnalyzer.Config
 			get { return viewManager; }
 		}
 
-		private readonly List<LogDirectoryConfigurationInfo> directories = new List<LogDirectoryConfigurationInfo>();
+		private readonly ObservableCollection<LogDirectoryConfigurationInfo> directories = new ObservableCollection<LogDirectoryConfigurationInfo>();
+		
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
-		public List<LogDirectoryConfigurationInfo> Directories
+		public ObservableCollection<LogDirectoryConfigurationInfo> Directories
 		{
 			get { return directories; }
 		}

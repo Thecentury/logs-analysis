@@ -58,17 +58,6 @@ namespace LogAnalyzer.Config
 
 		public bool UseCache { get; set; }
 
-		// todo brinchuk use this
-		private bool isDynamic = true;
-		/// <summary>
-		/// Может ли содержимое директории обновляться?
-		/// </summary>
-		public bool IsDynamic
-		{
-			get { return isDynamic; }
-			set { isDynamic = value; }
-		}
-
 		private readonly List<string> predefinedFiles = new List<string>();
 		/// <summary>
 		/// Список из заданных наперед имен файлов. Используется при открытии набора файлов при вызове из системы.

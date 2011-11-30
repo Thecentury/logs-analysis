@@ -89,19 +89,19 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Loaded command
 
-		private DelegateCommand loadedCommand;
+		private DelegateCommand<RoutedEventArgs> loadedCommand;
 		public ICommand LoadedCommand
 		{
 			get
 			{
 				if ( loadedCommand == null )
-					loadedCommand = new DelegateCommand( OnLoaded );
+					loadedCommand = new DelegateCommand<RoutedEventArgs>( OnLoaded );
 
 				return loadedCommand;
 			}
 		}
 
-		protected virtual void OnLoaded()
+		protected virtual void OnLoaded( RoutedEventArgs e )
 		{
 		}
 

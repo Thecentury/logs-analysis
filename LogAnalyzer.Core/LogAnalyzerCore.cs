@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -45,7 +46,6 @@ namespace LogAnalyzer
 			get { return config; }
 		}
 
-
 		// todo заменить NotImplementedException на NotSupportedException
 		// todo открывать в VS файл на нужной строке (где исключение)
 
@@ -64,18 +64,12 @@ namespace LogAnalyzer
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
 			if ( config.Logger == null )
-				throw new ArgumentNullException();
+				throw new ArgumentException( "config.Logger should not be null." );
 			if ( environment == null )
 				throw new ArgumentNullException( "environment" );
 
-			if ( config.Directories.Count == 0 )
-				throw new ArgumentException( "Config should have at least one LogDirectory." );
-
-			if ( !config.EnabledDirectories.Any() )
-				throw new ArgumentException( "Config should have at least one enabled LogDirectory." );
-
-			// todo обрабатывать null в элементах конфига
 			this.config = config;
+			config.Directories.CollectionChanged += OnConfigDirectoriesCollectionChanged;
 
 			logger.DebugWriteInfo( "" );
 			logger.DebugWriteInfo( "" );
@@ -83,26 +77,38 @@ namespace LogAnalyzer
 
 			foreach ( LogDirectoryConfigurationInfo dir in config.EnabledDirectories )
 			{
-				if ( String.IsNullOrWhiteSpace( dir.EncodingName ) )
-				{
-					dir.EncodingName = config.DefaultEncodingName;
-				}
-
-				var logDirectory = new LogDirectory( dir, config, environment, this );
-				directories.Add( logDirectory );
+				AddDirectory( dir );
 			}
 
 			this.readonlyDirectories = directories.AsReadOnly();
 
-			this.loadedEvent = new CountdownEvent( directories.Count );
+			this.operationsQueue = environment.OperationsQueue;
+		}
 
-			foreach ( var dir in directories )
+		private void AddDirectory( LogDirectoryConfigurationInfo dir )
+		{
+			if ( String.IsNullOrWhiteSpace( dir.EncodingName ) )
 			{
-				dir.Loaded += OnDirectoryLoaded;
-				dir.ReadProgress += OnDirectoryReadProgress;
+				dir.EncodingName = config.DefaultEncodingName;
 			}
 
-			this.operationsQueue = environment.OperationsQueue;
+			var logDirectory = new LogDirectory( dir, config, Environment, this );
+			logDirectory.Loaded += OnDirectoryLoaded;
+			logDirectory.ReadProgress += OnDirectoryReadProgress;
+			directories.Add( logDirectory );
+		}
+
+		private void OnConfigDirectoriesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			if ( e.Action != NotifyCollectionChangedAction.Add )
+				throw new NotSupportedException( "Collection change actions other than Add are not supported." );
+			if ( HaveStarted )
+				throw new InvalidOperationException( "Collection changes are not allowed after core have started." );
+
+			foreach ( LogDirectoryConfigurationInfo dir in e.NewItems )
+			{
+				AddDirectory( dir );
+			}
 		}
 
 		private void OnDirectoryReadProgress( object sender, FileReadEventArgs e )
@@ -126,13 +132,20 @@ namespace LogAnalyzer
 
 		protected override void StartImpl()
 		{
+			if ( config.Directories.Count == 0 )
+				throw new InvalidOperationException( "Config should have at least one LogDirectory." );
+			if ( !config.EnabledDirectories.Any() )
+				throw new InvalidOperationException( "Config should have at least one enabled LogDirectory." );
+
+			loadedEvent = new CountdownEvent( directories.Count );
+
 			foreach ( var dir in Directories )
 			{
 				dir.Start();
 			}
 		}
 
-		private readonly CountdownEvent loadedEvent;
+		private CountdownEvent loadedEvent;
 
 		public void WaitForLoaded()
 		{

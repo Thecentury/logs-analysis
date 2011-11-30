@@ -13,7 +13,7 @@ namespace LogAnalyzer.Tests
 	[TestFixture]
 	public class ConfigTests
 	{
-		[ExpectedException( typeof( ArgumentException ) )]
+		[ExpectedException( typeof( InvalidOperationException ) )]
 		[Test]
 		public void Test_0_Directories()
 		{
@@ -22,11 +22,12 @@ namespace LogAnalyzer.Tests
 			var env = new MockEnvironment( config, operationsQueue );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
+			core.Start();
 
-			Assert.Inconclusive( "Сюда мы прийти не должны." );
+			Assert.Fail( "Сюда мы прийти не должны." );
 		}
 
-		[ExpectedException( typeof( ArgumentException ) )]
+		[ExpectedException( typeof( InvalidOperationException ) )]
 		[Test]
 		public void Test_0_EnabledDirectories()
 		{
@@ -40,8 +41,9 @@ namespace LogAnalyzer.Tests
 			var env = new MockEnvironment( config, operationsQueue );
 
 			LogAnalyzerCore core = new LogAnalyzerCore( config, env );
+			core.Start();
 
-			Assert.Inconclusive( "Сюда мы придти не должны." );
+			Assert.Fail( "Сюда мы придти не должны." );
 		}
 	}
 }

@@ -197,6 +197,7 @@
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\DropFilesViewModel.cs" />
+    <Compile Include="ViewModels\DroppedFileViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />

@@ -278,9 +278,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			DynamicHighlightManager.ProcessCellSelection( e );
 		}
 
-		protected override void OnLoaded()
+		protected override void OnLoaded( RoutedEventArgs e )
 		{
-			base.OnLoaded();
+			base.OnLoaded( e );
 			ScrollDownIfShould();
 		}
 

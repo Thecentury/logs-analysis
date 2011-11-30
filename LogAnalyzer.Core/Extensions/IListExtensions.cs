@@ -22,6 +22,11 @@ namespace LogAnalyzer.Extensions
 			return list[1];
 		}
 
+		public static T Second<T>( this IEnumerable<T> collection )
+		{
+			return collection.Skip( 1 ).First();
+		}
+
 		/// <summary>
 		/// Поиск индекса, уверенный в том, что коллекция содержит искомый элемент.
 		/// </summary>

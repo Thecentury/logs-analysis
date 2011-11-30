@@ -8,10 +8,16 @@ namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockEnvironment : EnvironmentBase
 	{
-		private readonly List<MockDirectoryInfo> directories;
-		internal List<MockDirectoryInfo> Directories
+		private readonly List<IDirectoryInfo> directories;
+
+		public override IList<IDirectoryInfo> Directories
 		{
 			get { return directories; }
+		}
+
+		internal IEnumerable<MockDirectoryInfo> MockDirectories
+		{
+			get { return directories.OfType<MockDirectoryInfo>(); }
 		}
 
 		private readonly IOperationsQueue operationsQueue;
@@ -30,7 +36,7 @@ namespace LogAnalyzer.Tests.Mocks
 			this.operationsQueue = operationsQueue;
 			this.timeService = new MockTimeService();
 
-			directories = config.Directories.Select( d => new MockDirectoryInfo( d.Path ) ).ToList();
+			directories = new List<IDirectoryInfo>( config.Directories.Select( d => new MockDirectoryInfo( d.Path ) ) );
 		}
 
 		public override IDirectoryInfo GetDirectory( string path )

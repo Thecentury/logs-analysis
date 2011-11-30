@@ -55,7 +55,8 @@ namespace LogAnalyzer.Zip.Tests
 				var reader = fileInfo.GetReader( new LogFileReaderArguments
 				{
 					Encoding = Encoding.GetEncoding( 1251 ),
-					GlobalEntriesFilter = new DelegateFilter<LogEntry>( logEntry => true )
+					GlobalEntriesFilter = new DelegateFilter<LogEntry>( logEntry => true ),
+					LineParser = new MostLogLineParser()
 				} );
 
 				var entries = reader.ReadEntireFile();

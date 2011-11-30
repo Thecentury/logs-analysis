@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using System.Threading;
@@ -65,6 +66,12 @@ namespace LogAnalyzer
 			get { return encoding; }
 		}
 
+		private readonly LogDirectoryConfigurationInfo directoryConfig;
+		public LogDirectoryConfigurationInfo DirectoryConfig
+		{
+			get { return directoryConfig; }
+		}
+
 		/// <summary>
 		/// Path to directory.
 		/// </summary>
@@ -73,7 +80,8 @@ namespace LogAnalyzer
 		public string DisplayName { get; private set; }
 		public bool UseCache { get; private set; }
 
-		internal LogDirectory( LogDirectoryConfigurationInfo directoryConfigurationInfo, LogAnalyzerConfiguration config, IEnvironment environment, LogAnalyzerCore core )
+		public LogDirectory( [NotNull]LogDirectoryConfigurationInfo directoryConfigurationInfo, [NotNull]LogAnalyzerConfiguration config,
+			[NotNull]IEnvironment environment, [NotNull]LogAnalyzerCore core )
 			: base( environment, config.Logger )
 		{
 			if ( directoryConfigurationInfo == null )
@@ -85,6 +93,7 @@ namespace LogAnalyzer
 			if ( core == null )
 				throw new ArgumentNullException( "core" );
 
+			this.directoryConfig = directoryConfigurationInfo;
 			this.Path = directoryConfigurationInfo.Path;
 			this.FileNameFilter = directoryConfigurationInfo.FileNameFilter;
 			this.DisplayName = directoryConfigurationInfo.DisplayName;
@@ -259,12 +268,12 @@ namespace LogAnalyzer
 		{
 			LogFile logFile = new LogFile( file, this );
 
-			logFile.ReadProgress += OnLogFile_FileReadProgress;
+			logFile.ReadProgress += OnLogFileReadProgress;
 
 			return logFile;
 		}
 
-		private void OnLogFile_FileReadProgress( object sender, FileReadEventArgs e )
+		private void OnLogFileReadProgress( object sender, FileReadEventArgs e )
 		{
 			RaiseReadProgress( e );
 		}

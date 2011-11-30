@@ -46,5 +46,10 @@ namespace LogAnalyzer.Kernel
 		{
 			get { return timeService; }
 		}
+
+		public override IList<IDirectoryInfo> Directories
+		{
+			get { return directories; }
+		}
 	}
 }
