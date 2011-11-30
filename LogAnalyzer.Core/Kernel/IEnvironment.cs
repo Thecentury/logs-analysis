@@ -1,4 +1,6 @@
-﻿using System.Reactive.Concurrency;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive.Concurrency;
 using LogAnalyzer.Operations;
 
 namespace LogAnalyzer.Kernel
@@ -17,5 +19,7 @@ namespace LogAnalyzer.Kernel
 		ITimeService TimeService { get; }
 
 		OperationScheduler Scheduler { get; }
+
+		IList<IDirectoryInfo> Directories { get; }
 	}
 }

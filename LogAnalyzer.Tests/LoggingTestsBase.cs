@@ -45,15 +45,15 @@ namespace LogAnalyzer.Tests
 
 			env = new MockEnvironment( config, operationsQueue );
 
-			file1 = env.Directories.First().AddFile( "1" );
-			file2 = env.Directories.First().AddFile( "2" );
+			file1 = env.MockDirectories.First().AddFile( "1" );
+			file2 = env.MockDirectories.First().AddFile( "2" );
 
 			logger1 = new DeterminedTimeLogHelper( file1 );
 			logger2 = new DeterminedTimeLogHelper( file2 );
 
 			if ( directoriesCount > 1 )
 			{
-				file3 = env.Directories.Second().AddFile( "3" );
+				file3 = env.MockDirectories.Second().AddFile( "3" );
 				logger3 = new DeterminedTimeLogHelper( file3 );
 			}
 

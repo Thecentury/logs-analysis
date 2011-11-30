@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LogAnalyzer;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
@@ -44,6 +45,11 @@ namespace ModuleLogsProvider.Logging.Most
 		public override ITimeService TimeService
 		{
 			get { return timeService; }
+		}
+
+		public override IList<IDirectoryInfo> Directories
+		{
+			get { return new List<IDirectoryInfo> { directory }; }
 		}
 	}
 }

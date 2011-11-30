@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows;
+using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Regions;
@@ -21,13 +22,12 @@ namespace LogAnalyzer.GUI.ViewModels
 	public partial class ApplicationViewModel : BindingObject
 	{
 		private readonly LogAnalyzerConfiguration config;
-
 		public LogAnalyzerConfiguration Config
 		{
 			get { return config; }
 		}
 
-		private LogAnalyzerCore core;
+		private readonly LogAnalyzerCore core;
 		public LogAnalyzerCore Core
 		{
 			get { return core; }
@@ -39,22 +39,33 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return coreViewModel; }
 		}
 
+		private readonly IEnvironment environment;
+		public IEnvironment Environment
+		{
+			get { return environment; }
+		}
+
 		/// <summary>
 		/// Для тестов.
 		/// </summary>
 		internal ApplicationViewModel() { }
 
-		public ApplicationViewModel( LogAnalyzerConfiguration config, IEnvironment environment )
+		public ApplicationViewModel( [NotNull] LogAnalyzerConfiguration config, [NotNull] IEnvironment environment )
 		{
 			if ( config == null ) throw new ArgumentNullException( "config" );
 			if ( environment == null ) throw new ArgumentNullException( "environment" );
 
 			this.config = config;
+			this.environment = environment;
+
 			tabs.CollectionChanged += OnTabsCollectionChanged;
 
+			core = new LogAnalyzerCore( config, environment );
+			core.Loaded += OnCore_Loaded;
+	
 			if ( config.EnabledDirectories.Any() )
 			{
-				Start( environment );
+				Start();
 			}
 			else
 			{
@@ -63,17 +74,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private void Start( IEnvironment environment )
+		private void Start()
 		{
-			config.Logger.WriteInfo( "Starting..." );
-			core = new LogAnalyzerCore( config, environment );
-
-			core.Loaded += OnCore_Loaded;
-
 			ProgressState = Windows7Taskbar.ThumbnailProgressState.Normal;
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
+			
+			config.Logger.WriteInfo( "Starting..." );
 
 			core.Start();
 		}

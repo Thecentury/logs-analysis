@@ -28,6 +28,12 @@ namespace LogAnalyzer
 			protected set { mergedEntriesList = value; }
 		}
 
+		private readonly IEnvironment environment;
+		public IEnvironment Environment
+		{
+			get { return environment; }
+		}
+
 		protected readonly Logger logger;
 
 		protected LogEntriesList( IEnvironment environment, Logger logger )
@@ -38,6 +44,7 @@ namespace LogAnalyzer
 				throw new ArgumentNullException( "logger" );
 
 			this.logger = logger;
+			this.environment = environment;
 
 			mergedEntriesList = new List<LogEntry>();
 			logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
@@ -71,9 +78,16 @@ namespace LogAnalyzer
 
 		public event EventHandler Loaded;
 
+		private bool haveStarted;
+		public bool HaveStarted
+		{
+			get { return haveStarted; }
+		}
+
 		[DebuggerStepThrough]
 		public void Start()
 		{
+			haveStarted = true;
 			loadStartTime = DateTime.Now;
 			StartImpl();
 		}

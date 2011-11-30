@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using LogAnalyzer.Config;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Tests.Mocks;
 using Moq;
 using NUnit.Framework;
 
@@ -24,16 +26,26 @@ namespace LogAnalyzer.Tests.Gui
 		public void ShouldBeAbleToStartWithNoEnabledDirectories()
 		{
 			LogAnalyzerConfiguration config = LogAnalyzerConfiguration.CreateNew()
-				.AddLogDirectory( new LogDirectoryConfigurationInfo { Enabled = false } );
+				.AddLogDirectory( new LogDirectoryConfigurationInfo { Enabled = false, DisplayName = "Name", Path = "Path" } );
 
 			AssertHaveCreated( config );
 		}
 
+		[Test]
+		public void StartsWithZeroDirectories()
+		{
+			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
+			MockEnvironment env = new MockEnvironment( config );
+
+			ApplicationViewModel vm = new ApplicationViewModel( config, env );
+			vm.Core.Start();
+		}
+
 		private static void AssertHaveCreated( LogAnalyzerConfiguration config )
 		{
-			Mock<IEnvironment> mockEnvironment = new Mock<IEnvironment>();
+			MockEnvironment environment = new MockEnvironment( config );
 
-			ApplicationViewModel application = new ApplicationViewModel( config, mockEnvironment.Object );
+			ApplicationViewModel application = new ApplicationViewModel( config, environment );
 
 			Assert.NotNull( application );
 		}

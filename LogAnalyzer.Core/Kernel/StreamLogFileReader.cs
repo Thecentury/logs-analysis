@@ -36,6 +36,8 @@ namespace LogAnalyzer.Kernel
 			if ( args == null ) throw new ArgumentNullException( "args" );
 			if ( streamProvider == null ) throw new ArgumentNullException( "streamProvider" );
 
+			args.Validate();
+
 			logger = args.Logger;
 			parentLogFile = args.ParentLogFile;
 			encoding = args.Encoding;

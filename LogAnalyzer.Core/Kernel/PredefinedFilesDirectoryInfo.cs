@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Misc;
@@ -18,24 +19,35 @@ namespace LogAnalyzer.Kernel
 	/// </summary>
 	internal sealed class PredefinedFilesDirectoryInfo : FileSystemDirectoryInfo
 	{
-		public PredefinedFilesDirectoryInfo( LogDirectoryConfigurationInfo config ) : base( config ) { }
+		private readonly IEnumerable<string> fileNames;
+
+		public PredefinedFilesDirectoryInfo( [NotNull] LogDirectoryConfigurationInfo config ) : this( config, config.PredefinedFiles ) { }
+
+		public PredefinedFilesDirectoryInfo( [NotNull] LogDirectoryConfigurationInfo config, [NotNull] IEnumerable<string> fileNames )
+			: base( config )
+		{
+			if ( config == null ) throw new ArgumentNullException( "config" );
+			if ( fileNames == null ) throw new ArgumentNullException( "fileNames" );
+
+			this.fileNames = fileNames;
+		}
 
 		public override IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
-			return DirectoryConfig.PredefinedFiles.Select( CreateFile );
+			return fileNames.Select( CreateFile );
 		}
 
-		private IFileInfo CreateFile( string fileName )
+		public IFileInfo CreateFile( string fileName )
 		{
 			string fullPath = System.IO.Path.GetFullPath( fileName );
 			return GetFileInfo( fullPath );
 		}
 
-		protected override LogNotificationsSourceBase CreateNotificationSource( string path, string filesFilter )
+		protected override LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
 		{
 			ListMultiDictionary<string, string> dirToFileNames = new ListMultiDictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
-			foreach ( var fileName in DirectoryConfig.PredefinedFiles )
+			foreach ( var fileName in fileNames )
 			{
 				try
 				{
@@ -57,9 +69,9 @@ namespace LogAnalyzer.Kernel
 				var files = pair.Value;
 				var notificationsSource = new FileSystemNotificationsSource( dirName, "*",
 					NotifyFilters.Size | NotifyFilters.FileName | NotifyFilters.LastWrite, includeSubdirectories: false );
-				
+
 				var pollingNotificationSource = new PollingFileSystemNotificationSource( dirName, "*", includeSubdirectories: false );
-				
+
 				var composite = new CompositeLogNotificationsSource( notificationsSource, pollingNotificationSource );
 
 				var filteringSource = new FileNameFilteringNotificationSource( composite, files );

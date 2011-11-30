@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
@@ -28,5 +29,7 @@ namespace LogAnalyzer.Kernel
 		{
 			get { return config.Container.ResolveNotNull<OperationScheduler>(); }
 		}
+
+		public abstract IList<IDirectoryInfo> Directories { get; }
 	}
 }

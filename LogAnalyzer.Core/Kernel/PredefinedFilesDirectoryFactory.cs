@@ -15,5 +15,10 @@ namespace LogAnalyzer.Kernel
 			else
 				return null;
 		}
+
+		public static IDirectoryInfo CreateDirectory( LogDirectoryConfigurationInfo config, IEnumerable<string> fileNames )
+		{
+			return new PredefinedFilesDirectoryInfo( config, fileNames );
+		}
 	}
 }

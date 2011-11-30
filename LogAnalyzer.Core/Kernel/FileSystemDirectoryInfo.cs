@@ -26,7 +26,7 @@ namespace LogAnalyzer.Kernel
 
 		private readonly bool useCache;
 
-		private readonly LogNotificationsSourceBase notificationSource;
+		private LogNotificationsSourceBase notificationSource;
 
 		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{
@@ -37,10 +37,6 @@ namespace LogAnalyzer.Kernel
 
 			this.path = directoryConfig.Path;
 			this.useCache = directoryConfig.UseCache;
-
-			string filesFilter = directoryConfig.FileNameFilter;
-
-			this.notificationSource = CreateNotificationSource( path, filesFilter );
 
 			if ( useCache )
 			{
@@ -56,7 +52,7 @@ namespace LogAnalyzer.Kernel
 			return Directory.EnumerateFiles( path, searchPattern, searchOption ).Select( GetFileInfo );
 		}
 
-		protected virtual LogNotificationsSourceBase CreateNotificationSource( string path, string filesFilter )
+		protected virtual LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
 		{
 			return
 				new CompositeLogNotificationsSource(
@@ -71,7 +67,14 @@ namespace LogAnalyzer.Kernel
 
 		public LogNotificationsSourceBase NotificationSource
 		{
-			get { return notificationSource; }
+			get
+			{
+				if ( notificationSource == null )
+				{
+					notificationSource = CreateNotificationSource( directoryConfig.FileNameFilter );
+				}
+				return notificationSource;
+			}
 		}
 
 		public IFileInfo GetFileInfo( string fullPath )
