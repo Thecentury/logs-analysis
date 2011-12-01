@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -15,13 +16,16 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class DropFilesViewModel : TabViewModel
 	{
+		private readonly IFileSystem fileSystem;
 		private readonly IDirectoryInfo directoryInfo;
 		private readonly LogDirectory logDirectory;
 
-		public DropFilesViewModel( [NotNull] ApplicationViewModel applicationViewModel )
+		public DropFilesViewModel( [NotNull] ApplicationViewModel applicationViewModel, [NotNull] IFileSystem fileSystem )
 			: base( applicationViewModel )
 		{
+			this.fileSystem = fileSystem;
 			if ( applicationViewModel == null ) throw new ArgumentNullException( "applicationViewModel" );
+			if ( fileSystem == null ) throw new ArgumentNullException( "fileSystem" );
 
 			var directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
 
@@ -76,41 +80,79 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		private readonly ObservableCollection<DroppedFileViewModel> files = new ObservableCollection<DroppedFileViewModel>();
-		public IEnumerable<DroppedFileViewModel> Files
+		public IList<DroppedFileViewModel> Files
 		{
 			get { return files; }
-		} 
+		}
 
 		#region Commands
 
-		private DelegateCommand<DragEventArgs> dropCommand;
+		// Drop Command
 
-		public ICommand DropCommand
+		private DelegateCommand<IDataObject> dropCommand;
+		public DelegateCommand<IDataObject> DropCommand
 		{
 			get
 			{
 				if ( dropCommand == null )
-					dropCommand = new DelegateCommand<DragEventArgs>( DropCommandExecute );
+					dropCommand = new DelegateCommand<IDataObject>( DropCommandExecute );
 
 				return dropCommand;
 			}
 		}
 
-		private void DropCommandExecute( DragEventArgs args )
+		private void DropCommandExecute( [NotNull] IDataObject data )
 		{
-			if ( args.Data.GetFormats().Contains( "FileDrop" ) )
-			{
-				string[] fileNames = (string[])args.Data.GetData( "FileDrop" );
-				foreach ( string fileName in fileNames )
-				{
-					var file = directoryInfo.GetFileInfo( fileName );
-					DroppedFileViewModel fileViewModel = new DroppedFileViewModel( file, logDirectory, fileName, files );
-					files.Add( fileViewModel );
-				}
+			if ( data == null ) throw new ArgumentNullException( "data" );
 
-				args.Handled = true;
+			if ( data.GetFormats().Contains( "FileDrop" ) )
+			{
+				string[] paths = (string[])data.GetData( "FileDrop" );
+				foreach ( string path in paths )
+				{
+					if ( fileSystem.FileExists( path ) )
+					{
+						AddDroppedFile( path );
+					}
+					else if ( fileSystem.DirectoryExists( path ) )
+					{
+						throw new NotImplementedException();
+					}
+				}
 			}
 		}
+
+		public DroppedFileViewModel AddDroppedFile( string path )
+		{
+			var file = directoryInfo.GetFileInfo( path );
+			DroppedFileViewModel fileViewModel = new DroppedFileViewModel( file, logDirectory, path, files );
+			files.Add( fileViewModel );
+
+			return fileViewModel;
+		}
+
+		// Clear command
+
+
+		private DelegateCommand clearCommand;
+		public ICommand ClearCommand
+		{
+			get
+			{
+				if ( clearCommand == null )
+				{
+					clearCommand = new DelegateCommand( ClearExecute );
+				}
+
+				return clearCommand;
+			}
+		}
+
+		private void ClearExecute()
+		{
+			files.Clear();
+		}
+
 
 		#endregion
 	}

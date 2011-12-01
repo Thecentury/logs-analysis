@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.ViewModels.Helpers;
 using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -52,6 +53,16 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				readingProgressPercents = value;
 				RaisePropertyChanged( "ReadingProcessPercents" );
+			}
+		}
+
+		public string LengthString
+		{
+			get
+			{
+				long length = fileInfo.Length;
+				string result = FileSizeHelper.GetFormattedLength( length );
+				return result;
 			}
 		}
 

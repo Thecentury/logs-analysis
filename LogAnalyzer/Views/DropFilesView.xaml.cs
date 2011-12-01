@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.Views
 {
@@ -37,6 +38,11 @@ namespace LogAnalyzer.GUI.Views
 		protected override void OnDrop( DragEventArgs e )
 		{
 			base.OnDrop( e );
+			
+			DropFilesViewModel vm = (DropFilesViewModel)DataContext;
+			vm.DropCommand.Execute( e.Data );
+
+			e.Handled = true;
 		}
 	}
 }

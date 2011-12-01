@@ -62,14 +62,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			core = new LogAnalyzerCore( config, environment );
 			core.Loaded += OnCore_Loaded;
-	
+
 			if ( config.EnabledDirectories.Any() )
 			{
 				Start();
 			}
 			else
 			{
-				DropFilesViewModel dropViewModel = new DropFilesViewModel( this );
+				var fileSystem = config.ResolveNotNull<IFileSystem>();
+				DropFilesViewModel dropViewModel = new DropFilesViewModel( this, fileSystem );
 				AddNewTab( dropViewModel );
 			}
 		}
@@ -80,7 +81,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
-			
+
 			config.Logger.WriteInfo( "Starting..." );
 
 			core.Start();

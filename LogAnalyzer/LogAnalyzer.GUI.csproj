@@ -207,6 +207,7 @@
     <Compile Include="ViewModels\FilterEditorViewModel.cs" />
     <Compile Include="ViewModels\FilterTabToolbarViewModel.cs" />
     <Compile Include="ViewModels\FilterTabViewModel.cs" />
+    <Compile Include="ViewModels\Helpers\FileSizeHelper.cs" />
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
     <Compile Include="ViewModels\HighlightEditorWindowViewModel.cs" />
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
