@@ -162,7 +162,7 @@ namespace LogAnalyzer
 			ReadProgress.Raise( this, e );
 		}
 
-		public abstract int TotalLengthInBytes
+		public abstract long TotalLengthInBytes
 		{
 			get;
 		}

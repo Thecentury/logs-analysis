@@ -125,7 +125,7 @@ namespace LogAnalyzer
 
 		public event EventHandler<FileReadEventArgs> ReadProgress;
 
-		public int TotalLengthInBytes
+		public long TotalLengthInBytes
 		{
 			get { return FileInfo.Length; }
 		}

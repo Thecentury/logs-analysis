@@ -177,7 +177,7 @@ namespace LogAnalyzer
 			MessageSeverityCount.Update( sortedEntries );
 		}
 
-		public override int TotalLengthInBytes
+		public override long TotalLengthInBytes
 		{
 			get { return Directories.Sum( d => d.TotalLengthInBytes ); }
 		}

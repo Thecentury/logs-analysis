@@ -36,7 +36,7 @@ namespace ModuleLogsProvider.Logging.Most
 		/// Длина файла, в байтах.
 		/// </summary>
 		/// <value></value>
-		public int Length
+		public long Length
 		{
 			get { return messages.Entries.Count; }
 		}

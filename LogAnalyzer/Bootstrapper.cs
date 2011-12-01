@@ -77,7 +77,8 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
 				.RegisterInstance<RegionManager>( new RegionManager() )
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager )
-				.RegisterInstance<ITimeService>( new NeverOldTimeService() );
+				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
+				.RegisterInstance<IFileSystem>( new RealFileSystem() );
 		}
 	}
 }

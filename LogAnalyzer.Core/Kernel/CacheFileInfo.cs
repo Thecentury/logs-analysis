@@ -34,13 +34,9 @@ namespace LogAnalyzer.Kernel
 			return reader;
 		}
 
-		public int Length
+		public long Length
 		{
-			get
-			{
-				int length = (int)remoteFile.Length;
-				return length;
-			}
+			get { return remoteFile.Length; }
 		}
 
 		public string Name

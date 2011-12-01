@@ -22,11 +22,14 @@
 				<StackPanel Orientation="Horizontal"
 							Margin="3">
 					<Button ToolTip="Remove this file"
-							Margin="3,0,3,0"
+							Margin="3,0,5,0"
 							Command="{Binding RemoveFileCommand}">
 						<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-small-black.png"/>
 					</Button>
 					<TextBlock Text="{Binding FileName}"/>
+					<TextBlock Text="     "/>
+					<TextBlock Text="{Binding LengthString}"
+							   Foreground="DimGray"/>
 				</StackPanel>
 			</StackPanel>
 		</DataTemplate>
@@ -41,12 +44,28 @@
 			Drop files here to analyze them
 		</TextBlock>
 
-		<ItemsControl ItemsSource="{Binding Files}"
-					  Visibility="{Binding HasFiles, Converter={StaticResource bool2VisibilityConverter}}"
+		<DockPanel Visibility="{Binding HasFiles, Converter={StaticResource bool2VisibilityConverter}}"
+				   VerticalAlignment="Stretch" 
+				   LastChildFill="True">
+			<Button Content="Clear" 
+					Margin="10" 
+					DockPanel.Dock="Bottom"
+					Command="{Binding ClearCommand}"
+					Padding="10"
+					HorizontalAlignment="Center"/>
+			
+			<ScrollViewer VerticalScrollBarVisibility="Auto"
+						  HorizontalAlignment="Center"
+						  DockPanel.Dock="Top"
+						  VerticalAlignment="Top">
+
+				<ItemsControl ItemsSource="{Binding Files}"
 					  HorizontalAlignment="Center"
 					  VerticalAlignment="Center"
 					  ItemTemplate="{StaticResource droppedFileTemplate}"
 					  />
 
+			</ScrollViewer>
+		</DockPanel>
 	</Grid>
 </UserControl>

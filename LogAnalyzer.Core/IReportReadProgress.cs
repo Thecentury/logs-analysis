@@ -8,6 +8,6 @@ namespace LogAnalyzer
 	public interface IReportReadProgress
 	{
 		event EventHandler<FileReadEventArgs> ReadProgress;
-		int TotalLengthInBytes { get; }
+		long TotalLengthInBytes { get; }
 	}
 }

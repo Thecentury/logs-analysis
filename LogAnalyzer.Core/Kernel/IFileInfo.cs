@@ -16,7 +16,8 @@ namespace LogAnalyzer.Kernel
 		/// <summary>
 		/// Длина файла, в байтах.
 		/// </summary>
-		int Length { get; }
+		long Length { get; }
+
 		string Name { get; }
 		string FullName { get; }
 

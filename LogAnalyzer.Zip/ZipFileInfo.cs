@@ -37,9 +37,9 @@ namespace LogAnalyzer.Zip
 			return new StreamLogFileReader( args, new ZipStreamProvider( zipEntry ) );
 		}
 
-		public int Length
+		public long Length
 		{
-			get { return (int)zipEntry.UncompressedSize; }
+			get { return zipEntry.UncompressedSize; }
 		}
 
 		public string Name

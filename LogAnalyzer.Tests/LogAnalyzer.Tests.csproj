@@ -82,6 +82,8 @@
     <Compile Include="DirectoryManagerTests.cs" />
     <Compile Include="FilterTests.cs" />
     <Compile Include="Gui\ApplicationViewModelTests.cs" />
+    <Compile Include="Gui\DropFilesViewModelTests.cs" />
+    <Compile Include="Gui\FileSizeHelperTests.cs" />
     <Compile Include="Gui\TreeItemsTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />

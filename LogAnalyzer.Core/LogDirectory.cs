@@ -380,11 +380,11 @@ namespace LogAnalyzer
 			OnLogEntriesAddedToFile( logFile.LogEntries );
 		}
 
-		public override int TotalLengthInBytes
+		public override long TotalLengthInBytes
 		{
 			get
 			{
-				int result = filesWrapper.Sum( f => f.TotalLengthInBytes );
+				long result = filesWrapper.Sum( f => f.TotalLengthInBytes );
 				return result;
 			}
 		}
