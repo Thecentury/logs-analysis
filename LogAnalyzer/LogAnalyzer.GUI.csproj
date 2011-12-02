@@ -196,17 +196,21 @@
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
-    <Compile Include="ViewModels\DropFilesViewModel.cs" />
-    <Compile Include="ViewModels\DroppedFileViewModel.cs" />
+    <Compile Include="ViewModels\FilesDropping\DropFilesViewModel.cs" />
+    <Compile Include="ViewModels\FilesDropping\DroppedFileViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
+    <Compile Include="ViewModels\FilesTree\CoreTreeItem.cs" />
+    <Compile Include="ViewModels\FilesTree\DirectoryTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />
+    <Compile Include="ViewModels\FilesTree\FileTreeItemBase.cs" />
     <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />
     <Compile Include="ViewModels\FilterEditorViewModel.cs" />
     <Compile Include="ViewModels\FilterTabToolbarViewModel.cs" />
     <Compile Include="ViewModels\FilterTabViewModel.cs" />
+    <Compile Include="ViewModels\Helpers\FileNameToIconHelper.cs" />
     <Compile Include="ViewModels\Helpers\FileSizeHelper.cs" />
     <Compile Include="ViewModels\Helpers\UITreeHelper.cs" />
     <Compile Include="ViewModels\HighlightEditorWindowViewModel.cs" />
@@ -512,6 +516,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\battery-charge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\box.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\paper-plane.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

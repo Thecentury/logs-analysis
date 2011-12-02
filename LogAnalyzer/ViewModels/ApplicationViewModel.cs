@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Regions;
+using LogAnalyzer.GUI.ViewModels.FilesDropping;
 using LogAnalyzer.GUI.ViewModels.FilesTree;
 using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;

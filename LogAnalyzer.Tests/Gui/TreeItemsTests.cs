@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.GUI.ViewModels.FilesTree;
+using LogAnalyzer.GUI.ViewModels.Helpers;
 using Moq;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace LogAnalyzer.Tests.Gui
 			FileTreeItem item = new FileTreeItem( mock.Object );
 			string icon = item.IconSource;
 
-			string expectedIcon = FileTreeItem.FileNameToIconMap[expectedShortName];
+			string expectedIcon = FileNameToIconHelper.FileNameToIconMap[expectedShortName];
 
 			Assert.IsTrue( icon.Contains( expectedIcon ) );
 		}

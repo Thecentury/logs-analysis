@@ -29,5 +29,13 @@ namespace LogAnalyzer.Extensions
 		{
 			return new IndexerEnumerable<T>( list );
 		}
+
+		public static void ForEach<T>( this IEnumerable<T> collection, Action<T> action )
+		{
+			foreach ( var item in collection )
+			{
+				action( item );
+			}
+		}
 	}
 }

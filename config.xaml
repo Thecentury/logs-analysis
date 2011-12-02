@@ -12,14 +12,7 @@
 	</LogAnalyzerConfiguration.Directories>
 
 	<!--<LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>
-		<EqualsBuilder>
-			<EqualsBuilder.Left>
-				<GetPropertyFilterBuilder PropertyName="ThreadId"/>
-			</EqualsBuilder.Left>
-			<EqualsBuilder.Right>
-				<IntConstantBuilder Value="62"/>
-			</EqualsBuilder.Right>
-		</EqualsBuilder>
+		<TextContains Substring="0119"/>
 	</LogAnalyzerConfiguration.GlobalLogEntityFilterBuilder>-->
 	<!--<LastNMinutesAcceptor MinutesCount="30"/>-->
 

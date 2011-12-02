@@ -52,7 +52,7 @@ namespace LogAnalyzer.Tests.Mocks
 			return reader;
 		}
 
-		int IFileInfo.Length
+		long IFileInfo.Length
 		{
 			get
 			{
