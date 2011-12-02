@@ -18,14 +18,18 @@ namespace LogAnalyzer.Tests.Gui
 		[Test]
 		public void ShouldBeAbleToStartWithNoDirectories()
 		{
-			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
+			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration()
+				.RegisterInstance<IFileSystem>( new RealFileSystem() );
+
 			AssertHaveCreated( config );
 		}
 
 		[Test]
 		public void ShouldBeAbleToStartWithNoEnabledDirectories()
 		{
-			LogAnalyzerConfiguration config = LogAnalyzerConfiguration.CreateNew()
+			LogAnalyzerConfiguration config = LogAnalyzerConfiguration
+				.CreateNew()
+				.RegisterInstance<IFileSystem>( new RealFileSystem() )
 				.AddLogDirectory( new LogDirectoryConfigurationInfo { Enabled = false, DisplayName = "Name", Path = "Path" } );
 
 			AssertHaveCreated( config );
@@ -34,7 +38,9 @@ namespace LogAnalyzer.Tests.Gui
 		[Test]
 		public void StartsWithZeroDirectories()
 		{
-			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
+			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration()
+				.RegisterInstance<IFileSystem>( new RealFileSystem() );
+
 			MockEnvironment env = new MockEnvironment( config );
 
 			ApplicationViewModel vm = new ApplicationViewModel( config, env );

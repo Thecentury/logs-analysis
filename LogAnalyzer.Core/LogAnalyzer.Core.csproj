@@ -223,7 +223,7 @@
     <Compile Include="Operations\TaskOperationScheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Collections\ThinEnumerableWrapper.cs" />
-    <Compile Include="Collections\ReadonlyObservableList.cs" />
+    <Compile Include="Collections\ObservableList.cs" />
     <Compile Include="Collections\ThinCollectionWrapper.cs" />
     <Compile Include="Collections\ThinObservableCollection.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

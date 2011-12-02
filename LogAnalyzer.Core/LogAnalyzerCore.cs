@@ -10,6 +10,7 @@ using System.Security.AccessControl;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using System.Threading.Tasks;
@@ -34,6 +35,13 @@ namespace LogAnalyzer
 		public IList<LogDirectory> Directories
 		{
 			get { return readonlyDirectories; }
+		}
+
+		public void AddDirectory( [NotNull] LogDirectory dir )
+		{
+			if ( dir == null ) throw new ArgumentNullException( "dir" );
+
+			directories.Add( dir );
 		}
 
 		internal override int TotalFilesCount

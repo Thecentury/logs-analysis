@@ -3,31 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common"
-             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels" mc:Ignorable="d" 
+             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
+             xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
 			 Background="Transparent"
 			 AllowDrop="True">
-
-	<Common:AttachedCommandBehaviour.Bindings>
-		<Common:AttachedCommandBinding Command="{Binding DropCommand}" Event="Drop" />
-	</Common:AttachedCommandBehaviour.Bindings>
 
 	<UserControl.Resources>
 
 		<BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
 
-		<DataTemplate DataType="{x:Type ViewModels:DroppedFileViewModel}" x:Key="droppedFileTemplate">
+		<Style TargetType="{x:Type Image}" x:Key="removeButtonImageStyle">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="RenderTransform">
+						<Setter.Value>
+							<ScaleTransform CenterX="8" CenterY="8"
+											ScaleX="2" ScaleY="2"/>
+						</Setter.Value>
+					</Setter>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<DataTemplate DataType="{x:Type FilesDropping:DroppedFileViewModel}" x:Key="droppedFileTemplate">
 			<StackPanel Orientation="Vertical">
 				<StackPanel Orientation="Horizontal"
 							Margin="3">
 					<Button ToolTip="Remove this file"
 							Margin="3,0,5,0"
 							Command="{Binding RemoveFileCommand}">
-						<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-small-black.png"/>
+						<Button.Template>
+							<ControlTemplate TargetType="{x:Type Button}">
+								<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-small-black.png"
+									   Style="{StaticResource removeButtonImageStyle}"/>
+							</ControlTemplate>
+						</Button.Template>
 					</Button>
-					<TextBlock Text="{Binding FileName}"/>
-					<TextBlock Text="     "/>
+					
+					<Image Source="{Binding Icon}"
+						   Margin="0,0,4,0"/>
+					<TextBlock Text="{Binding Name}"/>
+					<TextBlock Text="      "/>
 					<TextBlock Text="{Binding LengthString}"
 							   Foreground="DimGray"/>
 				</StackPanel>

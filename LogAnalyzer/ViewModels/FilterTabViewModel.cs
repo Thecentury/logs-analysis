@@ -20,7 +20,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private const int MaxHeaderLength = 20;
 		private const int FilteringProgressNotificationsCount = 20;
 		private readonly ExpressionFilter<LogEntry> filter = new ExpressionFilter<LogEntry>();
-		private readonly ReadonlyObservableList<LogEntry> observableFilteredEntries;
+		private readonly ObservableList<LogEntry> observableFilteredEntries;
 		private readonly IList<LogEntry> source;
 		private readonly object sourceReplaceLock = new object();
 		private CancellationTokenSource cancellationSource = new CancellationTokenSource();
@@ -51,7 +51,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				observable.CollectionChanged += OnSourceCollectionChanged;
 			}
 
-			observableFilteredEntries = new ReadonlyObservableList<LogEntry>( new List<LogEntry>() );
+			observableFilteredEntries = new ObservableList<LogEntry>( new List<LogEntry>() );
 
 			Init( observableFilteredEntries );
 

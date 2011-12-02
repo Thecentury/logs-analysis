@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.GUI.ViewModels.FilesDropping;
 
 namespace LogAnalyzer.GUI.Views
 {

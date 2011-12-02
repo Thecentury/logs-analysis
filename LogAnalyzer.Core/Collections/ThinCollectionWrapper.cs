@@ -17,7 +17,7 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "Count = {Count}" )]
 	public sealed class ThinCollectionWrapper<T> : ThinObservableCollection, ICollection<T>, ICollection
 	{
-		private readonly ICollection<T> collection = null;
+		private readonly ICollection<T> collection;
 		public ICollection<T> Collection
 		{
 			get { return collection; }

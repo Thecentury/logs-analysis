@@ -49,7 +49,7 @@ namespace LogAnalyzer.GUI.ViewModels
 					.Subscribe( OnSourceCollectionChanged );
 			}
 
-			observableFilteredEntries = new ReadonlyObservableList<LogEntry>( acceptedEntries );
+			observableFilteredEntries = new ObservableList<LogEntry>( acceptedEntries );
 			FillAcceptedEntries( entriesSource );
 
 			ScanCreatedEntries();
@@ -149,7 +149,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		private readonly List<LogEntry> acceptedEntries = new List<LogEntry>();
-		private readonly ReadonlyObservableList<LogEntry> observableFilteredEntries;
+		private readonly ObservableList<LogEntry> observableFilteredEntries;
 
 		public IList<LogEntry> AcceptedEntries
 		{

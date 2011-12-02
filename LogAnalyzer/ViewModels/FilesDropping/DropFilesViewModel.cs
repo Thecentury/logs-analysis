@@ -4,15 +4,15 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer.GUI.ViewModels
+namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
 	public sealed class DropFilesViewModel : TabViewModel
 	{
@@ -29,7 +29,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			var directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
 
-			directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( directoryConfig, files.Select( f => f.FileName ) );
+			directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( directoryConfig, files.Select( f => f.Name ) );
 			applicationViewModel.Environment.Directories.Add( directoryInfo );
 
 			applicationViewModel.Config.Directories.Add( directoryConfig );
@@ -79,10 +79,18 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return files.Count > 0; }
 		}
 
-		private readonly ObservableCollection<DroppedFileViewModel> files = new ObservableCollection<DroppedFileViewModel>();
-		public IList<DroppedFileViewModel> Files
+		private readonly ObservableCollection<DroppedObjectViewModel> files = new ObservableCollection<DroppedObjectViewModel>();
+		public IList<DroppedObjectViewModel> Files
 		{
 			get { return files; }
+		}
+
+		public override void Dispose()
+		{
+			foreach ( var file in Files )
+			{
+				file.Dispose();
+			}
 		}
 
 		#region Commands
@@ -116,10 +124,33 @@ namespace LogAnalyzer.GUI.ViewModels
 					}
 					else if ( fileSystem.DirectoryExists( path ) )
 					{
-						throw new NotImplementedException();
+						AddDroppedDir( path );
 					}
 				}
 			}
+		}
+
+		public DroppedDirectoryViewModel AddDroppedDir( string path )
+		{
+			var config = ApplicationViewModel.Config;
+
+			string name = Path.GetDirectoryName( path );
+			LogDirectoryConfigurationInfo dirConfig = new LogDirectoryConfigurationInfo( path, "*", name );
+			dirConfig.EncodingName = config.DefaultEncodingName;
+
+			var dirFactory = config.ResolveNotNull<IDirectoryFactory>();
+			IDirectoryInfo dirInfo = dirFactory.CreateDirectory( dirConfig );
+			var env = ApplicationViewModel.Environment;
+			env.Directories.Add( dirInfo );
+
+			var core = ApplicationViewModel.Core;
+			LogDirectory dir = new LogDirectory( dirConfig, config, env, core );
+			core.AddDirectory( dir );
+
+			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, files );
+			files.Add( droppedDir );
+
+			return droppedDir;
 		}
 
 		public DroppedFileViewModel AddDroppedFile( string path )
@@ -132,7 +163,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		// Clear command
-
 
 		private DelegateCommand clearCommand;
 		public ICommand ClearCommand
@@ -150,9 +180,9 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ClearExecute()
 		{
+			files.ForEach( f => f.Dispose() );
 			files.Clear();
 		}
-
 
 		#endregion
 	}

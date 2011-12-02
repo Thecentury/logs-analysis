@@ -6,6 +6,7 @@ using System.Windows;
 using LogAnalyzer.Config;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.GUI.ViewModels.FilesDropping;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Tests.Common;
 using LogAnalyzer.Tests.Mocks;
@@ -21,13 +22,14 @@ namespace LogAnalyzer.Tests.Gui
 		[TestCase( 1, 0, 1, new object[] { "file1" } )]
 		[TestCase( 2, 0, 2, new object[] { "file1", "file2" } )]
 		[TestCase( 1, 0, 3, new object[] { "file1", "nonExistingFile" } )]
-		[TestCase( 1, 0, 4, new object[] { "dir1" }, Description = "1 directory" )]
+		[TestCase( 1, 0, 4, new object[] { @"c:\Users" }, Description = "1 directory" )]
 		public void ExecuteDropCommand( int totalFilesCount, int directoriesCount, int index, params object[] fileNames )
 		{
 			var fileSystemMock = CreateFileSystemMock();
 
-			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration().
-				RegisterInstance<IFileSystem>( fileSystemMock.Object );
+			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration()
+				.RegisterInstance<IFileSystem>( fileSystemMock.Object )
+				.RegisterInstance<IDirectoryFactory>( new DefaultDirectoryFactory() );
 
 			var dropViewModel = CreateDropViewModel( config );
 
@@ -48,6 +50,7 @@ namespace LogAnalyzer.Tests.Gui
 			fileSystemMock.Setup( fs => fs.FileExists( "file2" ) ).Returns( true );
 			fileSystemMock.Setup( fs => fs.DirectoryExists( "dir1" ) ).Returns( true );
 			fileSystemMock.Setup( fs => fs.DirectoryExists( "dir2" ) ).Returns( true );
+			fileSystemMock.Setup( fs => fs.DirectoryExists( @"c:\Users" ) ).Returns( true );
 			return fileSystemMock;
 		}
 

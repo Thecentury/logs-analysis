@@ -326,9 +326,11 @@ namespace LogAnalyzer.Kernel
 				}
 				else
 				{
-					latestAddedEntry.ReplaceLastLine( line, lineIndex );
-
-					logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": replaced line #{1}", Name, lineIndex );
+					if ( latestAddedEntry != null )
+					{
+						latestAddedEntry.ReplaceLastLine(line, lineIndex);
+						logger.DebugWriteVerbose("LogFile.AppendLine: File = \"{0}\": replaced line #{1}", Name, lineIndex);
+					}
 				}
 			}
 			else // добавилась новая строка

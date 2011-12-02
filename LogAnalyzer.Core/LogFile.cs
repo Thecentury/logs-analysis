@@ -46,8 +46,8 @@ namespace LogAnalyzer
 
 		private readonly IList<LogEntry> logEntries = CollectionHelper.CreateList<LogEntry>();
 
-		private readonly ReadonlyObservableList<LogEntry> entries;
-		public ReadonlyObservableList<LogEntry> LogEntries
+		private readonly ObservableList<LogEntry> entries;
+		public ObservableList<LogEntry> LogEntries
 		{
 			get { return entries; }
 		}
@@ -73,7 +73,7 @@ namespace LogAnalyzer
 			logger = this.parentDirectory.Config.Logger;
 			encoding = this.parentDirectory.Encoding;
 
-			entries = new ReadonlyObservableList<LogEntry>( logEntries );
+			entries = new ObservableList<LogEntry>( logEntries );
 
 			this.fileInfo = fileInfo;
 			Name = fileInfo.Name;

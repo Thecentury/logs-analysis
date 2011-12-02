@@ -11,7 +11,7 @@ namespace LogAnalyzer.Collections
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[DebuggerDisplay( "Count = {list.Count}" )]
-	public sealed class ReadonlyObservableList<T> : ThinObservableCollection, IList<T>, IList where T : class
+	public sealed class ObservableList<T> : ThinObservableCollection, IList<T>, IList where T : class
 	{
 		private IList<T> list;
 		public IList<T> List
@@ -20,7 +20,7 @@ namespace LogAnalyzer.Collections
 			set { ReplaceInnerList( value ); }
 		}
 
-		public ReadonlyObservableList( IList<T> list )
+		public ObservableList( IList<T> list )
 		{
 			ReplaceInnerList( list );
 		}
@@ -79,7 +79,8 @@ namespace LogAnalyzer.Collections
 
 		public void Add( T item )
 		{
-			throw new NotImplementedException();
+			list.Add( item );
+			RaiseCollectionAdded( item );
 		}
 
 		public void Clear()
