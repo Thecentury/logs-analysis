@@ -62,7 +62,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			tabs.CollectionChanged += OnTabsCollectionChanged;
 
 			core = new LogAnalyzerCore( config, environment );
-			core.Loaded += OnCore_Loaded;
+			core.Loaded += OnCoreLoaded;
 
 			if ( config.EnabledDirectories.Any() )
 			{
@@ -73,7 +73,18 @@ namespace LogAnalyzer.GUI.ViewModels
 				var fileSystem = config.ResolveNotNull<IFileSystem>();
 				DropFilesViewModel dropViewModel = new DropFilesViewModel( this, fileSystem );
 				AddNewTab( dropViewModel );
+				dropViewModel.Finished += OnDropViewModelFinished;
 			}
+		}
+
+		private void OnDropViewModelFinished( object sender, EventArgs e )
+		{
+			DropFilesViewModel dropVm = (DropFilesViewModel)sender;
+			dropVm.Finished -= OnDropViewModelFinished;
+			dropVm.Dispose();
+
+			tabs.Clear();
+			Start();
 		}
 
 		private void Start()
@@ -96,7 +107,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private void OnCore_Loaded( object sender, EventArgs e )
+		private void OnCoreLoaded( object sender, EventArgs e )
 		{
 			OnCoreLoaded();
 		}

@@ -70,7 +70,7 @@ namespace LogAnalyzer.Config
 			return config;
 		}
 
-		public static LogAnalyzerConfiguration RegisterInstance<T>( this LogAnalyzerConfiguration config, object instance )
+		public static LogAnalyzerConfiguration RegisterInstance<T>( this LogAnalyzerConfiguration config, T instance )
 		{
 			config.Container.RegisterInstance<T>( instance );
 
