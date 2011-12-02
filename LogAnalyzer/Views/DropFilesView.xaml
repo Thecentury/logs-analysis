@@ -26,7 +26,7 @@
 			</Style.Triggers>
 		</Style>
 
-		<DataTemplate DataType="{x:Type FilesDropping:DroppedFileViewModel}" x:Key="droppedFileTemplate">
+		<DataTemplate DataType="{x:Type FilesDropping:DroppedObjectViewModel}" x:Key="droppedFileTemplate">
 			<StackPanel Orientation="Vertical">
 				<StackPanel Orientation="Horizontal"
 							Margin="3">
@@ -40,7 +40,7 @@
 							</ControlTemplate>
 						</Button.Template>
 					</Button>
-					
+
 					<Image Source="{Binding Icon}"
 						   Margin="0,0,4,0"/>
 					<TextBlock Text="{Binding Name}"/>
@@ -64,13 +64,24 @@
 		<DockPanel Visibility="{Binding HasFiles, Converter={StaticResource bool2VisibilityConverter}}"
 				   VerticalAlignment="Stretch" 
 				   LastChildFill="True">
-			<Button Content="Clear" 
-					Margin="10" 
-					DockPanel.Dock="Bottom"
+			<Grid DockPanel.Dock="Bottom"
+				  HorizontalAlignment="Stretch" 
+				  Margin="10">
+
+				<Button Content="Clear" 
 					Command="{Binding ClearCommand}"
 					Padding="10"
-					HorizontalAlignment="Center"/>
-			
+					HorizontalAlignment="Left"/>
+
+				<Button Command="{Binding AnalyzeCommand}"
+						Padding="10"
+						Foreground="DarkViolet"
+						HorizontalAlignment="Center">
+					<TextBlock>Analyze!</TextBlock>
+				</Button>
+			</Grid>
+
+
 			<ScrollViewer VerticalScrollBarVisibility="Auto"
 						  HorizontalAlignment="Center"
 						  DockPanel.Dock="Top"

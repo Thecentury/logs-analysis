@@ -80,9 +80,7 @@ namespace LogAnalyzer.Tests.Gui
 		[Test]
 		public void ExecuteClearCommand()
 		{
-			var fileSystemMock = CreateFileSystemMock();
-
-			var dropViewModel = CreateDropViewModel( new LogAnalyzerConfiguration().RegisterInstance<IFileSystem>( fileSystemMock.Object ) );
+			var dropViewModel = CreateDropViewModel();
 			dropViewModel.ClearCommand.Execute();
 
 			dropViewModel.Assert( d => d.Files.Count == 0 );
@@ -92,6 +90,60 @@ namespace LogAnalyzer.Tests.Gui
 
 			dropViewModel.ClearCommand.Execute();
 			dropViewModel.Assert( d => d.Files.Count == 0 );
+		}
+
+		private static DropFilesViewModel CreateDropViewModel()
+		{
+			var fileSystemMock = CreateFileSystemMock();
+			var dropViewModel = CreateDropViewModel(
+				new LogAnalyzerConfiguration()
+				.RegisterInstance( fileSystemMock.Object )
+				.RegisterInstance<IDirectoryFactory>( new DefaultDirectoryFactory() )
+				);
+			return dropViewModel;
+		}
+
+		[Test]
+		public void CannotExecuteAnalyzeCommandOnEmptyFilesCollection()
+		{
+			var dropViewModel = CreateDropViewModel();
+
+			dropViewModel.Assert( d => !d.AnalyzeCommand.CanExecute() );
+		}
+
+		[Test]
+		public void ExecuteAnalyzeCommandWithFileAndDirectory()
+		{
+			var dropViewModel = CreateDropViewModel();
+			dropViewModel.AddDroppedFile( "SomePath" );
+			dropViewModel.AddDroppedDir( @"c:\Users" );
+
+			dropViewModel.Assert( d => d.Files.Count == 2 );
+			dropViewModel.Assert( d => d.AnalyzeCommand.CanExecute() );
+
+			dropViewModel.AnalyzeCommand.Execute();
+
+			Assert.AreEqual( 2, dropViewModel.ApplicationViewModel.Core.Directories.Count );
+		}
+
+		[Test]
+		public void ExecuteAnalyzeCommandWithOneFile()
+		{
+			var dropVm = CreateDropViewModel();
+			dropVm.AddDroppedFile( @"c:\Windows\notepad.exe" );
+
+			dropVm.AnalyzeCommand.Execute();
+			dropVm.Assert( d => d.ApplicationViewModel.Core.Directories.Count == 1 );
+		}
+
+		[Test]
+		public void ExecuteAnalyzeCommandWithOneDirectory()
+		{
+			var dropVm = CreateDropViewModel();
+			dropVm.AddDroppedDir( @"c:\Users" );
+
+			dropVm.AnalyzeCommand.Execute();
+			dropVm.Assert( d => d.ApplicationViewModel.Core.Directories.Count == 1 );
 		}
 	}
 }

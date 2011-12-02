@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Extensions;
 
@@ -10,9 +11,12 @@ namespace LogAnalyzer.Kernel
 		private readonly FileInfo fileInfo;
 		private LogFileReaderBase reader;
 
-		public FileSystemFileInfo( string path )
+		public FileSystemFileInfo( [NotNull] string path )
 		{
+			if ( path == null ) throw new ArgumentNullException( "path" );
 			fileInfo = new FileInfo( path );
+			if ( !fileInfo.Exists )
+				throw new InvalidOperationException( string.Format( "File '{0}' doesn't exist.", path ) );
 		}
 
 		public void Refresh()

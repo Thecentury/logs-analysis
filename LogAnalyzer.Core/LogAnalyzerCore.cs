@@ -41,7 +41,18 @@ namespace LogAnalyzer
 		{
 			if ( dir == null ) throw new ArgumentNullException( "dir" );
 
+			dir.Loaded += OnDirectoryLoaded;
+			dir.ReadProgress += OnDirectoryReadProgress;
 			directories.Add( dir );
+		}
+
+		public void RemoveDirectory( [NotNull] LogDirectory dir )
+		{
+			if ( dir == null ) throw new ArgumentNullException( "dir" );
+
+			dir.Loaded -= OnDirectoryLoaded;
+			dir.ReadProgress -= OnDirectoryReadProgress;
+			directories.Remove( dir );
 		}
 
 		internal override int TotalFilesCount
@@ -101,9 +112,7 @@ namespace LogAnalyzer
 			}
 
 			var logDirectory = new LogDirectory( dir, config, Environment, this );
-			logDirectory.Loaded += OnDirectoryLoaded;
-			logDirectory.ReadProgress += OnDirectoryReadProgress;
-			directories.Add( logDirectory );
+			AddDirectory( logDirectory );
 		}
 
 		private void OnConfigDirectoriesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )

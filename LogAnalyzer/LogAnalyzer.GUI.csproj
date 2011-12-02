@@ -197,9 +197,13 @@
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\FilesDropping\DropFilesViewModel.cs" />
+    <Compile Include="ViewModels\FilesDropping\DroppedDirectoryViewModel.cs" />
     <Compile Include="ViewModels\FilesDropping\DroppedFileViewModel.cs" />
     <Compile Include="ViewModels\DynamicHighlightManager.cs" />
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
+    <Compile Include="ViewModels\FilesDropping\DroppedObjectViewModel.cs" />
+    <Compile Include="ViewModels\FilesDropping\IDroppedObjectVisitor.cs" />
+    <Compile Include="ViewModels\FilesDropping\StartAnalyzingVisitor.cs" />
     <Compile Include="ViewModels\FilesTree\CoreTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\DirectoryTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />

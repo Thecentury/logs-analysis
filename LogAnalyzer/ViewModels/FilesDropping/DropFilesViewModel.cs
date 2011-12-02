@@ -19,6 +19,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		private readonly IFileSystem fileSystem;
 		private readonly IDirectoryInfo directoryInfo;
 		private readonly LogDirectory logDirectory;
+		private readonly LogDirectoryConfigurationInfo directoryConfig;
 
 		public DropFilesViewModel( [NotNull] ApplicationViewModel applicationViewModel, [NotNull] IFileSystem fileSystem )
 			: base( applicationViewModel )
@@ -27,14 +28,16 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			if ( applicationViewModel == null ) throw new ArgumentNullException( "applicationViewModel" );
 			if ( fileSystem == null ) throw new ArgumentNullException( "fileSystem" );
 
-			var directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
+			directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
 
-			directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( directoryConfig, files.Select( f => f.Name ) );
+			directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( directoryConfig,
+				files.OfType<DroppedFileViewModel>().Select( f => f.Name ) );
+
 			applicationViewModel.Environment.Directories.Add( directoryInfo );
 
-			applicationViewModel.Config.Directories.Add( directoryConfig );
-
 			files.CollectionChanged += OnFilesCollectionChanged;
+
+			applicationViewModel.Config.Directories.Add( directoryConfig );
 
 			logDirectory = applicationViewModel.Core.Directories.First( d => d.DirectoryConfig == directoryConfig );
 		}
@@ -44,6 +47,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			RaisePropertyChanged( "IconFile" );
 			RaisePropertyChanged( "HasNoFiles" );
 			RaisePropertyChanged( "HasFiles" );
+			AnalyzeCommand.RaiseCanExecuteChanged();
 		}
 
 		protected override bool CanBeClosedCore()
@@ -145,7 +149,6 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 			var core = ApplicationViewModel.Core;
 			LogDirectory dir = new LogDirectory( dirConfig, config, env, core );
-			core.AddDirectory( dir );
 
 			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, files );
 			files.Add( droppedDir );
@@ -184,6 +187,42 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			files.Clear();
 		}
 
+		// Analyze command
+
+		private DelegateCommand analyzeCommand;
+
+		public DelegateCommand AnalyzeCommand
+		{
+			get
+			{
+				if ( analyzeCommand == null )
+				{
+					analyzeCommand = new DelegateCommand( AnalyzeExecute, AnalyzeCanExecute );
+				}
+
+				return analyzeCommand;
+			}
+		}
+
+		private void AnalyzeExecute()
+		{
+			if ( !files.Any( f => f is DroppedFileViewModel ) )
+			{
+				ApplicationViewModel.Core.RemoveDirectory( logDirectory );
+			}
+
+			StartAnalyzingVisitor visitor = new StartAnalyzingVisitor( logDirectory, ApplicationViewModel.Core );
+			files.ForEach( visitor.Visit );
+			Finished.Raise( this );
+		}
+
+		private bool AnalyzeCanExecute()
+		{
+			return files.Count > 0;
+		}
+
 		#endregion
+
+		public event EventHandler Finished;
 	}
 }
