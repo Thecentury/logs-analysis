@@ -12,8 +12,9 @@ using System.Text.RegularExpressions;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogEntry File={ParentLogFile.FullPath} LineIndex={LineIndex}" )]
-	public sealed class LogEntry : INotifyPropertyChanged, IFreezable, IHaveTime
+	public sealed class LogEntry : INotifyPropertyChanged, IFreezable, IHaveTime, ILogEntry
 	{
+		// todo brinchuk remove me
 		// todo probably read from config
 		private const string ExceptionRegexText = @"^\s*at (?<Function>.*) in (?<File>.*):line (?<LineNumber>\d+)$";
 		private static readonly Regex exceptionRegex = new Regex( ExceptionRegexText, RegexOptions.Compiled );

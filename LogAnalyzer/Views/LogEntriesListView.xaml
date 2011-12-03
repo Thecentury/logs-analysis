@@ -54,7 +54,7 @@
 			<ItemsControl ItemsSource="{Binding HighlightedByList}" VerticalAlignment="Top">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						
+
 						<Rectangle Width="10" Height="10" 
 								   Fill="{Binding Brush}" Stroke="DarkGray" 
 								   StrokeThickness="1" Margin="2"
@@ -72,9 +72,9 @@
 										</MenuItem.Icon>
 									</MenuItem>
 								</ContextMenu>
-							</Rectangle.ContextMenu>	
+							</Rectangle.ContextMenu>
 						</Rectangle>
-						
+
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 				<ItemsControl.ItemsPanel>
@@ -337,37 +337,8 @@
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
-			<ContentControl Content="{Binding}">
-
-				<ContentControl.Resources>
-
-					<ControlTemplate TargetType="ContentControl" x:Key="textTemplate">
-						<TextBox Text="{Binding UnitedText, Mode=OneWay}" 
-								 Background="Transparent"
-								 IsReadOnly="True" TextWrapping="Wrap"
-								 MaxHeight="200"
-								 VerticalScrollBarVisibility="Auto"
-								 BorderBrush="{x:Null}" BorderThickness="0"/>
-					</ControlTemplate>
-
-					<ControlTemplate TargetType="ContentControl" x:Key="exceptionCellTemplate">
-						<views:ExceptionView DataContext="{Binding LinesView}"/>
-					</ControlTemplate>
-
-				</ContentControl.Resources>
-
-				<ContentControl.Style>
-					<Style TargetType="ContentControl">
-						<!--todo включить-->
-						<!--<Style.Triggers>
-							<DataTrigger Binding="{Binding IsException}" Value="True">
-								<Setter Property="Template" Value="{StaticResource exceptionCellTemplate}"/>
-							</DataTrigger>
-							</Style.Triggers>-->
-						<Setter Property="Template" Value="{StaticResource textTemplate}"/>
-					</Style>
-				</ContentControl.Style>
-			</ContentControl>
+			<Control Template="{Binding Template}"
+					 DataContext="{Binding TemplateContext}"/>
 		</DataTemplate>
 
 	</UserControl.Resources>
@@ -380,7 +351,7 @@
 		</DockPanel>
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
-		
+
 		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
 		<Image Source="{Binding MessageTypeImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
 
