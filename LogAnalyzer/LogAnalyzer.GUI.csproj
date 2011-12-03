@@ -193,6 +193,12 @@
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Collections\LogEntryViewModelLight.cs" />
+    <Compile Include="ViewModels\Colorizing\ColorizationLoader.cs" />
+    <Compile Include="ViewModels\Colorizing\ColorizationManager.cs" />
+    <Compile Include="ViewModels\Colorizing\DefaultColorizeTemplate.cs" />
+    <Compile Include="ViewModels\Colorizing\FilteringColorizeTemplate.cs" />
+    <Compile Include="ViewModels\Colorizing\RegexColorizeTemplate.cs" />
+    <Compile Include="ViewModels\Colorizing\ColorizeTemplateBase.cs" />
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />
@@ -298,6 +304,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <None Include="Templates\BusinessProcessStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\Default.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Page Include="Views\CommonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

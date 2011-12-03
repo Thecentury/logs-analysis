@@ -1,0 +1,14 @@
+﻿<l:DefaultColorizeTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:l="http://www.awad.com/LogAnalyzer"
+					Priority="-100">
+	<ControlTemplate>
+		<TextBox Text="{Binding Text, Mode=OneWay}" 
+				 Background="Transparent"
+				 IsReadOnly="True" 
+				 TextWrapping="Wrap"
+				 MaxHeight="200"
+				 VerticalScrollBarVisibility="Auto"
+				 BorderBrush="{x:Null}" BorderThickness="0"/>
+	</ControlTemplate>
+</l:DefaultColorizeTemplate>

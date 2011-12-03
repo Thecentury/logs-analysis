@@ -3,3 +3,4 @@ using LogAnalyzer.Properties;
 
 [assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Regions" )]
 [assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.GUI.Common" )]
+[assembly: XmlnsDefinition( LogAnalyzerGlobalConstants.XmlNamespace, "LogAnalyzer.GUI.ViewModels.Colorizing" )]

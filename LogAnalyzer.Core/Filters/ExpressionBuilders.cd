@@ -1,98 +1,100 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="LogAnalyzer.Filters.AlwaysTrueFilterBuilder" Collapsed="true">
-    <Position X="3.25" Y="1.75" Width="1.5" />
+  <Class Name="LogAnalyzer.Filters.VerbatimExpressionBuilder&lt;T&gt;" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\AlwaysTrueFilterBuilder.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAEBAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\VerbatimExpressionBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LogAnalyzer.Filters.ExpressionBuilderManager" Collapsed="true">
-    <Position X="26" Y="1.5" Width="1.5" />
+    <Position X="17.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAgCAAAAYAAAAAAAAAAAAA=</HashCode>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAgCAEAAQAAAAAAAAAAEAA=</HashCode>
       <FileName>Filters\ExpressionBuilderManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LogAnalyzer.Filters.BinaryExpressionBuilder" Collapsed="true">
     <Position X="15.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAEAAAAEAACACAAAAAAAA=</HashCode>
+      <HashCode>AAgAAAAAAAAAgAQIACAEAAAAEAAAAEAACACAAAAAAQA=</HashCode>
       <FileName>Filters\BinaryExpressionBuilder.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="LogAnalyzer.Filters.BooleanBinaryExpressionBuilder" Collapsed="true">
     <Position X="15.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="LogAnalyzer.Filters.GreaterThanBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.NotEquals" Collapsed="true">
     <Position X="7.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.GreaterThanOrEqualBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.LessThan" Collapsed="true">
     <Position X="12.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.LessThanBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.GreaterThan" Collapsed="true">
     <Position X="16.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.LessThanOrEqualBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.Or" Collapsed="true">
     <Position X="21.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.EqualsBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.GreaterThanOrEqual" Collapsed="true">
     <Position X="10" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.NoEqualsBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.And" Collapsed="true">
     <Position X="14.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.AndBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.LessThanOrEqual" Collapsed="true">
     <Position X="19" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.OrBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.Equals" Collapsed="true">
     <Position X="23.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Filters\BooleanBinaryExpressionBuilders.cs</FileName>
+      <FileName>Filters\BooleanExpressionBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LogAnalyzer.Filters.ConstantExpressionBuilder&lt;TConstant&gt;" Collapsed="true">
-    <Position X="5.5" Y="1.75" Width="1.5" />
+    <Position X="12" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Filters\ConstantExpressionBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LogAnalyzer.Filters.DelegateFilter&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="26" Y="0.5" Width="1.5" />
+    <Position X="17.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAABABAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Filters\DelegateFilter.cs</FileName>
@@ -102,14 +104,15 @@
   <Class Name="LogAnalyzer.Filters.ExpressionBuilder" Collapsed="true">
     <Position X="13.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAAAgAgCABAJQEAAAAgAAlAABAASAAAAAAAAIACA=</HashCode>
+      <HashCode>AIAgCAAgAgCABAJUECACAgAAlAABAFSAAAAAAAAIASA=</HashCode>
       <FileName>Filters\ExpressionBuilder.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="LogAnalyzer.Filters.ExpressionBuilderExtensions" Collapsed="true">
-    <Position X="27.75" Y="0.5" Width="1.5" />
+    <Position X="19.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgAAAAAAAEAAAAAIAAACAAAAAAAAAABAAAEA=</HashCode>
+      <HashCode>AAAgAAAAgAABAAAAEAAAAAIAAACAAAAAAAAAABAAAEA=</HashCode>
       <FileName>Filters\ExpressionBuilderExtensions.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -124,7 +127,7 @@
   <Class Name="LogAnalyzer.Filters.StringFilterBuilder" Collapsed="true">
     <Position X="29.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAECAAAAAEAAAAAAAEAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAECAAAAAEAAAAAAAEAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Filters\StringFilterBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -135,28 +138,28 @@
       <FileName>Filters\StringFilterBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.StringContainsBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.StringStartsWith" Collapsed="true">
     <Position X="33" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Filters\StringFilterBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.StringContainsIgnoreCaseBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.StringEndsWith" Collapsed="true">
     <Position X="26.25" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Filters\StringFilterBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.StringStartsWithBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.StringContainsIgnoreCase" Collapsed="true">
     <Position X="28.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Filters\StringFilterBuilders.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.StringEndsWithBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.StringContains" Collapsed="true">
     <Position X="30.75" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -173,15 +176,15 @@
   <Class Name="LogAnalyzer.Filters.FilterParameterAttribute" Collapsed="true">
     <Position X="35.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAEAAAA=</HashCode>
       <FileName>Filters\FilterParameterAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LogAnalyzer.Filters.GetPropertyFilterBuilder" Collapsed="true">
+  <Class Name="LogAnalyzer.Filters.PreviousDayFileFilter" Collapsed="true">
     <Position X="15.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAAAABAAAA=</HashCode>
-      <FileName>Filters\GetPropertyFilterBuilder.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Filters\FileFilters\PreviousDayFileFilter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LogAnalyzer.Filters.Slot" Collapsed="true" BaseTypeListCollapsed="true">

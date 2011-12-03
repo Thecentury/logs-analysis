@@ -1,11 +1,15 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Regions;
+using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Misc;
@@ -71,14 +75,27 @@ namespace LogAnalyzer.GUI
 
 			DirectoryManager.RegisterCommonFactories();
 
+			string templatesDir = Path.Combine(
+				Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ),
+				"Templates" );
+
+			ColorizationManager colorizationManager = null;
+			DispatcherHelper.GetDispatcher().Invoke( () =>
+			{
+				ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
+				var templates = colorizationLoader.Load();
+				colorizationManager = new ColorizationManager( templates );
+			}, DispatcherPriority.Send );
+
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
-				.RegisterInstance<OperationScheduler>( OperationScheduler.TaskScheduler )
+				.RegisterInstance( OperationScheduler.TaskScheduler )
 				.RegisterInstance<IErrorReportingService>( new ErrorReportingService() )
-				.RegisterInstance<RegionManager>( new RegionManager() )
+				.RegisterInstance( new RegionManager() )
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager )
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
-				.RegisterInstance<IFileSystem>( new RealFileSystem() );
+				.RegisterInstance<IFileSystem>( new RealFileSystem() )
+				.RegisterInstance( colorizationManager );
 		}
 	}
 }

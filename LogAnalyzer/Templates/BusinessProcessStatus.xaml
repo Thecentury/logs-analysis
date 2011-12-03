@@ -1,0 +1,15 @@
+﻿<l:RegexColorizeTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:l="http://www.awad.com/LogAnalyzer">
+	<l:RegexColorizeTemplate.Pattern>Executed (?&lt;Start&gt;\w+) -> (?&lt;Delegate&gt;[\w\.]+) -> (?&lt;End&gt;\w+)</l:RegexColorizeTemplate.Pattern>
+	<l:RegexColorizeTemplate.Filter>
+		<l:FileNameEquals FileName="ModuleOrderManager.log"/>
+	</l:RegexColorizeTemplate.Filter>
+	<ControlTemplate TargetType="Control">
+		<TextBlock>
+				<Run Text="Executed"/>
+				<Run Text="{Binding Start, Mode=OneWay}" Foreground="Green"/> ->
+				<Run Text="{Binding Delegate}" Foreground="BlueViolet"/> ->
+				<Run Text="{Binding End}" Foreground="Green"/> .
+		</TextBlock>
+	</ControlTemplate>
+</l:RegexColorizeTemplate>

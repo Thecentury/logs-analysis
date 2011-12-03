@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
@@ -15,6 +16,7 @@ using System.Windows.Input;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
+using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -26,6 +28,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private readonly ILogEntryHost host;
 		private readonly int indexInParentCollection = ParallelHelper.IndexNotFound;
 		private readonly LogEntriesListViewModel parentViewModel;
+		private readonly ColorizationManager colorizationManager;
 
 		/// <summary>
 		/// Индекс в коллекции host.
@@ -44,7 +47,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private static int createdCount;
 #endif
 
-		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host, LogEntriesListViewModel parentViewModel, int indexInParentCollection )
+		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host,
+			LogEntriesListViewModel parentViewModel, int indexInParentCollection )
 			: base( logEntry )
 		{
 			if ( logEntry == null )
@@ -61,6 +65,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			this.host = host;
 			this.indexInParentCollection = indexInParentCollection;
 			this.parentViewModel = parentViewModel;
+
+			colorizationManager = parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ColorizationManager>();
 
 #if MEASURE_CREATED_COUNT
 			Interlocked.Increment( ref createdCount );
@@ -82,6 +88,47 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		}
 #endif
+
+		private ControlTemplate template;
+		public ControlTemplate Template
+		{
+			get
+			{
+				if ( template == null )
+				{
+					UpdateColorization();
+				}
+				return template;
+			}
+		}
+
+		private void UpdateColorization()
+		{
+			var colorizingTemplate = colorizationManager.GetTemplateForEntry( logEntry );
+			if ( colorizingTemplate != null )
+			{
+				template = colorizingTemplate.Template;
+				templateContext = colorizingTemplate.GetDataContext( logEntry );
+			}
+			else
+			{
+				template = new ControlTemplate();
+				templateContext = this;
+			}
+		}
+
+		private object templateContext;
+		public object TemplateContext
+		{
+			get
+			{
+				if ( templateContext == null )
+				{
+					UpdateColorization();
+				}
+				return templateContext;
+			}
+		}
 
 		public bool Equals( LogEntryViewModel other )
 		{
