@@ -105,16 +105,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void UpdateColorization()
 		{
 			var colorizingTemplate = colorizationManager.GetTemplateForEntry( logEntry );
-			if ( colorizingTemplate != null )
-			{
-				template = colorizingTemplate.Template;
-				templateContext = colorizingTemplate.GetDataContext( logEntry );
-			}
-			else
-			{
-				template = new ControlTemplate();
-				templateContext = this;
-			}
+			template = colorizingTemplate.Template;
+			templateContext = colorizingTemplate.GetDataContext( logEntry );
 		}
 
 		private object templateContext;
