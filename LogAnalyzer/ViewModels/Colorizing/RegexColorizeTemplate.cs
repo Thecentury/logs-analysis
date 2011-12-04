@@ -55,7 +55,12 @@ namespace LogAnalyzer.GUI.ViewModels.Colorizing
 
 		public override bool Accepts( LogEntry logEntry )
 		{
-			return base.Accepts( logEntry ) && regex.IsMatch( logEntry.UnitedText );
+			bool accepts = base.Accepts( logEntry );
+			if(!accepts)
+				return false;
+
+			bool matches = regex.IsMatch( logEntry.UnitedText );
+			return matches;
 		}
 	}
 }
