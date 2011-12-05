@@ -332,8 +332,8 @@
 
 			<Setter Property="RowStyle" Value="{StaticResource rowStyle}"/>
 
-			<Setter Property="SelectedValue" Value="{Binding SelectedEntry}"/>
-			<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex}"/>
+			<Setter Property="SelectedValue" Value="{Binding SelectedEntry, Mode=TwoWay}"/>
+			<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex, Mode=TwoWay}"/>
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
