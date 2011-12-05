@@ -48,6 +48,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		void ILogEntryHost.Release( LogEntryViewModel vm )
 		{
 			viewModelsCache.Remove( vm.IndexInParentCollection );
+			vm.Dispose();
+
 			ItemRemoved.Raise( this, new LogEntryHostChangedEventArgs( vm ) );
 		}
 
