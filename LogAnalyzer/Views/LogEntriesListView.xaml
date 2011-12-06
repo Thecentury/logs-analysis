@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:LogAnalyzer.GUI"
 			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views" 
-			 xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
+			 xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" xmlns:OverviewGui="clr-namespace:LogAnalyzer.GUI.OverviewGui"
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.InputBindings>
@@ -341,6 +342,48 @@
 					 DataContext="{Binding TemplateContext}"/>
 		</DataTemplate>
 
+		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>
+
+		<!-- Стиль прямоугольника из Overview -->
+		<Style TargetType="{x:Type Rectangle}" x:Key="overviewRectangleStyle">
+			<Setter Property="Height" Value="2"/>
+			<Setter Property="Margin" Value="2,0,2,0"/>
+			<Setter Property="Width" Value="16"/>
+			<Setter Property="ToolTip">
+				<Setter.Value>
+					<ToolTip>
+						<TextBlock MaxWidth="300" TextWrapping="WrapWithOverflow">
+							<Run Text="{Binding LogEntry.Type, Mode=OneWay}"
+								 Foreground="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
+								 />
+							<Run Text="{Binding LogEntry.Time.TimeOfDay, Mode=OneWay}"/>:
+							<Run Text="{Binding LogEntry.UnitedText, Mode=OneWay}"/>
+						</TextBlock>
+					</ToolTip>
+				</Setter.Value>
+			</Setter>
+
+			<EventSetter Event="MouseLeftButtonDown" Handler="OnOverviewItemLeftMouseButtonDown"/>
+
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Stroke" Value="Black"/>
+					<Setter Property="StrokeThickness" Value="1"/>
+					<Setter Property="Height" Value="5"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
+			<Rectangle Style="{StaticResource overviewRectangleStyle}"
+					   Fill="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
+					   />
+		</DataTemplate>
+
+		<Style x:Key="overviewContainerStyle">
+			<Setter Property="OverviewGui:OverviewCanvas.Coordinate" Value="{Binding Coordinate}"/>
+		</Style>
+
 	</UserControl.Resources>
 
 	<DockPanel LastChildFill="True">
@@ -354,6 +397,18 @@
 
 		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
 		<Image Source="{Binding MessageTypeImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
+
+		<ItemsControl ItemsSource="{Binding MessageTypeOverview}"
+					  DockPanel.Dock="Right"
+					  Width="20"
+					  Margin="0,22,0,0"
+					  ItemContainerStyle="{StaticResource overviewContainerStyle}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"

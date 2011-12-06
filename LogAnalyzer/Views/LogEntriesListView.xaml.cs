@@ -1,7 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using LogAnalyzer.GUI.Extensions;
+using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.Views
@@ -15,6 +18,13 @@ namespace LogAnalyzer.GUI.Views
 		{
 			InitializeComponent();
 			Loaded += LogEntriesListView_Loaded;
+		}
+
+		private void OnOverviewItemLeftMouseButtonDown( object sender, MouseEventArgs e )
+		{
+			FrameworkElement fe = (FrameworkElement)sender;
+			OverviewInfo info = (OverviewInfo)fe.DataContext;
+			info.ScrollToItemCommand.Execute();
 		}
 
 		private void LogEntriesListView_Loaded( object sender, RoutedEventArgs e )

@@ -177,7 +177,10 @@
     <Compile Include="Interop\FlashWindow.cs" />
     <Compile Include="OverviewGui\IOverviewBitmapBuilder.cs" />
     <Compile Include="OverviewGui\MessageTypeBitmapBuilder.cs" />
+    <Compile Include="OverviewGui\MessageTypeToBackgroundConverter.cs" />
     <Compile Include="OverviewGui\OverviewBitmapBuilderBase.cs" />
+    <Compile Include="OverviewGui\OverviewCanvas.cs" />
+    <Compile Include="OverviewGui\OverviewInfo.cs" />
     <Compile Include="OverviewGui\OverviewViewModel.cs" />
     <Compile Include="OverviewGui\PaletteOverviewBitmapBuilder.cs" />
     <Compile Include="Regions\FutureRegion.cs" />

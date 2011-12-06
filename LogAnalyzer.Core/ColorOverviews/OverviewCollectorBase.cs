@@ -8,7 +8,7 @@ namespace LogAnalyzer.ColorOverviews
 		public int SegmentsCount
 		{
 			get { return segmentsCount; }
-			protected set { segmentsCount = value; }
+			set { segmentsCount = value; }
 		}
 
 		public abstract TResult[] Build( IList<TItem> items );

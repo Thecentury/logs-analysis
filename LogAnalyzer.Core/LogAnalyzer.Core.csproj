@@ -96,6 +96,7 @@
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
     <Compile Include="Filters\FileFilters\ExcludeFilesByNameFilter.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Logging\SingleThreadedLogWriter.cs" />
     <Compile Include="Kernel\WorkerThreadOperationsQueue.cs" />
     <Compile Include="MessageSeverityCount.cs" />
+    <Compile Include="MessageTypeStrings.cs" />
     <Compile Include="Misc\CommandLineArgumentsParser.cs" />
     <Compile Include="Misc\MultiDictionary.cs" />
     <Compile Include="Misc\PerformanceCountersService.cs" />

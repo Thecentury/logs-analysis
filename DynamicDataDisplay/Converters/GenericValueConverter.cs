@@ -20,8 +20,6 @@ namespace Microsoft.Research.DynamicDataDisplay.Converters
 			this.conversion = conversion;
 		}
 
-		#region IValueConverter Members
-
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is T)
@@ -48,7 +46,5 @@ namespace Microsoft.Research.DynamicDataDisplay.Converters
 		{
 			throw new NotSupportedException();
 		}
-
-		#endregion
 	}
 }

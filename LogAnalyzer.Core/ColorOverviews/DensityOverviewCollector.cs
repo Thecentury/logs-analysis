@@ -10,6 +10,11 @@ namespace LogAnalyzer.ColorOverviews
 	{
 		private readonly Func<T, bool> predicate;
 
+		public DensityOverviewCollector()
+			: this( e => true )
+		{
+		}
+
 		public DensityOverviewCollector( [NotNull] Func<T, bool> predicate )
 		{
 			if ( predicate == null ) throw new ArgumentNullException( "predicate" );
@@ -26,7 +31,7 @@ namespace LogAnalyzer.ColorOverviews
 			if ( predicate( entry ) )
 			{
 				var collection = result[index];
-				collection.Add(entry);
+				collection.Add( entry );
 			}
 		}
 
