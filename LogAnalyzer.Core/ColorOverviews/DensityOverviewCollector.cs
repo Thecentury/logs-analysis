@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace LogAnalyzer.ColorOverviews
 {
-	public sealed class DensityOverviewCollector<T> : OverviewCollectorBase<T, ICollection<T>>
+	public sealed class DensityOverviewCollector<T> : TimeOverviewCollectorBase<T, ICollection<T>>
 		where T : IHaveTime
 	{
 		private readonly Func<T, bool> predicate;

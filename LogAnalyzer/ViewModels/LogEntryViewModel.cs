@@ -85,7 +85,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			Interlocked.Decrement(ref createdCount);
 			Logger.Instance.WriteInfo( "LogEntryViewModel.~dtor: CreatedCount = {0}", createdCount );
-
 		}
 #endif
 
@@ -217,18 +216,24 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private Brush logNameBackground;
+		private static readonly Dictionary<int, Brush> logFileNameBrushesCache = new Dictionary<int, Brush>();
+
 		public Brush LogNameBackground
 		{
 			get
 			{
-				if ( logNameBackground == null )
+				int hashCode = File.Name.GetHashCode();
+				Brush logNameBackground;
+
+				if ( !logFileNameBrushesCache.TryGetValue( hashCode, out logNameBackground ) )
 				{
-					double hue = (File.Name.GetHashCode() - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
+					double hue = (hashCode - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
 					HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
 					HsbColor darkerColor = new HsbColor( hue, 0.2, 0.95 );
 					logNameBackground = new LinearGradientBrush( hsbColor.ToArgbColor(), darkerColor.ToArgbColor(), 90 );
 					logNameBackground.Freeze();
+
+					logFileNameBrushesCache.Add( hashCode, logNameBackground );
 				}
 
 				return logNameBackground;
