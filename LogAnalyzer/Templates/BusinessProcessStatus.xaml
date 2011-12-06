@@ -22,7 +22,8 @@
 			BorderBrush="{x:Null}"
 			BorderThickness="0" 
 			IsReadOnly="True"
-			IsReadOnlyCaretVisible="True">
+			IsReadOnlyCaretVisible="True"
+			Background="Transparent">
 			<FlowDocument>
 				<Paragraph>
 					<Run Text="Executed"/>

@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace LogAnalyzer.ColorOverviews
 {
-	public sealed class LastMatchingOverviewBuilder<T> : OverviewCollectorBase<T, T>
+	public sealed class LastMatchingOverviewBuilder<T> : TimeOverviewCollectorBase<T, T>
 		where T : class, IHaveTime
 	{
 		private readonly Func<T, bool> predicate;

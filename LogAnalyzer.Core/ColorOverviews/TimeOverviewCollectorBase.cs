@@ -3,36 +3,26 @@ using System.Collections.Generic;
 
 namespace LogAnalyzer.ColorOverviews
 {
-	public abstract class OverviewCollectorBase<TItem, TResult> : IOverviewCollector<TItem, TResult>
+	public abstract class TimeOverviewCollectorBase<TItem, TResult> : OverviewCollectorBase<TItem, TResult>
 		where TItem : IHaveTime
 	{
-		private int segmentsCount = 1000;
-
-		public int SegmentsCount
+		public override TResult[] Build( IList<TItem> entries )
 		{
-			get { return segmentsCount; }
-			set { segmentsCount = value; }
-		}
-
-		protected abstract TResult InitResult();
-		protected abstract void Append( TResult[] result, int index, TItem entry );
-
-		public TResult[] Build( IList<TItem> entries )
-		{
-			var result = new TResult[segmentsCount];
+			int count = SegmentsCount;
+			var result = new TResult[count];
 
 			DateTime minTime = entries[0].Time;
 			DateTime maxTime = entries[entries.Count - 1].Time;
 
-			TimeSpan step = TimeSpan.FromTicks( (long)((maxTime - minTime).Ticks / (double)segmentsCount) );
+			TimeSpan step = TimeSpan.FromTicks( (long)((maxTime - minTime).Ticks / (double)count) );
 
-			for ( int i = 0; i < segmentsCount; i++ )
+			for ( int i = 0; i < count; i++ )
 			{
 				result[i] = InitResult();
 			}
 
 			int entriesIndex = 0;
-			for ( int i = 0; i < segmentsCount; i++ )
+			for ( int i = 0; i < count; i++ )
 			{
 				DateTime stepUpperBoundary = minTime + TimeSpan.FromSeconds( step.TotalSeconds * i );
 

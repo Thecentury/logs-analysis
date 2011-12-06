@@ -245,7 +245,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( messageTypeImage == null )
 				{
-					var collector = new GroupingOverviewCollector<LogEntry>( e => true );
+					var collector = new GroupingByIndexOverviewCollector<LogEntry>();
 					var builder = new MessageTypeOverviewBuilder();
 					var map = builder.CreateOverviewMap( collector.Build( entries ) );
 

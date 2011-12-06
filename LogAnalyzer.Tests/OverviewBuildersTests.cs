@@ -30,7 +30,7 @@ namespace LogAnalyzer.Tests
 			AssertCounts( segmentsCount, entriesCount, builder );
 		}
 
-		private static void AssertCounts( int segmentsCount, int entriesCount, OverviewCollectorBase<TimeClass, TimeClass> builder )
+		private static void AssertCounts( int segmentsCount, int entriesCount, TimeOverviewCollectorBase<TimeClass, TimeClass> builder )
 		{
 			var list = CreateSampleData( entriesCount );
 			var overview = builder.Build( list );
