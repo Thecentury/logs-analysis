@@ -20,6 +20,8 @@ namespace LogAnalyzer.Collections
 			set { ReplaceInnerList( value ); }
 		}
 
+		public ObservableList() : this( new List<T>() ) { }
+
 		public ObservableList( IList<T> list )
 		{
 			ReplaceInnerList( list );

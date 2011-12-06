@@ -22,9 +22,9 @@ namespace LogAnalyzer.ColorOverviews
 				result[i] = InitResult();
 			}
 
-			double delta = items.Count/((double) count);
+			double delta = items.Count / ((double)count);
 			int itemsIndex = 0;
-			for (int i = 0; i < count; i++)
+			for ( int i = 0; i < count; i++ )
 			{
 				double currentCeiling = delta * i;
 				while ( itemsIndex < currentCeiling )

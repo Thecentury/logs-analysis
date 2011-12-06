@@ -224,7 +224,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				if ( densityImage == null )
 				{
-					var collector = new DensityOverviewCollector<LogEntry>( e => true );
+					var collector = new DensityOverviewCollector<LogEntry>();
 					var builder = new DensityOverviewBuilder<LogEntry>();
 					var map = builder.CreateOverviewMap( collector.Build( entries ) )
 						.Select( e => Math.Pow( e, 0.33 ) )
@@ -238,22 +238,73 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private BitmapSource messageTypeImage;
-		public BitmapSource MessageTypeImage
+		private List<OverviewInfo> messageTypeOverviewInfos;
+		public List<OverviewInfo> MessageTypeOverview
 		{
 			get
 			{
-				if ( messageTypeImage == null )
+				if ( messageTypeOverviewInfos == null )
 				{
 					var collector = new GroupingByIndexOverviewCollector<LogEntry>();
 					var builder = new MessageTypeOverviewBuilder();
 					var map = builder.CreateOverviewMap( collector.Build( entries ) );
 
-					var bitmapBuilder = new MessageTypeBitmapBuilder();
-					messageTypeImage = bitmapBuilder.CreateBitmap( map );
+					double length = map.Length;
+
+					List<OverviewInfo> list = new List<OverviewInfo>();
+					for ( int i = 0; i < map.Length; i++ )
+					{
+						LogEntry entry = map[i];
+						if ( entry == null )
+							continue;
+						if ( !entry.Type.In( MessageTypes.Error, MessageTypes.Warning ) )
+							continue;
+
+						OverviewInfo info = new OverviewInfo( map[i], i / length, this );
+						list.Add( info );
+					}
+
+					messageTypeOverviewInfos = list;
 				}
-				return messageTypeImage;
+
+				return messageTypeOverviewInfos;
 			}
+		}
+
+		private DelegateCommand<LogEntry> scrollToItemCommand;
+		public DelegateCommand<LogEntry> ScrollToItemCommand
+		{
+			get
+			{
+				if ( scrollToItemCommand == null )
+				{
+					scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
+					{
+					    var index = entries.SequentialIndexOf(entry);
+						SelectedEntryIndex = index;
+					} );
+				}
+				return scrollToItemCommand;
+			}
+		}
+
+		private ObservableCollection<OverviewViewModel> overviews;
+		public ObservableCollection<OverviewViewModel> Overviews
+		{
+			get
+			{
+				if ( overviews == null )
+				{
+					overviews = new ObservableCollection<OverviewViewModel>();
+					PopulateOverviews( overviews );
+				}
+				return overviews;
+			}
+		}
+
+		protected virtual void PopulateOverviews( IList<OverviewViewModel> overviews )
+		{
+
 		}
 
 		#endregion Overviews

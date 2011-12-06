@@ -22,15 +22,15 @@ namespace LogAnalyzer.GUI.OverviewGui
 		{
 			switch ( item )
 			{
-				case "E":
+				case MessageTypes.Error:
 					return errorColor;
-				case "W":
+				case MessageTypes.Warning:
 					return warningColor;
-				case "I":
+				case MessageTypes.Info:
 					return infoColor;
-				case "D":
+				case MessageTypes.Debug:
 					return debugColor;
-				case "V":
+				case MessageTypes.Verbose:
 					return verboseColor;
 				default:
 					return otherColor;
