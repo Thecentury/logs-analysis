@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using System.Xaml;
@@ -78,11 +79,11 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestExpressionBuilderManager()
 		{
-			ExpressionBuilder[] buildersReturningBoolean = ExpressionBuilderManager.GetBuilders( typeof( bool ), typeof(object) );
+			ExpressionBuilder[] buildersReturningBoolean = ExpressionBuilderManager.GetBuilders( typeof( bool ), typeof( object ) );
 			Assert.NotNull( buildersReturningBoolean );
 			Assert.That( buildersReturningBoolean.Length, Is.GreaterThan( 0 ) );
 
-			ExpressionBuilder[] buildersReturningExpression = ExpressionBuilderManager.GetBuilders( typeof( ExpressionBuilder ), typeof(object) );
+			ExpressionBuilder[] buildersReturningExpression = ExpressionBuilderManager.GetBuilders( typeof( ExpressionBuilder ), typeof( object ) );
 			Assert.NotNull( buildersReturningExpression );
 			Assert.That( buildersReturningExpression.Length, Is.GreaterThan( 0 ) );
 		}
@@ -221,16 +222,19 @@ namespace LogAnalyzer.Tests
 
 		private sealed class ThrowingClass
 		{
+			[UsedImplicitly]
 			public bool Throws
 			{
 				get { throw new NotSupportedException(); }
 			}
 
+			[UsedImplicitly]
 			public bool True
 			{
 				get { return true; }
 			}
 
+			[UsedImplicitly]
 			public bool False
 			{
 				get { return false; }

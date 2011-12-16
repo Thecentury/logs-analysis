@@ -231,6 +231,7 @@
     <Compile Include="ViewModels\HighlightingViewModel.cs" />
     <Compile Include="ViewModels\IAwareOfIndex.cs" />
     <Compile Include="ViewModels\IHierarchyMember.cs" />
+    <Compile Include="ViewModels\ISaveFileDialog.cs" />
     <Compile Include="ViewModels\ITypeName.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />
     <Compile Include="ViewModels\LogDirectoryViewModel.cs" />

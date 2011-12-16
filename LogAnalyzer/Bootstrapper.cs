@@ -9,6 +9,7 @@ using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Regions;
+using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
@@ -95,7 +96,8 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager )
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
 				.RegisterInstance<IFileSystem>( new RealFileSystem() )
-				.RegisterInstance( colorizationManager );
+				.RegisterInstance( colorizationManager )
+				.Register<ISaveFileDialog>( () => new UISaveFileDialog() );
 		}
 	}
 }
