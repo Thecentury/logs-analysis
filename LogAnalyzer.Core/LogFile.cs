@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ using LogAnalyzer.Logging;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogFile {FullPath}" )]
-	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile
+	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ISaveable
 	{
 		private readonly Logger logger;
 		private readonly LogDirectory parentDirectory;
@@ -135,5 +136,13 @@ namespace LogAnalyzer
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion
+
+		public void Write( TextWriter writer )
+		{
+			foreach ( var logEntry in entries )
+			{
+				logEntry.Write( writer );
+			}
+		}
 	}
 }

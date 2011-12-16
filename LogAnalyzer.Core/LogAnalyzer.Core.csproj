@@ -96,6 +96,7 @@
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
+    <Compile Include="Extensions\LogEntriesEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="IHaveTime.cs" />
     <Compile Include="ILogEntry.cs" />
     <Compile Include="ILogFile.cs" />
+    <Compile Include="ISaveable.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
     <Compile Include="Kernel\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
