@@ -38,8 +38,29 @@ namespace LogAnalyzer.Tests
 			builder.FileNames.Add( fileName1 );
 
 			var filter = builder.BuildFilter<IFileInfo>();
-			
+
 			Assert.IsTrue( filter.Include( fileMock1.Object ) );
+			Assert.IsFalse( filter.Include( fileMock2.Object ) );
+		}
+
+		[Test]
+		public void IncludeFilesByNameInsideOtherFiltersTest()
+		{
+			const string fileName1 = "ModuleOrderManager.log";
+			const string fileName2 = "Kernal.log";
+
+			var fileMock2 = CreateFileInfoMock( fileName2 );
+
+			IncludeFilesByNameFilter builder1 = new IncludeFilesByNameFilter();
+			builder1.FileNames.Add( fileName1 );
+
+			IncludeFilesByNameFilter builder2 = new IncludeFilesByNameFilter();
+			builder1.FileNames.Add( fileName1 );
+
+			AndCollection and = new AndCollection( builder1, builder2 );
+
+			var filter = and.BuildFilter<IFileInfo>();
+
 			Assert.IsFalse( filter.Include( fileMock2.Object ) );
 		}
 

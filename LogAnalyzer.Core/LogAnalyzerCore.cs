@@ -20,7 +20,7 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
-	public sealed class LogAnalyzerCore : LogEntriesList
+	public sealed class LogAnalyzerCore : LogEntriesList, ILogVisitable
 	{
 		private readonly LogAnalyzerConfiguration config;
 		private readonly IOperationsQueue operationsQueue;
@@ -197,6 +197,11 @@ namespace LogAnalyzer
 		public override long TotalLengthInBytes
 		{
 			get { return Directories.Sum( d => d.TotalLengthInBytes ); }
+		}
+
+		public void Accept( ILogVisitor visitor )
+		{
+			visitor.Visit( this );
 		}
 	}
 }

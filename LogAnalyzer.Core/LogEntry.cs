@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogEntry File={ParentLogFile.FullPath} LineIndex={LineIndex}" )]
-	public sealed class LogEntry : INotifyPropertyChanged, IFreezable, IHaveTime, ILogEntry, ISaveable
+	public sealed class LogEntry : INotifyPropertyChanged, IFreezable, IHaveTime, ILogEntry, ILogVisitable
 	{
 		// todo brinchuk remove me
 		// todo probably read from config
@@ -245,12 +245,9 @@ namespace LogAnalyzer
 
 		#endregion
 
-		public void Write( TextWriter writer )
+		public void Accept( ILogVisitor visitor )
 		{
-			string message = UnitedText;
-			string text = String.Format( "[{0}] [{1}] {2:G}\t{3}", Type, ThreadId.ToString().PadLeft( 3 ), Time, message );
-			writer.Write( text );
-			writer.WriteLine();
+			visitor.Visit( this );
 		}
 	}
 }

@@ -59,6 +59,14 @@ namespace LogAnalyzer.Extensions
 			logger.WriteLine( MessageType.Error, message );
 		}
 
+		public static void WriteException( this Logger logger, Exception exc )
+		{
+			if ( logger == null )
+				return;
+
+			logger.WriteLine( MessageType.Error, exc.ToString() );
+		}
+
 		public static void WriteVerbose( this Logger logger, string message )
 		{
 			if ( logger == null )

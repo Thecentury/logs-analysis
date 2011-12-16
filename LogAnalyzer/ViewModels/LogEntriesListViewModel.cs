@@ -485,10 +485,21 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				operationScheduler.StartNewOperation( () =>
 														{
-															using ( FileStream fs = new FileStream( path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None ) )
-															using ( var writer = new StreamWriter( fs ) )
+															try
 															{
-																entries.SaveAll( writer );
+																using ( FileStream fs = new FileStream( path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None ) )
+																using ( var writer = new StreamWriter( fs ) )
+																{
+																	LogSaveVisitor saveVisitor = new LogSaveVisitor( writer, new DefaultLogEntryFormatter() );
+																	foreach ( var logEntry in entries )
+																	{
+																		logEntry.Accept( saveVisitor );
+																	}
+																}
+															}
+															catch ( Exception exc )
+															{
+																Logger.Instance.WriteError( "SaveToFileExecute(): {0}", exc );
 															}
 														} );
 			}

@@ -15,7 +15,7 @@ namespace LogAnalyzer.Filters
 	[ContentProperty( "FileNames" )]
 	public abstract class FilesByNameFilterBase : ExpressionBuilder
 	{
-		protected readonly IList<string> fileNames = new List<string>();
+		private readonly IList<string> fileNames = new List<string>();
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public IList<string> FileNames
@@ -25,77 +25,7 @@ namespace LogAnalyzer.Filters
 
 		public override Type GetResultType( ParameterExpression target )
 		{
-			return typeof ( bool );
-		}
-	}
-
-	internal class MyList<T> : IList<T>
-	{
-		public IEnumerator<T> GetEnumerator()
-		{
-			throw new NotImplementedException();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		public void Add( T item )
-		{
-			
-		}
-
-		public void Clear()
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool Contains( T item )
-		{
-			return true;
-			return false;
-		}
-
-		public void CopyTo( T[] array, int arrayIndex )
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool Remove( T item )
-		{
-			throw new NotImplementedException();
-		}
-
-		public int Count
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool IsReadOnly
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public int IndexOf( T item )
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Insert( int index, T item )
-		{
-			throw new NotImplementedException();
-		}
-
-		public void RemoveAt( int index )
-		{
-			throw new NotImplementedException();
-		}
-
-		public T this[ int index ]
-		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			return typeof( bool );
 		}
 	}
 
@@ -104,12 +34,11 @@ namespace LogAnalyzer.Filters
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
 			if ( parameterExpression.Type != typeof( IFileInfo ) )
-				throw new NotSupportedException( "ExcludeFilesByNameFilter is for IFileInfo only." );
+				throw new NotSupportedException( "IncludeFilesByNameFilter is for IFileInfo only." );
 
-			Expression<Func<IFileInfo, bool>> expTree = file => fileNames.Contains( file.Name );
-
-			return expTree;
-
+			return Expression.Call(
+				Expression.Constant( FileNames ), typeof( List<string> ).GetMethod( "Contains" ),
+				Expression.Property( parameterExpression, "Name" ) );
 		}
 	}
 }

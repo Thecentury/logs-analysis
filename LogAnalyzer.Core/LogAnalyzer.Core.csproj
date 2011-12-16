@@ -93,10 +93,10 @@
     <Compile Include="ColorOverviews\OverviewCollectorBase.cs" />
     <Compile Include="ColorOverviews\TimeOverviewCollectorBase.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
+    <Compile Include="DefaultLogEntryFormatter.cs" />
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
     <Compile Include="Extensions\LogAnalyzerConfigurationExtensions.cs" />
-    <Compile Include="Extensions\LogEntriesEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
@@ -110,8 +110,10 @@
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="IHaveTime.cs" />
     <Compile Include="ILogEntry.cs" />
+    <Compile Include="ILogEntryFormatter.cs" />
     <Compile Include="ILogFile.cs" />
-    <Compile Include="ISaveable.cs" />
+    <Compile Include="ILogVisitable.cs" />
+    <Compile Include="ILogVisitor.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
     <Compile Include="Kernel\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
@@ -219,6 +221,7 @@
     <Compile Include="Logging\MessageType.cs" />
     <Compile Include="Logging\SingleThreadedLogWriter.cs" />
     <Compile Include="Kernel\WorkerThreadOperationsQueue.cs" />
+    <Compile Include="LogSaveVisitor.cs" />
     <Compile Include="MessageSeverityCount.cs" />
     <Compile Include="MessageTypeStrings.cs" />
     <Compile Include="Misc\CommandLineArgumentsParser.cs" />
