@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Collections;
@@ -11,7 +12,7 @@ using LogAnalyzer.Logging;
 
 namespace LogAnalyzer
 {
-	public abstract class LogEntriesList : INotifyPropertyChanged, IReportReadProgress
+	public abstract class LogEntriesList : INotifyPropertyChanged, IReportReadProgress, ISaveable
 	{
 		private readonly CompositeObservableListWrapper<LogEntry> mergedEntriesWrapper;
 		public CompositeObservableListWrapper<LogEntry> MergedEntries
@@ -168,5 +169,13 @@ namespace LogAnalyzer
 		}
 
 		#endregion
+
+		public void Write( TextWriter writer )
+		{
+			foreach ( var logEntry in mergedEntriesWrapper )
+			{
+				logEntry.Write( writer );
+			}
+		}
 	}
 }

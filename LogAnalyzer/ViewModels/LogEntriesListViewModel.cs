@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -20,6 +22,7 @@ using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
+using LogAnalyzer.Operations;
 using Microsoft.Research.DynamicDataDisplay.Common.Palettes;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -456,6 +459,41 @@ namespace LogAnalyzer.GUI.ViewModels
 			highlightingFilters.Add( vm );
 		}
 
+		// SaveToFile command
+
+		private DelegateCommand saveToFileCommand;
+		public ICommand SaveToFileCommand
+		{
+			get
+			{
+				if ( saveToFileCommand == null )
+				{
+					saveToFileCommand = new DelegateCommand( SaveToFileExecute );
+				}
+				return saveToFileCommand;
+			}
+		}
+
+		private void SaveToFileExecute()
+		{
+			var saveFileDialog = ApplicationViewModel.Config.ResolveNotNull<ISaveFileDialog>();
+			if ( saveFileDialog.ShowDialog() == true )
+			{
+				string path = saveFileDialog.FileName;
+
+				OperationScheduler operationScheduler = ApplicationViewModel.Config.ResolveNotNull<OperationScheduler>();
+
+				operationScheduler.StartNewOperation( () =>
+														{
+															using ( FileStream fs = new FileStream( path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None ) )
+															using ( var writer = new StreamWriter( fs ) )
+															{
+																entries.SaveAll( writer );
+															}
+														} );
+			}
+		}
+
 		#endregion // commands
 
 		#region Highlighting
@@ -526,12 +564,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void PopulateToolbarItems( ICollection<object> collection )
 		{
 			collection.Add( new LogEntryListToolbarViewModel( this ) );
-			collection.Add( new ToolBarItemViewModel
-								{
-									Tooltip = "Add highlighting",
-									Command = AddHighlightingCommand,
-									IconSource = MakePackUri( "/Resources/flag--plus.png" )
-								} );
+			collection.Add( new ToolBarItemViewModel( "Save entries to file", SaveToFileCommand, MakePackUri( "/Resources/disk.png" ) ) );
+			collection.Add( new ToolBarItemViewModel( "Add highlighting", AddHighlightingCommand, MakePackUri( "/Resources/flag--plus.png" ) ) );
 		}
 
 		#endregion
@@ -618,7 +652,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
 				};
-				updateAddedCountTimer.Tick += OnUpdateAddedCountTimer_Tick;
+				updateAddedCountTimer.Tick += OnUpdateAddedCountTimerTick;
 				updateAddedCountTimer.Start();
 			} );
 		}
@@ -698,7 +732,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private void OnUpdateAddedCountTimer_Tick( object sender, EventArgs e )
+		private void OnUpdateAddedCountTimerTick( object sender, EventArgs e )
 		{
 			AddedEntriesCountString = "+" + addedEntriesCount;
 			addedEntriesCount = 0;
