@@ -5,6 +5,8 @@ using System.Text;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using System.Xaml;
+using LogAnalyzer.Kernel;
+using Moq;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
@@ -22,6 +24,31 @@ namespace LogAnalyzer.Tests
 			Assert.IsFalse( filter.Include( "456" ) );
 		}
 
+		[Test]
+		public void IncludeFilesByNameFilterTest()
+		{
+			const string fileName1 = "ModuleOrderManager.log";
+			const string fileName2 = "Kernal.log";
+
+			var fileMock1 = CreateFileInfoMock( fileName1 );
+			var fileMock2 = CreateFileInfoMock( fileName2 );
+
+			IncludeFilesByNameFilter builder = new IncludeFilesByNameFilter();
+			builder.FileNames.Add( fileName1 );
+
+			var filter = builder.BuildFilter<IFileInfo>();
+			
+			Assert.IsTrue( filter.Include( fileMock1.Object ) );
+			Assert.IsFalse( filter.Include( fileMock2.Object ) );
+		}
+
+		private static Mock<IFileInfo> CreateFileInfoMock( string fileName1 )
+		{
+			var fileMock = new Mock<IFileInfo>();
+			fileMock.SetupGet( f => f.FullName ).Returns( @"C:\most\awad\logs\" );
+			fileMock.SetupGet( f => f.Name ).Returns( fileName1 );
+			return fileMock;
+		}
 
 		[Test]
 		public void TestStringStartsWithFilter()
