@@ -8,6 +8,8 @@ namespace LogAnalyzer.ColorOverviews
 		public double[] CreateOverviewMap( ICollection<T>[] source )
 		{
 			double[] map = new double[source.Length];
+			if ( source.Length == 0 )
+				return map;
 
 			const double minCount = 0;
 			double maxCount = source.Select( coll => coll.Count ).Max();

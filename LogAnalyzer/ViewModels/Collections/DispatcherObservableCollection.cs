@@ -18,7 +18,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	{
 		private readonly IScheduler scheduler;
 		private readonly object collection;
-		private readonly CompositeDisposable unsubscruber;
+		private readonly CompositeDisposable unsubscriber;
 
 		public DispatcherObservableCollection( object collection, IScheduler scheduler )
 		{
@@ -59,7 +59,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			var compositeList = collection as CompositeObservableListWrapper<LogEntry>;
 			if ( compositeList == null )
 				return;
-
 
 			for ( int i = 0; i < e.NewItems.Count; i++ )
 			{
@@ -114,9 +113,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		/// </summary>
 		public void Dispose()
 		{
-			unsubscruber.Dispose();
+			unsubscriber.Dispose();
 		}
-
-		public CompositeDisposable unsubscriber { get; set; }
 	}
 }

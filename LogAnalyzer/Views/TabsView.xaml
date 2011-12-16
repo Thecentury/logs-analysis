@@ -55,6 +55,7 @@
 
 							<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
 								<views:LogEntriesListView/>
+								<!--<views:ItemsControlLogEntriesView/>-->
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">

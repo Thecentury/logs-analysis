@@ -8,6 +8,9 @@ namespace LogAnalyzer.ColorOverviews
 	{
 		public override TResult[] Build( IList<TItem> entries )
 		{
+			if ( entries.Count == 0 )
+				return new TResult[0];
+
 			int count = SegmentsCount;
 			var result = new TResult[count];
 

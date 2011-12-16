@@ -86,10 +86,10 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			int actualIndex = AdjustIndex( entry, index );
 
-			var addedItem = GetLogEntryViewModelByIndex( actualIndex, addToCache: false );
+			var addedItem = GetLogEntryViewModelByIndex( actualIndex, addToCache: true );
 
-			base.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem,
-																		  actualIndex ) );
+			base.OnCollectionChanged(
+				new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem, actualIndex ) );
 		}
 
 		private int AdjustIndex( LogEntry entry, int index )
@@ -140,6 +140,12 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 					viewModelsCache.Add( index, logEntryViewModel );
 					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 				}
+
+				Logger.Instance.WriteInfo( "Created new EntryViewModel for index {0}", index );
+			}
+			else
+			{
+				Logger.Instance.WriteInfo( "Used existing EntryViewModel for index {0}", index );
 			}
 
 			return logEntryViewModel;

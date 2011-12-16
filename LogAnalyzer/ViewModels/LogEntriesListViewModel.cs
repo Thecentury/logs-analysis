@@ -148,7 +148,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				autoScrollToBottom = value;
 				RaisePropertyChanged( "AutoScrollToBottom" );
 
-				ScrollDownIfShould();
+				ScrollToBottomIfShould();
 			}
 		}
 
@@ -226,7 +226,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					var collector = new DensityOverviewCollector<LogEntry>();
 					var builder = new DensityOverviewBuilder<LogEntry>();
-					var map = builder.CreateOverviewMap( collector.Build( entries ) )
+					var grouped = collector.Build( entries );
+					var map = builder.CreateOverviewMap( grouped )
 						.Select( e => Math.Pow( e, 0.33 ) )
 						.ToArray();
 
@@ -280,7 +281,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
 					{
-					    var index = entries.SequentialIndexOf(entry);
+						var index = entries.SequentialIndexOf( entry );
 						SelectedEntryIndex = index;
 					} );
 				}
@@ -288,21 +289,21 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private ObservableCollection<OverviewViewModel> overviews;
-		public ObservableCollection<OverviewViewModel> Overviews
+		private ObservableCollection<OverviewViewModelBase> overviews;
+		public ObservableCollection<OverviewViewModelBase> Overviews
 		{
 			get
 			{
 				if ( overviews == null )
 				{
-					overviews = new ObservableCollection<OverviewViewModel>();
+					overviews = new ObservableCollection<OverviewViewModelBase>();
 					PopulateOverviews( overviews );
 				}
 				return overviews;
 			}
 		}
 
-		protected virtual void PopulateOverviews( IList<OverviewViewModel> overviews )
+		protected virtual void PopulateOverviews( IList<OverviewViewModelBase> overviewsList )
 		{
 
 		}
@@ -332,7 +333,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected override void OnLoaded( RoutedEventArgs e )
 		{
 			base.OnLoaded( e );
-			ScrollDownIfShould();
+			ScrollToBottomIfShould();
 		}
 
 		#region Scroll commands
@@ -612,6 +613,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			InvokeInUIDispatcher( () =>
 			{
 				entriesView = new LogEntryViewModelCollectionView( logEntriesViewModels );
+
 				updateAddedCountTimer = new DispatcherTimer
 				{
 					Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
@@ -665,22 +667,34 @@ namespace LogAnalyzer.GUI.ViewModels
 			//{
 			//    dispatcher.VerifyAccess();
 			//}
-#endif
-			Logger.Instance.WriteError( "{0}: {1} +{2} starting from {3}", GetType().Name,
-				e.Action, e.NewItems != null ? e.NewItems.Count : 0, e.NewStartingIndex );
 
-			ScrollDownIfShould();
+			// todo brinchuk remove this
+			string text = "";
+			if ( e.NewItems != null )
+			{
+				LogEntryViewModel vm = (LogEntryViewModel)e.NewItems[0];
+				text = vm.UnitedText + ", Index = " + vm.IndexInParentCollection;
+			}
+
+			if ( this is CoreViewModel )
+			{
+				Logger.Instance.WriteError( "{0}: {1} +{2} starting from {3}; Total = {5}, '{4}'", GetType().Name,
+					e.Action, e.NewItems != null ? e.NewItems.Count : 0, e.NewStartingIndex, text, entries.Count );
+			}
+#endif
+
+			ScrollToBottomIfShould();
 
 			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
 
 			UpdateAddedCount( e );
 		}
 
-		private void ScrollDownIfShould()
+		private void ScrollToBottomIfShould()
 		{
 			if ( autoScrollToBottom )
 			{
-				Dispatcher.CurrentDispatcher.BeginInvoke( ScrollToBottomCommand.ExecuteIfCan );
+				ScrollToBottomCommand.ExecuteIfCan();
 			}
 		}
 

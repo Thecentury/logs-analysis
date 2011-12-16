@@ -1,4 +1,4 @@
-﻿#define CUSTOM_LIST_VIEW
+﻿#define _CUSTOM_LIST_VIEW
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using JetBrains.Annotations;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-#if CUSTOM_LIST_VIEW
+#if !CUSTOM_LIST_VIEW
 
 	public sealed class LogEntryViewModelCollectionView : ListCollectionView
 	{

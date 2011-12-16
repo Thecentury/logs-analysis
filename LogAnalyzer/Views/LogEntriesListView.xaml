@@ -106,6 +106,8 @@
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
 		</Style>
 
+		<Common:DebuggingConverter x:Key="debuggingConverter"/>
+
 		<!-- Стиль ячейки имени файла -->
 		<Style TargetType="DataGridCell" x:Key="fileCellStyle">
 			<Setter Property="local:DynamicHighlighting.PropertyName" Value="File.Name"/>
@@ -333,8 +335,9 @@
 
 			<Setter Property="RowStyle" Value="{StaticResource rowStyle}"/>
 
-			<Setter Property="SelectedValue" Value="{Binding SelectedEntry, Mode=TwoWay}"/>
-			<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex, Mode=TwoWay}"/>
+			<!-- todo uncomment -->
+			<!--<Setter Property="SelectedValue" Value="{Binding SelectedEntry, Mode=TwoWay}"/>-->
+			<!--<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex, Mode=TwoWay}"/>-->
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
@@ -412,7 +415,7 @@
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
-				  DataContextChanged="DataGrid_DataContextChanged"
+				  DataContextChanged="DataGridDataContextChanged"
 				  BorderBrush="{x:Null}" BorderThickness="0"
 				  Style="{StaticResource dataGridStyle}"
 				  >
