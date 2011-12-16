@@ -62,6 +62,13 @@ namespace LogAnalyzer.Filters
 
 	public sealed class AndCollection : BooleanCollectionBuilder
 	{
+		public AndCollection() { }
+
+		public AndCollection( params ExpressionBuilder[] children )
+		{
+			Children.AddRange( children );
+		}
+
 		protected override Expression CreateBinaryOperation( Expression left, Expression right )
 		{
 			return Expression.AndAlso( left, right );
@@ -70,6 +77,13 @@ namespace LogAnalyzer.Filters
 
 	public sealed class OrCollection : BooleanCollectionBuilder
 	{
+		public OrCollection() { }
+
+		public OrCollection( params ExpressionBuilder[] children )
+		{
+			Children.AddRange( children );
+		}
+
 		protected override Expression CreateBinaryOperation( Expression left, Expression right )
 		{
 			return Expression.OrElse( left, right );

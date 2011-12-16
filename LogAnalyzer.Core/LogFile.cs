@@ -13,7 +13,7 @@ using LogAnalyzer.Logging;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogFile {FullPath}" )]
-	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ISaveable
+	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ILogVisitable
 	{
 		private readonly Logger logger;
 		private readonly LogDirectory parentDirectory;
@@ -137,12 +137,9 @@ namespace LogAnalyzer
 
 		#endregion
 
-		public void Write( TextWriter writer )
+		public void Accept( ILogVisitor visitor )
 		{
-			foreach ( var logEntry in entries )
-			{
-				logEntry.Write( writer );
-			}
+			visitor.Visit( this );
 		}
 	}
 }

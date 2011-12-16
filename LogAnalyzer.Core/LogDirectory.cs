@@ -13,7 +13,7 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
-	public sealed class LogDirectory : LogEntriesList
+	public sealed class LogDirectory : LogEntriesList, ILogVisitable
 	{
 		private readonly object sync = new object();
 		private readonly IList<LogFile> files = CollectionHelper.CreateList<LogFile>();
@@ -387,6 +387,11 @@ namespace LogAnalyzer
 				long result = filesWrapper.Sum( f => f.TotalLengthInBytes );
 				return result;
 			}
+		}
+
+		public void Accept( ILogVisitor visitor )
+		{
+			visitor.Visit( this );
 		}
 	}
 }

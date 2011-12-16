@@ -18,8 +18,9 @@ namespace LogAnalyzer.Filters
 
 			return
 				Expression.Not(
-					Expression.Call(Expression.Constant( fileNames ), typeof( List<string> ).GetMethod( "Contains" ), Expression.Property( parameterExpression, "Name" )
-						)
+					Expression.Call(
+					Expression.Constant( FileNames ), typeof( List<string> ).GetMethod( "Contains" ),
+					Expression.Property( parameterExpression, "Name" ) )
 					);
 		}
 	}
