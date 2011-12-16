@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AppForTests
 {
@@ -21,22 +24,44 @@ namespace AppForTests
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private DispatcherTimer timer;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 			Loaded += new RoutedEventHandler( MainWindow_Loaded );
+
+			timer = new DispatcherTimer( TimeSpan.FromMilliseconds( 100 ), DispatcherPriority.Background, OnTick, Dispatcher.CurrentDispatcher );
 		}
 
 		void MainWindow_Loaded( object sender, RoutedEventArgs e )
 		{
-			IDictionary<string, object> o = new ExpandoObject();
-			o["p1"] = "p1";
-			o["p2"] = "p2";
+			grid.ItemsSource = collection;
+			var border = VisualTreeHelper.GetChild( grid, 0 );
+			viewer = VisualTreeHelper.GetChild( border, 0 ) as ScrollViewer;
+			collection.CollectionChanged += collection_CollectionChanged;
+		}
 
-			DataContext = o;
+		void collection_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+		}
 
-			var m = Regex.Match("123", @"(?<a>\d)");
+		private readonly ObservableCollection<Data> collection = new ObservableCollection<Data>();
+		private ScrollViewer viewer;
+
+		void OnTick( object sender, EventArgs args )
+		{
+			for ( int i = 0; i < 10; i++ )
+			{
+				collection.Add( new Data { String = collection.Count.ToString() } );
+			}
+
+			viewer.ScrollToEnd();
 		}
 	}
 
+	public class Data
+	{
+		public string String { get; set; }
+	}
 }

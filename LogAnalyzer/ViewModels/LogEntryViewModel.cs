@@ -203,7 +203,16 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public string UnitedText
 		{
-			get { return logEntry.UnitedText; }
+			get
+			{
+				string text = logEntry.UnitedText;
+
+				if ( text.Contains( "]" ) || text.Length > 4 )
+				{
+				}
+
+				return text;
+			}
 		}
 
 		public bool IsException

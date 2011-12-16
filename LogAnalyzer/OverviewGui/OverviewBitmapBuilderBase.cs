@@ -18,7 +18,7 @@ namespace LogAnalyzer.GUI.OverviewGui
 		{
 			if ( map == null ) throw new ArgumentNullException( "map" );
 
-			int width = map.Length;
+			int width = Math.Max( map.Length, 1 );
 			const int height = 1;
 
 			int[] pixels = new int[width];

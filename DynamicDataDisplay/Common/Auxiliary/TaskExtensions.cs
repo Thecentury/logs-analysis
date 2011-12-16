@@ -15,19 +15,19 @@ namespace Microsoft.Research.DynamicDataDisplay.Common.Auxiliary
 		/// </summary>
 		/// <param name="task">The task.</param>
 		/// <returns></returns>
-		public static Task WithExceptionLogging(this Task task)
+		public static Task WithExceptionLogging( this Task task )
 		{
-			return task.ContinueWith(t =>
+			return task.ContinueWith( t =>
 			{
-				var exception = t.Exception;
-				if (exception != null)
+				Exception exception = t.Exception;
+				if ( exception != null )
 				{
-					if (exception.InnerException != null)
+					if ( exception.InnerException != null )
 						exception = exception.InnerException;
 
-					Debug.WriteLine("Failure in async task: " + exception.Message);
+					Debug.WriteLine( "Failure in async task: " + exception.Message );
 				}
-			}, TaskContinuationKind.OnFailed);
+			}, TaskContinuationOptions.OnlyOnFaulted );
 		}
 
 		/// <summary>
@@ -36,15 +36,15 @@ namespace Microsoft.Research.DynamicDataDisplay.Common.Auxiliary
 		/// <param name="task">The task.</param>
 		/// <param name="dispatcher">The dispatcher.</param>
 		/// <returns></returns>
-		public static Task WithExceptionThrowingInDispatcher(this Task task, Dispatcher dispatcher)
+		public static Task WithExceptionThrowingInDispatcher( this Task task, Dispatcher dispatcher )
 		{
-			return task.ContinueWith(t =>
+			return task.ContinueWith( t =>
 			{
-				dispatcher.BeginInvoke(() =>
+				dispatcher.BeginInvoke( () =>
 				{
-					throw t.Exception;
-				}, DispatcherPriority.Send);
-			}, TaskContinuationKind.OnFailed);
+					throw t.Exception ?? new Exception( "Task has failed, but its Exception property returns null. This is strange." );
+				}, DispatcherPriority.Send );
+			}, TaskContinuationOptions.OnlyOnFaulted );
 		}
 	}
 }
