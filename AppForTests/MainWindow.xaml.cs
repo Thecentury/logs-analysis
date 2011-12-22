@@ -29,12 +29,12 @@ namespace AppForTests
 		public MainWindow()
 		{
 			InitializeComponent();
-			Loaded += new RoutedEventHandler( MainWindow_Loaded );
+			Loaded += MainWindowLoaded;
 
 			timer = new DispatcherTimer( TimeSpan.FromMilliseconds( 100 ), DispatcherPriority.Background, OnTick, Dispatcher.CurrentDispatcher );
 		}
 
-		void MainWindow_Loaded( object sender, RoutedEventArgs e )
+		void MainWindowLoaded( object sender, RoutedEventArgs e )
 		{
 			grid.ItemsSource = collection;
 			var border = VisualTreeHelper.GetChild( grid, 0 );

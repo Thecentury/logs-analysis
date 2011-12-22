@@ -28,10 +28,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 			this.parameter = parameter;
 
 			// todo отписываться
-			builder.PropertyChanged += OnBuilder_PropertyChanged;
+			builder.PropertyChanged += OnBuilderPropertyChanged;
 		}
 
-		private void OnBuilder_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnBuilderPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			RaiseAllPropertiesChanged();
 		}
@@ -51,7 +51,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				{
 					Type resultType = GetResultType();
 					ExpressionBuilder[] builders = ExpressionBuilderManager
-						.GetBuilders( resultType, typeof(LogEntry) )
+						.GetBuilders( resultType, typeof( LogEntry ) )
 						.OrderBy( b => b.GetType().Name )
 						.ToArray();
 					builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
@@ -113,7 +113,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			get
 			{
-				string description = builder.ToString();
+				string description = builder.ToString().Replace( "Filter", String.Empty ).Replace( "Builder", String.Empty );
 				return description;
 			}
 		}

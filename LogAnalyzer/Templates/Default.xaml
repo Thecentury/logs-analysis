@@ -3,12 +3,24 @@
 					xmlns:l="http://www.awad.com/LogAnalyzer"
 					Priority="-100">
 	<ControlTemplate>
-		<TextBox Text="{Binding Text, Mode=OneWay}" 
+		<!--<TextBox Text="{Binding Text, Mode=OneWay}" 
 				 Background="Transparent"
 				 IsReadOnly="True" 
 				 TextWrapping="Wrap"
 				 MaxHeight="200"
 				 VerticalScrollBarVisibility="Auto"
-				 BorderBrush="{x:Null}" BorderThickness="0"/>
+				 BorderBrush="{x:Null}" BorderThickness="0"/>-->
+		<FlowDocumentScrollViewer
+					 Background="Transparent"
+					 BorderBrush="{x:Null}"
+					 BorderThickness="0"
+					 MaxHeight="200"
+					 VerticalScrollBarVisibility="Auto">
+			<FlowDocument>
+				<Paragraph>
+					<Run Text="{Binding Text, Mode=OneWay}"/>
+				</Paragraph>
+			</FlowDocument>
+		</FlowDocumentScrollViewer>
 	</ControlTemplate>
 </l:DefaultColorizeTemplate>

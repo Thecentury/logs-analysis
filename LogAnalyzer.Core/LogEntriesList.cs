@@ -155,6 +155,24 @@ namespace LogAnalyzer
 			PropertyChanged.RaiseAllChanged( this );
 		}
 
+		protected void PerformInitialMerge( int capacity, IEnumerable<LogEntry> entries )
+		{
+			// todo не сделать ли тут запас по Capacity?
+			MergedEntriesList.Capacity = capacity;
+
+			mergedEntriesList.AddRange( entries
+										.AsParallel()
+										.OrderBy( LogEntryByDateAndIndexComparer.Instance ) );
+
+#if ASSERT
+			Condition.DebugAssert( sortedEntries.AreSorted( LogEntryByDateComparer.Instance ) );
+#endif
+
+			MergedEntries.RaiseCollectionReset();
+			MessageSeverityCount.Update( mergedEntriesList );
+		}
+
+
 		#region IReportReadProgress Members
 
 		public event EventHandler<FileReadEventArgs> ReadProgress;

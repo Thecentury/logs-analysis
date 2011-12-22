@@ -175,23 +175,9 @@ namespace LogAnalyzer
 
 		private void PerformInitialMerge()
 		{
-			// todo не сделать ли тут запас по Capacity?
-			MergedEntriesList.Capacity = Directories.Sum( d => d.Files.Sum( f => f.LogEntries.Count ) );
-
-			LogEntry[] sortedEntries = Directories
-				.SelectMany( d => d.Files.SelectMany( f => f.LogEntries ) )
-				.AsParallel()
-				.OrderBy( LogEntryByDateAndIndexComparer.Instance )
-				.ToArray();
-
-#if ASSERT
-			Condition.DebugAssert( sortedEntries.AreSorted( LogEntryByDateComparer.Instance ) );
-#endif
-
-			// ILSpy: используется Buffer.BlockCopy
-			MergedEntriesList.AddRange( sortedEntries );
-			MergedEntries.RaiseCollectionReset();
-			MessageSeverityCount.Update( sortedEntries );
+			PerformInitialMerge(
+				Directories.Sum( d => d.Files.Sum( f => f.LogEntries.Count ) ),
+								Directories.SelectMany( d => d.Files.SelectMany( f => f.LogEntries ) ) );
 		}
 
 		public override long TotalLengthInBytes

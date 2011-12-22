@@ -335,14 +335,27 @@
 
 			<Setter Property="RowStyle" Value="{StaticResource rowStyle}"/>
 
-			<!-- todo uncomment -->
-			<!--<Setter Property="SelectedValue" Value="{Binding SelectedEntry, Mode=TwoWay}"/>-->
-			<!--<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex, Mode=TwoWay}"/>-->
+			<Setter Property="SelectedValue" Value="{Binding SelectedEntry, Mode=TwoWay}"/>
+			<Setter Property="SelectedIndex" Value="{Binding SelectedEntryIndex, Mode=TwoWay}"/>
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
-			<Control Template="{Binding Template}"
-					 DataContext="{Binding TemplateContext}"/>
+			<RichTextBox IsReadOnly="True"
+						 Background="#AAFFFFFF"
+						 BorderBrush="{x:Null}"
+						 BorderThickness="0"
+						 MaxHeight="200"
+						 VerticalScrollBarVisibility="Auto"
+						 SelectionChanged="TextBoxBase_OnSelectionChanged"
+						 Loaded="RichTextBoxLoaded">
+				<FlowDocument>
+					<Paragraph>
+						<Run Text="{Binding UnitedText, Mode=OneWay}"/>
+					</Paragraph>
+				</FlowDocument>
+			</RichTextBox>
+			<!--<Control Template="{Binding Template}"
+					 DataContext="{Binding TemplateContext}"/>-->
 		</DataTemplate>
 
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>

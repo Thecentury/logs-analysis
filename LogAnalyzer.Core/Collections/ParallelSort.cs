@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,9 @@ namespace LogAnalyzer.Collections
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="arr"></param>
-		public static void QuicksortSequential<T>( T[] arr ) where T : IComparable<T>
+		public static void QuicksortSequential<T>( IList<T> arr ) where T : IComparable<T>
 		{
-			QuicksortSequential( arr, 0, arr.Length - 1 );
+			QuicksortSequential( arr, 0, arr.Count - 1 );
 		}
 
 		/// <summary>
@@ -32,16 +33,16 @@ namespace LogAnalyzer.Collections
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="arr"></param>
-		public static void QuicksortParallel<T>( T[] arr ) where T : IComparable<T>
+		public static void QuicksortParallel<T>( IList<T> arr ) where T : IComparable<T>
 		{
-			QuicksortParallel( arr, 0, arr.Length - 1 );
+			QuicksortParallel( arr, 0, arr.Count - 1 );
 		}
 
 		#endregion
 
 		#region Private Static Methods
 
-		private static void QuicksortSequential<T>( T[] arr, int left, int right )
+		private static void QuicksortSequential<T>( IList<T> arr, int left, int right )
 			where T : IComparable<T>
 		{
 			if ( right > left )
@@ -52,7 +53,7 @@ namespace LogAnalyzer.Collections
 			}
 		}
 
-		private static void QuicksortParallel<T>( T[] arr, int left, int right )
+		private static void QuicksortParallel<T>( IList<T> arr, int left, int right )
 			where T : IComparable<T>
 		{
 			const int SEQUENTIAL_THRESHOLD = 2048;
@@ -65,25 +66,26 @@ namespace LogAnalyzer.Collections
 				else
 				{
 					int pivot = Partition( arr, left, right );
-					Parallel.Invoke( new Action[] { delegate {QuicksortParallel(arr, left, pivot - 1);},
-                                               delegate {QuicksortParallel(arr, pivot + 1, right);}
-                } );
+					Parallel.Invoke(
+						() => QuicksortParallel( arr, left, pivot - 1 ),
+						() => QuicksortParallel( arr, pivot + 1, right )
+												   );
 				}
 			}
 		}
 
-		private static void Swap<T>( T[] arr, int i, int j )
+		private static void Swap<T>( IList<T> arr, int i, int j )
 		{
 			T tmp = arr[i];
 			arr[i] = arr[j];
 			arr[j] = tmp;
 		}
 
-		private static int Partition<T>( T[] arr, int low, int high )
+		private static int Partition<T>( IList<T> arr, int low, int high )
 			where T : IComparable<T>
 		{
 			// Simple partitioning implementation
-			int pivotPos = ( high + low ) / 2;
+			int pivotPos = (high + low) / 2;
 			T pivot = arr[pivotPos];
 			Swap( arr, low, pivotPos );
 

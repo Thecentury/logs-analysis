@@ -17,7 +17,7 @@ namespace LogAnalyzer
 			loggerThread.Start();
 		}
 
-		private readonly Thread loggerThread = null;
+		private readonly Thread loggerThread;
 		private readonly BlockingCollection<string> operationsQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
 
 		private void ThreadProc(object state)

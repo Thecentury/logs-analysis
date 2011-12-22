@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
@@ -88,6 +89,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 #endif
 
+		// todo brinchuk remove me
 		private ControlTemplate template;
 		public ControlTemplate Template
 		{
@@ -101,6 +103,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		// todo brinchuk remove me
 		private void UpdateColorization()
 		{
 			var colorizingTemplate = colorizationManager.GetTemplateForEntry( logEntry );
@@ -108,6 +111,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			templateContext = colorizingTemplate.GetDataContext( logEntry );
 		}
 
+		// todo brinchuk remove me
 		private object templateContext;
 		public object TemplateContext
 		{
@@ -120,6 +124,15 @@ namespace LogAnalyzer.GUI.ViewModels
 				return templateContext;
 			}
 		}
+
+		public FlowDocument Document { get; set; }
+
+		public void OnSelectionChanged( TextSelection range )
+		{
+			parentViewModel.OnSelectedTextChanged( range.Text );
+		}
+
+		public string SelectedText { get; set; }
 
 		public bool Equals( LogEntryViewModel other )
 		{
@@ -206,11 +219,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				string text = logEntry.UnitedText;
-
-				if ( text.Contains( "]" ) || text.Length > 4 )
-				{
-				}
-
 				return text;
 			}
 		}

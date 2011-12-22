@@ -9,7 +9,7 @@ namespace LogAnalyzer.Filters
 // ReSharper restore CheckNamespace
 {
 	[FilterTarget( typeof( IFileInfo ) )]
-	public sealed class PreviousDayFileFilter : ExpressionBuilder
+	public sealed class ExcludePreviousDaysFileFilter : ExpressionBuilder
 	{
 		public override Type GetResultType( ParameterExpression target )
 		{
@@ -19,7 +19,7 @@ namespace LogAnalyzer.Filters
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
 			if ( parameterExpression.Type != typeof( IFileInfo ) )
-				throw new NotSupportedException( "PreviousDayFilter is for IFileInfo only." );
+				throw new NotSupportedException( "ExcludePreviousDaysFileFilter is for IFileInfo only." );
 
 			var filter = new Not( new StringStartsWith
 			{
