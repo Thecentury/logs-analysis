@@ -157,6 +157,7 @@
     <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
     <Compile Include="Extensions\ICommandExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
     <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />

@@ -45,5 +45,23 @@ namespace LogAnalyzer.GUI.Views
 				directoryColumn.Visibility = vm.DirectoriesColumnVisibility;
 			}
 		}
+
+		private void TextBoxBase_OnSelectionChanged( object sender, RoutedEventArgs e )
+		{
+			RichTextBox textBox = (RichTextBox)sender;
+			LogEntryViewModel vm = (LogEntryViewModel)textBox.DataContext;
+			vm.Document = textBox.Document;
+			var selection = textBox.Selection;
+			vm.OnSelectionChanged( selection );
+		}
+
+		private void RichTextBoxLoaded( object sender, RoutedEventArgs e )
+		{
+			RichTextBox textBox = (RichTextBox) sender;
+			textBox.Loaded -= RichTextBoxLoaded;
+
+			LogEntryViewModel vm = (LogEntryViewModel) textBox.DataContext;
+			vm.Document = textBox.Document;
+		}
 	}
 }

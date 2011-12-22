@@ -5,10 +5,12 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -759,6 +761,43 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				addedEntriesCount = 0;
 			}
+		}
+
+		public void OnSelectedTextChanged( string text )
+		{
+			if ( String.IsNullOrWhiteSpace( text ) )
+				return;
+
+			Regex textSearchRegex = CreateTextSearchRegex( text );
+			foreach ( var logEntryViewModel in LogEntriesViewModels.CreatedEntries )
+			{
+				var document = logEntryViewModel.Document;
+				if ( document == null )
+					return;
+
+				string unitedText = logEntryViewModel.UnitedText;
+				var match = textSearchRegex.Match( unitedText );
+
+				var start = document.ContentStart;
+
+				while ( match.Success )
+				{
+					var selectionRange = new TextRange( start.GetPositionAtOffset( match.Index ),
+													   start.GetPositionAtOffset( match.Index + match.Length ) );
+
+					selectionRange.ApplyPropertyValue( TextElement.BackgroundProperty, Brushes.LightGreen );
+
+					match = match.NextMatch();
+				}
+			}
+		}
+
+		private Regex CreateTextSearchRegex( string text )
+		{
+			string escapedText = text.Escape( "[", "]", "(", ")", @"\", ".", "+", "*", "?" );
+
+			Regex regex = new Regex( escapedText, RegexOptions.Compiled | RegexOptions.Multiline );
+			return regex;
 		}
 	}
 }
