@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Xaml;
 using LogAnalyzer.ColorOverviews;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
@@ -774,6 +775,9 @@ namespace LogAnalyzer.GUI.ViewModels
 				var document = logEntryViewModel.Document;
 				if ( document == null )
 					return;
+
+				//string xaml = XamlServices.Save( document );
+				//Logger.Instance.WriteInfo( xaml );
 
 				string unitedText = logEntryViewModel.UnitedText;
 				var match = textSearchRegex.Match( unitedText );
