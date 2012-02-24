@@ -143,6 +143,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvalonDocks\AbstractPaneViewModel.cs" />
+    <Compile Include="AvalonDocks\AbstractViewModel.cs" />
+    <Compile Include="AvalonDocks\AvalonDockHost.xaml.cs">
+      <DependentUpon>AvalonDockHost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AvalonDocks\DataTemplateUtils.cs" />
+    <Compile Include="AvalonDocks\DocumentClosingEventArgs.cs" />
+    <Compile Include="AvalonDocks\DocumentOverviewPaneViewModel.cs" />
+    <Compile Include="AvalonDocks\MainWindowViewModel.cs" />
+    <Compile Include="AvalonDocks\TextFileDocumentViewModel.cs" />
     <Compile Include="Common\AttachedCommandBehaviour.cs" />
     <Compile Include="Common\AttachedCommandBinding.cs" />
     <Compile Include="Common\AttachedCommandBindingCollection.cs" />
@@ -305,6 +315,10 @@
     </Compile>
     <Compile Include="WindowsInterop.cs" />
     <Compile Include="XmlNamespaces.cs" />
+    <Page Include="AvalonDocks\AvalonDockHost.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="FilterEditing\FilterEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -411,6 +425,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AvalonDock\AvalonDock.csproj">
+      <Project>{87E61430-4243-45F2-B74E-0A4C096CEBF3}</Project>
+      <Name>AvalonDock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DynamicDataDisplay\DynamicDataDisplay.csproj">
       <Project>{ECD37682-DF7E-409F-912D-0965634556B5}</Project>
       <Name>DynamicDataDisplay</Name>

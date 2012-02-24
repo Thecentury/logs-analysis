@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModels" xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" mc:Ignorable="d" 
+             xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping"
+             xmlns:AvalonDockMVVM="clr-namespace:AvalonDockMVVM"
+             xmlns:av="clr-namespace:AvalonDock;assembly=AvalonDock" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.Resources>
@@ -55,13 +57,12 @@
 
 							<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
 								<views:LogEntriesListView/>
-								<!--<views:ItemsControlLogEntriesView/>-->
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
 								<views:LoadingView/>
 							</DataTemplate>
-							
+
 							<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
 								<views:DropFilesView/>
 							</DataTemplate>
@@ -74,16 +75,25 @@
 			</Setter>
 		</Style>
 
+		<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
+			<av:DocumentContent Title="{Binding Header}">
+				<views:LogEntriesListView/>
+			</av:DocumentContent>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
+			<av:DocumentContent Title="{Binding Header}">
+				<views:LoadingView/>
+			</av:DocumentContent>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
+			<av:DocumentContent Title="{Binding Header}">
+				<views:DropFilesView/>
+			</av:DocumentContent>
+		</DataTemplate>
+
 	</UserControl.Resources>
-
-
-	<!--<ad:DockingManager>
-		<ad:ResizingPanel Orientation="Horizontal">
-			<ad:DockablePane ItemsSource="{Binding}"
-							 ItemContainerStyle="{StaticResource tabStyle}">
-			</ad:DockablePane>
-		</ad:ResizingPanel>
-	</ad:DockingManager>-->
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -91,7 +101,16 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 
-		<views:TabControlEx Grid.Column="0"
+		<AvalonDockMVVM:AvalonDockHost
+			Grid.Column="0"
+			Documents="{Binding Tabs}"
+			ActiveDocument="{Binding SelectedTab, Mode=OneWay}"
+			Panes="{Binding Panes}"
+			AvalonDockLoaded="AvalonDockHost_AvalonDockLoaded"
+			>
+		</AvalonDockMVVM:AvalonDockHost>
+
+		<!--<views:TabControlEx Grid.Column="0"
 			ItemsSource="{Binding Tabs}" 
 			SelectedIndex="{Binding SelectedIndex}"
 			ItemContainerStyle="{StaticResource tabStyle}">
@@ -101,10 +120,10 @@
 						<TabPanel DockPanel.Dock="Top" IsItemsHost="True" />
 						<Grid DockPanel.Dock="Bottom" x:Name="PART_ItemsHolder" />
 					</DockPanel>
-					<!-- no content presenter -->
+					< no content presenter >
 				</ControlTemplate>
 			</TabControl.Template>
-		</views:TabControlEx>
+		</views:TabControlEx>-->
 
 		<views:FileTreeView Grid.Column="1" DataContext="{Binding FilesTree}"/>
 

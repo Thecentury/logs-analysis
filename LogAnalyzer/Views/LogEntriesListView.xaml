@@ -340,7 +340,7 @@
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
-			<RichTextBox IsReadOnly="True"
+			<!--<RichTextBox IsReadOnly="True"
 						 Background="#AAFFFFFF"
 						 BorderBrush="{x:Null}"
 						 BorderThickness="0"
@@ -353,7 +353,14 @@
 						<Run Text="{Binding UnitedText, Mode=OneWay}"/>
 					</Paragraph>
 				</FlowDocument>
-			</RichTextBox>
+			</RichTextBox>-->
+			<TextBox IsReadOnly="True"
+					 MaxHeight="200"
+					 VerticalScrollBarVisibility="Auto"
+					 Text="{Binding UnitedText, Mode=OneWay}"
+					 BorderBrush="{x:Null}"
+					 BorderThickness="0"
+					 />
 			<!--<Control Template="{Binding Template}"
 					 DataContext="{Binding TemplateContext}"/>-->
 		</DataTemplate>
