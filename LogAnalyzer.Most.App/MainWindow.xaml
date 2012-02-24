@@ -53,7 +53,7 @@
 				</Button>
 			</ToolBar>
 
-			<Views:ErrorView DataContext="{Binding ErrorReporting}" DockPanel.Dock="Bottom"/>
+			<!--<Views:ErrorView DataContext="{Binding ErrorReporting}" DockPanel.Dock="Bottom"/>-->
 
 			<Grid>
 				<views:TabsView DataContext="{Binding}"/>

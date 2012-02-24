@@ -123,14 +123,6 @@
       <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
       <Name>LogAnalyzer.GUI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModuleLogsProvider.Logging\ModuleLogsProvider.Logging.csproj">
-      <Project>{44C0DB5F-B7FB-41F5-ABC2-23DB8FAEF1DA}</Project>
-      <Name>ModuleLogsProvider.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MostLogsProvider.GUI\ModuleLogsProvider.GUI.csproj">
-      <Project>{09FFC2ED-1437-4476-9499-1642A7B04565}</Project>
-      <Name>ModuleLogsProvider.GUI</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
