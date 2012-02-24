@@ -27,23 +27,21 @@ namespace LogAnalyzer
 
 		public LogFile ParentLogFile { get; set; }
 
-		private readonly List<string> textLines = new List<string>();
+		private readonly List<string> _textLines = new List<string>();
 		public IList<string> TextLines
 		{
-			get { return textLines; }
+			get { return _textLines; }
 		}
 
+		private string _unitedText;
 		public string UnitedText
 		{
-			get
-			{
-				return String.Join( Environment.NewLine, textLines );
-			}
+			get { return _unitedText ?? (_unitedText = String.Join( Environment.NewLine, _textLines )); }
 		}
 
 		public int LinesCount
 		{
-			get { return textLines.Count; }
+			get { return _textLines.Count; }
 		}
 
 		/// <summary>
@@ -75,7 +73,7 @@ namespace LogAnalyzer
 
 			SetHeaderValues( type, threadId, time, firstLine );
 
-			this.textLines.Add( firstLine );
+			this._textLines.Add( firstLine );
 			this.LineIndex = lineIndex;
 		}
 
@@ -106,7 +104,7 @@ namespace LogAnalyzer
 		{
 			SetHeaderValues( type, threadId, time, firstLine );
 
-			this.textLines[0] = firstLine;
+			this._textLines[0] = firstLine;
 
 			RaiseAllPropertiesChanged();
 		}
@@ -116,10 +114,10 @@ namespace LogAnalyzer
 			if ( newLine == null )
 				throw new ArgumentNullException( "newLine" );
 
-			if ( textLines.Count == 0 )
+			if ( _textLines.Count == 0 )
 				throw new InvalidOperationException();
 
-			int lastLineIndex = this.LineIndex + this.textLines.Count - 1;
+			int lastLineIndex = this.LineIndex + this._textLines.Count - 1;
 
 			if ( lastLineIndex != newLineIndex )
 				throw new InvalidOperationException();
@@ -127,7 +125,7 @@ namespace LogAnalyzer
 			if ( isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
-			textLines[textLines.Count - 1] = newLine;
+			_textLines[_textLines.Count - 1] = newLine;
 			RaiseAllPropertiesChanged();
 		}
 
@@ -137,13 +135,13 @@ namespace LogAnalyzer
 				throw new ArgumentNullException( "newLine" );
 
 			// первая строка должна извлекаться из заголовка LogEntry
-			if ( textLines.Count == 0 )
+			if ( _textLines.Count == 0 )
 				throw new InvalidOperationException();
 
 			if ( isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
-			textLines.Add( newLine );
+			_textLines.Add( newLine );
 			RaiseAllPropertiesChanged();
 		}
 
@@ -229,9 +227,9 @@ namespace LogAnalyzer
 
 			isFrozen = true;
 
-			if ( textLines.Count < textLines.Capacity )
+			if ( _textLines.Count < _textLines.Capacity )
 			{
-				textLines.TrimExcess();
+				_textLines.TrimExcess();
 			}
 
 			propertyChanged = null;
