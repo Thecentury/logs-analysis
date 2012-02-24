@@ -141,11 +141,11 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 				}
 
-				Logger.Instance.WriteInfo( "Created new EntryViewModel for index {0}", index );
+				//Logger.Instance.WriteInfo( "Created new EntryViewModel for index {0}", index );
 			}
 			else
 			{
-				Logger.Instance.WriteInfo( "Used existing EntryViewModel for index {0}", index );
+				//Logger.Instance.WriteInfo( "Used existing EntryViewModel for index {0}", index );
 			}
 
 			return logEntryViewModel;

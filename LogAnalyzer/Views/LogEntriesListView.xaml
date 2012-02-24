@@ -340,7 +340,7 @@
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
-			<RichTextBox IsReadOnly="True"
+			<!--<RichTextBox IsReadOnly="True"
 						 Background="#AAFFFFFF"
 						 BorderBrush="{x:Null}"
 						 BorderThickness="0"
@@ -353,7 +353,17 @@
 						<Run Text="{Binding UnitedText, Mode=OneWay}"/>
 					</Paragraph>
 				</FlowDocument>
-			</RichTextBox>
+			</RichTextBox>-->
+			
+			<TextBox
+				IsReadOnly="True"
+				BorderBrush="{x:Null}"
+				BorderThickness="0"
+				MaxHeight="200"
+				VerticalScrollBarVisibility="Auto"
+				TextWrapping="Wrap"
+				Text="{Binding UnitedText, Mode=OneWay}"/>
+			
 			<!--<Control Template="{Binding Template}"
 					 DataContext="{Binding TemplateContext}"/>-->
 		</DataTemplate>
@@ -456,6 +466,7 @@
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 
+				<!--<DataGridTextColumn Header="Text" Width="*" Binding="{Binding UnitedText}"/>-->
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->

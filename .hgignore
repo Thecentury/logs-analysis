@@ -15,3 +15,5 @@ Binaries/*
 Ext/FugueIcons/*
 *.DotSettings.user
 *.vsps
+*.crunchsolution.cache
+*.ncrunchsolution.user
