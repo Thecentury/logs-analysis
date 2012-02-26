@@ -7,21 +7,15 @@ using System.Text.RegularExpressions;
 
 namespace LogAnalyzer.Kernel
 {
-	public class MostLogLineParser : ILogLineParser
+	public sealed class MostLogLineParser : ILogLineParser
 	{
 		private const string LogLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
 		private static readonly Regex logLineRegex = new Regex( LogLineRegexText, RegexOptions.Compiled | RegexOptions.Multiline );
 		public static readonly string DateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
-		public bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )
+		public bool TryExtractLogEntryData( string line, ref string type, ref int threadId, ref DateTime time, ref string text )
 		{
-			// инициализация некорректными данными
-			type = null;
-			threadId = -1;
-			time = DateTime.MinValue;
-			text = null;
-
 			Match match = logLineRegex.Match( line );
 			if ( !match.Success )
 			{
@@ -42,14 +36,14 @@ namespace LogAnalyzer.Kernel
 			}
 
 			string timeStr = match.Groups[3].Value;
-			time = Parse( timeStr );
+			time = ParseDate( timeStr );
 
 			text = match.Groups[4].Value;
 
 			return true;
 		}
 
-		internal static DateTime Parse( string dateString )
+		internal static DateTime ParseDate( string dateString )
 		{
 			int day = (dateString[0] - '0') * 10 + (dateString[1] - '0');
 			int month = (dateString[3] - '0') * 10 + (dateString[4] - '0');

@@ -107,7 +107,7 @@ namespace LogAnalyzer
 			this.core = core;
 			this.filesWrapper = new ObservableList<LogFile>( files );
 			this.globalEntriesFilter = config.GlobalLogEntryFilter;
-			this.lineParser = directoryConfigurationInfo.LineParser ?? new MostLogLineParser();
+			this.lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
 			this.fileFilter = config.GlobalFilesFilter;
 
 			fileFilter.Changed += OnFileFilterChanged;

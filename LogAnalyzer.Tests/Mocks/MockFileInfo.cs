@@ -8,26 +8,26 @@ namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockFileInfo : IFileInfo
 	{
-		private readonly List<byte> bytes = new List<byte>();
-		private readonly string name;
-		private readonly string fullName;
-		private readonly MockLogRecordsSource logSource;
-		private readonly Encoding encoding = Encoding.Unicode;
+		private readonly List<byte> _bytes = new List<byte>();
+		private readonly string _name;
+		private readonly string _fullName;
+		private readonly MockLogRecordsSource _logSource;
+		private readonly Encoding _encoding = Encoding.Unicode;
 
-		private string dateFormat = MostLogLineParser.DateTimeFormat;
+		private string _dateFormat = MostLogLineParser.DateTimeFormat;
 		public string DateFormat
 		{
-			get { return dateFormat; }
-			set { dateFormat = value; }
+			get { return _dateFormat; }
+			set { _dateFormat = value; }
 		}
 
-		private readonly object sync = new object();
+		private readonly object _sync = new object();
 
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource )
 		{
-			this.name = name;
-			this.fullName = fullName;
-			this.logSource = logSource;
+			this._name = name;
+			this._fullName = fullName;
+			this._logSource = logSource;
 		}
 
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource, Encoding encoding )
@@ -35,7 +35,7 @@ namespace LogAnalyzer.Tests.Mocks
 		{
 			if ( encoding == null ) throw new ArgumentNullException( "encoding" );
 
-			this.encoding = encoding;
+			this._encoding = encoding;
 		}
 
 		#region IFileInfo Members
@@ -47,7 +47,7 @@ namespace LogAnalyzer.Tests.Mocks
 
 		LogFileReaderBase IFileInfo.GetReader( LogFileReaderArguments args )
 		{
-			MockStreamProvider streamProvider = new MockStreamProvider( bytes, sync );
+			MockStreamProvider streamProvider = new MockStreamProvider( _bytes, _sync );
 			StreamLogFileReader reader = new StreamLogFileReader( args, streamProvider );
 			return reader;
 		}
@@ -56,21 +56,21 @@ namespace LogAnalyzer.Tests.Mocks
 		{
 			get
 			{
-				lock ( sync )
+				lock ( _sync )
 				{
-					return bytes.Count;
+					return _bytes.Count;
 				}
 			}
 		}
 
 		public string Name
 		{
-			get { return name; }
+			get { return _name; }
 		}
 
 		public string FullName
 		{
-			get { return fullName; }
+			get { return _fullName; }
 		}
 
 		string IFileInfo.Extension
@@ -80,21 +80,21 @@ namespace LogAnalyzer.Tests.Mocks
 
 		public string Content
 		{
-			get { return encoding.GetString( bytes.ToArray() ); }
+			get { return _encoding.GetString( _bytes.ToArray() ); }
 		}
 
 		#endregion
 
 		public void Write( string str )
 		{
-			byte[] messageBytes = encoding.GetBytes( str );
+			byte[] messageBytes = _encoding.GetBytes( str );
 
-			lock ( sync )
+			lock ( _sync )
 			{
-				bytes.AddRange( messageBytes );
+				_bytes.AddRange( messageBytes );
 			}
 
-			logSource.RaiseFileChanged( name );
+			_logSource.RaiseFileChanged( _name );
 		}
 
 		public void WriteLine( string str )
@@ -105,7 +105,7 @@ namespace LogAnalyzer.Tests.Mocks
 		public void WriteLogMessage( char severity, int threadId, string message )
 		{
 			string logMessage = String.Format( "[{0}] [{1,3}] {2}\t{3}{4}", 
-				severity, threadId, DateTime.Now.ToString( dateFormat ), message, Environment.NewLine );
+				severity, threadId, DateTime.Now.ToString( _dateFormat ), message, Environment.NewLine );
 			Write( logMessage );
 		}
 
@@ -121,7 +121,7 @@ namespace LogAnalyzer.Tests.Mocks
 
 		public void WriteInfo( string message, DateTime dateTime )
 		{
-			string logMessage = String.Format( "[I] [123] {0}\t{1}", dateTime.ToString( dateFormat ), message );
+			string logMessage = String.Format( "[I] [123] {0}\t{1}", dateTime.ToString( _dateFormat ), message );
 			Write( logMessage );
 		}
 

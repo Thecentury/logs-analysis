@@ -17,3 +17,5 @@ Ext/FugueIcons/*
 *.vsps
 *.crunchsolution.cache
 *.ncrunchsolution.user
+*.ncrunchsolution
+*.ncrunchproject
