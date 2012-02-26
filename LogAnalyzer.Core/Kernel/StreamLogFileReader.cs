@@ -13,22 +13,22 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class StreamLogFileReader : LogFileReaderBase
 	{
-		private readonly IFilter<LogEntry> globalEntriesFilter;
+		private readonly IFilter<LogEntry> _globalEntriesFilter;
 
-		private long lastLineBreakByteIndex;
-		private long prevStreamLength;
-		private readonly Logger logger;
-		private readonly Encoding encoding;
-		private int linesCount;
-		private bool lastLineWasEmpty;
-		private LogEntry lastCreatedEntry;
-		private readonly LogFile parentLogFile;
-		private readonly IStreamProvider streamProvider;
-		private readonly ILogLineParser lineParser;
+		private long _lastLineBreakByteIndex;
+		private long _prevStreamLength;
+		private readonly Logger _logger;
+		private readonly Encoding _encoding;
+		private int _linesCount;
+		private bool _lastLineWasEmpty;
+		private LogEntry _lastCreatedEntry;
+		private readonly LogFile _parentLogFile;
+		private readonly IStreamProvider _streamProvider;
+		private readonly ILogLineParser _lineParser;
 
 		private string Name
 		{
-			get { return parentLogFile.Name; }
+			get { return _parentLogFile.Name; }
 		}
 
 		public StreamLogFileReader( LogFileReaderArguments args, IStreamProvider streamProvider )
@@ -38,23 +38,23 @@ namespace LogAnalyzer.Kernel
 
 			args.Validate();
 
-			logger = args.Logger;
-			parentLogFile = args.ParentLogFile;
-			encoding = args.Encoding;
-			globalEntriesFilter = args.GlobalEntriesFilter;
-			lineParser = args.LineParser;
+			_logger = args.Logger;
+			_parentLogFile = args.ParentLogFile;
+			_encoding = args.Encoding;
+			_globalEntriesFilter = args.GlobalEntriesFilter;
+			_lineParser = args.LineParser;
 
-			this.streamProvider = streamProvider;
+			this._streamProvider = streamProvider;
 		}
 
-		private Stream OpenStream( int startingPosition )
+		private Stream OpenStreamAtPosition( int startingPosition )
 		{
-			return streamProvider.OpenStream( startingPosition );
+			return _streamProvider.OpenStream( startingPosition );
 		}
 
 		private StreamReader OpenReader( Stream stream )
 		{
-			return new StreamReader( stream, encoding );
+			return new StreamReader( stream, _encoding );
 		}
 
 		private List<LogEntry> NoLogEntries()
@@ -76,21 +76,21 @@ namespace LogAnalyzer.Kernel
 		private string ReadAddedText()
 		{
 			string addedText;
-			using ( Stream fs = OpenStream( (int)lastLineBreakByteIndex ) )
+			using ( Stream fs = OpenStreamAtPosition( (int)_lastLineBreakByteIndex ) )
 			{
 				// todo use ReadTimeout
 
 				// длина файла уменьшилась - пока рассматриваем только append
-				if ( fs.Length < prevStreamLength )
+				if ( fs.Length < _prevStreamLength )
 				{
-					logger.WriteError( "LogFile.OnFileChanged: Длина файла \"{0}\" уменьшилась с {1} до {2}", Name, prevStreamLength, fs.Length );
+					_logger.WriteError( "LogFile.OnFileChanged: Длина файла \"{0}\" уменьшилась с {1} до {2}", Name, _prevStreamLength, fs.Length );
 					return null;
 				}
 
-				if ( fs.Length == prevStreamLength )
+				if ( fs.Length == _prevStreamLength )
 				{
 					// длина файла не изменилась
-					logger.DebugWriteInfo( "LogFile.OnFileChanged: Длина файла \"{0}\" не изменилась ({1} байт)", Name, prevStreamLength );
+					_logger.DebugWriteInfo( "LogFile.OnFileChanged: Длина файла \"{0}\" не изменилась ({1} байт)", Name, _prevStreamLength );
 					return null;
 				}
 
@@ -99,7 +99,7 @@ namespace LogAnalyzer.Kernel
 				// todo асинхронное чтение тут и в ReadFile
 
 				// начинаем читать с начала последней строки
-				fs.Position = this.lastLineBreakByteIndex;
+				fs.Position = this._lastLineBreakByteIndex;
 				using ( StreamReader reader = OpenReader( fs ) )
 				{
 					addedText = reader.ReadToEnd();
@@ -107,7 +107,7 @@ namespace LogAnalyzer.Kernel
 
 					if ( wasLineBreakAtTheEnd )
 					{
-						this.lastLineBreakByteIndex = streamLength;
+						this._lastLineBreakByteIndex = streamLength;
 					}
 					else
 					{
@@ -119,14 +119,14 @@ namespace LogAnalyzer.Kernel
 							int charsFromLineBreakToTheEndOfString = addedText.Length - (breakLineIndexInAddedText + 1);
 							char[] chars = addedText.ToCharArray( breakLineIndexInAddedText + 1, charsFromLineBreakToTheEndOfString );
 
-							int bytesCountFromLastLineBreakToTheEndOfAddedText = encoding.GetByteCount( chars );
+							int bytesCountFromLastLineBreakToTheEndOfAddedText = _encoding.GetByteCount( chars );
 
-							this.lastLineBreakByteIndex += (addedText.Length - bytesCountFromLastLineBreakToTheEndOfAddedText);
+							this._lastLineBreakByteIndex += (addedText.Length - bytesCountFromLastLineBreakToTheEndOfAddedText);
 						}
 					}
 				}
 
-				this.prevStreamLength = streamLength;
+				this._prevStreamLength = streamLength;
 			}
 
 			return addedText;
@@ -138,11 +138,11 @@ namespace LogAnalyzer.Kernel
 
 			if ( String.IsNullOrEmpty( addedText ) )
 			{
-				logger.DebugWriteInfo( "LogFile.OnFileChanged: Файл \"{0}\": добавленный текст пуст.", this.Name );
+				_logger.DebugWriteInfo( "LogFile.OnFileChanged: Файл \"{0}\": добавленный текст пуст.", this.Name );
 				return NoLogEntries();
 			}
 
-			long lineIndex = Math.Max( this.linesCount - 1, 0 );
+			long lineIndex = Math.Max( this._linesCount - 1, 0 );
 
 			string[] addedLines = addedText.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
 
@@ -158,9 +158,9 @@ namespace LogAnalyzer.Kernel
 					LogEntryAppendResult _ = AppendLine( line, lineIndex, lastAddedEntry, addedEntries );
 				}
 
-				linesCount = (int)(lineIndex + 1);
+				_linesCount = (int)(lineIndex + 1);
 				lineIndex++;
-				lastLineWasEmpty = emptyLine;
+				_lastLineWasEmpty = emptyLine;
 			}
 
 			return addedEntries;
@@ -174,7 +174,7 @@ namespace LogAnalyzer.Kernel
 
 		/// <summary>
 		/// Максимальная длина одной считанной из файла строки.
-		/// <para/>Если длина строки больше, то считается, что выбрана неправильная кодировка, и бросаетмя исключение InvalidEncodingException.
+		/// <para/>Если длина строки больше, то считается, что выбрана неправильная кодировка, и бросаетcя исключение InvalidEncodingException.
 		/// </summary>
 		private const int MaxLineLength = 100000;
 
@@ -186,7 +186,7 @@ namespace LogAnalyzer.Kernel
 			}
 			catch ( Exception exc )
 			{
-				logger.WriteError( "Exception while reading file '{0}'", this.Name );
+				_logger.WriteError( "Exception while reading file '{0}' {1}", this.Name, exc );
 				throw;
 			}
 		}
@@ -195,7 +195,7 @@ namespace LogAnalyzer.Kernel
 		{
 			List<LogEntry> logEntries = new List<LogEntry>();
 
-			using ( Stream stream = OpenStream( 0 ) )
+			using ( Stream stream = OpenStreamAtPosition( 0 ) )
 			{
 				int notificationsCount = 0;
 				long lineIndex = 0;
@@ -240,7 +240,7 @@ namespace LogAnalyzer.Kernel
 
 						if ( invalidEncoding )
 						{
-							throw new InvalidEncodingException( encoding, Name );
+							throw new InvalidEncodingException( _encoding, Name );
 						}
 					}
 
@@ -256,19 +256,19 @@ namespace LogAnalyzer.Kernel
 					{
 						// если последняя считанная строка не заканчивается переносом строки,
 						// то считаем, что перенос строки был перед началом последней строки.
-						int byteCount = encoding.GetByteCount( prevLine );
+						int byteCount = _encoding.GetByteCount( prevLine );
 						prevLineBreakIndex = length - byteCount;
 					}
 
-					this.lastLineBreakByteIndex = prevLineBreakIndex;
+					this._lastLineBreakByteIndex = prevLineBreakIndex;
 				}
 
-				linesCount = (int)lineIndex;
+				_linesCount = (int)lineIndex;
 
-				if ( lastLineBreakByteIndex == length )
+				if ( _lastLineBreakByteIndex == length )
 				{
-					linesCount++;
-					lastLineWasEmpty = true;
+					_linesCount++;
+					_lastLineWasEmpty = true;
 				}
 			}
 
@@ -289,25 +289,25 @@ namespace LogAnalyzer.Kernel
 				throw new ArgumentNullException( "line" );
 
 			// некорректные значения
-			string type;
-			int tid;
-			DateTime time = DateTime.MinValue;
-			string lineText;
+			string type = null;
+			int tid = 0;
+			DateTime time = default( DateTime );
+			string lineText = null;
 
-			bool isLastLineChanged = lineIndex == (linesCount - 1) && linesCount > 0 && !lastLineWasEmpty;
+			bool isLastLineChanged = lineIndex == (_linesCount - 1) && _linesCount > 0 && !_lastLineWasEmpty;
 
 			// обновилась последняя строка файла?
 			if ( isLastLineChanged )
 			{
 				// в последней строке было начало LogEntry?
-				if ( lineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( _lineParser.TryExtractLogEntryData( line, ref type, ref tid, ref time, ref lineText ) )
 				{
-					LogEntry lastEntry = lastCreatedEntry;
+					LogEntry lastEntry = _lastCreatedEntry;
 					// последняя запись состоит только из заголовка?
 					if ( lastEntry.LinesCount == 1 )
 					{
 						lastEntry.UpdateHeader( type, tid, time, lineText );
-						logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": updated header in line #{1}", Name, lineIndex );
+						_logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": updated header in line #{1}", Name, lineIndex );
 					}
 					else // неполный заголовок новой записи был ошибочно дописан в текст предыдущей записи -> исправляем
 					{
@@ -315,53 +315,55 @@ namespace LogAnalyzer.Kernel
 						lastEntry.Freeze();
 
 						// после удаления последней строки самая последняя запись перестала пропускаться фильтром?
-						if ( !globalEntriesFilter.Include( lastEntry ) )
+						if ( !_globalEntriesFilter.Include( lastEntry ) )
 						{
 							RemoveLastEntry( addedEntries );
 						}
 
-						lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
-						TryAddEntry( lastCreatedEntry, addedEntries );
+						_lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, _parentLogFile );
+						TryAddEntry( _lastCreatedEntry, addedEntries );
 					}
 				}
 				else
 				{
 					if ( latestAddedEntry != null )
 					{
-						latestAddedEntry.ReplaceLastLine(line, lineIndex);
-						logger.DebugWriteVerbose("LogFile.AppendLine: File = \"{0}\": replaced line #{1}", Name, lineIndex);
+						latestAddedEntry.ReplaceLastLine( line, lineIndex );
+						_logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": replaced line #{1}", Name, lineIndex );
 					}
 				}
 			}
 			else // добавилась новая строка
 			{
 				// в добавленной строке было начало нового LogEntry?
-				if ( lineParser.TryExtractLogEntryData( line, out type, out tid, out time, out lineText ) )
+				if ( _lineParser.TryExtractLogEntryData( line, ref type, ref tid, ref time, ref lineText ) )
 				{
-					lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, parentLogFile );
+					_lastCreatedEntry = new LogEntry( type, tid, time, lineText, (int)lineIndex, _parentLogFile );
 
-					LogEntryAppendResult result = TryAddEntry( lastCreatedEntry, addedEntries );
+					LogEntryAppendResult result = TryAddEntry( _lastCreatedEntry, addedEntries );
 					if ( result == LogEntryAppendResult.Added )
 					{
 						// морозим предыдущий, если он был
 						if ( latestAddedEntry != null )
+						{
 							latestAddedEntry.Freeze();
+						}
 					}
 				}
 				else
 				{
 					// добавляем к предыдущей записи лога
-					if ( lastCreatedEntry != null )
+					if ( _lastCreatedEntry != null )
 					{
-						lastCreatedEntry.AppendLine( line );
+						_lastCreatedEntry.AppendLine( line );
 
-						bool wasNotAddedToList = lastCreatedEntry != latestAddedEntry;
+						bool wasNotAddedToList = _lastCreatedEntry != latestAddedEntry;
 						if ( wasNotAddedToList )
 						{
-							LogEntryAppendResult res = TryAddEntry( lastCreatedEntry, addedEntries );
+							LogEntryAppendResult res = TryAddEntry( _lastCreatedEntry, addedEntries );
 							if ( res == LogEntryAppendResult.Added )
 							{
-								logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": Appended line #{1} with text \"{2}\"", Name, lineIndex, line );
+								_logger.DebugWriteVerbose( "LogFile.AppendLine: File = \"{0}\": Appended line #{1} with text \"{2}\"", Name, lineIndex, line );
 							}
 							return res;
 						}
@@ -369,7 +371,7 @@ namespace LogAnalyzer.Kernel
 
 					// нет последней линии - например, мы читаем файл и все линии до этого не проходили по дате
 					// или неправильная кодировка - тогда в файл не будет добавлена ни одна запись
-					if ( lastCreatedEntry == null )
+					if ( _lastCreatedEntry == null )
 						return LogEntryAppendResult.NotParsed;
 				}
 			}
@@ -379,7 +381,7 @@ namespace LogAnalyzer.Kernel
 
 		private LogEntryAppendResult TryAddEntry( LogEntry newEntry, IList<LogEntry> addedEntries )
 		{
-			if ( globalEntriesFilter.Include( newEntry ) )
+			if ( _globalEntriesFilter.Include( newEntry ) )
 			{
 				addedEntries.Add( newEntry );
 

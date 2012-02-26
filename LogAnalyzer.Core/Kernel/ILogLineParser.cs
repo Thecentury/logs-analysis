@@ -7,6 +7,6 @@ namespace LogAnalyzer.Kernel
 {
 	public interface ILogLineParser
 	{
-		bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text );
+		bool TryExtractLogEntryData( string line, ref string type, ref int threadId, ref DateTime time, ref string text );
 	}
 }

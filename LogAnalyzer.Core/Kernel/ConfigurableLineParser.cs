@@ -9,10 +9,10 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class ConfigurableLineParser : ILogLineParser
 	{
-		private string logLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
+		private string _logLineRegexText = @"^\[(?<Type>.)] \[(?<TID>.{3,4})] (?<Time>\d{2}\.\d{2}\.\d{4} \d{1,2}:\d{2}:\d{2})\t(?<Text>.*)$";
 
-		private Regex logLineRegex;
-		private string dateTimeFormat = "dd.MM.yyyy H:mm:ss";
+		private Regex _logLineRegex;
+		private string _dateTimeFormat = "dd.MM.yyyy H:mm:ss";
 
 		public ConfigurableLineParser()
 		{
@@ -21,29 +21,29 @@ namespace LogAnalyzer.Kernel
 
 		public string LogLineRegexText
 		{
-			get { return logLineRegexText; }
+			get { return _logLineRegexText; }
 			set
 			{
 				if ( String.IsNullOrEmpty( value ) )
 					throw new ArgumentException();
 
-				logLineRegexText = value;
+				_logLineRegexText = value;
 				CreateRegex();
 			}
 		}
 
 		private void CreateRegex()
 		{
-			logLineRegex = new Regex( logLineRegexText, RegexOptions.Multiline | RegexOptions.Compiled );
+			_logLineRegex = new Regex( _logLineRegexText, RegexOptions.Multiline | RegexOptions.Compiled );
 		}
 
 		public string DateTimeFormat
 		{
-			get { return dateTimeFormat; }
-			set { dateTimeFormat = value; }
+			get { return _dateTimeFormat; }
+			set { _dateTimeFormat = value; }
 		}
 
-		public bool TryExtractLogEntryData( string line, out string type, out int threadId, out DateTime time, out string text )
+		public bool TryExtractLogEntryData( string line, ref string type, ref int threadId, ref DateTime time, ref string text )
 		{
 			// инициализация некорректными данными
 			type = null;
@@ -51,7 +51,7 @@ namespace LogAnalyzer.Kernel
 			time = DateTime.MinValue;
 			text = null;
 
-			Match match = logLineRegex.Match( line );
+			Match match = _logLineRegex.Match( line );
 			if ( !match.Success )
 			{
 				return false;
@@ -80,7 +80,7 @@ namespace LogAnalyzer.Kernel
 
 		internal DateTime Parse( string dateString )
 		{
-			return DateTime.ParseExact( dateString, dateTimeFormat, CultureInfo.InvariantCulture );
+			return DateTime.ParseExact( dateString, _dateTimeFormat, CultureInfo.InvariantCulture );
 		}
 	}
 }
