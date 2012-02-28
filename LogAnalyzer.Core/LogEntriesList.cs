@@ -14,28 +14,28 @@ namespace LogAnalyzer
 {
 	public abstract class LogEntriesList : INotifyPropertyChanged, IReportReadProgress
 	{
-		private readonly CompositeObservableListWrapper<LogEntry> mergedEntriesWrapper;
+		private readonly CompositeObservableListWrapper<LogEntry> _mergedEntriesWrapper;
 		public CompositeObservableListWrapper<LogEntry> MergedEntries
 		{
-			get { return mergedEntriesWrapper; }
+			get { return _mergedEntriesWrapper; }
 		}
 
-		private readonly LogEntrySortedCollection logEntrySortedCollection;
+		private readonly LogEntrySortedCollection _logEntrySortedCollection;
 
-		private List<LogEntry> mergedEntriesList;
+		private List<LogEntry> _mergedEntriesList;
 		protected internal List<LogEntry> MergedEntriesList
 		{
-			get { return mergedEntriesList; }
-			protected set { mergedEntriesList = value; }
+			get { return _mergedEntriesList; }
+			protected set { _mergedEntriesList = value; }
 		}
 
-		private readonly IEnvironment environment;
+		private readonly IEnvironment _environment;
 		public IEnvironment Environment
 		{
-			get { return environment; }
+			get { return _environment; }
 		}
 
-		protected readonly Logger logger;
+		protected readonly Logger Logger;
 
 		protected LogEntriesList( IEnvironment environment, Logger logger )
 		{
@@ -44,52 +44,52 @@ namespace LogAnalyzer
 			if ( logger == null )
 				throw new ArgumentNullException( "logger" );
 
-			this.logger = logger;
-			this.environment = environment;
+			this.Logger = logger;
+			this._environment = environment;
 
-			mergedEntriesList = new List<LogEntry>();
-			logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
-			mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( mergedEntriesList, logEntrySortedCollection.UnappendedLogEntries );
+			_mergedEntriesList = new List<LogEntry>();
+			_logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
+			_mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( _mergedEntriesList, _logEntrySortedCollection.UnappendedLogEntries );
 		}
 
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
 		{
 			int startingIndex = MergedEntries.Count;
 
-			logEntrySortedCollection.Enqueue( addedEntries );
+			_logEntrySortedCollection.Enqueue( addedEntries );
 
 			MergedEntries.RaiseGenericCollectionItemsAdded( addedEntries, startingIndex );
 
-			messageSeverityCount.Update( addedEntries );
+			_messageSeverityCount.Update( addedEntries );
 		}
 
-		private readonly MessageSeverityCount messageSeverityCount = new MessageSeverityCount();
+		private readonly MessageSeverityCount _messageSeverityCount = new MessageSeverityCount();
 		public MessageSeverityCount MessageSeverityCount
 		{
-			get { return messageSeverityCount; }
+			get { return _messageSeverityCount; }
 		}
 
-		private DateTime loadStartTime;
+		private DateTime _loadStartTime;
 
-		private bool isLoaded;
+		private bool _isLoaded;
 		public bool IsLoaded
 		{
-			get { return isLoaded; }
+			get { return _isLoaded; }
 		}
 
 		public event EventHandler Loaded;
 
-		private bool haveStarted;
+		private bool _haveStarted;
 		public bool HaveStarted
 		{
-			get { return haveStarted; }
+			get { return _haveStarted; }
 		}
 
 		[DebuggerStepThrough]
 		public void Start()
 		{
-			haveStarted = true;
-			loadStartTime = DateTime.Now;
+			_haveStarted = true;
+			_loadStartTime = DateTime.Now;
 			StartImpl();
 		}
 
@@ -97,13 +97,13 @@ namespace LogAnalyzer
 
 		protected void RaiseLoadedEvent()
 		{
-			isLoaded = true;
+			_isLoaded = true;
 			Loaded.Raise( this );
 			RaiseAllPropertiesChanged();
 
-			TimeSpan loadingDuration = DateTime.Now - loadStartTime;
+			TimeSpan loadingDuration = DateTime.Now - _loadStartTime;
 
-			logger.WriteInfo( "{0}: loaded in {1} seconds", ToString(), loadingDuration.TotalSeconds );
+			Logger.WriteInfo( "{0}: loaded in {1} seconds", ToString(), loadingDuration.TotalSeconds );
 
 			// не держим ссылки на подписчиков, 
 			// все равно это событие больше вызвано не будет
@@ -112,8 +112,8 @@ namespace LogAnalyzer
 
 		internal void AppendLogEntryToMergedList( LogEntry logEntry )
 		{
-			logger.DebugWriteVerbose( "{0}.AppendMergedLogEntry: +\"{1}\"", GetType().Name, logEntry.TextLines.FirstOrDefault() );
-			mergedEntriesList.Add( logEntry );
+			Logger.DebugWriteVerbose( "{0}.AppendMergedLogEntry: +\"{1}\"", GetType().Name, logEntry.TextLines.FirstOrDefault() );
+			_mergedEntriesList.Add( logEntry );
 			// todo notify about collection change
 		}
 
@@ -160,7 +160,7 @@ namespace LogAnalyzer
 			// todo не сделать ли тут запас по Capacity?
 			MergedEntriesList.Capacity = capacity;
 
-			mergedEntriesList.AddRange( entries
+			_mergedEntriesList.AddRange( entries
 										.AsParallel()
 										.OrderBy( LogEntryByDateAndIndexComparer.Instance ) );
 
@@ -169,7 +169,7 @@ namespace LogAnalyzer
 #endif
 
 			MergedEntries.RaiseCollectionReset();
-			MessageSeverityCount.Update( mergedEntriesList );
+			MessageSeverityCount.Update( _mergedEntriesList );
 		}
 
 

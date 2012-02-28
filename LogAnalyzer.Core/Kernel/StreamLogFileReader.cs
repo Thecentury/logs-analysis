@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Logging;
@@ -191,8 +192,83 @@ namespace LogAnalyzer.Kernel
 			}
 		}
 
+		private sealed class ReadResult
+		{
+			public List<LogEntry> Entries { get; set; }
+			public long StartOffset { get; set; }
+		}
+
+		private ReadResult ReadChunk( int startStreamPosition, int endStreamPosition, bool isFirst )
+		{
+			List<LogEntry> logEntries = new List<LogEntry>();
+			ReadResult result = new ReadResult { Entries = logEntries };
+
+			using ( Stream stream = OpenStreamAtPosition( startStreamPosition ) )
+			{
+				using ( StreamReader reader = OpenReader( stream ) )
+				{
+					string line;
+
+					if ( !isFirst )
+					{
+						line = reader.ReadLine();
+						int byteCount = _encoding.GetByteCount( line );
+						result.StartOffset = startStreamPosition + byteCount;
+					}
+					else
+					{
+						result.StartOffset = startStreamPosition;
+					}
+
+					while ( (line = reader.ReadLine()) != null && stream.Position < endStreamPosition )
+					{
+						// todo brinchuk разобраться с нулем
+						LogEntryAppendResult lineAppendResult = AppendLine( line, 0, logEntries.LastOrDefault(), logEntries );
+					}
+				}
+			}
+
+			return result;
+		}
+
+		private IList<LogEntry> ReadChunked()
+		{
+			List<LogEntry> logEntries = new List<LogEntry>();
+
+			int chunksNum = Environment.ProcessorCount;
+			int chunkLength;
+			using ( var stream = OpenStreamAtPosition( 0 ) )
+			{
+				chunkLength = (int)(stream.Length / (double)chunksNum);
+			}
+
+			ReadResult[] results = new ReadResult[chunksNum];
+			Action[] actions = new Action[chunksNum];
+			for ( int i = 0; i < chunksNum; i++ )
+			{
+				int start = chunkLength * i;
+				int end = start + chunkLength;
+				int iLocal = i;
+				Action action = () => results[iLocal] = ReadChunk( start, end, iLocal == 0 );
+				actions[i] = action;
+			}
+
+			Parallel.Invoke( actions );
+
+			foreach ( var result in results )
+			{
+				logEntries.AddRange( result.Entries );
+			}
+
+			return logEntries;
+		}
+
 		private IList<LogEntry> ReadEntireFileUnsafe()
 		{
+			// todo brinchuk comment me
+			//var result = ReadChunked();
+			//return result;
+
 			List<LogEntry> logEntries = new List<LogEntry>();
 
 			using ( Stream stream = OpenStreamAtPosition( 0 ) )
@@ -202,7 +278,9 @@ namespace LogAnalyzer.Kernel
 
 				int length = (int)stream.Length;
 				if ( length == 0 )
+				{
 					return logEntries;
+				}
 
 				using ( StreamReader reader = OpenReader( stream ) )
 				{

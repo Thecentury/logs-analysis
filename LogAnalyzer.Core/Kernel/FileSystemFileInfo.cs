@@ -76,21 +76,21 @@ namespace LogAnalyzer.Kernel
 
 	internal sealed class FileSystemStreamReader : IStreamProvider
 	{
-		private readonly FileInfo fileInfo;
+		private readonly FileInfo _fileInfo;
 
 		public FileSystemStreamReader( FileInfo fileInfo )
 		{
 			if ( fileInfo == null )
 				throw new ArgumentNullException( "fileInfo" );
 
-			this.fileInfo = fileInfo;
+			this._fileInfo = fileInfo;
 		}
 
 		public Stream OpenStream( int startPosition )
 		{
 			try
 			{
-				Stream stream = fileInfo.Open( FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete );
+				Stream stream = new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 8192, FileOptions.SequentialScan );
 				stream.Position = startPosition;
 
 				if ( KeyValueStorage.Instance.Contains( "FileSystemStreamReaderTransformer" ) )
@@ -103,7 +103,7 @@ namespace LogAnalyzer.Kernel
 			}
 			catch ( IOException exc )
 			{
-				throw new LogAnalyzerIOException( string.Format( "Ошибка при открытии файла '{0}'", fileInfo.FullName ), exc );
+				throw new LogAnalyzerIOException( String.Format( "Ошибка при открытии файла '{0}'", _fileInfo.FullName ), exc );
 			}
 		}
 	}
