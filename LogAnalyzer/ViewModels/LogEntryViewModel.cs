@@ -258,36 +258,36 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private readonly ObservableCollection<HighlightingViewModel> highlightedByList = new ObservableCollection<HighlightingViewModel>();
+		private readonly ObservableCollection<HighlightingViewModel> _highlightedByList = new ObservableCollection<HighlightingViewModel>();
 		/// <summary>
 		/// Список фильтров, которыми подсвечена данная запись.
 		/// </summary>
 		public ObservableCollection<HighlightingViewModel> HighlightedByList
 		{
-			get { return highlightedByList; }
+			get { return _highlightedByList; }
 		}
 
 		#endregion
 
 		protected override void OnInnerPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
-			linesViewModel = null;
+			_linesViewModel = null;
 			base.OnInnerPropertyChanged( sender, e );
 		}
 
 		// todo аналогично, избавиться от поля.
-		private List<MessageLineViewModel> linesViewModel;
+		private List<MessageLineViewModel> _linesViewModel;
 		public List<MessageLineViewModel> LinesView
 		{
 			get
 			{
-				if ( linesViewModel == null )
+				if ( _linesViewModel == null )
 				{
 					// todo тут не учитывается возможность, что LogEntry обновится
-					linesViewModel = new List<MessageLineViewModel>( logEntry.LinesCount );
+					_linesViewModel = new List<MessageLineViewModel>( logEntry.LinesCount );
 					FillLinesViewModel();
 				}
-				return linesViewModel;
+				return _linesViewModel;
 			}
 		}
 
@@ -307,7 +307,7 @@ namespace LogAnalyzer.GUI.ViewModels
 					lineViewModel = new ExceptionLineViewModel( lineInfo, line );
 				}
 
-				linesViewModel.Add( lineViewModel );
+				_linesViewModel.Add( lineViewModel );
 			}
 		}
 

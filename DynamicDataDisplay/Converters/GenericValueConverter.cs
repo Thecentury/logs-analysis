@@ -11,7 +11,7 @@ namespace Microsoft.Research.DynamicDataDisplay.Converters
 	{
 		public GenericValueConverter() { }
 
-		private Func<T, object> conversion;
+		private readonly Func<T, object> conversion;
 		public GenericValueConverter(Func<T, object> conversion)
 		{
 			if (conversion == null)

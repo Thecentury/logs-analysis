@@ -172,7 +172,7 @@ namespace LogAnalyzer
 
 					operationsQueue.EnqueueOperation( () =>
 					{
-						logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
+						Logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
 						Interlocked.Increment( ref initialFilesLoadedCount );
 						AnalyzeIfLoaded();
 					} );
@@ -208,7 +208,7 @@ namespace LogAnalyzer
 					operationsSource.Start();
 					operationsQueue.EnqueueOperation( () =>
 					{
-						logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
+						Logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
 											this.DisplayName, files.Count );
 
 						RaiseLoadedEvent();
@@ -265,7 +265,7 @@ namespace LogAnalyzer
 
 		private void OnFileCreated( object sender, FileSystemEventArgs e )
 		{
-			logger.WriteInfo( "Core.OnFileCreated: '{0}' '{1}'", e.ChangeType, e.Name );
+			Logger.WriteInfo( "Core.OnFileCreated: '{0}' '{1}'", e.ChangeType, e.Name );
 
 			string fullPath = e.FullPath;
 			operationsQueue.EnqueueOperation( () =>
@@ -288,7 +288,7 @@ namespace LogAnalyzer
 				bool exclude = !fileFilter.Include( file );
 				if ( exclude )
 				{
-					logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
+					Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
 					return;
 				}
 
@@ -307,12 +307,12 @@ namespace LogAnalyzer
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
 		{
-			logger.WriteInfo( "Core.OnFileDelete: '{0}' '{1}'", e.ChangeType, e.Name );
+			Logger.WriteInfo( "Core.OnFileDelete: '{0}' '{1}'", e.ChangeType, e.Name );
 		}
 
 		private void OnFileChanged( object sender, FileSystemEventArgs e )
 		{
-			logger.DebugWriteInfo( "Core.OnFileChanged: '{0}' '{1}'", e.ChangeType, e.Name );
+			Logger.DebugWriteInfo( "Core.OnFileChanged: '{0}' '{1}'", e.ChangeType, e.Name );
 
 			string fullPath = e.FullPath;
 

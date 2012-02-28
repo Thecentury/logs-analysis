@@ -90,9 +90,9 @@ namespace LogAnalyzer
 			this.config = config;
 			config.Directories.CollectionChanged += OnConfigDirectoriesCollectionChanged;
 
-			logger.DebugWriteInfo( "" );
-			logger.DebugWriteInfo( "" );
-			logger.DebugWriteInfo( "" );
+			Logger.DebugWriteInfo( "" );
+			Logger.DebugWriteInfo( "" );
+			Logger.DebugWriteInfo( "" );
 
 			foreach ( LogDirectoryConfigurationInfo dir in config.EnabledDirectories )
 			{

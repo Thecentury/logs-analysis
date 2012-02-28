@@ -151,11 +151,13 @@
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\DynamicHighlighting.cs" />
     <Compile Include="Common\GenericDelegateCommand.cs" />
+    <Compile Include="Common\HighlightingCountToMarginConverter.cs" />
     <Compile Include="Common\HsbColor.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
+    <Compile Include="Controls\HighlightingBorderControl.cs" />
     <Compile Include="Extensions\ICommandExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
