@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace LogAnalyzer.GUI
+namespace LogAnalyzer.GUI.Common
 {
 	public sealed class PropertyNameToIsDynamicHighlightedConverter : IMultiValueConverter
 	{
-		#region IMultiValueConverter Members
-
 		public object Convert( object[] values, Type targetType, object parameter, CultureInfo culture )
 		{
 			string dataPropertyName = (string)values[0];
@@ -24,7 +19,5 @@ namespace LogAnalyzer.GUI
 		{
 			throw new NotSupportedException();
 		}
-
-		#endregion
 	}
 }

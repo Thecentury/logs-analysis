@@ -23,9 +23,10 @@ namespace LogAnalyzer.Collections
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="arr"></param>
-		public static void QuicksortSequential<T>( IList<T> arr ) where T : IComparable<T>
+		/// <param name="comparer"> </param>
+		public static void QuicksortSequential<T>( IList<T> arr, IComparer<T> comparer )
 		{
-			QuicksortSequential( arr, 0, arr.Count - 1 );
+			QuicksortSequential( arr, 0, arr.Count - 1, comparer );
 		}
 
 		/// <summary>
@@ -33,43 +34,41 @@ namespace LogAnalyzer.Collections
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="arr"></param>
-		public static void QuicksortParallel<T>( IList<T> arr ) where T : IComparable<T>
+		/// <param name="comparer"> </param>
+		public static void QuicksortParallel<T>( IList<T> arr, IComparer<T> comparer )
 		{
-			QuicksortParallel( arr, 0, arr.Count - 1 );
+			QuicksortParallel( arr, 0, arr.Count - 1, comparer );
 		}
 
 		#endregion
 
 		#region Private Static Methods
 
-		private static void QuicksortSequential<T>( IList<T> arr, int left, int right )
-			where T : IComparable<T>
+		private static void QuicksortSequential<T>( IList<T> arr, int left, int right, IComparer<T> comparer )
 		{
 			if ( right > left )
 			{
-				int pivot = Partition( arr, left, right );
-				QuicksortSequential( arr, left, pivot - 1 );
-				QuicksortSequential( arr, pivot + 1, right );
+				int pivot = Partition( arr, left, right, comparer );
+				QuicksortSequential( arr, left, pivot - 1, comparer );
+				QuicksortSequential( arr, pivot + 1, right, comparer );
 			}
 		}
 
-		private static void QuicksortParallel<T>( IList<T> arr, int left, int right )
-			where T : IComparable<T>
+		private static void QuicksortParallel<T>( IList<T> arr, int left, int right, IComparer<T> comparer )
 		{
-			const int SEQUENTIAL_THRESHOLD = 2048;
+			const int sequentialThreshold = 2048;
 			if ( right > left )
 			{
-				if ( right - left < SEQUENTIAL_THRESHOLD )
+				if ( right - left < sequentialThreshold )
 				{
-					QuicksortSequential( arr, left, right );
+					QuicksortSequential( arr, left, right, comparer );
 				}
 				else
 				{
-					int pivot = Partition( arr, left, right );
+					int pivot = Partition( arr, left, right, comparer );
 					Parallel.Invoke(
-						() => QuicksortParallel( arr, left, pivot - 1 ),
-						() => QuicksortParallel( arr, pivot + 1, right )
-												   );
+						() => QuicksortParallel( arr, left, pivot - 1, comparer ),
+						() => QuicksortParallel( arr, pivot + 1, right, comparer ) );
 				}
 			}
 		}
@@ -81,8 +80,7 @@ namespace LogAnalyzer.Collections
 			arr[j] = tmp;
 		}
 
-		private static int Partition<T>( IList<T> arr, int low, int high )
-			where T : IComparable<T>
+		private static int Partition<T>( IList<T> arr, int low, int high, IComparer<T> comparer )
 		{
 			// Simple partitioning implementation
 			int pivotPos = (high + low) / 2;
@@ -92,7 +90,7 @@ namespace LogAnalyzer.Collections
 			int left = low;
 			for ( int i = low + 1; i <= high; i++ )
 			{
-				if ( arr[i].CompareTo( pivot ) < 0 )
+				if ( comparer.Compare( arr[i], pivot ) < 0 )
 				{
 					left++;
 					Swap( arr, i, left );

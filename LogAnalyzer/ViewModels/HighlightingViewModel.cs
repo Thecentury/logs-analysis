@@ -18,10 +18,10 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public class HighlightingViewModel : BindingObject
 	{
-		private readonly IList<LogEntry> entriesSource;
-		private readonly SparseLogEntryViewModelList logEntriesViewModels;
-		private readonly LogEntriesListViewModel parentViewModel;
-		private readonly IDisposable collectionChangedSubscription;
+		private readonly IList<LogEntry> _entriesSource;
+		private readonly SparseLogEntryViewModelList _logEntriesViewModels;
+		private readonly LogEntriesListViewModel _parentViewModel;
+		private readonly IDisposable _collectionChangedSubscription;
 
 		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
 			[NotNull] ExpressionBuilder builder )
@@ -33,64 +33,64 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
 			if ( builder == null ) throw new ArgumentNullException( "builder" );
 
-			this.entriesSource = parentViewModel.Entries;
-			this.logEntriesViewModels = parentViewModel.LogEntriesViewModels;
-			this.parentViewModel = parentViewModel;
-			logEntriesViewModels.ItemCreated += OnLogEntriesViewModels_ItemCreated;
+			this._entriesSource = parentViewModel.Entries;
+			this._logEntriesViewModels = parentViewModel.LogEntriesViewModels;
+			this._parentViewModel = parentViewModel;
+			_logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
 			this.Filter.ExpressionBuilder = builder;
-			this.brush = brush;
+			this._brush = brush;
 
-			INotifyCollectionChanged observableCollection = entriesSource as INotifyCollectionChanged;
+			INotifyCollectionChanged observableCollection = _entriesSource as INotifyCollectionChanged;
 			if ( observableCollection != null )
 			{
-				collectionChangedSubscription = observableCollection.ToNotifyCollectionChangedObservable()
+				_collectionChangedSubscription = observableCollection.ToNotifyCollectionChangedObservable()
 					.ObserveOn( DispatcherHelper.GetDispatcher() )
 					.Select( o => o.EventArgs )
 					.Subscribe( OnSourceCollectionChanged );
 			}
 
-			observableFilteredEntries = new ObservableList<LogEntry>( acceptedEntries );
-			FillAcceptedEntries( entriesSource );
+			_observableFilteredEntries = new ObservableList<LogEntry>( _acceptedEntries );
+			FillAcceptedEntries( _entriesSource );
 
 			ScanCreatedEntries();
 
-			filter.Changed += OnFilter_Changed;
+			_filter.Changed += OnFilterChanged;
 		}
 
 		private void ScanCreatedEntries()
 		{
-			foreach ( var logEntryViewModel in logEntriesViewModels.CreatedEntries )
+			foreach ( var logEntryViewModel in _logEntriesViewModels.CreatedEntries )
 			{
-				if ( filter.Include( logEntryViewModel.LogEntry ) )
+				if ( _filter.Include( logEntryViewModel.LogEntry ) )
 				{
 					logEntryViewModel.HighlightedByList.Add( this );
 				}
 			}
 		}
 
-		private Brush brush;
+		private Brush _brush;
 		public Brush Brush
 		{
-			get { return brush; }
+			get { return _brush; }
 			set
 			{
-				brush = value;
+				_brush = value;
 				RaisePropertyChanged( "Brush" );
 			}
 		}
 
-		private readonly ExpressionFilter<LogEntry> filter = new ExpressionFilter<LogEntry>();
+		private readonly ExpressionFilter<LogEntry> _filter = new ExpressionFilter<LogEntry>();
 		public ExpressionFilter<LogEntry> Filter
 		{
-			get { return filter; }
+			get { return _filter; }
 		}
 
-		private void OnFilter_Changed( object sender, EventArgs e )
+		private void OnFilterChanged( object sender, EventArgs e )
 		{
 			RemoveSelfFromCreatedEntries();
 
-			acceptedEntries.Clear();
-			FillAcceptedEntries( entriesSource );
+			_acceptedEntries.Clear();
+			FillAcceptedEntries( _entriesSource );
 
 			ScanCreatedEntries();
 
@@ -100,19 +100,19 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public string Description
 		{
-			get { return filter.ExpressionBuilder.ToExpressionString(); }
+			get { return _filter.ExpressionBuilder.ToExpressionString(); }
 		}
 
-		private int highlightedCount;
+		private int _highlightedCount;
 		public int HighlightedCount
 		{
-			get { return highlightedCount; }
+			get { return _highlightedCount; }
 			set
 			{
-				if ( highlightedCount == value )
+				if ( _highlightedCount == value )
 					return;
 
-				highlightedCount = value;
+				_highlightedCount = value;
 				RaisePropertyChanged( "HighlightedCount" );
 			}
 		}
@@ -120,43 +120,43 @@ namespace LogAnalyzer.GUI.ViewModels
 		// todo brinchuk is this neccesary?
 		public event EventHandler Changed;
 
-		private int selectedAcceptedEntryIndex = -1;
+		private int _selectedAcceptedEntryIndex = -1;
 		public int SelectedAcceptedEntryIndex
 		{
-			get { return selectedAcceptedEntryIndex; }
+			get { return _selectedAcceptedEntryIndex; }
 			set
 			{
-				selectedAcceptedEntryIndex = value;
+				_selectedAcceptedEntryIndex = value;
 
-				var entry = acceptedEntries[value];
-				int indexInParentView = ParallelHelper.SequentialIndexOf( parentViewModel.Entries, entry );
-				parentViewModel.SelectedEntryIndex = indexInParentView;
+				var entry = _acceptedEntries[value];
+				int indexInParentView = ParallelHelper.SequentialIndexOf( _parentViewModel.Entries, entry );
+				_parentViewModel.SelectedEntryIndex = indexInParentView;
 
 				CurrentIndex = value + 1;
 				RaisePropertyChanged( "SelectedAcceptedEntryIndex" );
 			}
 		}
 
-		private int currentIndex;
+		private int _currentIndex;
 		public int CurrentIndex
 		{
-			get { return currentIndex; }
+			get { return _currentIndex; }
 			set
 			{
-				currentIndex = value;
+				_currentIndex = value;
 				RaisePropertyChanged( "CurrentIndex" );
 			}
 		}
 
-		private readonly List<LogEntry> acceptedEntries = new List<LogEntry>();
-		private readonly ObservableList<LogEntry> observableFilteredEntries;
+		private readonly List<LogEntry> _acceptedEntries = new List<LogEntry>();
+		private readonly ObservableList<LogEntry> _observableFilteredEntries;
 
 		public IList<LogEntry> AcceptedEntries
 		{
-			get { return observableFilteredEntries; }
+			get { return _observableFilteredEntries; }
 		}
 
-		private readonly object acceptedEntriesSync = new object();
+		private readonly object _acceptedEntriesSync = new object();
 
 		private void OnSourceCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
@@ -165,29 +165,29 @@ namespace LogAnalyzer.GUI.ViewModels
 				List<LogEntry> acceptedAddedEntries = new List<LogEntry>();
 				foreach ( LogEntry added in e.NewItems )
 				{
-					if ( filter.Include( added ) )
+					if ( _filter.Include( added ) )
 					{
 						acceptedAddedEntries.Add( added );
 					}
 				}
 
-				lock ( acceptedEntriesSync )
+				lock ( _acceptedEntriesSync )
 				{
-					int startingIndex = acceptedEntries.Count;
+					int startingIndex = _acceptedEntries.Count;
 
-					acceptedEntries.AddRange( acceptedAddedEntries );
-					observableFilteredEntries.RaiseGenericCollectionItemsAdded( acceptedAddedEntries, startingIndex );
-					observableFilteredEntries.RaiseCountChanged();
+					_acceptedEntries.AddRange( acceptedAddedEntries );
+					_observableFilteredEntries.RaiseGenericCollectionItemsAdded( acceptedAddedEntries, startingIndex );
+					_observableFilteredEntries.RaiseCountChanged();
 				}
 			}
 			else if ( e.Action == NotifyCollectionChangedAction.Reset )
 			{
-				lock ( acceptedEntriesSync )
+				lock ( _acceptedEntriesSync )
 				{
-					acceptedEntries.Clear();
-					FillAcceptedEntries( entriesSource );
-					observableFilteredEntries.RaiseCollectionReset();
-					observableFilteredEntries.RaiseCountChanged();
+					_acceptedEntries.Clear();
+					FillAcceptedEntries( _entriesSource );
+					_observableFilteredEntries.RaiseCollectionReset();
+					_observableFilteredEntries.RaiseCountChanged();
 				}
 			}
 		}
@@ -196,22 +196,22 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			var added = new List<LogEntry>();
 
-			int startingIndex = acceptedEntries.Count;
+			int startingIndex = _acceptedEntries.Count;
 
 			foreach ( var logEntry in entries )
 			{
-				if ( filter.Include( logEntry ) )
+				if ( _filter.Include( logEntry ) )
 				{
-					acceptedEntries.Add( logEntry );
+					_acceptedEntries.Add( logEntry );
 					added.Add( logEntry );
 				}
 			}
-			this.observableFilteredEntries.RaiseCollectionItemsAdded( added, startingIndex );
+			this._observableFilteredEntries.RaiseCollectionItemsAdded( added, startingIndex );
 		}
 
-		private void OnLogEntriesViewModels_ItemCreated( object sender, LogEntryHostChangedEventArgs e )
+		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
 		{
-			if ( filter.Include( e.LogEntryViewModel.LogEntry ) )
+			if ( _filter.Include( e.LogEntryViewModel.LogEntry ) )
 			{
 				e.LogEntryViewModel.HighlightedByList.Add( this );
 			}
@@ -220,14 +220,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		public override void Dispose()
 		{
 			base.Dispose();
-			collectionChangedSubscription.Dispose();
-			logEntriesViewModels.ItemCreated -= OnLogEntriesViewModels_ItemCreated;
+			_collectionChangedSubscription.Dispose();
+			_logEntriesViewModels.ItemCreated -= OnLogEntriesViewModelsItemCreated;
 			RemoveSelfFromCreatedEntries();
 		}
 
 		private void RemoveSelfFromCreatedEntries()
 		{
-			foreach ( var createdEntry in logEntriesViewModels.CreatedEntries )
+			foreach ( var createdEntry in _logEntriesViewModels.CreatedEntries )
 			{
 				createdEntry.HighlightedByList.Remove( this );
 			}
@@ -251,7 +251,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ShowEditorExecute()
 		{
-			var vm = parentViewModel.ApplicationViewModel.ShowHighlightEditorWindow( this );
+			var vm = _parentViewModel.ApplicationViewModel.ShowHighlightEditorWindow( this );
 			if ( vm == null )
 				return;
 
@@ -279,7 +279,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void RemoveHighlightingExecute()
 		{
-			parentViewModel.HighlightingFilters.Remove( this );
+			_parentViewModel.HighlightingFilters.Remove( this );
 		}
 
 		protected virtual bool RemoveHighlightingCanExecute()
@@ -308,7 +308,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private bool MoveToFirstHighlightedCanExecute()
 		{
-			bool canExecute = acceptedEntries.Count > 0 && selectedAcceptedEntryIndex != 0;
+			bool canExecute = _acceptedEntries.Count > 0 && _selectedAcceptedEntryIndex != 0;
 			return canExecute;
 		}
 
@@ -328,12 +328,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void MoveToLastHighlightedExecute()
 		{
-			SelectedAcceptedEntryIndex = acceptedEntries.Count - 1;
+			SelectedAcceptedEntryIndex = _acceptedEntries.Count - 1;
 		}
 
 		private bool MoveToLastHighlightedCanExecute()
 		{
-			bool canExecute = acceptedEntries.Count > 0 && selectedAcceptedEntryIndex != acceptedEntries.Count - 1;
+			bool canExecute = _acceptedEntries.Count > 0 && _selectedAcceptedEntryIndex != _acceptedEntries.Count - 1;
 			return canExecute;
 		}
 
@@ -358,7 +358,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private bool MoveToNextHighlightedCanExecute()
 		{
-			return acceptedEntries.Count > 0 && selectedAcceptedEntryIndex < acceptedEntries.Count - 1;
+			return _acceptedEntries.Count > 0 && _selectedAcceptedEntryIndex < _acceptedEntries.Count - 1;
 		}
 
 		// Move to previous highlighted
@@ -382,7 +382,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private bool MoveToPreviousHighlightedCanExecute()
 		{
-			return acceptedEntries.Count > 0 && selectedAcceptedEntryIndex > 0;
+			return _acceptedEntries.Count > 0 && _selectedAcceptedEntryIndex > 0;
 		}
 
 		#endregion

@@ -160,9 +160,18 @@ namespace LogAnalyzer
 			// todo не сделать ли тут запас по Capacity?
 			MergedEntriesList.Capacity = capacity;
 
+			Stopwatch timer = Stopwatch.StartNew();
+
+#if true
 			_mergedEntriesList.AddRange( entries
 										.AsParallel()
 										.OrderBy( LogEntryByDateAndIndexComparer.Instance ) );
+#else
+			_mergedEntriesList.AddRange( entries );
+			ParallelSort.QuicksortParallel( _mergedEntriesList, LogEntryByDateAndIndexComparer.Instance );
+#endif
+
+			Logger.WriteInfo( "{1}: Sorting - elapsed {0} ms", timer.ElapsedMilliseconds, GetType().Name );
 
 #if ASSERT
 			Condition.DebugAssert( sortedEntries.AreSorted( LogEntryByDateComparer.Instance ) );
