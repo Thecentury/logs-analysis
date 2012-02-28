@@ -362,7 +362,8 @@
 				MaxHeight="200"
 				VerticalScrollBarVisibility="Auto"
 				TextWrapping="Wrap"
-				Text="{Binding UnitedText, Mode=OneWay}"/>
+				FocusVisualStyle="{x:Null}"
+				Text="{Binding UnitedText, Mode=OneTime}"/>
 			
 			<!--<Control Template="{Binding Template}"
 					 DataContext="{Binding TemplateContext}"/>-->

@@ -13,6 +13,7 @@ namespace TestConsoleApp
 			var benchmark = new LogLineParsingBenchmark();
 			//benchmark.ReadLongFileWithMostLogLineParser();
 			benchmark.ReadLongFileWithManualParser();
+			//benchmark.SimplyReadFile();
 		}
 	}
 }
