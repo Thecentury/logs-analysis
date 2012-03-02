@@ -15,6 +15,7 @@ namespace TestApp
 	public sealed class TestBootstrapper : Bootstrapper
 	{
 		internal MockEnvironment Environment;
+		internal ApplicationViewModel ApplicationViewModel;
 
 		protected override void Init()
 		{
@@ -40,13 +41,13 @@ namespace TestApp
 			Environment = new MockEnvironment( config );
 
 			MockDirectoryInfo directory = (MockDirectoryInfo)Environment.GetDirectory( "Dir1" );
-			directory.CreateRecordsSourceHandler = inner => new DelayedLogRecordsSource( inner, TimeSpan.FromSeconds( 1 ) );
+			directory.CreateRecordsSourceHandler = inner => inner;// new DelayedLogRecordsSource( inner, TimeSpan.FromSeconds( 1 ) );
 
-			ApplicationViewModel applicationViewModel = new ApplicationViewModel( config, Environment );
+			ApplicationViewModel = new ApplicationViewModel( config, Environment );
 
 			Application.Current.Dispatcher.BeginInvoke( () =>
 			{
-				Application.Current.MainWindow.DataContext = applicationViewModel;
+				Application.Current.MainWindow.DataContext = ApplicationViewModel;
 			} );
 		}
 	}

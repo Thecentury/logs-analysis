@@ -44,8 +44,7 @@ namespace LogAnalyzer.Kernel
 			_encoding = args.Encoding;
 			_globalEntriesFilter = args.GlobalEntriesFilter;
 			_lineParser = args.LineParser;
-
-			this._streamProvider = streamProvider;
+			_streamProvider = streamProvider;
 		}
 
 		private Stream OpenStreamAtPosition( int startingPosition )

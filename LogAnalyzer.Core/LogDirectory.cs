@@ -29,36 +29,36 @@ namespace LogAnalyzer
 			get { return files.Count; }
 		}
 
-		private readonly LogNotificationsSourceBase operationsSource;
-		private readonly IEnvironment environment;
-		private readonly IDirectoryInfo directoryInfo;
-		private readonly IOperationsQueue operationsQueue;
+		private readonly LogNotificationsSourceBase _operationsSource;
+		private readonly IEnvironment _environment;
+		private readonly IDirectoryInfo _directoryInfo;
+		private readonly IOperationsQueue _operationsQueue;
 
-		private readonly LogAnalyzerConfiguration config;
-		private readonly LogAnalyzerCore core;
-		private readonly ExpressionFilter<IFileInfo> fileFilter;
-		private readonly IFilter<LogEntry> globalEntriesFilter;
+		private readonly LogAnalyzerConfiguration _config;
+		private readonly LogAnalyzerCore _core;
+		private readonly ExpressionFilter<IFileInfo> _fileFilter;
+		private readonly IFilter<LogEntry> _globalEntriesFilter;
 		private readonly Encoding encoding = Encoding.Unicode;
-		private readonly ILogLineParser lineParser;
+		private readonly ILogLineParser _lineParser;
 
 		public ILogLineParser LineParser
 		{
-			get { return lineParser; }
+			get { return _lineParser; }
 		}
 
 		public IFilter<LogEntry> GlobalEntriesFilter
 		{
-			get { return globalEntriesFilter; }
+			get { return _globalEntriesFilter; }
 		}
 
 		public ExpressionFilter<IFileInfo> FileFilter
 		{
-			get { return fileFilter; }
+			get { return _fileFilter; }
 		}
 
 		public LogAnalyzerConfiguration Config
 		{
-			get { return config; }
+			get { return _config; }
 		}
 
 		public Encoding Encoding
@@ -99,24 +99,24 @@ namespace LogAnalyzer
 			this.DisplayName = directoryConfigurationInfo.DisplayName;
 			this.UseCache = directoryConfigurationInfo.UseCache;
 
-			this.directoryInfo = environment.GetDirectory( Path );
-			this.operationsSource = directoryInfo.NotificationSource;
-			this.environment = environment;
-			this.operationsQueue = environment.OperationsQueue;
-			this.config = config;
-			this.core = core;
+			this._directoryInfo = environment.GetDirectory( Path );
+			this._operationsSource = _directoryInfo.NotificationSource;
+			this._environment = environment;
+			this._operationsQueue = environment.OperationsQueue;
+			this._config = config;
+			this._core = core;
 			this.filesWrapper = new ObservableList<LogFile>( files );
-			this.globalEntriesFilter = config.GlobalLogEntryFilter;
-			this.lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
-			this.fileFilter = config.GlobalFilesFilter;
+			this._globalEntriesFilter = config.GlobalLogEntryFilter;
+			this._lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
+			this._fileFilter = config.GlobalFilesFilter;
 
-			fileFilter.Changed += OnFileFilterChanged;
+			_fileFilter.Changed += OnFileFilterChanged;
 
-			operationsSource.Changed += OnFileChanged;
-			operationsSource.Created += OnFileCreated;
-			operationsSource.Deleted += OnFileDeleted;
-			operationsSource.Error += OnWatcherError;
-			operationsSource.Renamed += OnFileRenamed;
+			_operationsSource.Changed += OnFileChanged;
+			_operationsSource.Created += OnFileCreated;
+			_operationsSource.Deleted += OnFileDeleted;
+			_operationsSource.Error += OnWatcherError;
+			_operationsSource.Renamed += OnFileRenamed;
 
 			if ( !String.IsNullOrWhiteSpace( directoryConfigurationInfo.EncodingName ) )
 			{
@@ -131,7 +131,7 @@ namespace LogAnalyzer
 
 		protected override void StartImpl()
 		{
-			IDirectoryInfo dir = environment.GetDirectory( Path );
+			IDirectoryInfo dir = _environment.GetDirectory( Path );
 
 			// отсекаем ситуации, когда по фильтру *.log возвращаются файлы *.log__
 			int extensionLength = 100;
@@ -157,20 +157,20 @@ namespace LogAnalyzer
 			{
 				file.Refresh();
 
-				if ( !fileFilter.Include( file ) )
+				if ( !_fileFilter.Include( file ) )
 					continue;
 
 				IFileInfo local = file;
 
 				LogFile logFile = CreateLogFile( local );
 
-				operationsQueue.EnqueueOperation( () => AddFile( logFile ) );
+				_operationsQueue.EnqueueOperation( () => AddFile( logFile ) );
 
-				environment.Scheduler.StartNewOperation( () =>
+				_environment.Scheduler.StartNewOperation( () =>
 				{
 					logFile.ReadFile();
 
-					operationsQueue.EnqueueOperation( () =>
+					_operationsQueue.EnqueueOperation( () =>
 					{
 						Logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
 						Interlocked.Increment( ref initialFilesLoadedCount );
@@ -201,12 +201,12 @@ namespace LogAnalyzer
 			// все файлы в начальной загрузке загружены?
 			if ( initialFilesLoadedCount == initialFilesLoadingCount )
 			{
-				environment.Scheduler.StartNewOperation( () =>
+				_environment.Scheduler.StartNewOperation( () =>
 				{
 					PerformInitialMerge();
 
-					operationsSource.Start();
-					operationsQueue.EnqueueOperation( () =>
+					_operationsSource.Start();
+					_operationsQueue.EnqueueOperation( () =>
 					{
 						Logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
 											this.DisplayName, files.Count );
@@ -234,7 +234,7 @@ namespace LogAnalyzer
 			if ( addedEntries.Count == 0 )
 				return;
 
-			operationsQueue.EnqueueOperation( () => OnLogEntryAddedToFileHandler( addedEntries ) );
+			_operationsQueue.EnqueueOperation( () => OnLogEntryAddedToFileHandler( addedEntries ) );
 		}
 
 		/// <summary>
@@ -244,7 +244,7 @@ namespace LogAnalyzer
 		private void OnLogEntryAddedToFileHandler( IList<LogEntry> addedEntries )
 		{
 			EnqueueToMerge( addedEntries );
-			core.EnqueueToMerge( addedEntries );
+			_core.EnqueueToMerge( addedEntries );
 		}
 
 		#region FileSystemWatcher notifications
@@ -268,7 +268,7 @@ namespace LogAnalyzer
 			Logger.WriteInfo( "Core.OnFileCreated: '{0}' '{1}'", e.ChangeType, e.Name );
 
 			string fullPath = e.FullPath;
-			operationsQueue.EnqueueOperation( () =>
+			_operationsQueue.EnqueueOperation( () =>
 			{
 				if ( !ContainsFile( fullPath ) )
 				{
@@ -283,9 +283,9 @@ namespace LogAnalyzer
 		{
 			lock ( sync )
 			{
-				IFileInfo file = directoryInfo.GetFileInfo( fullPath );
+				IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
 
-				bool exclude = !fileFilter.Include( file );
+				bool exclude = !_fileFilter.Include( file );
 				if ( exclude )
 				{
 					Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
@@ -316,7 +316,7 @@ namespace LogAnalyzer
 
 			string fullPath = e.FullPath;
 
-			operationsQueue.EnqueueOperation( () =>
+			_operationsQueue.EnqueueOperation( () =>
 			{
 				if ( !ContainsFile( fullPath ) )
 				{
@@ -326,7 +326,7 @@ namespace LogAnalyzer
 				{
 					var changedFile = files.Single( f => f.FullPath == fullPath );
 
-					if ( !fileFilter.Include( changedFile.FileInfo ) )
+					if ( !_fileFilter.Include( changedFile.FileInfo ) )
 						return;
 
 					changedFile.OnFileChanged();

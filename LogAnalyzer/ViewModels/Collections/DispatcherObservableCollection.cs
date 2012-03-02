@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -14,24 +15,26 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	/// Передает событие CollectionChanged в UI поток.
 	/// </summary>
 	[IgnoreMissingProperty( "Count" )]
-	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged, IDisposable
+	public class DispatcherObservableCollection : INotifyCollectionChanged, INotifyPropertyChanged, IDisposable, IEnumerable
 	{
-		private readonly IScheduler scheduler;
-		private readonly object collection;
-		private readonly CompositeDisposable unsubscriber;
+		private readonly IScheduler _scheduler;
+		private readonly IEnumerable _collection;
+		private readonly CompositeDisposable _unsubscriber;
 
-		public DispatcherObservableCollection( object collection, IScheduler scheduler )
+		public string Name { get; set; }
+
+		public DispatcherObservableCollection( IEnumerable collection, IScheduler scheduler )
 		{
 			if ( collection == null ) throw new ArgumentNullException( "collection" );
 			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
 
-			this.collection = collection;
-			this.scheduler = scheduler;
+			this._collection = collection;
+			this._scheduler = scheduler;
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
 			// todo brinchuk remove me
-			observableCollection.CollectionChanged += observableCollection_CollectionChanged;
+			observableCollection.CollectionChanged += ObservableCollectionCollectionChanged;
 
 			var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection,
 																						   "CollectionChanged" );
@@ -47,16 +50,16 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			var unsubscribeOthers = collectionChanged.Where( e => e.EventArgs.Action != NotifyCollectionChangedAction.Add )
 				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
 
-			unsubscriber = new CompositeDisposable( unsubscribeAdd, unsubscribeOthers );
+			_unsubscriber = new CompositeDisposable( unsubscribeAdd, unsubscribeOthers );
 		}
 
 		// todo brinchuk remove me!!!
-		void observableCollection_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		void ObservableCollectionCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action != NotifyCollectionChangedAction.Add )
 				return;
 
-			var compositeList = collection as CompositeObservableListWrapper<LogEntry>;
+			var compositeList = _collection as CompositeObservableListWrapper<LogEntry>;
 			if ( compositeList == null )
 				return;
 
@@ -97,7 +100,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public void RaiseCollectionReset()
 		{
-			scheduler.Schedule( CollectionChanged.RaiseCollectionReset );
+			_scheduler.Schedule( CollectionChanged.RaiseCollectionReset );
 		}
 
 		#endregion
@@ -113,7 +116,12 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		/// </summary>
 		public void Dispose()
 		{
-			unsubscriber.Dispose();
+			_unsubscriber.Dispose();
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return _collection.GetEnumerator();
 		}
 	}
 }

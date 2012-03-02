@@ -32,17 +32,17 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public abstract class LogEntriesListViewModel : TabViewModel
 	{
-		private int addedEntriesCount;
+		private int _addedEntriesCount;
 
-		private string addedEntriesCountString;
-		private bool autoScrollToBottom = true;
-		private IList<LogEntry> entries;
-		private LogEntryViewModelCollectionView entriesView;
-		private SparseLogEntryViewModelList logEntriesViewModels;
-		private LogEntryViewModel selectedEntry;
-		private int selectedEntryIndex;
-		private DispatcherTimer updateAddedCountTimer;
-		private SearchViewModel searchViewModel;
+		private string _addedEntriesCountString;
+		private bool _autoScrollToBottom = true;
+		private IList<LogEntry> _entries;
+		private LogEntryViewModelCollectionView _entriesView;
+		private SparseLogEntryViewModelList _logEntriesViewModels;
+		private LogEntryViewModel _selectedEntry;
+		private int _selectedEntryIndex;
+		private DispatcherTimer _updateAddedCountTimer;
+		private SearchViewModel _searchViewModel;
 
 		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
@@ -52,31 +52,31 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public int TotalEntries
 		{
-			get { return entries.Count; }
+			get { return _entries.Count; }
 		}
 
 		public int TotalLines
 		{
 			get
 			{
-				int count = entries.Sum( le => le.LinesCount );
+				int count = _entries.Sum( le => le.LinesCount );
 				return count;
 			}
 		}
 
 		protected internal SparseLogEntryViewModelList LogEntriesViewModels
 		{
-			get { return logEntriesViewModels; }
+			get { return _logEntriesViewModels; }
 		}
 
 		public LogEntryViewModelCollectionView EntriesView
 		{
-			get { return entriesView; }
+			get { return _entriesView; }
 		}
 
 		public SearchViewModel SearchViewModel
 		{
-			get { return searchViewModel; }
+			get { return _searchViewModel; }
 		}
 
 		public virtual MessageSeverityCountViewModel MessageSeverityCount
@@ -104,34 +104,34 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public IList<LogEntry> Entries
 		{
-			get { return entries; }
+			get { return _entries; }
 		}
 
 		public LogEntryViewModel SelectedEntry
 		{
-			get { return selectedEntry; }
+			get { return _selectedEntry; }
 			set
 			{
-				if ( selectedEntry == value )
+				if ( _selectedEntry == value )
 					return;
 
-				selectedEntry = value;
+				_selectedEntry = value;
 				RaisePropertyChanged( "SelectedEntry" );
 			}
 		}
 
 		public int SelectedEntryIndex
 		{
-			get { return selectedEntryIndex; }
+			get { return _selectedEntryIndex; }
 			set
 			{
-				selectedEntryIndex = value;
+				_selectedEntryIndex = value;
 				RaisePropertyChanged( "SelectedEntryIndex" );
 
 				if ( DataGrid != null )
 				{
 					//Stopwatch timer = Stopwatch.StartNew();
-					var selectedValue = logEntriesViewModels[value];
+					var selectedValue = _logEntriesViewModels[value];
 					//var elapsed = timer.ElapsedMilliseconds;
 					//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
 
@@ -145,13 +145,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public bool AutoScrollToBottom
 		{
-			get { return autoScrollToBottom; }
+			get { return _autoScrollToBottom; }
 			set
 			{
-				if ( autoScrollToBottom == value )
+				if ( _autoScrollToBottom == value )
 					return;
 
-				autoScrollToBottom = value;
+				_autoScrollToBottom = value;
 				RaisePropertyChanged( "AutoScrollToBottom" );
 
 				ScrollToBottomIfShould();
@@ -160,13 +160,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public string AddedEntriesCountString
 		{
-			get { return addedEntriesCountString; }
+			get { return _addedEntriesCountString; }
 			set
 			{
-				if ( addedEntriesCountString == value )
+				if ( _addedEntriesCountString == value )
 					return;
 
-				addedEntriesCountString = value;
+				_addedEntriesCountString = value;
 				RaisePropertyChanged( "AddedEntriesCountString" );
 			}
 		}
@@ -210,7 +210,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( highlightedPropertyName == null )
 				return;
 
-			foreach ( LogEntryViewModel logEntryViewModel in logEntriesViewModels.CreatedEntries )
+			foreach ( LogEntryViewModel logEntryViewModel in _logEntriesViewModels.CreatedEntries )
 			{
 				bool include = dynamicHighlightingFilter.Include( logEntryViewModel.LogEntry );
 
@@ -232,7 +232,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					var collector = new DensityOverviewCollector<LogEntry>();
 					var builder = new DensityOverviewBuilder<LogEntry>();
-					var grouped = collector.Build( entries );
+					var grouped = collector.Build( _entries );
 					var map = builder.CreateOverviewMap( grouped )
 						.Select( e => Math.Pow( e, 0.33 ) )
 						.ToArray();
@@ -254,7 +254,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					var collector = new GroupingByIndexOverviewCollector<LogEntry>();
 					var builder = new MessageTypeOverviewBuilder();
-					var map = builder.CreateOverviewMap( collector.Build( entries ) );
+					var map = builder.CreateOverviewMap( collector.Build( _entries ) );
 
 					double length = map.Length;
 
@@ -287,7 +287,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
 					{
-						var index = entries.SequentialIndexOf( entry );
+						var index = _entries.SequentialIndexOf( entry );
 						SelectedEntryIndex = index;
 					} );
 				}
@@ -318,16 +318,16 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Commands
 
-		private DelegateCommand<RoutedEventArgs> gotFocusCommand;
+		private DelegateCommand<RoutedEventArgs> _gotFocusCommand;
 
 		public ICommand GotFocusCommand
 		{
 			get
 			{
-				if ( gotFocusCommand == null )
-					gotFocusCommand = new DelegateCommand<RoutedEventArgs>( GotFocusExecute );
+				if ( _gotFocusCommand == null )
+					_gotFocusCommand = new DelegateCommand<RoutedEventArgs>( GotFocusExecute );
 
-				return gotFocusCommand;
+				return _gotFocusCommand;
 			}
 		}
 
@@ -344,14 +344,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Scroll commands
 
-		private DelegateCommand scrollDownCommand;
-		private DelegateCommand scrollPageDownCommand;
-		private DelegateCommand scrollPageUpCommand;
-		private DelegateCommand scrollToBottomCommand;
-		private DelegateCommand scrollToTopCommand;
+		private DelegateCommand _scrollDownCommand;
+		private DelegateCommand _scrollPageDownCommand;
+		private DelegateCommand _scrollPageUpCommand;
+		private DelegateCommand _scrollToBottomCommand;
+		private DelegateCommand _scrollToTopCommand;
 
-		private DelegateCommand scrollUpCommand;
-		private DelegateCommand toggleAutoScrollToBottomCommand;
+		private DelegateCommand _scrollUpCommand;
+		private DelegateCommand _toggleAutoScrollToBottomCommand;
 
 		public ScrollViewer ScrollViewer { get; set; }
 
@@ -361,10 +361,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollDownCommand == null )
-					scrollDownCommand = new DelegateCommand( () => SelectedEntryIndex++, () => SelectedEntryIndex < entries.Count - 1 );
+				if ( _scrollDownCommand == null )
+					_scrollDownCommand = new DelegateCommand( () => SelectedEntryIndex++, () => SelectedEntryIndex < _entries.Count - 1 );
 
-				return scrollDownCommand;
+				return _scrollDownCommand;
 			}
 		}
 
@@ -372,10 +372,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollUpCommand == null )
-					scrollUpCommand = new DelegateCommand( () => SelectedEntryIndex--, () => SelectedEntryIndex > 0 );
+				if ( _scrollUpCommand == null )
+					_scrollUpCommand = new DelegateCommand( () => SelectedEntryIndex--, () => SelectedEntryIndex > 0 );
 
-				return scrollUpCommand;
+				return _scrollUpCommand;
 			}
 		}
 
@@ -383,12 +383,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollPageDownCommand == null )
-					scrollPageDownCommand = new DelegateCommand(
+				if ( _scrollPageDownCommand == null )
+					_scrollPageDownCommand = new DelegateCommand(
 						() => ScrollViewer.PageDown(),
-						() => SelectedEntryIndex < entries.Count - 1 );
+						() => SelectedEntryIndex < _entries.Count - 1 );
 
-				return scrollPageDownCommand;
+				return _scrollPageDownCommand;
 			}
 		}
 
@@ -396,12 +396,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollPageUpCommand == null )
-					scrollPageUpCommand = new DelegateCommand(
+				if ( _scrollPageUpCommand == null )
+					_scrollPageUpCommand = new DelegateCommand(
 						() => ScrollViewer.PageUp(),
 						() => SelectedEntryIndex > 0 );
 
-				return scrollPageUpCommand;
+				return _scrollPageUpCommand;
 			}
 		}
 
@@ -409,10 +409,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollToTopCommand == null )
-					scrollToTopCommand = new DelegateCommand( () => ScrollViewer.ScrollToTop(), () => ScrollViewer != null );
+				if ( _scrollToTopCommand == null )
+					_scrollToTopCommand = new DelegateCommand( () => ScrollViewer.ScrollToTop(), () => ScrollViewer != null );
 
-				return scrollToTopCommand;
+				return _scrollToTopCommand;
 			}
 		}
 
@@ -420,10 +420,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( scrollToBottomCommand == null )
-					scrollToBottomCommand = new DelegateCommand( () => ScrollViewer.ScrollToBottom(), () => ScrollViewer != null );
+				if ( _scrollToBottomCommand == null )
+					_scrollToBottomCommand = new DelegateCommand( () => ScrollViewer.ScrollToBottom(), () => ScrollViewer != null );
 
-				return scrollToBottomCommand;
+				return _scrollToBottomCommand;
 			}
 		}
 
@@ -431,23 +431,23 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( toggleAutoScrollToBottomCommand == null )
-					toggleAutoScrollToBottomCommand = new DelegateCommand( () => AutoScrollToBottom = !AutoScrollToBottom );
-				return toggleAutoScrollToBottomCommand;
+				if ( _toggleAutoScrollToBottomCommand == null )
+					_toggleAutoScrollToBottomCommand = new DelegateCommand( () => AutoScrollToBottom = !AutoScrollToBottom );
+				return _toggleAutoScrollToBottomCommand;
 			}
 		}
 
 		#endregion // Scroll commands
 
-		private DelegateCommand addHighlightingCommand;
+		private DelegateCommand _addHighlightingCommand;
 		public ICommand AddHighlightingCommand
 		{
 			get
 			{
-				if ( addHighlightingCommand == null )
-					addHighlightingCommand = new DelegateCommand( AddHighlighting );
+				if ( _addHighlightingCommand == null )
+					_addHighlightingCommand = new DelegateCommand( AddHighlighting );
 
-				return addHighlightingCommand;
+				return _addHighlightingCommand;
 			}
 		}
 
@@ -494,7 +494,7 @@ namespace LogAnalyzer.GUI.ViewModels
 																using ( var writer = new StreamWriter( fs ) )
 																{
 																	LogSaveVisitor saveVisitor = new LogSaveVisitor( writer, new DefaultLogEntryFormatter() );
-																	foreach ( var logEntry in entries )
+																	foreach ( var logEntry in _entries )
 																	{
 																		logEntry.Accept( saveVisitor );
 																	}
@@ -649,25 +649,25 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( entries == null )
 				throw new ArgumentNullException( "entries" );
 
-			this.entries = entries;
+			this._entries = entries;
 
-			logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
-			logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
-			logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
-			logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
+			_logEntriesViewModels = new SparseLogEntryViewModelList( this, GetFileViewModel );
+			_logEntriesViewModels.ItemCreated += OnLogEntriesViewModelsItemCreated;
+			_logEntriesViewModels.ItemRemoved += OnLogEntriesViewModelsItemRemoved;
+			_logEntriesViewModels.CollectionChanged += OnLogEntriesViewModelsCollectionChanged;
 
-			searchViewModel = new SearchViewModel( this );
+			_searchViewModel = new SearchViewModel( this );
 
 			InvokeInUIDispatcher( () =>
 			{
-				entriesView = new LogEntryViewModelCollectionView( logEntriesViewModels );
+				_entriesView = new LogEntryViewModelCollectionView( _logEntriesViewModels );
 
-				updateAddedCountTimer = new DispatcherTimer
+				_updateAddedCountTimer = new DispatcherTimer
 				{
 					Interval = TimeSpan.FromSeconds( Settings.Default.AddedCountUpdateInterval )
 				};
-				updateAddedCountTimer.Tick += OnUpdateAddedCountTimerTick;
-				updateAddedCountTimer.Start();
+				_updateAddedCountTimer.Tick += OnUpdateAddedCountTimerTick;
+				_updateAddedCountTimer.Start();
 			} );
 		}
 
@@ -675,7 +675,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			base.OnTabClosing();
 
-			logEntriesViewModels.Dispose();
+			_logEntriesViewModels.Dispose();
 		}
 
 		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
@@ -709,28 +709,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		/// <param name="e"></param>
 		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
-#if DEBUG
-			//var dispatcher = DispatcherHelper.GetDispatcher();
-			//if ( dispatcher != null )
-			//{
-			//    dispatcher.VerifyAccess();
-			//}
-
-			// todo brinchuk remove this
-			string text = "";
-			if ( e.NewItems != null )
-			{
-				LogEntryViewModel vm = (LogEntryViewModel)e.NewItems[0];
-				text = vm.UnitedText + ", Index = " + vm.IndexInParentCollection;
-			}
-
-			if ( this is CoreViewModel )
-			{
-				Logger.Instance.WriteError( "{0}: {1} +{2} starting from {3}; Total = {5}, '{4}'", GetType().Name,
-					e.Action, e.NewItems != null ? e.NewItems.Count : 0, e.NewStartingIndex, text, entries.Count );
-			}
-#endif
-
 			ScrollToBottomIfShould();
 
 			RaisePropertiesChanged( "TotalLines", "TotalEntries" );
@@ -740,7 +718,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ScrollToBottomIfShould()
 		{
-			if ( autoScrollToBottom )
+			if ( _autoScrollToBottom )
 			{
 				ScrollToBottomCommand.ExecuteIfCan();
 			}
@@ -748,19 +726,19 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnUpdateAddedCountTimerTick( object sender, EventArgs e )
 		{
-			AddedEntriesCountString = "+" + addedEntriesCount;
-			addedEntriesCount = 0;
+			AddedEntriesCountString = "+" + _addedEntriesCount;
+			_addedEntriesCount = 0;
 		}
 
 		private void UpdateAddedCount( NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action == NotifyCollectionChangedAction.Add )
 			{
-				addedEntriesCount += e.NewItems.Count;
+				_addedEntriesCount += e.NewItems.Count;
 			}
 			else if ( e.Action == NotifyCollectionChangedAction.Reset )
 			{
-				addedEntriesCount = 0;
+				_addedEntriesCount = 0;
 			}
 		}
 

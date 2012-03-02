@@ -22,28 +22,28 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public partial class ApplicationViewModel : BindingObject
 	{
-		private readonly LogAnalyzerConfiguration config;
+		private readonly LogAnalyzerConfiguration _config;
 		public LogAnalyzerConfiguration Config
 		{
-			get { return config; }
+			get { return _config; }
 		}
 
-		private readonly LogAnalyzerCore core;
+		private readonly LogAnalyzerCore _core;
 		public LogAnalyzerCore Core
 		{
-			get { return core; }
+			get { return _core; }
 		}
 
-		private CoreViewModel coreViewModel;
+		private CoreViewModel _coreViewModel;
 		public CoreViewModel CoreViewModel
 		{
-			get { return coreViewModel; }
+			get { return _coreViewModel; }
 		}
 
-		private readonly IEnvironment environment;
+		private readonly IEnvironment _environment;
 		public IEnvironment Environment
 		{
-			get { return environment; }
+			get { return _environment; }
 		}
 
 		/// <summary>
@@ -56,13 +56,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( config == null ) throw new ArgumentNullException( "config" );
 			if ( environment == null ) throw new ArgumentNullException( "environment" );
 
-			this.config = config;
-			this.environment = environment;
+			this._config = config;
+			this._environment = environment;
 
-			tabs.CollectionChanged += OnTabsCollectionChanged;
+			_tabs.CollectionChanged += OnTabsCollectionChanged;
 
-			core = new LogAnalyzerCore( config, environment );
-			core.Loaded += OnCoreLoaded;
+			_core = new LogAnalyzerCore( config, environment );
+			_core.Loaded += OnCoreLoaded;
 
 			if ( config.EnabledDirectories.Any() )
 			{
@@ -83,7 +83,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			dropVm.Finished -= OnDropViewModelFinished;
 			dropVm.Dispose();
 
-			tabs.Clear();
+			_tabs.Clear();
 			Start();
 		}
 
@@ -94,16 +94,16 @@ namespace LogAnalyzer.GUI.ViewModels
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
 
-			config.Logger.WriteInfo( "Starting..." );
+			_config.Logger.WriteInfo( "Starting..." );
 
-			core.Start();
+			_core.Start();
 		}
 
 		private void OnTabsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
-			if ( SelectedIndex >= tabs.Count )
+			if ( SelectedIndex >= _tabs.Count )
 			{
-				SelectedIndex = tabs.Count - 1;
+				SelectedIndex = _tabs.Count - 1;
 			}
 		}
 
@@ -112,21 +112,21 @@ namespace LogAnalyzer.GUI.ViewModels
 			OnCoreLoaded();
 		}
 
-		private bool onCoreLoadedCalled;
+		private bool _onCoreLoadedCalled;
 		protected virtual void OnCoreLoaded()
 		{
-			if ( onCoreLoadedCalled )
+			if ( _onCoreLoadedCalled )
 				return;
 
-			onCoreLoadedCalled = true;
+			_onCoreLoadedCalled = true;
 
-			coreViewModel = new CoreViewModel( core, this ) { IsActive = true };
-			FilesTree = new CoreTreeItem( core );
+			_coreViewModel = new CoreViewModel( _core, this ) { IsActive = true };
+			FilesTree = new CoreTreeItem( _core );
 
 			BeginInvokeInUIDispatcher( () =>
 			{
-				tabs.RemoveAt( 0 );
-				tabs.Add( coreViewModel );
+				_tabs.RemoveAt( 0 );
+				_tabs.Add( _coreViewModel );
 
 				ProgressValue = 0;
 				ProgressState = Windows7Taskbar.ThumbnailProgressState.NoProgress;
@@ -134,49 +134,49 @@ namespace LogAnalyzer.GUI.ViewModels
 			} );
 		}
 
-		private readonly ObservableCollection<TabViewModel> tabs = new ObservableCollection<TabViewModel>();
+		private readonly ObservableCollection<TabViewModel> _tabs = new ObservableCollection<TabViewModel>();
 		public ObservableCollection<TabViewModel> Tabs
 		{
-			get { return tabs; }
+			get { return _tabs; }
 		}
 
-		private int progressValue;
+		private int _progressValue;
 		public int ProgressValue
 		{
-			get { return progressValue; }
+			get { return _progressValue; }
 			set
 			{
-				if ( progressValue == value )
+				if ( _progressValue == value )
 					return;
 
-				progressValue = value;
+				_progressValue = value;
 				RaisePropertyChanged( "ProgressValue" );
 			}
 		}
 
-		private Windows7Taskbar.ThumbnailProgressState progressState;
+		private Windows7Taskbar.ThumbnailProgressState _progressState;
 		public Windows7Taskbar.ThumbnailProgressState ProgressState
 		{
-			get { return progressState; }
+			get { return _progressState; }
 			set
 			{
-				if ( progressState == value )
+				if ( _progressState == value )
 					return;
 
-				progressState = value;
+				_progressState = value;
 				RaisePropertyChanged( "ProgressState" );
 			}
 		}
 
-		private int selectedIndex;
+		private int _selectedIndex;
 		public int SelectedIndex
 		{
-			get { return selectedIndex; }
+			get { return _selectedIndex; }
 			set
 			{
-				selectedIndex = value;
-				if ( selectedIndex < 0 )
-					selectedIndex = 0;
+				_selectedIndex = value;
+				if ( _selectedIndex < 0 )
+					_selectedIndex = 0;
 
 				RaisePropertyChanged( "SelectedIndex" );
 				RaisePropertyChanged( "SelectedTab" );
@@ -187,10 +187,10 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( tabs.Count == 0 )
+				if ( _tabs.Count == 0 )
 					return null;
 
-				return tabs[selectedIndex];
+				return _tabs[_selectedIndex];
 			}
 		}
 

@@ -15,47 +15,52 @@ namespace LogAnalyzer
 	[DebuggerDisplay( "LogFile {FullPath}" )]
 	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ILogVisitable
 	{
-		private readonly Logger logger;
-		private readonly LogDirectory parentDirectory;
-		private readonly Encoding encoding;
+		private readonly Logger _logger;
+		private readonly LogDirectory _parentDirectory;
+		private readonly Encoding _encoding;
 		public Encoding Encoding
 		{
-			get { return encoding; }
+			get { return _encoding; }
 		}
 
-		private readonly IFileInfo fileInfo;
+		private readonly IFileInfo _fileInfo;
 		public IFileInfo FileInfo
 		{
-			get { return fileInfo; }
+			get { return _fileInfo; }
 		}
 
-		private readonly LogFileReaderBase logFileReader;
+		private readonly LogFileReaderBase _logFileReader;
 		public LogFileReaderBase LogFileReader
 		{
-			get { return logFileReader; }
+			get { return _logFileReader; }
 		}
 
 		public string Name { get; private set; }
 		public string FullPath { get; private set; }
 
-
-		private int linesCount;
+		private int _linesCount;
 		public int LinesCount
 		{
-			get { return linesCount; }
+			get { return _linesCount; }
 		}
 
-		private readonly IList<LogEntry> logEntries = CollectionHelper.CreateList<LogEntry>();
+		private readonly IList<LogEntry> _logEntries = CollectionHelper.CreateList<LogEntry>();
 
-		private readonly ObservableList<LogEntry> entries;
+		private readonly ObservableList<LogEntry> _entries;
 		public ObservableList<LogEntry> LogEntries
 		{
-			get { return entries; }
+			get { return _entries; }
+		}
+
+		// todo brinchuk сделать еще метод, возвращающий навигатор с определенного смещения в файле
+		public IBidirectionalEnumerable<LogEntry> GetNavigator()
+		{
+			return new LogFileNavigator( _fileInfo, new LogFileReaderArguments( ParentDirectory, this ) );
 		}
 
 		public LogDirectory ParentDirectory
 		{
-			get { return parentDirectory; }
+			get { return _parentDirectory; }
 		}
 
 		/// <summary>
@@ -70,27 +75,19 @@ namespace LogAnalyzer
 			if ( parentDirectory == null )
 				throw new ArgumentNullException( "parentDirectory" );
 
-			this.parentDirectory = parentDirectory;
-			logger = this.parentDirectory.Config.Logger;
-			encoding = this.parentDirectory.Encoding;
+			_parentDirectory = parentDirectory;
+			_logger = this._parentDirectory.Config.Logger;
+			_encoding = this._parentDirectory.Encoding;
 
-			entries = new ObservableList<LogEntry>( logEntries );
+			_entries = new ObservableList<LogEntry>( _logEntries );
 
-			this.fileInfo = fileInfo;
+			_fileInfo = fileInfo;
 			Name = fileInfo.Name;
 			FullPath = fileInfo.FullName;
 
-			logFileReader = fileInfo.GetReader(
-				new LogFileReaderArguments
-				{
-					Encoding = encoding,
-					Logger = logger,
-					ParentLogFile = this,
-					GlobalEntriesFilter = parentDirectory.GlobalEntriesFilter,
-					LineParser = parentDirectory.LineParser
-				} );
+			_logFileReader = fileInfo.GetReader( new LogFileReaderArguments( parentDirectory, this ) );
 
-			logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
+			_logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
 		}
 
 		private void OnLogFileReaderFileReadProgress( object sender, FileReadEventArgs e )
@@ -100,26 +97,26 @@ namespace LogAnalyzer
 
 		public void ReadFile()
 		{
-			IList<LogEntry> addedEntries = logFileReader.ReadEntireFile();
+			IList<LogEntry> addedEntries = _logFileReader.ReadEntireFile();
 			ProcessAddedEntries( addedEntries, 0 );
 		}
 
 		private void ProcessAddedEntries( IList<LogEntry> addedEntries, int startingIndex )
 		{
-			this.linesCount = addedEntries.Sum( e => e.LinesCount );
+			this._linesCount = addedEntries.Sum( e => e.LinesCount );
 
-			logEntries.AddRange( addedEntries );
+			_logEntries.AddRange( addedEntries );
 
-			entries.RaiseGenericCollectionItemsAdded( addedEntries, startingIndex );
-			parentDirectory.OnLogEntriesAddedToFile( addedEntries );
+			_entries.RaiseGenericCollectionItemsAdded( addedEntries, startingIndex );
+			_parentDirectory.OnLogEntriesAddedToFile( addedEntries );
 
 			PropertyChanged.RaiseAllChanged( this );
 		}
 
 		internal void OnFileChanged()
 		{
-			int startingIndex = entries.Count;
-			IList<LogEntry> addedLogEntries = logFileReader.ReadToEnd( logEntries.LastOrDefault() );
+			int startingIndex = _entries.Count;
+			IList<LogEntry> addedLogEntries = _logFileReader.ReadToEnd( _logEntries.LastOrDefault() );
 
 			ProcessAddedEntries( addedLogEntries, startingIndex );
 		}
@@ -131,11 +128,7 @@ namespace LogAnalyzer
 			get { return FileInfo.Length; }
 		}
 
-		#region INotifyPropertyChanged Members
-
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		#endregion
 
 		public void Accept( ILogVisitor visitor )
 		{

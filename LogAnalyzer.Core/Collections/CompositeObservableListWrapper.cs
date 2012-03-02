@@ -16,26 +16,26 @@ namespace LogAnalyzer
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[DebuggerDisplay( "CompositeObservableListWrapper<{TypeForDebugger}> Count = {first.Count}+{second.Count}" )]
-	public sealed class CompositeObservableListWrapper<T> : ThinObservableCollection, IList<T>
+	public sealed class CompositeObservableListWrapper<T> : ThinObservableCollection, IList<T>, IEnumerable
 	{
-		private IList<T> first;
+		private IList<T> _first;
 		public IList<T> First
 		{
-			get { return first; }
+			get { return _first; }
 			internal set
 			{
 				Condition.Assert( value != null );
-				first = value;
+				_first = value;
 			}
 		}
 
-		private readonly IList<T> second;
+		private readonly IList<T> _second;
 		public IList<T> Second
 		{
-			get { return second; }
+			get { return _second; }
 		}
 
-		private readonly object syncRoot = new object();
+		private readonly object _syncRoot = new object();
 
 		public CompositeObservableListWrapper( IList<T> first, IList<T> second )
 		{
@@ -44,8 +44,8 @@ namespace LogAnalyzer
 			if ( second == null )
 				throw new ArgumentNullException( "second" );
 
-			this.first = first;
-			this.second = second;
+			this._first = first;
+			this._second = second;
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
@@ -73,16 +73,16 @@ namespace LogAnalyzer
 		{
 			get
 			{
-				int firstCount = first.Count;
+				int firstCount = _first.Count;
 
 				T result;
 				if ( index < firstCount )
 				{
-					result = first[index];
+					result = _first[index];
 				}
 				else
 				{
-					result = second[index - firstCount];
+					result = _second[index - firstCount];
 				}
 
 				return result;
@@ -115,7 +115,7 @@ namespace LogAnalyzer
 
 		public int Count
 		{
-			get { return first.Count + second.Count; }
+			get { return _first.Count + _second.Count; }
 		}
 
 		public bool IsReadOnly
@@ -130,12 +130,12 @@ namespace LogAnalyzer
 
 		public IEnumerator<T> GetEnumerator()
 		{
-			lock ( syncRoot )
+			lock ( _syncRoot )
 			{
-				T[] secondCopy = new T[second.Count];
-				second.CopyTo( secondCopy, 0 );
+				T[] secondCopy = new T[_second.Count];
+				_second.CopyTo( secondCopy, 0 );
 
-				return new CompositeArrayEnumerator<T>( first, secondCopy );
+				return new CompositeArrayEnumerator<T>( _first, secondCopy );
 			}
 		}
 

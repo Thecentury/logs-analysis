@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading;
 using LogAnalyzer.Kernel;
@@ -22,12 +23,15 @@ namespace LogAnalyzer.Tests.Mocks
 		}
 
 		private readonly object _sync = new object();
+		private readonly MockStreamProvider _streamProvider;
 
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource )
 		{
 			this._name = name;
 			this._fullName = fullName;
 			this._logSource = logSource;
+
+			_streamProvider = new MockStreamProvider( _bytes, _sync );
 		}
 
 		public MockFileInfo( string name, string fullName, MockLogRecordsSource logSource, Encoding encoding )
@@ -47,9 +51,13 @@ namespace LogAnalyzer.Tests.Mocks
 
 		LogFileReaderBase IFileInfo.GetReader( LogFileReaderArguments args )
 		{
-			MockStreamProvider streamProvider = new MockStreamProvider( _bytes, _sync );
-			StreamLogFileReader reader = new StreamLogFileReader( args, streamProvider );
+			StreamLogFileReader reader = new StreamLogFileReader( args, _streamProvider );
 			return reader;
+		}
+
+		public Stream OpenStream()
+		{
+			return _streamProvider.OpenStream();
 		}
 
 		long IFileInfo.Length

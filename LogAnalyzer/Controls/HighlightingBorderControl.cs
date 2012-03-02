@@ -13,6 +13,8 @@ namespace LogAnalyzer.GUI.Controls
 {
 	internal sealed class HighlightingBorderControl : FrameworkElement
 	{
+		#region HighlightingViewModels dependency property
+
 		public ObservableCollection<HighlightingViewModel> HighlightingViewModels
 		{
 			get { return (ObservableCollection<HighlightingViewModel>)GetValue( HighlightingViewModelsProperty ); }
@@ -77,6 +79,10 @@ namespace LogAnalyzer.GUI.Controls
 			InvalidateVisual();
 		}
 
+		#endregion
+
+		#region Offset dependency property
+
 		public double Offset
 		{
 			get { return (double)GetValue( OffsetProperty ); }
@@ -88,6 +94,8 @@ namespace LogAnalyzer.GUI.Controls
 		  typeof( double ),
 		  typeof( HighlightingBorderControl ),
 		  new FrameworkPropertyMetadata( 3.0, FrameworkPropertyMetadataOptions.AffectsRender ) );
+
+		#endregion
 
 		protected override void OnRender( DrawingContext dc )
 		{
@@ -110,7 +118,9 @@ namespace LogAnalyzer.GUI.Controls
 			{
 				var highlightingViewModel = hvms[i];
 				int index = i;
-				rect = new Rect( 0 + offset * index, 0 + offset * index, width - 2 * offset * index, height - 2 * offset * index );
+				double size = offset * index;
+
+				rect = new Rect( 0 + size, 0 + size, width - 2 * size, height - 2 * size );
 
 				dc.DrawRectangle( highlightingViewModel.Brush, null, rect );
 			}
