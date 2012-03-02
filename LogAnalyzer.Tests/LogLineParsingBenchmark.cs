@@ -60,7 +60,7 @@ namespace LogAnalyzer.Tests
 																		LineParser = parser,
 																		Encoding = Encoding.GetEncoding( 1251 ),
 																		GlobalEntriesFilter = new DelegateFilter<LogEntry>( e => true )
-																	}, new FileSystemStreamReader( new FileInfo( Path ) ) );
+																	}, new FileSystemStreamProvider( new FileInfo( Path ) ) );
 
 			var entries = reader.ReadEntireFile();
 

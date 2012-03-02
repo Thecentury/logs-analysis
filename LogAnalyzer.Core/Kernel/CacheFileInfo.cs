@@ -5,9 +5,10 @@ namespace LogAnalyzer.Kernel
 {
 	internal sealed class CacheFileInfo : IFileInfo
 	{
-		private readonly FileInfo remoteFile;
-		private readonly FileInfo cacheFile;
-		private readonly DateTime loggingDate;
+		private readonly FileInfo _remoteFile;
+		private readonly FileInfo _cacheFile;
+		private readonly DateTime _loggingDate;
+		private readonly CacheStreamProvider _streamReader;
 
 		public CacheFileInfo( FileInfo remoteFile, FileInfo cacheFile, DateTime loggingDate )
 		{
@@ -16,74 +17,88 @@ namespace LogAnalyzer.Kernel
 			if ( cacheFile == null )
 				throw new ArgumentNullException( "cacheFile" );
 
-			this.remoteFile = remoteFile;
-			this.cacheFile = cacheFile;
-			this.loggingDate = loggingDate;
+			_remoteFile = remoteFile;
+			_cacheFile = cacheFile;
+			_loggingDate = loggingDate;
+
+			_streamReader = new CacheStreamProvider( _cacheFile, _remoteFile );
 		}
 
 		public void Refresh()
 		{
-			remoteFile.Refresh();
-			cacheFile.Refresh();
+			_remoteFile.Refresh();
+			_cacheFile.Refresh();
 		}
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
-			CacheStreamReader streamReader = new CacheStreamReader( cacheFile, remoteFile );
-			StreamLogFileReader reader = new StreamLogFileReader( args, streamReader );
+			StreamLogFileReader reader = new StreamLogFileReader( args, _streamReader );
 			return reader;
+		}
+
+		public Stream OpenStream()
+		{
+			return _streamReader.OpenStream();
 		}
 
 		public long Length
 		{
-			get { return remoteFile.Length; }
+			get { return _remoteFile.Length; }
 		}
 
 		public string Name
 		{
-			get { return remoteFile.Name; }
+			get { return _remoteFile.Name; }
 		}
 
 		public string FullName
 		{
-			get { return remoteFile.FullName; }
+			get { return _remoteFile.FullName; }
 		}
 
 		public string Extension
 		{
-			get { return cacheFile.Extension; }
+			get { return _cacheFile.Extension; }
 		}
 
 		public DateTime LastWriteTime
 		{
-			get { return remoteFile.LastWriteTime; }
+			get { return _remoteFile.LastWriteTime; }
 		}
 
 		public DateTime LoggingDate
 		{
-			get { return loggingDate; }
+			get { return _loggingDate; }
 		}
 	}
 
-	internal sealed class CacheStreamReader : IStreamProvider
+	public static class StreamProviderExtensions
 	{
-		private readonly FileInfo remoteFile;
-		private readonly FileInfo cacheFile;
+		public static Stream OpenStream( this IStreamProvider streamProvider )
+		{
+			return streamProvider.OpenStream( 0 );
+		}
+	}
 
-		public CacheStreamReader( FileInfo cacheFile, FileInfo remoteFile )
+	internal sealed class CacheStreamProvider : IStreamProvider
+	{
+		private readonly FileInfo _remoteFile;
+		private readonly FileInfo _cacheFile;
+
+		public CacheStreamProvider( FileInfo cacheFile, FileInfo remoteFile )
 		{
 			if ( cacheFile == null ) throw new ArgumentNullException( "cacheFile" );
 			if ( remoteFile == null ) throw new ArgumentNullException( "remoteFile" );
 
-			this.cacheFile = cacheFile;
-			this.remoteFile = remoteFile;
+			this._cacheFile = cacheFile;
+			this._remoteFile = remoteFile;
 		}
 
 		public Stream OpenStream( int startPosition )
 		{
-			Stream remoteStream = OpenReadStream( remoteFile );
-			Stream cacheWriteStream = OpenWriteStream( cacheFile );
-			Stream cacheReadStream = OpenReadStream( cacheFile );
+			Stream remoteStream = OpenReadStream( _remoteFile );
+			Stream cacheWriteStream = OpenWriteStream( _cacheFile );
+			Stream cacheReadStream = OpenReadStream( _cacheFile );
 
 			CacheStream cacheStream = new CacheStream( remoteStream, cacheReadStream, cacheWriteStream, startPosition );
 			return cacheStream;

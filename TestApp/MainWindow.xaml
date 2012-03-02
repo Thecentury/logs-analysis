@@ -16,13 +16,28 @@
 		<DockPanel LastChildFill="True">
 			<!--Header-->
 			<ToolBar DockPanel.Dock="Top" Margin="0,5,0,5">
-				<Button Content="Start new" Click="StartButton_Click"/>
-				<Button Content="Pause all" Click="PauseAllButton_Click"/>
-				<Button Content="Resume all" Click="ResumeAllButton_Click"/>
+				<Button Content="Start new" Click="StartButtonClick"/>
+				<Button Content="Pause all" Click="PauseAllButtonClick"/>
+				<Button Content="Resume all" Click="ResumeAllButtonClick"/>
 			</ToolBar>
 
 			<Grid>
-				<views:TabsView DataContext="{Binding}"/>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition Width="0"/>
+				</Grid.ColumnDefinitions>
+				
+				<views:TabsView 
+					Grid.Column="0"/>
+				
+				<DataGrid Name="dataGrid"
+						  AutoGenerateColumns="True"
+						  Grid.Column="1">
+					<DataGrid.Columns>
+						<DataGridTextColumn Binding="{Binding Time}"/>
+						<DataGridTextColumn Binding="{Binding UnitedText}"/>
+					</DataGrid.Columns>
+				</DataGrid>
 			</Grid>
 
 		</DockPanel>

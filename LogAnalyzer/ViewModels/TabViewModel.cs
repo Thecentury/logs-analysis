@@ -9,15 +9,15 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public abstract class TabViewModel : BindingObject, ITypeName
 	{
-		private readonly ApplicationViewModel applicationViewModel;
+		private readonly ApplicationViewModel _applicationViewModel;
 		public ApplicationViewModel ApplicationViewModel
 		{
-			get { return applicationViewModel; }
+			get { return _applicationViewModel; }
 		}
 
 		public IScheduler Scheduler
 		{
-			get { return applicationViewModel.Config.ResolveNotNull<IScheduler>(); }
+			get { return _applicationViewModel.Config.ResolveNotNull<IScheduler>(); }
 		}
 
 		protected TabViewModel( ApplicationViewModel applicationViewModel )
@@ -25,7 +25,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( applicationViewModel == null )
 				throw new ArgumentNullException( "applicationViewModel" );
 
-			this.applicationViewModel = applicationViewModel;
+			this._applicationViewModel = applicationViewModel;
 		}
 
 		public string Type
@@ -62,7 +62,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( CanBeClosedCore() )
 			{
 				OnTabClosing();
-				applicationViewModel.Tabs.Remove( this );
+				_applicationViewModel.Tabs.Remove( this );
 			}
 		}
 

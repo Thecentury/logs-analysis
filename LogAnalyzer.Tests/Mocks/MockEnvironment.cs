@@ -8,20 +8,20 @@ namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockEnvironment : EnvironmentBase
 	{
-		private readonly List<IDirectoryInfo> directories;
+		private readonly List<IDirectoryInfo> _directories;
 
 		public override IList<IDirectoryInfo> Directories
 		{
-			get { return directories; }
+			get { return _directories; }
 		}
 
 		internal IEnumerable<MockDirectoryInfo> MockDirectories
 		{
-			get { return directories.OfType<MockDirectoryInfo>(); }
+			get { return _directories.OfType<MockDirectoryInfo>(); }
 		}
 
-		private readonly IOperationsQueue operationsQueue;
-		private readonly ITimeService timeService;
+		private readonly IOperationsQueue _operationsQueue;
+		private readonly ITimeService _timeService;
 
 		public MockEnvironment( LogAnalyzerConfiguration config ) : this( config, new WorkerThreadOperationsQueue( config.Logger ) ) { }
 
@@ -33,25 +33,25 @@ namespace LogAnalyzer.Tests.Mocks
 			if ( operationsQueue == null )
 				throw new ArgumentNullException( "operationsQueue" );
 
-			this.operationsQueue = operationsQueue;
-			this.timeService = new MockTimeService();
+			this._operationsQueue = operationsQueue;
+			this._timeService = new MockTimeService();
 
-			directories = new List<IDirectoryInfo>( config.Directories.Select( d => new MockDirectoryInfo( d.Path ) ) );
+			_directories = new List<IDirectoryInfo>( config.Directories.Select( d => new MockDirectoryInfo( d.Path ) ) );
 		}
 
 		public override IDirectoryInfo GetDirectory( string path )
 		{
-			return directories.First( d => d.Path == path );
+			return _directories.First( d => d.Path == path );
 		}
 
 		public override IOperationsQueue OperationsQueue
 		{
-			get { return operationsQueue; }
+			get { return _operationsQueue; }
 		}
 
 		public override ITimeService TimeService
 		{
-			get { return timeService; }
+			get { return _timeService; }
 		}
 	}
 }

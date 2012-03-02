@@ -8,57 +8,64 @@ namespace LogAnalyzer.Kernel
 {
 	internal sealed class FileSystemFileInfo : IFileInfo
 	{
-		private readonly FileInfo fileInfo;
-		private LogFileReaderBase reader;
+		private readonly FileInfo _fileInfo;
+		private LogFileReaderBase _reader;
 
 		public FileSystemFileInfo( [NotNull] string path )
 		{
 			if ( path == null ) throw new ArgumentNullException( "path" );
-			fileInfo = new FileInfo( path );
-			if ( !fileInfo.Exists )
-				throw new InvalidOperationException( string.Format( "File '{0}' doesn't exist.", path ) );
+			_fileInfo = new FileInfo( path );
+			if ( !_fileInfo.Exists )
+			{
+				throw new InvalidOperationException( String.Format( "File '{0}' doesn't exist.", path ) );
+			}
 		}
 
 		public void Refresh()
 		{
-			fileInfo.Refresh();
+			_fileInfo.Refresh();
 		}
 
 		public LogFileReaderBase GetReader( LogFileReaderArguments args )
 		{
 			// todo brinchuk многопоточность?! Тут может быть доступ из разных потоков?
-			if ( reader == null )
+			if ( _reader == null )
 			{
-				FileSystemStreamReader streamReader = new FileSystemStreamReader( fileInfo );
-				reader = new StreamLogFileReader( args, streamReader );
+				FileSystemStreamProvider streamReader = new FileSystemStreamProvider( _fileInfo );
+				_reader = new StreamLogFileReader( args, streamReader );
 			}
 
-			return reader;
+			return _reader;
+		}
+
+		public Stream OpenStream()
+		{
+			return new FileStream( _fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete );
 		}
 
 		public long Length
 		{
-			get { return fileInfo.Length; }
+			get { return _fileInfo.Length; }
 		}
 
 		public string Name
 		{
-			get { return fileInfo.Name; }
+			get { return _fileInfo.Name; }
 		}
 
 		public string FullName
 		{
-			get { return fileInfo.FullName; }
+			get { return _fileInfo.FullName; }
 		}
 
 		public string Extension
 		{
-			get { return fileInfo.Extension; }
+			get { return _fileInfo.Extension; }
 		}
 
 		public DateTime LastWriteTime
 		{
-			get { return fileInfo.LastWriteTime; }
+			get { return _fileInfo.LastWriteTime; }
 		}
 
 		public DateTime LoggingDate
@@ -69,16 +76,16 @@ namespace LogAnalyzer.Kernel
 				// or use LastWriteTime, or smth like that
 				throw new NotImplementedException();
 
-				return fileInfo.LastWriteTime.Date;
+				return _fileInfo.LastWriteTime.Date;
 			}
 		}
 	}
 
-	internal sealed class FileSystemStreamReader : IStreamProvider
+	internal sealed class FileSystemStreamProvider : IStreamProvider
 	{
 		private readonly FileInfo _fileInfo;
 
-		public FileSystemStreamReader( FileInfo fileInfo )
+		public FileSystemStreamProvider( FileInfo fileInfo )
 		{
 			if ( fileInfo == null )
 				throw new ArgumentNullException( "fileInfo" );
@@ -90,7 +97,7 @@ namespace LogAnalyzer.Kernel
 		{
 			try
 			{
-				Stream stream = new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 8192, FileOptions.SequentialScan );
+				Stream stream = new FileStream( _fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 8192, FileOptions.SequentialScan );
 				stream.Position = startPosition;
 
 				if ( KeyValueStorage.Instance.Contains( "FileSystemStreamReaderTransformer" ) )

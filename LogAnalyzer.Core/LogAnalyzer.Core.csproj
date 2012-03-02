@@ -71,6 +71,7 @@
     <Compile Include="Auxilliary\CodeAnnotations.cs" />
     <Compile Include="Auxilliary\SlowStream.cs" />
     <Compile Include="Auxilliary\SlowStreamTransformer.cs" />
+    <Compile Include="Collections\BidirectionalEnumerableExtensions.cs" />
     <Compile Include="Caching\CacheManager.cs" />
     <Compile Include="Collections\CollectionDebugView.cs" />
     <Compile Include="Collections\CollectionHelper.cs" />
@@ -108,6 +109,8 @@
     <Compile Include="Filters\FluentFilterExtensions.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
+    <Compile Include="Collections\IBidirectionalEnumerable.cs" />
+    <Compile Include="Collections\IBidirectionalEnumerator.cs" />
     <Compile Include="IHaveTime.cs" />
     <Compile Include="ILogEntry.cs" />
     <Compile Include="ILogEntryFormatter.cs" />
@@ -214,6 +217,7 @@
     <Compile Include="LogEntryComparers.cs" />
     <Compile Include="Collections\LogEntrySortedCollection.cs" />
     <Compile Include="LogFile.cs" />
+    <Compile Include="LogFileNavigator.cs" />
     <Compile Include="Logging\ConsoleLogWriter.cs" />
     <Compile Include="Logging\DebugLogWriter.cs" />
     <Compile Include="Logging\Logger.cs" />

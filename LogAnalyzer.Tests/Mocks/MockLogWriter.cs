@@ -6,34 +6,34 @@ namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockLogWriter
 	{
-		private readonly MockLogRecordsSource notificationSource;
-		private readonly MockFileInfo file;
-		private readonly Thread loggingThread;
+		private readonly MockLogRecordsSource _notificationSource;
+		private readonly MockFileInfo _file;
+		private readonly Thread _loggingThread;
 
 		public MockLogWriter( [NotNull] MockLogRecordsSource notificationSource, [NotNull] MockFileInfo file, TimeSpan sleepDuration )
 		{
 			if ( notificationSource == null ) throw new ArgumentNullException( "notificationSource" );
 			if ( file == null ) throw new ArgumentNullException( "file" );
 
-			this.notificationSource = notificationSource;
-			this.file = file;
-			this.sleepDuration = sleepDuration;
+			this._notificationSource = notificationSource;
+			this._file = file;
+			this._sleepDuration = sleepDuration;
 
-			loggingThread = new Thread( ThreadProc );
-			loggingThread.Priority = ThreadPriority.Lowest;
-			loggingThread.IsBackground = true;
+			_loggingThread = new Thread( ThreadProc );
+			_loggingThread.Priority = ThreadPriority.Lowest;
+			_loggingThread.IsBackground = true;
 		}
 
-		private TimeSpan sleepDuration = TimeSpan.FromMilliseconds(10);
+		private TimeSpan _sleepDuration = TimeSpan.FromMilliseconds( 10 );
 		public TimeSpan SleepDuration
 		{
-			get { return sleepDuration; }
-			set { sleepDuration = value; }
+			get { return _sleepDuration; }
+			set { _sleepDuration = value; }
 		}
 
 		public void Start()
 		{
-			loggingThread.Start();
+			_loggingThread.Start();
 		}
 
 		private void ThreadProc()
@@ -45,13 +45,13 @@ namespace LogAnalyzer.Tests.Mocks
 
 			while ( true )
 			{
-				char messageSeverity = severities[rnd.Next(0, severities.Length)];
-				file.WriteLogMessage( messageSeverity, threadId, count.ToString() );
-				
-				notificationSource.RaiseFileChanged( file.FullName );
+				char messageSeverity = severities[rnd.Next( 0, severities.Length )];
+				_file.WriteLogMessage( messageSeverity, threadId, count.ToString() );
+
+				_notificationSource.RaiseFileChanged( _file.FullName );
 				count++;
 
-				Thread.Sleep( sleepDuration );
+				Thread.Sleep( _sleepDuration );
 			}
 		}
 	}

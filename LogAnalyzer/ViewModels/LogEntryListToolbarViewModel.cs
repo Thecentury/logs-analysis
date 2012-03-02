@@ -11,29 +11,29 @@ namespace LogAnalyzer.GUI.ViewModels
 	[IgnoreAllMissingProperties]
 	internal sealed class LogEntryListToolbarViewModel : BindingObject
 	{
-		private readonly LogEntriesListViewModel parent;
+		private readonly LogEntriesListViewModel _parent;
 
 		public LogEntryListToolbarViewModel([NotNull] LogEntriesListViewModel parent )
 			: base( parent )
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
-			this.parent = parent;
+			this._parent = parent;
 		}
 
 		public ICommand ScrollToBottomCommand
 		{
-			get { return parent.ScrollToBottomCommand; }
+			get { return _parent.ScrollToBottomCommand; }
 		}
 
 		public ICommand ScrollToTopCommand
 		{
-			get { return parent.ScrollToTopCommand; }
+			get { return _parent.ScrollToTopCommand; }
 		}
 
 		public bool AutoScrollToBottom
 		{
-			get { return parent.AutoScrollToBottom; }
-			set { parent.AutoScrollToBottom = value; }
+			get { return _parent.AutoScrollToBottom; }
+			set { _parent.AutoScrollToBottom = value; }
 		}
 	}
 }

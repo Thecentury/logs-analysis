@@ -89,6 +89,7 @@
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />
     <Compile Include="HighlightViewModelTests.cs" />
     <Compile Include="LogDateTimeFilterTests.cs" />
+    <Compile Include="LogFileNavigatorTests.cs" />
     <Compile Include="LoggingTestsBase.cs" />
     <Compile Include="LogLineParsingBenchmark.cs" />
     <Compile Include="ManualLogLineParserTests.cs" />
@@ -123,6 +124,10 @@
       <Project>{2B2192E9-C25A-4B12-96E8-38526B549D1C}</Project>
       <Name>LogAnalyzer.GUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Log1.txt" />
+    <Content Include="Resources\Log2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

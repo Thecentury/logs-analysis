@@ -28,8 +28,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				entriesTab.ParentView = SelectedTab as LogEntriesListViewModel;
 			}
 
-			tabs.Add( tabViewModel );
-			SelectedIndex = tabs.Count - 1;
+			_tabs.Add( tabViewModel );
+			SelectedIndex = _tabs.Count - 1;
 		}
 
 		public ICommand CreateAddDirectoryViewCommand( LogDirectoryViewModel directoryViewModel )
@@ -39,15 +39,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			return command;
 		}
 
-		private DelegateCommand createFilterAndViewCommand;
+		private DelegateCommand _createFilterAndViewCommand;
 		public ICommand CreateFilterAndViewCommand
 		{
 			get
 			{
-				if ( createFilterAndViewCommand == null )
-					createFilterAndViewCommand = new DelegateCommand( CreateFilterAndViewCommandExecute );
+				if ( _createFilterAndViewCommand == null )
+					_createFilterAndViewCommand = new DelegateCommand( CreateFilterAndViewCommandExecute );
 
-				return createFilterAndViewCommand;
+				return _createFilterAndViewCommand;
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( filterBuilder == null )
 				return;
 
-			FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this );
+			FilterTabViewModel filterViewModel = new FilterTabViewModel( _coreViewModel.Entries, this );
 			filterViewModel.Filter.ExpressionBuilder = filterBuilder;
 
 			AddNewTab( filterViewModel );
@@ -125,7 +125,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				// todo exception handling
 				ExpressionBuilder builder = (ExpressionBuilder)XamlServices.Load( fileName );
-				LogEntriesListViewModel selectedTab = tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
+				LogEntriesListViewModel selectedTab = _tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
 
 				if ( selectedTab != null )
 				{
@@ -152,7 +152,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void AddFilterViewFromCore( ExpressionBuilder filter )
 		{
-			FilterTabViewModel filterViewModel = new FilterTabViewModel( coreViewModel.Entries, this, filter );
+			FilterTabViewModel filterViewModel = new FilterTabViewModel( _coreViewModel.Entries, this, filter );
 			AddNewTab( filterViewModel );
 			filterViewModel.StartFiltering();
 		}
@@ -265,7 +265,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 			else
 			{
-				var selectedTab = tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
+				var selectedTab = _tabs.Single( t => t.IsActive ) as LogEntriesListViewModel;
 				if ( selectedTab != null )
 				{
 					FilterTabViewModel filterViewModel = new FilterTabViewModel( selectedTab.Entries, this, filter );
@@ -307,7 +307,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			return new DelegateCommand( () =>
 											{
 												int index = ParallelHelper.SequentialIndexOf( parentTab.Entries, logEntryViewModel.LogEntry );
-												SelectedIndex = tabs.IndexOf( parentTab );
+												SelectedIndex = _tabs.IndexOf( parentTab );
 												parentTab.SelectedEntryIndex = index;
 											} );
 		}

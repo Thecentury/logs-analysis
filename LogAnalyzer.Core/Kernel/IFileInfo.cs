@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace LogAnalyzer.Kernel
 {
@@ -12,6 +13,8 @@ namespace LogAnalyzer.Kernel
 		/// <param name="args"></param>
 		/// <returns></returns>
 		LogFileReaderBase GetReader( LogFileReaderArguments args );
+
+		Stream OpenStream();
 
 		/// <summary>
 		/// Длина файла, в байтах.

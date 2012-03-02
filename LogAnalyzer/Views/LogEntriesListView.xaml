@@ -478,12 +478,12 @@
 									CellStyle="{StaticResource threadCellStyle}" 
 									Width="40"/>
 
-				<!--<DataGridTextColumn Header="#" Binding="{Binding IndexInFile}" Width="45"/>-->
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 
-				<!--<DataGridTextColumn Header="Text" Width="*" Binding="{Binding UnitedText}"/>-->
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
+				
+				<!--<DataGridTextColumn Binding="{Binding UnitedText}"/>-->
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->
 				<!--<DataGridTextColumn Header="ColumnName" Binding="{Binding HighlightedColumnName}" Width="60"/>-->
