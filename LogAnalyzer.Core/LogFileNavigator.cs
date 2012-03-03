@@ -5,17 +5,45 @@ using System.Text;
 using JetBrains.Annotations;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Misc;
 
 namespace LogAnalyzer
 {
+	public interface IStreamReaderFactory
+	{
+		TextReader CreateReader( Stream stream, Encoding encoding );
+	}
+
+	public sealed class FuncStreamReaderFactory : IStreamReaderFactory
+	{
+		private readonly Func<Stream, Encoding, TextReader> _creater;
+
+		public FuncStreamReaderFactory( Func<Stream, Encoding, TextReader> creater )
+		{
+			_creater = creater;
+		}
+
+		public TextReader CreateReader( Stream stream, Encoding encoding )
+		{
+			TextReader reader = _creater( stream, encoding );
+			return reader;
+		}
+	}
+
 	public sealed class LogFileNavigator : IBidirectionalEnumerable<LogEntry>
 	{
 		private readonly IFileInfo _fileInfo;
 		private readonly LogFileReaderArguments _parameters;
+		private readonly IStreamReaderFactory _streamReaderFactory;
 		private readonly Encoding _encoding;
 		private readonly ILogLineParser _lineParser;
 
 		public LogFileNavigator( [NotNull] IFileInfo fileInfo, [NotNull] LogFileReaderArguments parameters )
+			: this( fileInfo, parameters, new FuncStreamReaderFactory( ( stream, encoding ) => new StreamReader( stream, encoding ) ) )
+		{
+		}
+
+		public LogFileNavigator( [NotNull] IFileInfo fileInfo, [NotNull] LogFileReaderArguments parameters, [NotNull] IStreamReaderFactory streamReaderFactory )
 		{
 			if ( fileInfo == null )
 			{
@@ -24,6 +52,10 @@ namespace LogAnalyzer
 			if ( parameters == null )
 			{
 				throw new ArgumentNullException( "parameters" );
+			}
+			if ( streamReaderFactory == null )
+			{
+				throw new ArgumentNullException( "streamReaderFactory" );
 			}
 			if ( parameters.Encoding == null )
 			{
@@ -36,6 +68,7 @@ namespace LogAnalyzer
 
 			_fileInfo = fileInfo;
 			_parameters = parameters;
+			_streamReaderFactory = streamReaderFactory;
 			_encoding = parameters.Encoding;
 			_lineParser = parameters.LineParser;
 		}
@@ -49,7 +82,7 @@ namespace LogAnalyzer
 		{
 			private readonly LogFileNavigator _parent;
 			private readonly Stream _stream;
-			private readonly StreamReader _reader;
+			private readonly TextReader _reader;
 			private readonly ILogLineParser _parser;
 
 			private string _type;
@@ -66,7 +99,7 @@ namespace LogAnalyzer
 				_parser = parent._lineParser;
 
 				_stream = _parent._fileInfo.OpenStream();
-				_reader = new StreamReader( _stream, _parent._encoding );
+				_reader = _parent._streamReaderFactory.CreateReader( _stream, _parent._encoding );
 			}
 
 			public bool MoveBack()
@@ -144,5 +177,39 @@ namespace LogAnalyzer
 				get { return Current; }
 			}
 		}
+	}
+
+	public sealed class LogFileIndexer
+	{
+		private readonly LogFileReaderArguments _arguments;
+
+		public LogFileIndex BuildIndex( IFileInfo file )
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public sealed class LogFileIndex
+	{
+		private readonly IndexRecord[] _records;
+
+		public LogFileIndex( [NotNull] IndexRecord[] records )
+		{
+			if ( records == null )
+			{
+				throw new ArgumentNullException( "records" );
+			}
+			_records = records;
+		}
+
+		public IndexRecord[] Records
+		{
+			get { return _records; }
+		}
+	}
+
+	public struct IndexRecord
+	{
+		public long Offset { get; set; }
 	}
 }
