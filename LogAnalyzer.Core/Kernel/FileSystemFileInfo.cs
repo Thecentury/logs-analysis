@@ -6,7 +6,7 @@ using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel
 {
-	internal sealed class FileSystemFileInfo : IFileInfo
+	public sealed class FileSystemFileInfo : IFileInfo
 	{
 		private readonly FileInfo _fileInfo;
 		private LogFileReaderBase _reader;

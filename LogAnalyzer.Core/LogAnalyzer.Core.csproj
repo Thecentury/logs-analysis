@@ -232,6 +232,8 @@
     <Compile Include="Misc\CommandLineArgumentsParser.cs" />
     <Compile Include="Misc\MultiDictionary.cs" />
     <Compile Include="Misc\PerformanceCountersService.cs" />
+    <Compile Include="Misc\BCLPositionAwareStreamReader.cs" />
+    <Compile Include="Misc\PositionAwareStreamReader.cs" />
     <Compile Include="Operations\AsyncOperation.cs" />
     <Compile Include="Operations\SyncronousAsyncOperation.cs" />
     <Compile Include="Operations\SyncronousOperationScheduler.cs" />

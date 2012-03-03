@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Collections;
@@ -31,7 +32,7 @@ namespace LogAnalyzer.Tests
 		}
 
 		[Test]
-		public void ShouldReadLog1()
+		public void ShouldReadSimpleSingleLinesLog()
 		{
 			LogFileNavigator navigator = new LogFileNavigator( new FileSystemFileInfo( @"..\..\Resources\Log1.txt" ), _arguments );
 			var entries = navigator.ToForwardEnumerable().ToList();
@@ -40,13 +41,39 @@ namespace LogAnalyzer.Tests
 		}
 
 		[Test]
-		public void ShouldReadLog2()
+		public void ShouldReadLogWithOneDoubleLinedEntry()
 		{
 			LogFileNavigator navigator = new LogFileNavigator( new FileSystemFileInfo( @"..\..\Resources\Log2.txt" ), _arguments );
 			var entries = navigator.ToForwardEnumerable().ToList();
 
 			Assert.That( entries.Count, Is.EqualTo( 4 ) );
 			Assert.That( entries[2].TextLines.Count, Is.EqualTo( 2 ) );
+		}
+
+		[Test]
+		public void ShouldReadLogWithDoubleLinedEntryAtTheEnd()
+		{
+			LogFileNavigator navigator = new LogFileNavigator( new FileSystemFileInfo( @"..\..\Resources\Log3.txt" ), _arguments );
+			var entries = navigator.ToForwardEnumerable().ToList();
+
+			Assert.That( entries.Count, Is.EqualTo( 4 ) );
+			Assert.That( entries[2].TextLines.Count, Is.EqualTo( 2 ) );
+			Assert.That( entries[3].TextLines.Count, Is.EqualTo( 2 ) );
+		}
+
+#if !NCRUNCH
+		[Test]
+#endif
+		public void LongLogFileReadingBenchmark()
+		{
+			LogFileNavigator navigator = new LogFileNavigator( new FileSystemFileInfo( @"C:\Logs\Security2.!log!" ), _arguments );
+
+			Stopwatch timer = Stopwatch.StartNew();
+			int count = navigator.ToForwardEnumerable().Count();
+
+			timer.Stop();
+			Console.WriteLine( "Count = {0}", count );
+			Console.WriteLine( "Elapsed {0} ms", timer.ElapsedMilliseconds );
 		}
 	}
 }
