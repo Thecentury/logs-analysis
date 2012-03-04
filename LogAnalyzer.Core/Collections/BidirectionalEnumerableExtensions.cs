@@ -16,7 +16,7 @@ namespace LogAnalyzer.Collections
 
 			public IEnumerator<T> GetEnumerator()
 			{
-				return _biEnumerable.GetEnumerator();
+				return _biEnumerable.GetBidirectionalEnumerator();
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()
@@ -72,7 +72,7 @@ namespace LogAnalyzer.Collections
 
 			public IEnumerator<T> GetEnumerator()
 			{
-				return new Enumerator( _biEnumerable.GetEnumerator() );
+				return new Enumerator( _biEnumerable.GetBidirectionalEnumerator() );
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()

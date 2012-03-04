@@ -20,8 +20,15 @@ namespace LogAnalyzer.Misc
 		private int _charLen;
 		private int _bytesPos;
 		private int _bytesLen;
-		private long _positionInFile;
 		private bool _preambleWasRead;
+
+		private long _positionInFile;
+		private long _savedPosition;
+
+		public void SavePosition()
+		{
+			_savedPosition = _positionInFile;
+		}
 
 		public PositionAwareStreamReader( [NotNull] Stream stream, [NotNull] Encoding encoding )
 		{
@@ -50,6 +57,11 @@ namespace LogAnalyzer.Misc
 		public long PositionInFile
 		{
 			get { return _positionInFile; }
+		}
+
+		public long SavedPosition
+		{
+			get { return _savedPosition; }
 		}
 
 		private void ReadPreamble()
@@ -81,6 +93,15 @@ namespace LogAnalyzer.Misc
 			// сдвигаем положение на длину преамбулы
 			_positionInFile += preamble.Length;
 			_bytesPos += preamble.Length;
+		}
+
+		public void DiscardBufferData()
+		{
+			_bytesPos = 0;
+			_bytesLen = 0;
+			_charPos = 0;
+			_charLen = 0;
+			_positionInFile = _stream.Position;
 		}
 
 		public override void Close()
@@ -191,6 +212,8 @@ namespace LogAnalyzer.Misc
 
 				if ( eolFound )
 				{
+					bytesUsed = encoder.GetByteCount( _chars, _charPos, 1, flush: false );
+					_positionInFile += bytesUsed;
 					// на символ '\r'
 					_charPos++;
 
