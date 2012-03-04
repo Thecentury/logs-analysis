@@ -111,12 +111,17 @@
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="Collections\IBidirectionalEnumerable.cs" />
     <Compile Include="Collections\IBidirectionalEnumerator.cs" />
+    <Compile Include="Common\FuncStreamReaderFactory.cs" />
     <Compile Include="IHaveTime.cs" />
     <Compile Include="ILogEntry.cs" />
     <Compile Include="ILogEntryFormatter.cs" />
     <Compile Include="ILogFile.cs" />
     <Compile Include="ILogVisitable.cs" />
     <Compile Include="ILogVisitor.cs" />
+    <Compile Include="Common\IStreamReaderFactory.cs" />
+    <Compile Include="IndexedLogStreamEnumerator.cs" />
+    <Compile Include="IndexedLogStreamNavigator.cs" />
+    <Compile Include="IndexRecord.cs" />
     <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
     <Compile Include="Kernel\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
@@ -217,6 +222,8 @@
     <Compile Include="LogEntryComparers.cs" />
     <Compile Include="Collections\LogEntrySortedCollection.cs" />
     <Compile Include="LogFile.cs" />
+    <Compile Include="LogFileIndex.cs" />
+    <Compile Include="LogFileIndexer.cs" />
     <Compile Include="LogFileNavigator.cs" />
     <Compile Include="Logging\ConsoleLogWriter.cs" />
     <Compile Include="Logging\DebugLogWriter.cs" />
@@ -226,7 +233,10 @@
     <Compile Include="Logging\MessageType.cs" />
     <Compile Include="Logging\SingleThreadedLogWriter.cs" />
     <Compile Include="Kernel\WorkerThreadOperationsQueue.cs" />
+    <Compile Include="LogLineParserExtensions.cs" />
     <Compile Include="LogSaveVisitor.cs" />
+    <Compile Include="LogStreamNavigator.cs" />
+    <Compile Include="LogStreamReader.cs" />
     <Compile Include="MessageSeverityCount.cs" />
     <Compile Include="MessageTypeStrings.cs" />
     <Compile Include="Misc\CommandLineArgumentsParser.cs" />
@@ -239,6 +249,7 @@
     <Compile Include="Operations\SyncronousOperationScheduler.cs" />
     <Compile Include="Operations\TaskAsyncOperation.cs" />
     <Compile Include="Operations\TaskOperationScheduler.cs" />
+    <Compile Include="Common\PositionAwareStreamReaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Collections\ThinEnumerableWrapper.cs" />
     <Compile Include="Collections\ObservableList.cs" />
@@ -250,6 +261,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Operations\OperationScheduler.cs" />
+    <Compile Include="Common\StreamReaderFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\LogAnalyzerConfiguration.FluentApi.cs" />

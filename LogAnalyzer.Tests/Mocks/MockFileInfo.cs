@@ -42,6 +42,11 @@ namespace LogAnalyzer.Tests.Mocks
 			this._encoding = encoding;
 		}
 
+		public int Length
+		{
+			get { return _bytes.Count; }
+		}
+
 		#region IFileInfo Members
 
 		void IFileInfo.Refresh()
@@ -114,6 +119,7 @@ namespace LogAnalyzer.Tests.Mocks
 		{
 			string logMessage = String.Format( "[{0}] [{1,3}] {2}\t{3}{4}", 
 				severity, threadId, DateTime.Now.ToString( _dateFormat ), message, Environment.NewLine );
+
 			Write( logMessage );
 		}
 

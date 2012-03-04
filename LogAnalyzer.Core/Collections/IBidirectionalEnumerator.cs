@@ -6,4 +6,9 @@ namespace LogAnalyzer.Collections
 	{
 		bool MoveBack();
 	}
+
+	public interface IRandomAccessEnumerator<out T> : IBidirectionalEnumerator<T>
+	{
+		long Position { get; set; }
+	}
 }

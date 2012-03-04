@@ -1,35 +1,17 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Documents;
 using JetBrains.Annotations;
 using LogAnalyzer.Collections;
+using LogAnalyzer.Common;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Misc;
 
 namespace LogAnalyzer
 {
-	public interface IStreamReaderFactory
-	{
-		TextReader CreateReader( Stream stream, Encoding encoding );
-	}
-
-	public sealed class FuncStreamReaderFactory : IStreamReaderFactory
-	{
-		private readonly Func<Stream, Encoding, TextReader> _creater;
-
-		public FuncStreamReaderFactory( Func<Stream, Encoding, TextReader> creater )
-		{
-			_creater = creater;
-		}
-
-		public TextReader CreateReader( Stream stream, Encoding encoding )
-		{
-			TextReader reader = _creater( stream, encoding );
-			return reader;
-		}
-	}
-
 	public sealed class LogFileNavigator : IBidirectionalEnumerable<LogEntry>
 	{
 		private readonly IFileInfo _fileInfo;
@@ -39,7 +21,7 @@ namespace LogAnalyzer
 		private readonly ILogLineParser _lineParser;
 
 		public LogFileNavigator( [NotNull] IFileInfo fileInfo, [NotNull] LogFileReaderArguments parameters )
-			: this( fileInfo, parameters, new FuncStreamReaderFactory( ( stream, encoding ) => new StreamReader( stream, encoding ) ) )
+			: this( fileInfo, parameters, new StreamReaderFactory() )
 		{
 		}
 
@@ -73,143 +55,141 @@ namespace LogAnalyzer
 			_lineParser = parameters.LineParser;
 		}
 
-		public IBidirectionalEnumerator<LogEntry> GetEnumerator()
+		public IBidirectionalEnumerator<LogEntry> GetBidirectionalEnumerator()
 		{
-			return new Enumerator( this );
+			return new LogStreamEnumerator( _streamReaderFactory.CreateReader( _fileInfo.OpenStream(), _encoding ), _lineParser,
+				_parameters.ParentLogFile, disposeReader: false );
 		}
 
-		private sealed class Enumerator : IBidirectionalEnumerator<LogEntry>
+		public IEnumerator<LogEntry> GetEnumerator()
 		{
-			private readonly LogFileNavigator _parent;
-			private readonly Stream _stream;
-			private readonly TextReader _reader;
-			private readonly ILogLineParser _parser;
+			return GetBidirectionalEnumerator();
+		}
 
-			private string _type;
-			private int _threadId;
-			private DateTime _time;
-			private string _text;
-			private LogEntry _logEntry;
-			private int _lineIndex = -1;
-			private bool _hasReadHeader;
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+	}
 
-			public Enumerator( LogFileNavigator parent )
+	public sealed class LogStreamEnumerator : IBidirectionalEnumerator<LogEntry>
+	{
+		private readonly PositionAwareStreamReader _positionAwareStreamReader;
+		private readonly TextReader _reader;
+		private readonly ILogLineParser _parser;
+		private readonly LogFile _parentFile;
+		private readonly bool _disposeReader;
+
+		private string _type;
+		private int _threadId;
+		private DateTime _time;
+		private string _text;
+		private LogEntry _logEntry;
+		private int _lineIndex = -1;
+		private bool _hasReadHeader;
+
+		public LogStreamEnumerator( [NotNull] TextReader reader, [NotNull] ILogLineParser parser, [CanBeNull] LogFile parentFile, bool disposeReader )
+		{
+			if ( reader == null )
 			{
-				_parent = parent;
-				_parser = parent._lineParser;
-
-				_stream = _parent._fileInfo.OpenStream();
-				_reader = _parent._streamReaderFactory.CreateReader( _stream, _parent._encoding );
+				throw new ArgumentNullException( "reader" );
+			}
+			if ( parser == null )
+			{
+				throw new ArgumentNullException( "parser" );
 			}
 
-			public bool MoveBack()
-			{
-				throw new NotImplementedException();
-			}
+			_reader = reader;
+			_positionAwareStreamReader = reader as PositionAwareStreamReader;
+			_parser = parser;
+			_parentFile = parentFile;
+			_disposeReader = disposeReader;
+		}
 
-			public void Dispose()
+		public bool MoveBack()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Dispose()
+		{
+			if ( _disposeReader )
 			{
 				_reader.Dispose();
-				_stream.Dispose();
 			}
+		}
 
-			public bool MoveNext()
+		public bool MoveNext()
+		{
+			bool logEntryHeaderRead;
+
+			if ( !_hasReadHeader )
 			{
-				bool logEntryHeaderRead;
-
-				if ( !_hasReadHeader )
-				{
-					do
-					{
-						string line = _reader.ReadLine();
-						_lineIndex++;
-						if ( line == null )
-						{
-							return false;
-						}
-
-						logEntryHeaderRead = _parser.TryExtractLogEntryData( line, ref _type, ref _threadId, ref _time, ref _text );
-					} while ( !logEntryHeaderRead );
-
-					_hasReadHeader = true;
-				}
-
-				_logEntry = new LogEntry( _type, _threadId, _time, _text, _lineIndex, _parent._parameters.ParentLogFile );
-
 				do
 				{
 					string line = _reader.ReadLine();
 					_lineIndex++;
 					if ( line == null )
 					{
-						_hasReadHeader = false;
-						break;
+						return false;
 					}
 
 					logEntryHeaderRead = _parser.TryExtractLogEntryData( line, ref _type, ref _threadId, ref _time, ref _text );
-					if ( !logEntryHeaderRead )
-					{
-						_hasReadHeader = false;
-						_logEntry.AppendLine( line );
-					}
-					else
-					{
-						_hasReadHeader = true;
-					}
-
 				} while ( !logEntryHeaderRead );
 
-				return true;
+				_hasReadHeader = true;
 			}
 
-			public void Reset()
-			{
-				throw new NotSupportedException();
-			}
+			_logEntry = new LogEntry( _type, _threadId, _time, _text, _lineIndex, _parentFile );
 
-			public LogEntry Current
+			do
 			{
-				get { return _logEntry; }
-			}
+				if ( _positionAwareStreamReader != null )
+				{
+					_positionAwareStreamReader.SavePosition();
+				}
 
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
+				string line = _reader.ReadLine();
+				_lineIndex++;
+				if ( line == null )
+				{
+					_hasReadHeader = false;
+					if ( _positionAwareStreamReader != null )
+					{
+						_positionAwareStreamReader.SavePosition();
+					}
+					break;
+				}
+
+				logEntryHeaderRead = _parser.TryExtractLogEntryData( line, ref _type, ref _threadId, ref _time, ref _text );
+				if ( !logEntryHeaderRead )
+				{
+					_hasReadHeader = false;
+					_logEntry.AppendLine( line );
+				}
+				else
+				{
+					_hasReadHeader = true;
+				}
+
+			} while ( !logEntryHeaderRead );
+
+			return true;
 		}
-	}
 
-	public sealed class LogFileIndexer
-	{
-		private readonly LogFileReaderArguments _arguments;
-
-		public LogFileIndex BuildIndex( IFileInfo file )
+		public void Reset()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
-	}
 
-	public sealed class LogFileIndex
-	{
-		private readonly IndexRecord[] _records;
-
-		public LogFileIndex( [NotNull] IndexRecord[] records )
+		public LogEntry Current
 		{
-			if ( records == null )
-			{
-				throw new ArgumentNullException( "records" );
-			}
-			_records = records;
+			get { return _logEntry; }
 		}
 
-		public IndexRecord[] Records
+		object IEnumerator.Current
 		{
-			get { return _records; }
+			get { return Current; }
 		}
-	}
-
-	public struct IndexRecord
-	{
-		public long Offset { get; set; }
 	}
 }

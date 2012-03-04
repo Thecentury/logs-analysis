@@ -89,6 +89,7 @@
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />
     <Compile Include="HighlightViewModelTests.cs" />
     <Compile Include="LogDateTimeFilterTests.cs" />
+    <Compile Include="LogFileIndexerTests.cs" />
     <Compile Include="LogFileNavigatorTests.cs" />
     <Compile Include="LoggingTestsBase.cs" />
     <Compile Include="LogLineParsingBenchmark.cs" />
