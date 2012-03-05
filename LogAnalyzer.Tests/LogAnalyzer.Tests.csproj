@@ -94,6 +94,7 @@
     <Compile Include="LoggingTestsBase.cs" />
     <Compile Include="LogLineParsingBenchmark.cs" />
     <Compile Include="ManualLogLineParserTests.cs" />
+    <Compile Include="MergingNavigatorTests.cs" />
     <Compile Include="Mocks\DeterminedTimeLogHelper.cs" />
     <Compile Include="Mocks\MockDirectoryInfo.cs" />
     <Compile Include="Mocks\MockEnvironment.cs" />

@@ -41,23 +41,4 @@ namespace LogAnalyzer
 			return comparison;
 		}
 	}
-
-	public sealed class LogEntryByDateComparer : IComparer<LogEntry>
-	{
-		private LogEntryByDateComparer() { }
-
-		private static readonly LogEntryByDateComparer instance = new LogEntryByDateComparer();
-		public static LogEntryByDateComparer Instance
-		{
-			get { return instance; }
-		}
-
-		public int Compare( LogEntry x, LogEntry y )
-		{
-			int xSeconds = (int) x.Time.TimeOfDay.TotalSeconds;
-			int ySeconds = (int) y.Time.TimeOfDay.TotalSeconds;
-			int comparison = xSeconds.CompareTo( ySeconds );
-			return comparison;
-		}
-	}
 }

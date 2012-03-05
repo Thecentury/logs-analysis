@@ -59,14 +59,14 @@ namespace LogAnalyzer.Collections
 				}
 			}
 
-			public IBidirectionalEnumerator<T> GetBidirectionalEnumerator()
+			public IBidirectionalEnumerator<T> GetEnumerator()
 			{
 				return new Enumerator( _enumerable.GetEnumerator() );
 			}
 
-			public IEnumerator<T> GetEnumerator()
+			IEnumerator<T> IEnumerable<T>.GetEnumerator()
 			{
-				return GetBidirectionalEnumerator();
+				return GetEnumerator();
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()
@@ -78,11 +78,11 @@ namespace LogAnalyzer.Collections
 
 	public interface IBidirectionalEnumerable<out T> : IEnumerable<T>
 	{
-		IBidirectionalEnumerator<T> GetBidirectionalEnumerator();
+		IBidirectionalEnumerator<T> GetEnumerator();
 	}
 
 	public interface IRandomAccessEnumerable<out T> : IBidirectionalEnumerable<T>
 	{
-		IRandomAccessEnumerator<T> GetRandomAccessEnumerator();
+		IRandomAccessEnumerator<T> GetEnumerator();
 	}
 }
