@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Windows.Documents;
 using JetBrains.Annotations;
-using LogAnalyzer.Collections;
 using LogAnalyzer.Common;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Misc;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	public sealed class LogFileNavigator : IBidirectionalEnumerable<LogEntry>
 	{
@@ -55,15 +53,15 @@ namespace LogAnalyzer
 			_lineParser = parameters.LineParser;
 		}
 
-		public IBidirectionalEnumerator<LogEntry> GetBidirectionalEnumerator()
+		public IBidirectionalEnumerator<LogEntry> GetEnumerator()
 		{
 			return new LogStreamEnumerator( _streamReaderFactory.CreateReader( _fileInfo.OpenStream(), _encoding ), _lineParser,
 				_parameters.ParentLogFile, disposeReader: false );
 		}
 
-		public IEnumerator<LogEntry> GetEnumerator()
+		IEnumerator<LogEntry> IEnumerable<LogEntry>.GetEnumerator()
 		{
-			return GetBidirectionalEnumerator();
+			return GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

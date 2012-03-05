@@ -39,7 +39,7 @@ namespace LogAnalyzer.ConsoleApp
 			using ( var stream = new FileStream( FileName, FileMode.Open, FileAccess.Read ) )
 			{
 				IndexedLogStreamNavigator navigator = new IndexedLogStreamNavigator( stream, arguments.Encoding, new ManualLogLineParser(), index );
-				var enumerator = navigator.GetBidirectionalEnumerator();
+				var enumerator = navigator.GetEnumerator();
 
 				do
 				{

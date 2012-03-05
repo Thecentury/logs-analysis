@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using LogAnalyzer.Collections;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	public sealed class IndexedLogStreamNavigator : IRandomAccessEnumerable<LogEntry>
 	{
@@ -22,19 +21,19 @@ namespace LogAnalyzer
 			_index = index;
 		}
 
-		public IBidirectionalEnumerator<LogEntry> GetBidirectionalEnumerator()
+		IBidirectionalEnumerator<LogEntry> IBidirectionalEnumerable<LogEntry>.GetEnumerator()
 		{
-			return GetRandomAccessEnumerator();
+			return GetEnumerator();
 		}
 
-		public IRandomAccessEnumerator<LogEntry> GetRandomAccessEnumerator()
+		public IRandomAccessEnumerator<LogEntry> GetEnumerator()
 		{
 			return new IndexedLogStreamEnumerator( _stream, _encoding, _index, _parser, disposeStream: false );
 		}
 
-		public IEnumerator<LogEntry> GetEnumerator()
+		IEnumerator<LogEntry> IEnumerable<LogEntry>.GetEnumerator()
 		{
-			return GetBidirectionalEnumerator();
+			return GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

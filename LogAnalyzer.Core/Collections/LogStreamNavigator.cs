@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using JetBrains.Annotations;
-using LogAnalyzer.Collections;
 using LogAnalyzer.Kernel;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	public sealed class LogStreamNavigator : IBidirectionalEnumerable<LogEntry>
 	{
@@ -28,14 +27,14 @@ namespace LogAnalyzer
 			_parser = parser;
 		}
 
-		public IBidirectionalEnumerator<LogEntry> GetBidirectionalEnumerator()
+		public IBidirectionalEnumerator<LogEntry> GetEnumerator()
 		{
 			return new LogStreamEnumerator( _reader, _parser, parentFile: null, disposeReader: false );
 		}
 
-		public IEnumerator<LogEntry> GetEnumerator()
+		IEnumerator<LogEntry> IEnumerable<LogEntry>.GetEnumerator()
 		{
-			return GetBidirectionalEnumerator();
+			return GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

@@ -166,7 +166,7 @@ namespace LogAnalyzer.Collections
 		[Conditional( "DEBUG" )]
 		private void AssertParentMergedEntriesAreSorted()
 		{
-			Condition.DebugAssert( parent.MergedEntries.IsSorted( LogEntryByDateComparer.Instance ),
+			Condition.DebugAssert( parent.MergedEntries.IsSorted( LogEntryByTimeComparer.Instance ),
 				"Коллекция parent.MergedEntries должна быть отсортирована по времени." );
 		}
 
