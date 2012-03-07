@@ -68,26 +68,27 @@ namespace LogAnalyzer
 		/// </summary>
 		internal LogFile() { }
 
-		public LogFile( IFileInfo fileInfo, LogDirectory parentDirectory )
+		public LogFile( IFileInfo fileInfo, LogDirectory parentDirectory = null )
 		{
 			if ( fileInfo == null )
-				throw new ArgumentNullException( "fileInfo" );
-			if ( parentDirectory == null )
-				throw new ArgumentNullException( "parentDirectory" );
+			{
+				throw new ArgumentNullException("fileInfo");
+			}
 
 			_parentDirectory = parentDirectory;
-			_logger = this._parentDirectory.Config.Logger;
-			_encoding = this._parentDirectory.Encoding;
+			if ( parentDirectory != null )
+			{
+				_logger = this._parentDirectory.Config.Logger;
+				_encoding = this._parentDirectory.Encoding;
+				_logFileReader = fileInfo.GetReader( new LogFileReaderArguments( parentDirectory, this ) );
+				_logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
+			}
 
 			_entries = new ObservableList<LogEntry>( _logEntries );
 
 			_fileInfo = fileInfo;
 			Name = fileInfo.Name;
 			FullPath = fileInfo.FullName;
-
-			_logFileReader = fileInfo.GetReader( new LogFileReaderArguments( parentDirectory, this ) );
-
-			_logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
 		}
 
 		private void OnLogFileReaderFileReadProgress( object sender, FileReadEventArgs e )

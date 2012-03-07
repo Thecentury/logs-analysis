@@ -25,6 +25,55 @@ namespace LogAnalyzer.ConsoleApp
 			};
 
 
+			ExecuteMergingNavigator( arguments );
+			//ExecuteNavigator( arguments );
+			//CalculateEntriesCount( arguments );
+		}
+
+		private static void ExecuteMergingNavigator( LogFileReaderArguments arguments )
+		{
+			var files = Directory.GetFiles( @"D:\MOST\AWAD\logs", "*.log", SearchOption.TopDirectoryOnly );
+			var navigators = new IBidirectionalEnumerable<LogEntry>[files.Length];
+
+			for ( int i = 0; i < files.Length; i++ )
+			{
+				var file = files[i];
+				LogFile logFile = new LogFile( new FileSystemFileInfo( file ) );
+				navigators[i] = new LogStreamNavigator( new StreamReader( file, Encoding.GetEncoding( 1251 ), false ), new ManualLogLineParser(), logFile );
+			}
+
+			MergingNavigator mergingNavigator = new MergingNavigator( navigators );
+			var enumerator = mergingNavigator.GetEnumerator();
+
+			int count = 0;
+			LogEntry prev = null;
+			IComparer<LogEntry> comparer = new LogEntryByDateComparer();
+
+			Stopwatch timer = Stopwatch.StartNew();
+			do
+			{
+				if ( !enumerator.MoveNext() )
+				{
+					break;
+				}
+
+				count++;
+
+				//WriteEntry( enumerator.Current );
+				if ( prev != null && comparer.Compare( prev, enumerator.Current ) > 0 )
+				{
+					break;
+				}
+				prev = enumerator.Current;
+
+			} while ( true );
+
+			timer.Stop();
+			Console.WriteLine( "Count = {0}, elapsed {1} ms", count, timer.ElapsedMilliseconds );
+		}
+
+		private static void ExecuteNavigator( LogFileReaderArguments arguments )
+		{
 			Stopwatch timer = Stopwatch.StartNew();
 
 			LogFileIndexer indexer = new LogFileIndexer();
@@ -35,10 +84,10 @@ namespace LogAnalyzer.ConsoleApp
 
 			Console.WriteLine( "Elapsed {0} ms", timer.ElapsedMilliseconds );
 
-
 			using ( var stream = new FileStream( FileName, FileMode.Open, FileAccess.Read ) )
 			{
-				IndexedLogStreamNavigator navigator = new IndexedLogStreamNavigator( stream, arguments.Encoding, new ManualLogLineParser(), index );
+				IndexedLogStreamNavigator navigator = new IndexedLogStreamNavigator( stream, arguments.Encoding,
+																					new ManualLogLineParser(), index );
 				var enumerator = navigator.GetEnumerator();
 
 				do
@@ -78,10 +127,8 @@ namespace LogAnalyzer.ConsoleApp
 						Console.WriteLine( "Exiting." );
 						break;
 					}
-
 				} while ( true );
 			}
-			//CalculateEntriesCount( arguments );
 		}
 
 		private static void WriteEntry( LogEntry entry )

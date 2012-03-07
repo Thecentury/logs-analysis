@@ -4,8 +4,6 @@ namespace LogAnalyzer
 {
 	public sealed class LogEntryByTimeComparer : IComparer<LogEntry>
 	{
-		private LogEntryByTimeComparer() { }
-
 		private static readonly LogEntryByTimeComparer instance = new LogEntryByTimeComparer();
 		public static LogEntryByTimeComparer Instance
 		{
