@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Collections;
+using LogAnalyzer.Extensions;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
@@ -46,6 +47,7 @@ namespace LogAnalyzer.Tests
 			MergingNavigator navigator = new MergingNavigator( bi1, bi2 );
 			var merged = navigator.ToForwardEnumerable().ToList();
 			Assert.That( merged.Count, Is.EqualTo( entries1.Count + entries2.Count ) );
+			Assert.That( merged.IsSorted( new LogEntryByDateComparer() ) );
 		}
 	}
 }

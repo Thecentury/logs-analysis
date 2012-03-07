@@ -15,8 +15,6 @@ namespace LogAnalyzer
 	/// </summary>
 	public sealed class LogEntryByDateAndIndexComparer : IComparer<LogEntry>
 	{
-		private LogEntryByDateAndIndexComparer() { }
-
 		private static readonly LogEntryByDateAndIndexComparer instance = new LogEntryByDateAndIndexComparer();
 		public static LogEntryByDateAndIndexComparer Instance
 		{

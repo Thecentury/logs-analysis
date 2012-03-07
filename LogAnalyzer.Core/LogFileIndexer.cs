@@ -10,10 +10,6 @@ namespace LogAnalyzer
 {
 	public sealed class LogFileIndexer
 	{
-		public LogFileIndexer()
-		{
-		}
-
 		public LogFileIndex BuildIndex( [NotNull] IFileInfo file, [NotNull] LogFileReaderArguments arguments )
 		{
 			if ( file == null )

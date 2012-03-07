@@ -11,8 +11,9 @@ namespace LogAnalyzer.Collections
 	{
 		private readonly TextReader _reader;
 		private readonly ILogLineParser _parser;
+		private readonly LogFile _parentFile;
 
-		public LogStreamNavigator( [NotNull] TextReader reader, [NotNull] ILogLineParser parser )
+		public LogStreamNavigator( [NotNull] TextReader reader, [NotNull] ILogLineParser parser, LogFile parentFile = null )
 		{
 			if ( reader == null )
 			{
@@ -25,11 +26,12 @@ namespace LogAnalyzer.Collections
 
 			_reader = reader;
 			_parser = parser;
+			_parentFile = parentFile;
 		}
 
 		public IBidirectionalEnumerator<LogEntry> GetEnumerator()
 		{
-			return new LogStreamEnumerator( _reader, _parser, parentFile: null, disposeReader: false );
+			return new LogStreamEnumerator( _reader, _parser, _parentFile, disposeReader: false );
 		}
 
 		IEnumerator<LogEntry> IEnumerable<LogEntry>.GetEnumerator()

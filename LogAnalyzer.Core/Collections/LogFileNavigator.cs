@@ -104,6 +104,15 @@ namespace LogAnalyzer.Collections
 			_disposeReader = disposeReader;
 		}
 
+		public override string ToString()
+		{
+			if ( _parentFile != null )
+			{
+				return string.Format( "File = {0}", _parentFile.FullPath );
+			}
+			return base.ToString();
+		}
+
 		public bool MoveBack()
 		{
 			throw new NotImplementedException();
