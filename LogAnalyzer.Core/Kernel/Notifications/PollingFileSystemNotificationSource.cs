@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Kernel

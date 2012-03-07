@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	public sealed class CompositeLogNotificationsSource : LogNotificationsSourceBase
 	{
-		private readonly List<LogNotificationsSourceBase> children = new List<LogNotificationsSourceBase>();
+		private readonly List<LogNotificationsSourceBase> _children = new List<LogNotificationsSourceBase>();
 
 		public CompositeLogNotificationsSource( params LogNotificationsSourceBase[] children )
 			: this( (IEnumerable<LogNotificationsSourceBase>)children ) { }
@@ -18,9 +16,9 @@ namespace LogAnalyzer.Kernel
 		{
 			if ( children == null ) throw new ArgumentNullException( "children" );
 
-			this.children.AddRange( children );
+			this._children.AddRange( children );
 
-			foreach ( var child in this.children )
+			foreach ( var child in this._children )
 			{
 				CreateObservable( child, "Changed" ).Subscribe( RaiseChanged );
 				CreateObservable( child, "Created" ).Subscribe( RaiseCreated );
@@ -45,7 +43,7 @@ namespace LogAnalyzer.Kernel
 		{
 			base.StartCore();
 
-			foreach (var child in children)
+			foreach (var child in _children)
 			{
 				child.Start();
 			}
@@ -53,7 +51,7 @@ namespace LogAnalyzer.Kernel
 
 		protected override void StopCore()
 		{
-			foreach (var child in children)
+			foreach (var child in _children)
 			{
 				child.Stop();
 			}

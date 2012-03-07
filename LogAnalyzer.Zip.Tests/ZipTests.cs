@@ -7,6 +7,7 @@ using Ionic.Zip;
 using LogAnalyzer.Config;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Parsers;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Zip.Tests

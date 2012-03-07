@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.Kernel
 {

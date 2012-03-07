@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Parsers;
 
 namespace LogAnalyzer.Tests.Mocks
 {

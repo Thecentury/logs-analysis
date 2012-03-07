@@ -5,51 +5,52 @@ using System.IO;
 using System.Diagnostics;
 using LogAnalyzer.Caching;
 using LogAnalyzer.Config;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.Kernel
 {
 	[DebuggerDisplay( "Dir {Path}" )]
 	internal class FileSystemDirectoryInfo : IDirectoryInfo
 	{
-		private readonly LogDirectoryConfigurationInfo directoryConfig;
+		private readonly LogDirectoryConfigurationInfo _directoryConfig;
 		public LogDirectoryConfigurationInfo DirectoryConfig
 		{
-			get { return directoryConfig; }
+			get { return _directoryConfig; }
 		}
 
-		private readonly CacheManager cacheManager;
-		private readonly string path;
+		private readonly CacheManager _cacheManager;
+		private readonly string _path;
 		public string Path
 		{
-			get { return path; }
+			get { return _path; }
 		}
 
-		private readonly bool useCache;
+		private readonly bool _useCache;
 
-		private LogNotificationsSourceBase notificationSource;
+		private LogNotificationsSourceBase _notificationSource;
 
 		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{
 			if ( directoryConfig == null )
 				throw new ArgumentNullException( "directoryConfig" );
 
-			this.directoryConfig = directoryConfig;
+			this._directoryConfig = directoryConfig;
 
-			this.path = directoryConfig.Path;
-			this.useCache = directoryConfig.UseCache;
+			this._path = directoryConfig.Path;
+			this._useCache = directoryConfig.UseCache;
 
-			if ( useCache )
+			if ( _useCache )
 			{
-				cacheManager = CacheManager.ForDirectory( directoryConfig );
+				_cacheManager = CacheManager.ForDirectory( directoryConfig );
 			}
 		}
 
 		public virtual IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
-			SearchOption searchOption = directoryConfig.IncludeNestedDirectories
+			SearchOption searchOption = _directoryConfig.IncludeNestedDirectories
 											? SearchOption.AllDirectories
 											: SearchOption.TopDirectoryOnly;
-			return Directory.EnumerateFiles( path, searchPattern, searchOption ).Select( GetFileInfo );
+			return Directory.EnumerateFiles( _path, searchPattern, searchOption ).Select( GetFileInfo );
 		}
 
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
@@ -57,11 +58,11 @@ namespace LogAnalyzer.Kernel
 			return
 				new CompositeLogNotificationsSource(
 					new DelayedLogRecordsSource(
-						new FileSystemNotificationsSource( path, filesFilter,
+						new FileSystemNotificationsSource( _path, filesFilter,
 														  NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName,
-														  directoryConfig.IncludeNestedDirectories )
+														  _directoryConfig.IncludeNestedDirectories )
 						),
-						new PollingFileSystemNotificationSource( path, filesFilter, directoryConfig.IncludeNestedDirectories )
+						new PollingFileSystemNotificationSource( _path, filesFilter, _directoryConfig.IncludeNestedDirectories )
 					);
 		}
 
@@ -69,11 +70,11 @@ namespace LogAnalyzer.Kernel
 		{
 			get
 			{
-				if ( notificationSource == null )
+				if ( _notificationSource == null )
 				{
-					notificationSource = CreateNotificationSource( directoryConfig.FileNameFilter );
+					_notificationSource = CreateNotificationSource( _directoryConfig.FileNameFilter );
 				}
-				return notificationSource;
+				return _notificationSource;
 			}
 		}
 
@@ -81,9 +82,9 @@ namespace LogAnalyzer.Kernel
 		{
 			IFileInfo result;
 
-			if ( useCache )
+			if ( _useCache )
 			{
-				result = cacheManager.CreateFile( fullPath );
+				result = _cacheManager.CreateFile( fullPath );
 			}
 			else
 			{

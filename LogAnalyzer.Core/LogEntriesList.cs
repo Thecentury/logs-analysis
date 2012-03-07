@@ -171,6 +171,7 @@ namespace LogAnalyzer
 			ParallelSort.QuicksortParallel( _mergedEntriesList, LogEntryByDateAndIndexComparer.Instance );
 #endif
 
+			timer.Stop();
 			Logger.WriteInfo( "{1}: Sorting - elapsed {0} ms", timer.ElapsedMilliseconds, GetType().Name );
 
 #if ASSERT
