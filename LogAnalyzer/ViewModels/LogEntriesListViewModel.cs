@@ -35,7 +35,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private int _addedEntriesCount;
 
 		private string _addedEntriesCountString;
-		private bool _autoScrollToBottom = true;
+		private bool _autoScrollToBottom;
 		private IList<LogEntry> _entries;
 		private LogEntryViewModelCollectionView _entriesView;
 		private SparseLogEntryViewModelList _logEntriesViewModels;

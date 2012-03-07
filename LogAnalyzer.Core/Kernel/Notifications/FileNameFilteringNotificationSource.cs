@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.Kernel
 {

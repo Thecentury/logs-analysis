@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using LogAnalyzer.Extensions;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	public class LogNotificationsSourceBase : INotifyPropertyChanged
 	{
@@ -29,7 +29,7 @@ namespace LogAnalyzer.Kernel
 
 		public void Start()
 		{
-			if ( isEnabled )
+			if ( _isEnabled )
 				return;
 
 			IsEnabled = true;
@@ -40,7 +40,7 @@ namespace LogAnalyzer.Kernel
 
 		public void Stop()
 		{
-			if ( !isEnabled )
+			if ( !_isEnabled )
 				return;
 
 			IsEnabled = false;
@@ -49,13 +49,13 @@ namespace LogAnalyzer.Kernel
 
 		protected virtual void StopCore() { }
 
-		private bool isEnabled;
+		private bool _isEnabled;
 		public bool IsEnabled
 		{
-			get { return isEnabled; }
+			get { return _isEnabled; }
 			private set
 			{
-				isEnabled = value;
+				_isEnabled = value;
 				RaisePropertyChanged( "IsEnabled" );
 			}
 		}
@@ -79,7 +79,7 @@ namespace LogAnalyzer.Kernel
 
 		protected void RaiseFileSystemEvent( string fileName, string directoryName, WatcherChangeTypes changeType, FileSystemEventHandler handler )
 		{
-			if ( !isEnabled )
+			if ( !_isEnabled )
 				return;
 
 			if ( handler != null )

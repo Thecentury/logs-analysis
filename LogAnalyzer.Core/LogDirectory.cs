@@ -10,23 +10,25 @@ using System.Threading;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Notifications;
+using LogAnalyzer.Kernel.Parsers;
 
 namespace LogAnalyzer
 {
 	public sealed class LogDirectory : LogEntriesList, ILogVisitable
 	{
-		private readonly object sync = new object();
-		private readonly IList<LogFile> files = CollectionHelper.CreateList<LogFile>();
+		private readonly object _sync = new object();
+		private readonly IList<LogFile> _files = CollectionHelper.CreateList<LogFile>();
 
-		private readonly ObservableList<LogFile> filesWrapper;
+		private readonly ObservableList<LogFile> _filesWrapper;
 		public ObservableList<LogFile> Files
 		{
-			get { return filesWrapper; }
+			get { return _filesWrapper; }
 		}
 
 		internal override int TotalFilesCount
 		{
-			get { return files.Count; }
+			get { return _files.Count; }
 		}
 
 		private readonly LogNotificationsSourceBase _operationsSource;
@@ -38,7 +40,7 @@ namespace LogAnalyzer
 		private readonly LogAnalyzerCore _core;
 		private readonly ExpressionFilter<IFileInfo> _fileFilter;
 		private readonly IFilter<LogEntry> _globalEntriesFilter;
-		private readonly Encoding encoding = Encoding.Unicode;
+		private readonly Encoding _encoding = Encoding.Unicode;
 		private readonly ILogLineParser _lineParser;
 
 		public ILogLineParser LineParser
@@ -63,13 +65,13 @@ namespace LogAnalyzer
 
 		public Encoding Encoding
 		{
-			get { return encoding; }
+			get { return _encoding; }
 		}
 
-		private readonly LogDirectoryConfigurationInfo directoryConfig;
+		private readonly LogDirectoryConfigurationInfo _directoryConfig;
 		public LogDirectoryConfigurationInfo DirectoryConfig
 		{
-			get { return directoryConfig; }
+			get { return _directoryConfig; }
 		}
 
 		/// <summary>
@@ -93,7 +95,7 @@ namespace LogAnalyzer
 			if ( core == null )
 				throw new ArgumentNullException( "core" );
 
-			this.directoryConfig = directoryConfigurationInfo;
+			this._directoryConfig = directoryConfigurationInfo;
 			this.Path = directoryConfigurationInfo.Path;
 			this.FileNameFilter = directoryConfigurationInfo.FileNameFilter;
 			this.DisplayName = directoryConfigurationInfo.DisplayName;
@@ -105,7 +107,7 @@ namespace LogAnalyzer
 			this._operationsQueue = environment.OperationsQueue;
 			this._config = config;
 			this._core = core;
-			this.filesWrapper = new ObservableList<LogFile>( files );
+			this._filesWrapper = new ObservableList<LogFile>( _files );
 			this._globalEntriesFilter = config.GlobalLogEntryFilter;
 			this._lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
 			this._fileFilter = config.GlobalFilesFilter;
@@ -120,7 +122,7 @@ namespace LogAnalyzer
 
 			if ( !String.IsNullOrWhiteSpace( directoryConfigurationInfo.EncodingName ) )
 			{
-				this.encoding = Encoding.GetEncoding( directoryConfigurationInfo.EncodingName );
+				this._encoding = Encoding.GetEncoding( directoryConfigurationInfo.EncodingName );
 			}
 		}
 
@@ -209,7 +211,7 @@ namespace LogAnalyzer
 					_operationsQueue.EnqueueOperation( () =>
 					{
 						Logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
-											this.DisplayName, files.Count );
+											this.DisplayName, _files.Count );
 
 						RaiseLoadedEvent();
 					} );
@@ -219,8 +221,8 @@ namespace LogAnalyzer
 
 		private void PerformInitialMerge()
 		{
-			PerformInitialMerge( files.Sum( f => f.LogEntries.Count ),
-				files.SelectMany( f => f.LogEntries ) );
+			PerformInitialMerge( _files.Sum( f => f.LogEntries.Count ),
+				_files.SelectMany( f => f.LogEntries ) );
 		}
 
 		internal void OnLogEntriesAddedToFile( IList<LogEntry> addedEntries )
@@ -281,7 +283,7 @@ namespace LogAnalyzer
 
 		private void AddFile( string fullPath )
 		{
-			lock ( sync )
+			lock ( _sync )
 			{
 				IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
 
@@ -297,9 +299,9 @@ namespace LogAnalyzer
 				// todo brinchuk this should be done async!
 				logFile.ReadFile();
 
-				Condition.DebugAssert( !files.Contains( logFile ) );
-				files.Add( logFile );
-				filesWrapper.RaiseCollectionAdded( logFile );
+				Condition.DebugAssert( !_files.Contains( logFile ) );
+				_files.Add( logFile );
+				_filesWrapper.RaiseCollectionAdded( logFile );
 
 				logFile.LogEntries.RaiseCollectionReset();
 			}
@@ -324,7 +326,7 @@ namespace LogAnalyzer
 				}
 				else
 				{
-					var changedFile = files.Single( f => f.FullPath == fullPath );
+					var changedFile = _files.Single( f => f.FullPath == fullPath );
 
 					if ( !_fileFilter.Include( changedFile.FileInfo ) )
 						return;
@@ -350,7 +352,7 @@ namespace LogAnalyzer
 
 		public bool ContainsFile( string fullPath )
 		{
-			return files.Any( f => f.FullPath == fullPath );
+			return _files.Any( f => f.FullPath == fullPath );
 		}
 
 		private void AddFile( LogFile logFile )
@@ -358,9 +360,9 @@ namespace LogAnalyzer
 			if ( logFile == null )
 				throw new ArgumentNullException( "logFile" );
 
-			Condition.DebugAssert( !files.Contains( logFile ) );
+			Condition.DebugAssert( !_files.Contains( logFile ) );
 
-			files.Add( logFile );
+			_files.Add( logFile );
 
 			OnLogEntriesAddedToFile( logFile.LogEntries );
 		}
@@ -369,7 +371,7 @@ namespace LogAnalyzer
 		{
 			get
 			{
-				long result = filesWrapper.Sum( f => f.TotalLengthInBytes );
+				long result = _filesWrapper.Sum( f => f.TotalLengthInBytes );
 				return result;
 			}
 		}

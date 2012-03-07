@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
+using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Misc;
 
@@ -19,7 +20,7 @@ namespace LogAnalyzer.Kernel
 	/// </summary>
 	internal sealed class PredefinedFilesDirectoryInfo : FileSystemDirectoryInfo
 	{
-		private readonly IEnumerable<string> fileNames;
+		private readonly IEnumerable<string> _fileNames;
 
 		public PredefinedFilesDirectoryInfo( [NotNull] LogDirectoryConfigurationInfo config ) : this( config, config.PredefinedFiles ) { }
 
@@ -29,12 +30,12 @@ namespace LogAnalyzer.Kernel
 			if ( config == null ) throw new ArgumentNullException( "config" );
 			if ( fileNames == null ) throw new ArgumentNullException( "fileNames" );
 
-			this.fileNames = fileNames;
+			this._fileNames = fileNames;
 		}
 
 		public override IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
-			return fileNames.Select( CreateFile );
+			return _fileNames.Select( CreateFile );
 		}
 
 		public IFileInfo CreateFile( string fileName )
@@ -47,7 +48,7 @@ namespace LogAnalyzer.Kernel
 		{
 			ListMultiDictionary<string, string> dirToFileNames = new ListMultiDictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
-			foreach ( var fileName in fileNames )
+			foreach ( var fileName in _fileNames )
 			{
 				try
 				{

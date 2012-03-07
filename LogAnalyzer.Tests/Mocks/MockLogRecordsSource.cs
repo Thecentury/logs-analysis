@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.Tests.Mocks
 {

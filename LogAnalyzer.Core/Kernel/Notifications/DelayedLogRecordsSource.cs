@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Properties;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	public sealed class DelayedLogRecordsSource : LogNotificationsSourceBase
 	{
-		private readonly LogNotificationsSourceBase inner;
-		private readonly TimeSpan updateInterval = TimeSpan.FromMilliseconds( 500 );
+		private readonly LogNotificationsSourceBase _inner;
+		private readonly TimeSpan _updateInterval = TimeSpan.FromMilliseconds( 500 );
 
 		public DelayedLogRecordsSource( LogNotificationsSourceBase inner ) : this( inner, Settings.Default.FileSystemNotificationsDelayInterval ) { }
 
@@ -18,8 +18,8 @@ namespace LogAnalyzer.Kernel
 			if ( inner == null )
 				throw new ArgumentNullException( "inner" );
 
-			this.inner = inner;
-			this.updateInterval = updateInterval;
+			this._inner = inner;
+			this._updateInterval = updateInterval;
 
 			CreateDelayed( "Changed" ).Subscribe( RaiseChanged );
 			CreateObservable( "Deleted" ).Subscribe( RaiseDeleted );
@@ -31,26 +31,26 @@ namespace LogAnalyzer.Kernel
 		protected override void StartCore()
 		{
 			base.StartCore();
-			inner.Start();
+			_inner.Start();
 		}
 
 		protected override void StopCore()
 		{
-			inner.Stop();
+			_inner.Stop();
 			base.StopCore();
 		}
 
 		private IObservable<FileSystemEventArgs> CreateDelayed( string eventName )
 		{
-			return Observable.FromEventPattern<FileSystemEventArgs>( inner, eventName )
+			return Observable.FromEventPattern<FileSystemEventArgs>( _inner, eventName )
 				.Select( e => e.EventArgs )
 				.GroupBy( e => e.FullPath )
-				.SelectMany( g => g.Delayed( updateInterval ) );
+				.SelectMany( g => g.Delayed( _updateInterval ) );
 		}
 
 		private IObservable<FileSystemEventArgs> CreateObservable( string eventName )
 		{
-			return Observable.FromEventPattern<FileSystemEventArgs>( inner, eventName )
+			return Observable.FromEventPattern<FileSystemEventArgs>( _inner, eventName )
 				.Select( e => e.EventArgs );
 		}
 	}

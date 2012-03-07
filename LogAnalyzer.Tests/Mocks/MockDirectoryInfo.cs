@@ -4,57 +4,58 @@ using System.Linq;
 using System.Text;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.Tests.Mocks
 {
 	public sealed class MockDirectoryInfo : IDirectoryInfo
 	{
-		private readonly List<MockFileInfo> files = new List<MockFileInfo>();
-		private readonly Encoding encoding = Encoding.Unicode;
+		private readonly List<MockFileInfo> _files = new List<MockFileInfo>();
+		private readonly Encoding _encoding = Encoding.Unicode;
 
 		public List<MockFileInfo> Files
 		{
-			get { return files; }
+			get { return _files; }
 		}
 
-		private readonly MockLogRecordsSource recordsSource;
+		private readonly MockLogRecordsSource _recordsSource;
 		public MockLogRecordsSource MockNotificationSource
 		{
-			get { return recordsSource; }
+			get { return _recordsSource; }
 		}
 
-		private readonly string path;
+		private readonly string _path;
 		public string Path
 		{
-			get { return path; }
+			get { return _path; }
 		}
 
 		public MockDirectoryInfo( string path )
 		{
-			this.path = path;
-			recordsSource = new MockLogRecordsSource( path );
+			this._path = path;
+			_recordsSource = new MockLogRecordsSource( path );
 		}
 
 		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
-			return files;
+			return _files;
 		}
 
-		private LogNotificationsSourceBase notificationsSource;
+		private LogNotificationsSourceBase _notificationsSource;
 		public LogNotificationsSourceBase NotificationSource
 		{
 			get
 			{
-				if ( notificationsSource == null )
+				if ( _notificationsSource == null )
 				{
-					notificationsSource = recordsSource;
+					_notificationsSource = _recordsSource;
 					if ( CreateRecordsSourceHandler != null )
 					{
-						notificationsSource = CreateRecordsSourceHandler( recordsSource );
+						_notificationsSource = CreateRecordsSourceHandler( _recordsSource );
 					}
 				}
 
-				return notificationsSource;
+				return _notificationsSource;
 			}
 		}
 
@@ -62,20 +63,20 @@ namespace LogAnalyzer.Tests.Mocks
 
 		public MockFileInfo AddFile( string name )
 		{
-			if ( files.Any( f => f.Name == name ) )
+			if ( _files.Any( f => f.Name == name ) )
 				throw new InvalidOperationException( "File with name \"{0}\" already exists.".Format2( name ) );
 
-			MockFileInfo fileInfo = new MockFileInfo( name, System.IO.Path.Combine( path, name ), recordsSource, encoding );
-			files.Add( fileInfo );
+			MockFileInfo fileInfo = new MockFileInfo( name, System.IO.Path.Combine( _path, name ), _recordsSource, _encoding );
+			_files.Add( fileInfo );
 
-			recordsSource.RaiseFileCreated( name );
+			_recordsSource.RaiseFileCreated( name );
 
 			return fileInfo;
 		}
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			return files.Single( f => f.FullName == fullPath );
+			return _files.Single( f => f.FullName == fullPath );
 		}
 	}
 }

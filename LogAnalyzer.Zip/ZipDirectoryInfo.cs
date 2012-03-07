@@ -6,37 +6,39 @@ using Ionic.Zip;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Notifications;
 using IOPath = System.IO.Path;
 
 namespace LogAnalyzer.Zip
 {
 	internal sealed class ZipDirectoryInfo : IDirectoryInfo
 	{
-		private readonly LogNotificationsSourceBase notificationsSource = new LogNotificationsSourceBase();
-		private readonly string zipFileName;
-		private readonly string rootDirectory;
-		private readonly DirectoriesHierarchyHelper directoriesHierarchyHelper;
+		private readonly LogNotificationsSourceBase _notificationsSource = new LogNotificationsSourceBase();
+		private readonly string _zipFileName;
+		[UsedImplicitly] 
+		private readonly string _rootDirectory;
+		private readonly DirectoriesHierarchyHelper _directoriesHierarchyHelper;
 
 		public ZipDirectoryInfo( [NotNull] LogDirectoryConfigurationInfo config, [NotNull] string zipFileName, string rootDirectory )
 		{
 			if ( config == null ) throw new ArgumentNullException( "config" );
 			if ( zipFileName == null ) throw new ArgumentNullException( "zipFileName" );
 
-			this.zipFileName = zipFileName;
-			this.rootDirectory = rootDirectory;
-			this.directoriesHierarchyHelper = new DirectoriesHierarchyHelper( rootDirectory, config.IncludeNestedDirectories );
+			this._zipFileName = zipFileName;
+			this._rootDirectory = rootDirectory;
+			this._directoriesHierarchyHelper = new DirectoriesHierarchyHelper( rootDirectory, config.IncludeNestedDirectories );
 		}
 
 		public LogNotificationsSourceBase NotificationSource
 		{
-			get { return notificationsSource; }
+			get { return _notificationsSource; }
 		}
 
 		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
 		{
 			List<ZipFileInfo> files = new List<ZipFileInfo>();
 
-			using ( var zip = new ZipFile( zipFileName ) )
+			using ( var zip = new ZipFile( _zipFileName ) )
 			{
 				foreach ( ZipEntry zipEntry in zip )
 				{
@@ -56,7 +58,7 @@ namespace LogAnalyzer.Zip
 					if ( !includeByDir )
 						continue;
 
-					ZipFileInfo file = new ZipFileInfo( zipFileName, zipEntry.FileName );
+					ZipFileInfo file = new ZipFileInfo( _zipFileName, zipEntry.FileName );
 					files.Add( file );
 				}
 			}
@@ -66,17 +68,17 @@ namespace LogAnalyzer.Zip
 
 		private bool IncludeByDirectory( string directoryName )
 		{
-			return directoriesHierarchyHelper.IncludeDirectory( directoryName );
+			return _directoriesHierarchyHelper.IncludeDirectory( directoryName );
 		}
 
 		public IFileInfo GetFileInfo( string fullPath )
 		{
-			return new ZipFileInfo( zipFileName, fullPath );
+			return new ZipFileInfo( _zipFileName, fullPath );
 		}
 
 		public string Path
 		{
-			get { return zipFileName; }
+			get { return _zipFileName; }
 		}
 
 		internal sealed class DirectoriesHierarchyHelper

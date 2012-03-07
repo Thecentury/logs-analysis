@@ -122,8 +122,8 @@
     <Compile Include="IndexedLogStreamEnumerator.cs" />
     <Compile Include="Collections\IndexedLogStreamNavigator.cs" />
     <Compile Include="IndexRecord.cs" />
-    <Compile Include="Kernel\CompositeLogNotificationsSource.cs" />
-    <Compile Include="Kernel\ConfigurableLineParser.cs" />
+    <Compile Include="Kernel\Notifications\CompositeLogNotificationsSource.cs" />
+    <Compile Include="Kernel\Parsers\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />
     <Compile Include="Kernel\DirectoryManager.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Kernel\EnvironmentBase.cs" />
     <Compile Include="Kernel\ErrorMessages.cs" />
     <Compile Include="Kernel\ErrorOccuredEventArgs.cs" />
-    <Compile Include="Kernel\FileNameFilteringNotificationSource.cs" />
+    <Compile Include="Kernel\Notifications\FileNameFilteringNotificationSource.cs" />
     <Compile Include="Kernel\IDependencyInjectionContainer.cs" />
     <Compile Include="Kernel\ErrorReportingServiceBase.cs" />
     <Compile Include="Kernel\IErrorReportingService.cs" />
@@ -140,9 +140,9 @@
     <Compile Include="Kernel\ITransformer.cs" />
     <Compile Include="Kernel\IViewManager.cs" />
     <Compile Include="Auxilliary\KeyValueStorage.cs" />
-    <Compile Include="Kernel\ManualLogLineParser.cs" />
+    <Compile Include="Kernel\Parsers\ManualLogLineParser.cs" />
     <Compile Include="Kernel\NeverOldTimeService.cs" />
-    <Compile Include="Kernel\PollingFileSystemNotificationSource.cs" />
+    <Compile Include="Kernel\Notifications\PollingFileSystemNotificationSource.cs" />
     <Compile Include="Kernel\PredefinedFilesDirectoryFactory.cs" />
     <Compile Include="Kernel\PredefinedFilesDirectoryInfo.cs" />
     <Compile Include="Kernel\RealFileSystem.cs" />
@@ -155,10 +155,10 @@
     <Compile Include="Kernel\CacheStream.cs" />
     <Compile Include="Kernel\ConstIntervalTimeService.cs" />
     <Compile Include="Kernel\CreateFileInfoContext.cs" />
-    <Compile Include="Kernel\DelayedLogRecordsSource.cs" />
+    <Compile Include="Kernel\Notifications\DelayedLogRecordsSource.cs" />
     <Compile Include="Kernel\LogFileReaderBase.cs" />
     <Compile Include="Kernel\IStreamProvider.cs" />
-    <Compile Include="Kernel\MostLogLineParser.cs" />
+    <Compile Include="Kernel\Parsers\MostLogLineParser.cs" />
     <Compile Include="Kernel\StreamLogFileReader.cs" />
     <Compile Include="Kernel\LogFileReaderArguments.cs" />
     <Compile Include="Kernel\IOperationsQueue.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Kernel\FileSystemDirectoryInfo.cs" />
     <Compile Include="Kernel\FileSystemEnvironment.cs" />
     <Compile Include="Kernel\FileSystemFileInfo.cs" />
-    <Compile Include="Kernel\FileSystemNotificationsSource.cs" />
+    <Compile Include="Kernel\Notifications\FileSystemNotificationsSource.cs" />
     <Compile Include="Filters\AlwaysFalse.cs" />
     <Compile Include="Filters\AlwaysTrue.cs" />
     <Compile Include="Filters\Argument.cs" />
@@ -209,7 +209,7 @@
     <Compile Include="Kernel\IEnvironment.cs" />
     <Compile Include="Kernel\IFileInfo.cs" />
     <Compile Include="IFreezable.cs" />
-    <Compile Include="Kernel\LogNotificationsSourceBase.cs" />
+    <Compile Include="Kernel\Notifications\LogNotificationsSourceBase.cs" />
     <Compile Include="IReportReadProgress.cs" />
     <Compile Include="LastNMinutesAcceptor.cs" />
     <Compile Include="LogAnalyzerException.cs" />

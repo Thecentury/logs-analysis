@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -122,6 +123,8 @@ namespace LogAnalyzer.Kernel
 							int bytesCountFromLastLineBreakToTheEndOfAddedText = _encoding.GetByteCount( chars );
 
 							this._lastLineBreakByteIndex += (addedText.Length - bytesCountFromLastLineBreakToTheEndOfAddedText);
+
+							Debug.Assert( _lastLineBreakByteIndex >= 0 );
 						}
 					}
 				}
@@ -338,6 +341,7 @@ namespace LogAnalyzer.Kernel
 					}
 
 					this._lastLineBreakByteIndex = prevLineBreakIndex;
+					Debug.Assert( _lastLineBreakByteIndex >= 0 );
 				}
 
 				_linesCount = (int)lineIndex;

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Parsers
 {
 	public sealed class MostLogLineParser : ILogLineParser
 	{

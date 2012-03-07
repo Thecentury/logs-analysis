@@ -8,6 +8,7 @@ using System.Text;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Common;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Parsers;
 using LogAnalyzer.Misc;
 
 namespace LogAnalyzer.ConsoleApp

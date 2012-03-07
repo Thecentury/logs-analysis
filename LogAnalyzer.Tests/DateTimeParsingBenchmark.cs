@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Parsers;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests

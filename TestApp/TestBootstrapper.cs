@@ -7,6 +7,7 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Kernel.Parsers;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Tests.Mocks;
 

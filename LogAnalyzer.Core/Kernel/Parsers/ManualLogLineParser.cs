@@ -1,6 +1,6 @@
 using System;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Parsers
 {
 	public sealed class ManualLogLineParser : ILogLineParser
 	{
