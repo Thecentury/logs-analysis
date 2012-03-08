@@ -56,14 +56,15 @@ namespace LogAnalyzer.Kernel
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
 		{
 			return
-				new CompositeLogNotificationsSource(
-					new DelayedLogRecordsSource(
-						new FileSystemNotificationsSource( _path, filesFilter,
-														  NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName,
-														  _directoryConfig.IncludeNestedDirectories )
-						),
-						new PollingFileSystemNotificationSource( _path, filesFilter, _directoryConfig.IncludeNestedDirectories )
-					);
+				new PausableNotificationSource(
+					new CompositeLogNotificationsSource(
+						new DelayedLogRecordsSource(
+							new FileSystemNotificationsSource( _path, filesFilter,
+															  NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName,
+															  _directoryConfig.IncludeNestedDirectories )
+							),
+							new PollingFileSystemNotificationSource( _path, filesFilter, _directoryConfig.IncludeNestedDirectories )
+						) );
 		}
 
 		public LogNotificationsSourceBase NotificationSource

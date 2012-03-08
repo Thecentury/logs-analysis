@@ -69,16 +69,16 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			get { return PackUriHelper.MakePackUri( "/Resources/folder.png" ); }
 		}
 
-		private bool? isChecked;
+		private bool? _isChecked;
 		public bool? IsChecked
 		{
-			get { return isChecked; }
+			get { return _isChecked; }
 			set
 			{
-				if ( isChecked == value )
+				if ( _isChecked == value )
 					return;
 
-				isChecked = value;
+				_isChecked = value;
 
 				if ( value.HasValue )
 				{

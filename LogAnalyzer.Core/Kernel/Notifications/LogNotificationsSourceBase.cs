@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Kernel.Notifications
@@ -57,6 +59,18 @@ namespace LogAnalyzer.Kernel.Notifications
 			{
 				_isEnabled = value;
 				RaisePropertyChanged( "IsEnabled" );
+			}
+		}
+
+		public void SetIsEnabled(bool value)
+		{
+			if ( value )
+			{
+				Start();
+			}
+			else
+			{
+				Stop();
 			}
 		}
 
@@ -119,6 +133,48 @@ namespace LogAnalyzer.Kernel.Notifications
 		private void RaisePropertyChanged( string propertyName )
 		{
 			PropertyChanged.Raise( this, propertyName );
+		}
+
+		protected void Raise( [NotNull] EventArgs e )
+		{
+			if ( e == null )
+			{
+				throw new ArgumentNullException( "e" );
+			}
+
+			if ( e is ErrorEventArgs )
+			{
+				RaiseError( (ErrorEventArgs)e );
+			}
+			else if ( e is RenamedEventArgs )
+			{
+				RaiseRenamed( (RenamedEventArgs)e );
+			}
+			else
+			{
+				FileSystemEventArgs fsArgs = e as FileSystemEventArgs;
+				if ( fsArgs == null )
+				{
+					throw new InvalidOperationException( string.Format( "Unexpected EventArgs type '{0}'", e.GetType().Name ) );
+				}
+
+				switch ( fsArgs.ChangeType )
+				{
+					case WatcherChangeTypes.Created:
+						RaiseCreated( fsArgs );
+						break;
+					case WatcherChangeTypes.Deleted:
+						RaiseDeleted( fsArgs );
+						break;
+					case WatcherChangeTypes.Changed:
+						RaiseChanged( fsArgs );
+						break;
+					case WatcherChangeTypes.Renamed:
+					case WatcherChangeTypes.All:
+					default:
+						throw new ArgumentOutOfRangeException( string.Format( "Unexpected changeType '{0}'", fsArgs.ChangeType ) );
+				}
+			}
 		}
 
 		#endregion

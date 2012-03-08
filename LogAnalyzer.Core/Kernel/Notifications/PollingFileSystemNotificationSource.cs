@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Timers;
-using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Properties;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	/// <summary>
 	/// Реализация класса, уведомляющего об изменениях в файловой системе, которая периодически опрашивает файловую систему на наличие изменений.
 	/// </summary>
 	public sealed class PollingFileSystemNotificationSource : LogNotificationsSourceBase
 	{
-		private readonly string logsPath;
-		private readonly string filesFilter;
-		private readonly bool includeSubdirectories;
-		private readonly Timer timer;
-		private readonly object sync = new object();
-		private HashSet<FileInfo> files = new HashSet<FileInfo>();
-		private HashSet<string> fileNames = new HashSet<string>();
+		private readonly string _logsPath;
+		private readonly string _filesFilter;
+		private readonly bool _includeSubdirectories;
+		private readonly Timer _timer;
+		private readonly object _sync = new object();
+		private HashSet<FileInfo> _files = new HashSet<FileInfo>();
+		private HashSet<string> _fileNames = new HashSet<string>();
 
 		public PollingFileSystemNotificationSource( string logsPath, string filesFilter, bool includeSubdirectories )
 			: this( logsPath, filesFilter, includeSubdirectories, Settings.Default.FileSystemPollInterval ) { }
@@ -30,18 +28,18 @@ namespace LogAnalyzer.Kernel
 			if ( !Directory.Exists( logsPath ) )
 				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
 
-			this.logsPath = logsPath;
-			this.filesFilter = filesFilter;
-			this.includeSubdirectories = includeSubdirectories;
+			this._logsPath = logsPath;
+			this._filesFilter = filesFilter;
+			this._includeSubdirectories = includeSubdirectories;
 
-			timer = new Timer { Interval = updateInterval.TotalMilliseconds };
-			timer.Elapsed += OnTimerElapsed;
+			_timer = new Timer { Interval = updateInterval.TotalMilliseconds };
+			_timer.Elapsed += OnTimerElapsed;
 		}
 
 		private HashSet<FileInfo> GetFilesSnapshot()
 		{
-			var currentFiles = Directory.GetFiles( logsPath, filesFilter,
-				includeSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly );
+			var currentFiles = Directory.GetFiles( _logsPath, _filesFilter,
+				_includeSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly );
 
 			var snapshot = new HashSet<FileInfo>( currentFiles.Select( f => new FileInfo( f ) ) );
 
@@ -52,39 +50,39 @@ namespace LogAnalyzer.Kernel
 		{
 			return
 				new HashSet<string>(
-					Directory.EnumerateFiles( logsPath, filesFilter,
-						includeSubdirectories
+					Directory.EnumerateFiles( _logsPath, _filesFilter,
+						_includeSubdirectories
 						? SearchOption.AllDirectories
 						: SearchOption.TopDirectoryOnly ) );
 		}
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
-			lock ( sync )
+			lock ( _sync )
 			{
 				var currentFileNames = GetFileNamesSnapshot();
 
-				var added = GetAdded( currentFileNames, fileNames );
+				var added = GetAdded( currentFileNames, _fileNames );
 				foreach ( var fullPath in added )
 				{
 					RaiseCreated( new FileSystemEventArgs( WatcherChangeTypes.Created,
 						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
 
-					files.Add( new FileInfo( fullPath ) );
+					_files.Add( new FileInfo( fullPath ) );
 				}
 
-				var deleted = GetDeleted( currentFileNames, fileNames );
+				var deleted = GetDeleted( currentFileNames, _fileNames );
 				foreach ( var fullPath in deleted )
 				{
 					RaiseDeleted( new FileSystemEventArgs( WatcherChangeTypes.Deleted,
 						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
 
-					files.RemoveWhere( f => f.FullName == fullPath );
+					_files.RemoveWhere( f => f.FullName == fullPath );
 				}
 
-				fileNames = currentFileNames;
+				_fileNames = currentFileNames;
 
-				foreach ( var fileInfo in files )
+				foreach ( var fileInfo in _files )
 				{
 					var prevLength = fileInfo.Length;
 					fileInfo.Refresh();
@@ -92,7 +90,7 @@ namespace LogAnalyzer.Kernel
 
 					if ( currentLength != prevLength )
 					{
-						RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, logsPath, fileInfo.Name ) );
+						RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, _logsPath, fileInfo.Name ) );
 					}
 				}
 			}
@@ -110,19 +108,19 @@ namespace LogAnalyzer.Kernel
 
 		protected override void StartCore()
 		{
-			lock ( sync )
+			lock ( _sync )
 			{
-				files = GetFilesSnapshot();
+				_files = GetFilesSnapshot();
 			}
 
 			base.StartCore();
-			timer.Start();
+			_timer.Start();
 		}
 
 		protected override void StopCore()
 		{
 			base.StopCore();
-			timer.Stop();
+			_timer.Stop();
 		}
 	}
 }

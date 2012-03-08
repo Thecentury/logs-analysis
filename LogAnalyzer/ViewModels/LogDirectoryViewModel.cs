@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -14,42 +15,50 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogDirectoryViewModel : LogEntriesListViewModel, IHierarchyMember<CoreViewModel, LogDirectory>
 	{
-		private readonly LogDirectory directory;
+		private readonly LogDirectory _directory;
 
-		private readonly CoreViewModel coreViewModel;
+		private readonly CoreViewModel _coreViewModel;
 		public CoreViewModel CoreViewModel
 		{
-			get { return coreViewModel; }
+			get { return _coreViewModel; }
 		}
 
-		private readonly BatchUpdatingObservableCollection<LogFileViewModel> filesViewModels;
+		private readonly BatchUpdatingObservableCollection<LogFileViewModel> _filesViewModels;
 		public ObservableCollection<LogFileViewModel> Files
 		{
-			get { return filesViewModels; }
+			get { return _filesViewModels; }
 		}
 
 		public LogDirectory LogDirectory
 		{
-			get { return directory; }
+			get { return _directory; }
 		}
 
 		public string Path
 		{
-			get { return directory.Path; }
+			get { return _directory.Path; }
 		}
 
 		public string DisplayName
 		{
-			get { return directory.DisplayName; }
+			get { return _directory.DisplayName; }
 		}
 
-		private readonly MessageSeverityCountViewModel messageSeverityCount;
+		private readonly MessageSeverityCountViewModel _messageSeverityCount;
 		public override MessageSeverityCountViewModel MessageSeverityCount
 		{
-			get { return messageSeverityCount; }
+			get { return _messageSeverityCount; }
 		}
 
-		private readonly DispatcherObservableCollection syncronizedFilesViewModels;
+		public bool IsNotificationSourceEnabled
+		{
+			get { return _directory.NotificationsSource.IsEnabled; }
+			set { _directory.NotificationsSource.SetIsEnabled( value ); }
+		}
+
+		private readonly DispatcherObservableCollection _syncronizedFilesViewModels;
+
+		private readonly ToggleButtonViewModel _notificationsEnabledToggleButton;
 
 		public LogDirectoryViewModel( LogDirectory directory, CoreViewModel coreViewModel )
 			: base( coreViewModel.ApplicationViewModel )
@@ -59,26 +68,39 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( coreViewModel == null )
 				throw new ArgumentNullException( "coreViewModel" );
 
-			this.directory = directory;
-			this.coreViewModel = coreViewModel;
+			this._directory = directory;
+			this._coreViewModel = coreViewModel;
 
-			filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
-			directory.Files.CollectionChanged += Files_CollectionChanged;
+			_filesViewModels = new BatchUpdatingObservableCollection<LogFileViewModel>( directory.Files.Select( f => new LogFileViewModel( f, this ) ) );
+			directory.Files.CollectionChanged += OnFilesCollectionChanged;
 
 			Init( directory.MergedEntries );
 
-			syncronizedFilesViewModels = new DispatcherObservableCollection( filesViewModels, coreViewModel.Scheduler );
+			_syncronizedFilesViewModels = new DispatcherObservableCollection( _filesViewModels, coreViewModel.Scheduler );
 			// произойдет уже в этом потоке
-			syncronizedFilesViewModels.CollectionChanged += OnFilesViewModelsViewModelsCollectionChanged;
+			_syncronizedFilesViewModels.CollectionChanged += OnFilesViewModelsViewModelsCollectionChanged;
 
-			this.messageSeverityCount = new MessageSeverityCountViewModel( directory.MessageSeverityCount );
+			this._messageSeverityCount = new MessageSeverityCountViewModel( directory.MessageSeverityCount );
+
+			directory.NotificationsSource.PropertyChanged += NotificationsSourcePropertyChanged;
+
+			_notificationsEnabledToggleButton = new ToggleButtonViewModel(
+				() => IsNotificationSourceEnabled,
+				value => IsNotificationSourceEnabled = value,
+				"Toggle autoscroll to bottom on updates", PackUriHelper.MakePackUri( "/Resources/control-record.png" )
+				);
 		}
 
-		private void Files_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void NotificationsSourcePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			_notificationsEnabledToggleButton.RaiseIsToggledChanged();
+		}
+
+		private void OnFilesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action == NotifyCollectionChangedAction.Reset )
 			{
-				filesViewModels.RaiseCollectionReset();
+				_filesViewModels.RaiseCollectionReset();
 				return;
 			}
 
@@ -87,7 +109,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				foreach ( LogFile addedFile in e.NewItems )
 				{
 					LogFileViewModel fileViewModel = new LogFileViewModel( addedFile, this );
-					filesViewModels.Add( fileViewModel );
+					_filesViewModels.Add( fileViewModel );
 				}
 				return;
 			}
@@ -95,16 +117,25 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
 		{
-			LogFileViewModel result = filesViewModels.First( vm => vm.LogFile == logEntry.ParentLogFile );
+			LogFileViewModel result = _filesViewModels.First( vm => vm.LogFile == logEntry.ParentLogFile );
 			return result;
 		}
 
 		private void OnFilesViewModelsViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action != NotifyCollectionChangedAction.Add )
+			{
 				return;
+			}
 
-			BeginInvokeInUIDispatcher( () => filesViewModels.RaiseCollectionReset() );
+			BeginInvokeInUIDispatcher( () => _filesViewModels.RaiseCollectionReset() );
+		}
+
+		protected override void PopulateToolbarItems( IList<object> collection )
+		{
+			base.PopulateToolbarItems( collection );
+
+			collection.Insert( 1, _notificationsEnabledToggleButton );
 		}
 
 		protected override void PopulateStatusBarItems( ICollection<object> collection )
@@ -112,7 +143,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			base.PopulateStatusBarItems( collection );
 
 #if DEBUG
-			collection.Add( new MergedEntriesDebugStatusBarItem( directory.MergedEntries ) );
+			collection.Add( new MergedEntriesDebugStatusBarItem( _directory.MergedEntries ) );
 #endif
 		}
 
@@ -128,7 +159,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					openFolderCommand = new DelegateCommand<RoutedEventArgs>( _ =>
 					{
-						WindowsInterop.SelectInExplorer( directory.Path );
+						WindowsInterop.SelectInExplorer( _directory.Path );
 					} );
 				}
 
@@ -145,7 +176,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override LogEntriesListViewModel Clone()
 		{
-			LogDirectoryViewModel clone = new LogDirectoryViewModel( directory, coreViewModel );
+			LogDirectoryViewModel clone = new LogDirectoryViewModel( _directory, _coreViewModel );
 			return clone;
 		}
 
@@ -167,12 +198,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		CoreViewModel IHierarchyMember<CoreViewModel, LogDirectory>.Parent
 		{
-			get { return coreViewModel; }
+			get { return _coreViewModel; }
 		}
 
 		LogDirectory IHierarchyMember<CoreViewModel, LogDirectory>.Data
 		{
-			get { return directory; }
+			get { return _directory; }
 		}
 	}
 }

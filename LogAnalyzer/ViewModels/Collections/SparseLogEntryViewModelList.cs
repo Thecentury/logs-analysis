@@ -195,7 +195,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			return GetEnumerator();
 		}
 
-		public IEnumerator<LogEntryViewModel> GetEnumerator()
+		IEnumerator<LogEntryViewModel> IEnumerable<LogEntryViewModel>.GetEnumerator()
 		{
 			IndexerEnumerator<LogEntryViewModel> enumerator = new IndexerEnumerator<LogEntryViewModel>( this );
 			return enumerator;

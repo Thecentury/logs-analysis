@@ -82,8 +82,11 @@ namespace LogAnalyzer.Kernel
 
 			CompositeLogNotificationsSource compositeSource = new CompositeLogNotificationsSource( notificationsSources );
 
-			DelayedLogRecordsSource result = new DelayedLogRecordsSource( compositeSource );
-			return result;
+			DelayedLogRecordsSource delayedSource = new DelayedLogRecordsSource( compositeSource );
+
+			PausableNotificationSource pausableSource = new PausableNotificationSource( delayedSource );
+
+			return pausableSource;
 		}
 	}
 }

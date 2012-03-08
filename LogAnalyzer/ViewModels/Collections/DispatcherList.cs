@@ -95,7 +95,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		#region IEnumerable<T> Members
 
-		public IEnumerator<T> GetEnumerator()
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			// todo тут можно возвращать собственный enumerator, который бежит по индексу. Тогда предположительно
 			// не будет исключения, что коллекция была изменена во время ее enumerating.
