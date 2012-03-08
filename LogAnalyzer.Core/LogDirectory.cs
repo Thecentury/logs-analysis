@@ -31,7 +31,7 @@ namespace LogAnalyzer
 			get { return _files.Count; }
 		}
 
-		private readonly LogNotificationsSourceBase _operationsSource;
+		private readonly LogNotificationsSourceBase _notificationsSource;
 		private readonly IEnvironment _environment;
 		private readonly IDirectoryInfo _directoryInfo;
 		private readonly IOperationsQueue _operationsQueue;
@@ -46,6 +46,11 @@ namespace LogAnalyzer
 		public ILogLineParser LineParser
 		{
 			get { return _lineParser; }
+		}
+
+		public LogNotificationsSourceBase NotificationsSource
+		{
+			get { return _notificationsSource; }
 		}
 
 		public IFilter<LogEntry> GlobalEntriesFilter
@@ -102,7 +107,7 @@ namespace LogAnalyzer
 			this.UseCache = directoryConfigurationInfo.UseCache;
 
 			this._directoryInfo = environment.GetDirectory( Path );
-			this._operationsSource = _directoryInfo.NotificationSource;
+			this._notificationsSource = _directoryInfo.NotificationSource;
 			this._environment = environment;
 			this._operationsQueue = environment.OperationsQueue;
 			this._config = config;
@@ -114,11 +119,11 @@ namespace LogAnalyzer
 
 			_fileFilter.Changed += OnFileFilterChanged;
 
-			_operationsSource.Changed += OnFileChanged;
-			_operationsSource.Created += OnFileCreated;
-			_operationsSource.Deleted += OnFileDeleted;
-			_operationsSource.Error += OnWatcherError;
-			_operationsSource.Renamed += OnFileRenamed;
+			_notificationsSource.Changed += OnFileChanged;
+			_notificationsSource.Created += OnFileCreated;
+			_notificationsSource.Deleted += OnFileDeleted;
+			_notificationsSource.Error += OnWatcherError;
+			_notificationsSource.Renamed += OnFileRenamed;
 
 			if ( !String.IsNullOrWhiteSpace( directoryConfigurationInfo.EncodingName ) )
 			{
@@ -207,7 +212,7 @@ namespace LogAnalyzer
 				{
 					PerformInitialMerge();
 
-					_operationsSource.Start();
+					_notificationsSource.Start();
 					_operationsQueue.EnqueueOperation( () =>
 					{
 						Logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",

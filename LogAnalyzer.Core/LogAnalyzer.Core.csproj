@@ -122,7 +122,11 @@
     <Compile Include="IndexedLogStreamEnumerator.cs" />
     <Compile Include="Collections\IndexedLogStreamNavigator.cs" />
     <Compile Include="IndexRecord.cs" />
+    <Compile Include="Kernel\Notifications\ChangesStorage.cs" />
     <Compile Include="Kernel\Notifications\CompositeLogNotificationsSource.cs" />
+    <Compile Include="Kernel\Notifications\FileSystemEventArgsEqualityComparer.cs" />
+    <Compile Include="Kernel\Notifications\IgnoringStopNotificationSource.cs" />
+    <Compile Include="Kernel\Notifications\PausableNotificationSource.cs" />
     <Compile Include="Kernel\Parsers\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />

@@ -558,24 +558,24 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Toolbar
 
-		private readonly ObservableCollection<object> toolbarItems = new ObservableCollection<object>();
-		private bool toolbarItemsPopulated;
+		private readonly ObservableCollection<object> _toolbarItems = new ObservableCollection<object>();
+		private bool _toolbarItemsPopulated;
 
 		public ObservableCollection<object> ToolbarItems
 		{
 			get
 			{
-				if ( !toolbarItemsPopulated )
+				if ( !_toolbarItemsPopulated )
 				{
-					PopulateToolbarItems( toolbarItems );
-					toolbarItemsPopulated = true;
+					PopulateToolbarItems( _toolbarItems );
+					_toolbarItemsPopulated = true;
 				}
 
-				return toolbarItems;
+				return _toolbarItems;
 			}
 		}
 
-		protected virtual void PopulateToolbarItems( ICollection<object> collection )
+		protected virtual void PopulateToolbarItems( IList<object> collection )
 		{
 			collection.Add( new LogEntryListToolbarViewModel( this ) );
 			collection.Add( new ToolBarItemViewModel( "Save entries to file", SaveToFileCommand, MakePackUri( "/Resources/disk.png" ) ) );

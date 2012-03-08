@@ -7,7 +7,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 {
 	public sealed class DispatcherEnumerable<T> : DispatcherObservableCollection, IEnumerable<T>
 	{
-		private readonly IEnumerable<T> collection;
+		private readonly IEnumerable<T> _collection;
 
 		public DispatcherEnumerable( IEnumerable<T> collection, IScheduler scheduler )
 			: base( collection, scheduler )
@@ -15,14 +15,14 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			if ( collection == null )
 				throw new ArgumentNullException( "collection" );
 
-			this.collection = collection;
+			this._collection = collection;
 		}
 
 		#region IEnumerable<T> Members
 
-		public IEnumerator<T> GetEnumerator()
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			return collection.GetEnumerator();
+			return _collection.GetEnumerator();
 		}
 
 		#endregion
@@ -31,7 +31,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return collection.GetEnumerator();
+			return _collection.GetEnumerator();
 		}
 
 		#endregion

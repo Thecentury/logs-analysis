@@ -78,11 +78,11 @@ namespace LogAnalyzer.Collections
 
 	public interface IBidirectionalEnumerable<out T> : IEnumerable<T>
 	{
-		IBidirectionalEnumerator<T> GetEnumerator();
+		new IBidirectionalEnumerator<T> GetEnumerator();
 	}
 
 	public interface IRandomAccessEnumerable<out T> : IBidirectionalEnumerable<T>
 	{
-		IRandomAccessEnumerator<T> GetEnumerator();
+		new IRandomAccessEnumerator<T> GetEnumerator();
 	}
 }

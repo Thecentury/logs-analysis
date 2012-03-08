@@ -393,7 +393,7 @@
 			<Setter Property="Width" Value="16"/>
 			<Setter Property="ToolTip">
 				<Setter.Value>
-					<ToolTip>
+					<ToolTip ToolTipService.BetweenShowDelay="0" ToolTipService.ShowDuration="100000" ToolTipService.InitialShowDelay="0">
 						<TextBlock MaxWidth="300" TextWrapping="WrapWithOverflow">
 							<Run Text="{Binding LogEntry.Type, Mode=OneWay}"
 								 Foreground="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
@@ -412,6 +412,7 @@
 					<Setter Property="Stroke" Value="Black"/>
 					<Setter Property="StrokeThickness" Value="1"/>
 					<Setter Property="Height" Value="5"/>
+					<Setter Property="Panel.ZIndex" Value="10"/>
 				</Trigger>
 			</Style.Triggers>
 		</Style>

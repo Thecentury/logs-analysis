@@ -257,7 +257,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			throw new NotImplementedException();
 		}
 
-		protected override void PopulateToolbarItems( ICollection<object> collection )
+		protected override void PopulateToolbarItems( IList<object> collection )
 		{
 			base.PopulateToolbarItems( collection );
 			collection.Add( new FilterTabToolbarViewModel( this ) );

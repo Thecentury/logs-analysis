@@ -63,6 +63,14 @@
 		<TextBlock Text="{Binding Message}"/>
 	</DataTemplate>
 
+	<DataTemplate DataType="{x:Type ViewModels:ToggleButtonViewModel}">
+		<ToggleButton Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ToggleButtonStyleKey}}"
+					  IsChecked="{Binding IsToggled}"
+					  ToolTip="{Binding Tooltip}">
+			<Image Source="{Binding IconSource}" Stretch="None"/>
+		</ToggleButton>
+	</DataTemplate>
+
 	<DataTemplate DataType="{x:Type ViewModels:ToolBarItemViewModel}">
 		<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 				Command="{Binding Command}"

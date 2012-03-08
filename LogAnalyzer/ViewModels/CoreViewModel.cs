@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class CoreViewModel : LogEntriesListViewModel, IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>
 	{
-		private readonly LogAnalyzerCore core;
+		private readonly LogAnalyzerCore _core;
 
-		private readonly List<LogDirectoryViewModel> directories;
+		private readonly List<LogDirectoryViewModel> _directories;
 
 		public List<LogDirectoryViewModel> Directories
 		{
-			get { return directories; }
+			get { return _directories; }
 		}
 
-		private readonly MessageSeverityCountViewModel messageSeverityCount;
+		private readonly MessageSeverityCountViewModel _messageSeverityCount;
 		public override MessageSeverityCountViewModel MessageSeverityCount
 		{
-			get { return messageSeverityCount; }
+			get { return _messageSeverityCount; }
 		}
 
 		public CoreViewModel( LogAnalyzerCore core, ApplicationViewModel applicationViewModel )
@@ -32,13 +33,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( applicationViewModel == null )
 				throw new ArgumentNullException( "applicationViewModel" );
 
-			this.core = core;
+			this._core = core;
 
-			this.directories = core.Directories.Select( d => new LogDirectoryViewModel( d, this ) ).ToList();
+			this._directories = core.Directories.Select( d => new LogDirectoryViewModel( d, this ) ).ToList();
 
 			Init( core.MergedEntries );
 
-			messageSeverityCount = new MessageSeverityCountViewModel( core.MessageSeverityCount );
+			_messageSeverityCount = new MessageSeverityCountViewModel( core.MessageSeverityCount );
 		}
 
 		// todo не нужно ли оптимизировать поиск?
@@ -47,7 +48,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			LogFile logFile = logEntry.ParentLogFile;
 
 			LogDirectory logDirectory = logFile.ParentDirectory;
-			var directoryViewModel = directories.First( d => d.LogDirectory == logDirectory );
+			var directoryViewModel = _directories.First( d => d.LogDirectory == logDirectory );
 
 			var fileViewModel = directoryViewModel.Files.First( f => f.LogFile == logFile );
 			return fileViewModel;
@@ -55,8 +56,19 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override LogEntriesListViewModel Clone()
 		{
-			CoreViewModel clone = new CoreViewModel( core, ApplicationViewModel );
+			CoreViewModel clone = new CoreViewModel( _core, ApplicationViewModel );
 			return clone;
+		}
+
+		protected override void PopulateToolbarItems( IList<object> collection )
+		{
+			base.PopulateToolbarItems( collection );
+
+			collection.Insert( 1,
+				new ToggleButtonViewModel(
+					() => _directories.Any( d => d.IsNotificationSourceEnabled ),
+					value => _directories.ForEach( d => d.IsNotificationSourceEnabled = value ),
+					"Toggle autoscroll to bottom on updates", PackUriHelper.MakePackUri( "/Resources/control-record.png" ) ) );
 		}
 
 		public override string Header
@@ -79,7 +91,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			base.PopulateStatusBarItems( collection );
 
 #if DEBUG
-			collection.Add( new MergedEntriesDebugStatusBarItem( core.MergedEntries ) );
+			collection.Add( new MergedEntriesDebugStatusBarItem( _core.MergedEntries ) );
 #endif
 		}
 
@@ -90,7 +102,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		LogAnalyzerCore IHierarchyMember<ApplicationViewModel, LogAnalyzerCore>.Data
 		{
-			get { return core; }
+			get { return _core; }
 		}
 	}
 }
