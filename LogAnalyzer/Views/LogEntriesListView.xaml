@@ -345,21 +345,6 @@
 		</Style>
 
 		<DataTemplate x:Key="textCellTemplate">
-			<!--<RichTextBox IsReadOnly="True"
-						 Background="#AAFFFFFF"
-						 BorderBrush="{x:Null}"
-						 BorderThickness="0"
-						 MaxHeight="200"
-						 VerticalScrollBarVisibility="Auto"
-						 SelectionChanged="TextBoxBase_OnSelectionChanged"
-						 Loaded="RichTextBoxLoaded">
-				<FlowDocument>
-					<Paragraph>
-						<Run Text="{Binding UnitedText, Mode=OneWay}"/>
-					</Paragraph>
-				</FlowDocument>
-			</RichTextBox>-->
-
 			<Grid>
 				<Controls:HighlightingBorderControl HighlightingViewModels="{Binding HighlightedByList}"
 													HorizontalAlignment="Stretch"
@@ -383,6 +368,7 @@
 
 			<!--<Control Template="{Binding Template}"
 					 DataContext="{Binding TemplateContext}"/>-->
+			
 		</DataTemplate>
 
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>

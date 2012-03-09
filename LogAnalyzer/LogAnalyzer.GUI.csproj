@@ -218,10 +218,13 @@
     <Compile Include="ViewModels\FilesDropping\DroppedObjectViewModel.cs" />
     <Compile Include="ViewModels\FilesDropping\IDroppedObjectVisitor.cs" />
     <Compile Include="ViewModels\FilesDropping\StartAnalyzingVisitor.cs" />
+    <Compile Include="ViewModels\FilesTreeRequestShowVisitor.cs" />
     <Compile Include="ViewModels\FilesTree\CoreTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\DirectoryTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItem.cs" />
     <Compile Include="ViewModels\FilesTree\FileTreeItemBase.cs" />
+    <Compile Include="ViewModels\FilesTree\IRequestShow.cs" />
+    <Compile Include="ViewModels\FilesTree\RequestShowEventArgs.cs" />
     <Compile Include="ViewModels\FilterEntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\ExceptionLineViewModel.cs" />
     <Compile Include="ViewModels\Collections\ILogEntryHost.cs" />

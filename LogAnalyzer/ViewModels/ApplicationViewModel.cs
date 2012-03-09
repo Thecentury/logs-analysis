@@ -122,6 +122,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			_coreViewModel = new CoreViewModel( _core, this ) { IsActive = true };
 			FilesTree = new CoreTreeItem( _core );
+			FilesTree.RequestShow += OnFilesTreeRequestShow;
 
 			BeginInvokeInUIDispatcher( () =>
 			{
@@ -132,6 +133,12 @@ namespace LogAnalyzer.GUI.ViewModels
 				ProgressState = Windows7Taskbar.ThumbnailProgressState.NoProgress;
 				RaisePropertyChanged( "SelectedTab" );
 			} );
+		}
+
+		private void OnFilesTreeRequestShow( object sender, RequestShowEventArgs e )
+		{
+			FilesTreeRequestShowVisitor visitor = new FilesTreeRequestShowVisitor( this );
+			visitor.ProcessRequestShow( e.Source );
 		}
 
 		private readonly ObservableCollection<TabViewModel> _tabs = new ObservableCollection<TabViewModel>();

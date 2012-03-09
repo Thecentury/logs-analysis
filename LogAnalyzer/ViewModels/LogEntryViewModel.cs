@@ -24,24 +24,24 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogEntryViewModel : BindingObject, IAwareOfIndex, IEquatable<LogEntryViewModel>
 	{
-		private readonly LogEntry logEntry;
-		private readonly LogFileViewModel parentFile;
-		private readonly ILogEntryHost host;
-		private readonly int indexInParentCollection = ParallelHelper.IndexNotFound;
-		private readonly LogEntriesListViewModel parentViewModel;
-		private readonly ColorizationManager colorizationManager;
+		private readonly LogEntry _logEntry;
+		private readonly LogFileViewModel _parentFile;
+		private readonly ILogEntryHost _host;
+		private readonly int _indexInParentCollection = ParallelHelper.IndexNotFound;
+		private readonly LogEntriesListViewModel _parentViewModel;
+		private readonly ColorizationManager _colorizationManager;
 
 		/// <summary>
 		/// Индекс в коллекции host.
 		/// </summary>
 		internal int IndexInParentCollection
 		{
-			get { return indexInParentCollection; }
+			get { return _indexInParentCollection; }
 		}
 
 		internal ILogEntryHost ParentSparseCollection
 		{
-			get { return host; }
+			get { return _host; }
 		}
 
 #if MEASURE_CREATED_COUNT
@@ -61,13 +61,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( parentViewModel == null )
 				throw new ArgumentNullException( "parentViewModel" );
 
-			this.logEntry = logEntry;
-			this.parentFile = parentFile;
-			this.host = host;
-			this.indexInParentCollection = indexInParentCollection;
-			this.parentViewModel = parentViewModel;
+			this._logEntry = logEntry;
+			this._parentFile = parentFile;
+			this._host = host;
+			this._indexInParentCollection = indexInParentCollection;
+			this._parentViewModel = parentViewModel;
 
-			colorizationManager = parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ColorizationManager>();
+			_colorizationManager = parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ColorizationManager>();
 
 #if MEASURE_CREATED_COUNT
 			Interlocked.Increment( ref createdCount );
@@ -90,38 +90,38 @@ namespace LogAnalyzer.GUI.ViewModels
 #endif
 
 		// todo brinchuk remove me
-		private ControlTemplate template;
+		private ControlTemplate _template;
 		public ControlTemplate Template
 		{
 			get
 			{
-				if ( template == null )
+				if ( _template == null )
 				{
 					UpdateColorization();
 				}
-				return template;
+				return _template;
 			}
 		}
 
 		// todo brinchuk remove me
 		private void UpdateColorization()
 		{
-			var colorizingTemplate = colorizationManager.GetTemplateForEntry( logEntry );
-			template = colorizingTemplate.Template;
-			templateContext = colorizingTemplate.GetDataContext( logEntry );
+			var colorizingTemplate = _colorizationManager.GetTemplateForEntry( _logEntry );
+			_template = colorizingTemplate.Template;
+			_templateContext = colorizingTemplate.GetDataContext( _logEntry );
 		}
 
 		// todo brinchuk remove me
-		private object templateContext;
+		private object _templateContext;
 		public object TemplateContext
 		{
 			get
 			{
-				if ( templateContext == null )
+				if ( _templateContext == null )
 				{
 					UpdateColorization();
 				}
-				return templateContext;
+				return _templateContext;
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void OnSelectionChanged( TextSelection range )
 		{
-			parentViewModel.OnSelectedTextChanged( range.Text );
+			_parentViewModel.OnSelectedTextChanged( range.Text );
 		}
 
 		public string SelectedText { get; set; }
@@ -140,7 +140,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				return false;
 			if ( ReferenceEquals( this, other ) )
 				return true;
-			bool equals = Equals( other.logEntry, logEntry );
+			bool equals = Equals( other._logEntry, _logEntry );
 			return equals;
 		}
 
@@ -156,34 +156,34 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override int GetHashCode()
 		{
-			return logEntry.GetHashCode();
+			return _logEntry.GetHashCode();
 		}
 
 		protected override void OnPropertyChangedUnsubscribe()
 		{
-			host.Release( this );
+			_host.Release( this );
 		}
 
 		#region Properties
 
-		public string Type { get { return logEntry.Type; } }
-		public int ThreadId { get { return logEntry.ThreadId; } }
-		public DateTime Time { get { return logEntry.Time; } }
-		public int IndexInFile { get { return logEntry.LineIndex; } }
-		public int LinesCount { get { return logEntry.LinesCount; } }
-		public IList<string> Text { get { return logEntry.TextLines; } }
-		public LogFileViewModel File { get { return parentFile; } }
-		public LogDirectoryViewModel Directory { get { return parentFile.ParentDirectory; } }
+		public string Type { get { return _logEntry.Type; } }
+		public int ThreadId { get { return _logEntry.ThreadId; } }
+		public DateTime Time { get { return _logEntry.Time; } }
+		public int IndexInFile { get { return _logEntry.LineIndex; } }
+		public int LinesCount { get { return _logEntry.LinesCount; } }
+		public IList<string> Text { get { return _logEntry.TextLines; } }
+		public LogFileViewModel File { get { return _parentFile; } }
+		public LogDirectoryViewModel Directory { get { return _parentFile.ParentDirectory; } }
 		public ApplicationViewModel ApplicationViewModel { get { return Directory.CoreViewModel.ApplicationViewModel; } }
 
 		public LogEntriesListViewModel ParentViewModel
 		{
-			get { return parentViewModel; }
+			get { return _parentViewModel; }
 		}
 
 		public LogEntry LogEntry
 		{
-			get { return logEntry; }
+			get { return _logEntry; }
 		}
 
 		private string highlightedColumnName;
@@ -218,7 +218,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				string text = logEntry.UnitedText;
+				string text = _logEntry.UnitedText;
 				return text;
 			}
 		}
@@ -284,7 +284,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				if ( _linesViewModel == null )
 				{
 					// todo тут не учитывается возможность, что LogEntry обновится
-					_linesViewModel = new List<MessageLineViewModel>( logEntry.LinesCount );
+					_linesViewModel = new List<MessageLineViewModel>( _logEntry.LinesCount );
 					FillLinesViewModel();
 				}
 				return _linesViewModel;
@@ -293,10 +293,10 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void FillLinesViewModel()
 		{
-			foreach ( string line in logEntry.TextLines )
+			foreach ( string line in _logEntry.TextLines )
 			{
 				MessageLineViewModel lineViewModel;
-				FileLineInfo lineInfo = logEntry.GetExceptionLine( line );
+				FileLineInfo lineInfo = _logEntry.GetExceptionLine( line );
 				// в строке нет информации о методе, вызвавшем исключение
 				if ( lineInfo == null )
 				{
@@ -319,7 +319,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				List<MenuItemViewModel> parents = new List<MenuItemViewModel>();
 
-				var parent = parentViewModel.ParentView;
+				var parent = _parentViewModel.ParentView;
 				while ( parent != null )
 				{
 					MenuItemViewModel vm = new MenuItemViewModel
@@ -529,8 +529,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			DelegateCommand command = new DelegateCommand( () =>
 			{
-				HighlightingViewModel vm = new HighlightingViewModel( parentViewModel, filter, new SolidColorBrush( ColorHelper.GetRandomColor() ) );
-				parentViewModel.HighlightingFilters.Add( vm );
+				HighlightingViewModel vm = new HighlightingViewModel( _parentViewModel, filter, new SolidColorBrush( ColorHelper.GetRandomColor() ) );
+				_parentViewModel.HighlightingFilters.Add( vm );
 			} );
 
 			return command;
@@ -550,7 +550,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				return CreateHighlightCommand(
-						new Argument().GetProperty( "ParentLogFile" ).IsEqual( ExpressionBuilder.CreateConstant( logEntry.ParentLogFile ) )
+						new Argument().GetProperty( "ParentLogFile" ).IsEqual( ExpressionBuilder.CreateConstant( _logEntry.ParentLogFile ) )
 					);
 			}
 		}
@@ -693,14 +693,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public Visibility ShowInParentViewVisibility
 		{
-			get { return parentViewModel is CoreViewModel ? Visibility.Collapsed : Visibility.Visible; }
+			get { return _parentViewModel is CoreViewModel ? Visibility.Collapsed : Visibility.Visible; }
 		}
 
 		#region IAwareOfIndex Members
 
 		int IAwareOfIndex.IndexInParentCollection
 		{
-			get { return indexInParentCollection; }
+			get { return _indexInParentCollection; }
 		}
 
 		#endregion
