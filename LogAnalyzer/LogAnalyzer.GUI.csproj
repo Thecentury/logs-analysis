@@ -153,6 +153,7 @@
     <Compile Include="Common\GenericDelegateCommand.cs" />
     <Compile Include="Common\HighlightingCountToMarginConverter.cs" />
     <Compile Include="Common\HsbColor.cs" />
+    <Compile Include="Common\IsMouseOverService.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\ColorHelper.cs" />
@@ -564,6 +565,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\control-record.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\folder-horizontal-open.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
