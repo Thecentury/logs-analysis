@@ -44,7 +44,12 @@
 
 		<TextBox MinWidth="150" 
 				 MaxWidth="250" 
-				 Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				 Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<TextBox.InputBindings>
+				<KeyBinding Command="{Binding LaunchSearchCommand}" Key="Enter"/>
+				<KeyBinding Command="{Binding ClearSearchBoxCommand}" Key="Escape"/>
+			</TextBox.InputBindings>
+		</TextBox>
 
 		<Control Style="{StaticResource foundBarStyle}">
 			<Control.Template>

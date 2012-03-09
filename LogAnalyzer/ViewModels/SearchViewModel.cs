@@ -18,7 +18,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			: base( parentList, new AlwaysFalse() )
 		{
 			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
-			Filter.ExpressionBuilder = _textContainsFilter;
 		}
 
 		private readonly TextContains _textContainsFilter = new TextContains();
@@ -75,6 +74,20 @@ namespace LogAnalyzer.GUI.ViewModels
 			return false;
 		}
 
+		// Clear search pattern command
+
+		private DelegateCommand _clearSearchBoxCommand;
+		public ICommand ClearSearchBoxCommand
+		{
+			get
+			{
+				if ( _clearSearchBoxCommand == null )
+					_clearSearchBoxCommand = new DelegateCommand( () => Substring = null, () => Substring != null );
+
+				return _clearSearchBoxCommand;
+			}
+		}
+
 		// LaunchSearch command
 
 		private DelegateCommand _launchSearchCommand;
@@ -94,12 +107,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( _isRegexSearch )
 			{
 				_regexMatchesFilter.Pattern = _substring;
-				//Filter.ExpressionBuilder = _regexMatchesFilter;
+				Filter.ExpressionBuilder = _regexMatchesFilter;
 			}
 			else
 			{
 				_textContainsFilter.Substring = _substring;
-				//Filter.ExpressionBuilder = _textContainsFilter;
+				Filter.ExpressionBuilder = _textContainsFilter;
 			}
 
 			HaveSearched = true;
