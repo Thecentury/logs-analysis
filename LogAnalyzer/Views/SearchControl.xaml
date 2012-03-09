@@ -37,7 +37,14 @@
 	</UserControl.Resources>
 
 	<StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Center">
-		<TextBox MinWidth="100" Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		<CheckBox IsChecked="{Binding IsRegexSearch, Mode=TwoWay}"
+				  VerticalAlignment="Center"
+				  Margin="3"
+				  ToolTip="Regex Search"/>
+
+		<TextBox MinWidth="150" 
+				 MaxWidth="250" 
+				 Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 		<Control Style="{StaticResource foundBarStyle}">
 			<Control.Template>
@@ -49,7 +56,7 @@
 							<Run>of</Run>
 							<Run Text="{Binding AcceptedEntries.Count, Mode=OneWay}"/>
 						</TextBlock>
-					</Grid>					
+					</Grid>
 				</ControlTemplate>
 			</Control.Template>
 		</Control>
@@ -59,13 +66,13 @@
 				Command="{Binding MoveToPreviousHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-090.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
-		
+
 		<RepeatButton Style="{StaticResource findButtonStyle}"
 				ToolTip="Find Next"
 				Command="{Binding MoveToNextHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-270.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
-		
+
 		<Button Style="{StaticResource findButtonStyle}"
 				ToolTip="Search"
 				Command="{Binding LaunchSearchCommand}">

@@ -17,11 +17,22 @@ namespace LogAnalyzer.GUI.ViewModels
 		public SearchViewModel( LogEntriesListViewModel parentList )
 			: base( parentList, new AlwaysFalse() )
 		{
-			Filter.ExpressionBuilder = _textContainsFilter;
 			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 );
 		}
 
 		private readonly TextContains _textContainsFilter = new TextContains();
+		private readonly TextMatchesRegex _regexMatchesFilter = new TextMatchesRegex();
+
+		private bool _isRegexSearch;
+		public bool IsRegexSearch
+		{
+			get { return _isRegexSearch; }
+			set
+			{
+				_isRegexSearch = value;
+				RaisePropertyChanged( "IsRegexSearch" );
+			}
+		}
 
 		private string _substring;
 		public string Substring
@@ -79,7 +90,17 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void LaunchSearchExecute()
 		{
-			_textContainsFilter.Substring = _substring;
+			if ( _isRegexSearch )
+			{
+				_regexMatchesFilter.Pattern = _substring;
+				Filter.ExpressionBuilder = _regexMatchesFilter;
+			}
+			else
+			{
+				_textContainsFilter.Substring = _substring;
+				Filter.ExpressionBuilder = _textContainsFilter;
+			}
+
 			HaveSearched = true;
 			MoveToFirstHighlightedCommand.ExecuteIfCan();
 		}
