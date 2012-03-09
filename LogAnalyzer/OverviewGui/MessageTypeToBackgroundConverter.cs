@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Converters;
 
 namespace LogAnalyzer.GUI.OverviewGui
@@ -14,10 +15,10 @@ namespace LogAnalyzer.GUI.OverviewGui
 		{
 			Error = Brushes.Red;
 			Warning = Brushes.Orange;
-			Info = Brushes.LimeGreen;
+			Info = Brushes.LimeGreen.MakeTransparent( 0.5 );
 			Debug = Brushes.RoyalBlue;
-			Verbose = Brushes.BlueViolet;
-			Other = Brushes.Transparent;
+			Verbose = Brushes.BlueViolet.MakeTransparent( 0.4 );
+			Other = Brushes.LightGray;
 		}
 
 		public Brush Error { get; set; }

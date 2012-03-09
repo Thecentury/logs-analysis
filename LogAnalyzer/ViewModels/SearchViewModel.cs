@@ -8,6 +8,7 @@ using System.Windows.Media;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Extensions;
+using Microsoft.Research.DynamicDataDisplay;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -16,38 +17,38 @@ namespace LogAnalyzer.GUI.ViewModels
 		public SearchViewModel( LogEntriesListViewModel parentList )
 			: base( parentList, new AlwaysFalse() )
 		{
-			Filter.ExpressionBuilder = textContainsFilter;
-			Brush = Brushes.RoyalBlue;
+			Filter.ExpressionBuilder = _textContainsFilter;
+			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 );
 		}
 
-		private readonly TextContains textContainsFilter = new TextContains();
+		private readonly TextContains _textContainsFilter = new TextContains();
 
-		private string substring;
+		private string _substring;
 		public string Substring
 		{
-			get { return substring; }
+			get { return _substring; }
 			set
 			{
-				substring = value;
+				_substring = value;
 				RaisePropertyChanged( "Substring" );
 				HaveSearched = false;
 			}
 		}
 
-		private bool haveSearched;
+		private bool _haveSearched;
 		private bool HaveSearched
 		{
-			get { return haveSearched; }
+			get { return _haveSearched; }
 			set
 			{
-				haveSearched = value;
+				_haveSearched = value;
 				RaisePropertyChanged( "FoundBarVisibility" );
 			}
 		}
 
 		public Visibility FoundBarVisibility
 		{
-			get { return !haveSearched ? Visibility.Collapsed : Visibility.Visible; }
+			get { return !_haveSearched ? Visibility.Collapsed : Visibility.Visible; }
 		}
 
 		#region Commands
@@ -64,21 +65,21 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// LaunchSearch command
 
-		private DelegateCommand launchSearchCommand;
+		private DelegateCommand _launchSearchCommand;
 		public ICommand LaunchSearchCommand
 		{
 			get
 			{
-				if ( launchSearchCommand == null )
-					launchSearchCommand = new DelegateCommand( LaunchSearchExecute, LaunchSearchCanExecute );
+				if ( _launchSearchCommand == null )
+					_launchSearchCommand = new DelegateCommand( LaunchSearchExecute, LaunchSearchCanExecute );
 
-				return launchSearchCommand;
+				return _launchSearchCommand;
 			}
 		}
 
 		private void LaunchSearchExecute()
 		{
-			textContainsFilter.Substring = substring;
+			_textContainsFilter.Substring = _substring;
 			HaveSearched = true;
 			MoveToFirstHighlightedCommand.ExecuteIfCan();
 		}

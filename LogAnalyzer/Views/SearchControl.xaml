@@ -59,11 +59,13 @@
 				Command="{Binding MoveToPreviousHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-090.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
+		
 		<RepeatButton Style="{StaticResource findButtonStyle}"
 				ToolTip="Find Next"
 				Command="{Binding MoveToNextHighlightedCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-270.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
+		
 		<Button Style="{StaticResource findButtonStyle}"
 				ToolTip="Search"
 				Command="{Binding LaunchSearchCommand}">
