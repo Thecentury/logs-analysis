@@ -1,34 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Specialized;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Windows.Data;
 using System.Windows;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
-using System.Diagnostics;
-using System.Windows.Controls;
 using LogAnalyzer.GUI.Common;
-using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class LogFileViewModel : LogEntriesListViewModel
 	{
-		private readonly LogFile logFile;
-		private readonly LogDirectoryViewModel parentDirectory;
+		private readonly LogFile _logFile;
+		private readonly LogDirectoryViewModel _parentDirectory;
 
 		public LogDirectoryViewModel ParentDirectory
 		{
-			get { return parentDirectory; }
+			get { return _parentDirectory; }
 		}
 
 		public LogFile LogFile
 		{
-			get { return logFile; }
+			get { return _logFile; }
 		}
 
 		public LogFileViewModel( LogFile logFile, LogDirectoryViewModel parent )
@@ -37,8 +27,8 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( logFile == null )
 				throw new ArgumentNullException( "logFile" );
 
-			this.logFile = logFile;
-			this.parentDirectory = parent;
+			this._logFile = logFile;
+			this._parentDirectory = parent;
 
 			Init( logFile.LogEntries );
 		}
@@ -54,7 +44,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					selectFileCommand = new DelegateCommand<RoutedEventArgs>( _ =>
 					{
-						WindowsInterop.SelectInExplorer( logFile.FullPath );
+						WindowsInterop.SelectInExplorer( _logFile.FullPath );
 					} );
 				}
 
@@ -66,8 +56,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Properties
 
-		public string Name { get { return logFile.Name; } }
-		public long LinesCount { get { return logFile.LinesCount; } }
+		public string Name { get { return _logFile.Name; } }
+		public long LinesCount { get { return _logFile.LinesCount; } }
 
 		#endregion
 
@@ -83,7 +73,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public override LogEntriesListViewModel Clone()
 		{
-			LogFileViewModel clone = new LogFileViewModel( logFile, parentDirectory );
+			LogFileViewModel clone = new LogFileViewModel( _logFile, _parentDirectory );
 			return clone;
 		}
 
