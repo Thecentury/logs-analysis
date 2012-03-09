@@ -289,15 +289,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Move to first highlighted
 
-		private DelegateCommand moveToFirstHighlightedCommand;
+		private DelegateCommand _moveToFirstHighlightedCommand;
 		public ICommand MoveToFirstHighlightedCommand
 		{
 			get
 			{
-				if ( moveToFirstHighlightedCommand == null )
-					moveToFirstHighlightedCommand = new DelegateCommand( MoveToFirstHighlightedExecute, MoveToFirstHighlightedCanExecute );
+				if ( _moveToFirstHighlightedCommand == null )
+					_moveToFirstHighlightedCommand = new DelegateCommand( MoveToFirstHighlightedExecute, MoveToFirstHighlightedCanExecute );
 
-				return moveToFirstHighlightedCommand;
+				return _moveToFirstHighlightedCommand;
 			}
 		}
 
@@ -314,15 +314,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Move to last highlighted
 
-		private DelegateCommand moveToLastHighlightedCommand;
+		private DelegateCommand _moveToLastHighlightedCommand;
 		public ICommand MoveToLastHighlightedCommand
 		{
 			get
 			{
-				if ( moveToLastHighlightedCommand == null )
-					moveToLastHighlightedCommand = new DelegateCommand( MoveToLastHighlightedExecute, MoveToLastHighlightedCanExecute );
+				if ( _moveToLastHighlightedCommand == null )
+					_moveToLastHighlightedCommand = new DelegateCommand( MoveToLastHighlightedExecute, MoveToLastHighlightedCanExecute );
 
-				return moveToLastHighlightedCommand;
+				return _moveToLastHighlightedCommand;
 			}
 		}
 
