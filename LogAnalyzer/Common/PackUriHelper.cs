@@ -11,7 +11,9 @@ namespace LogAnalyzer.GUI.Common
 		{
 			string normalizedUri = uri;
 			if ( !normalizedUri.StartsWith( "/" ) )
+			{
 				normalizedUri = "/" + normalizedUri;
+			}
 
 			return "pack://application:,,,/LogAnalyzer.GUI;component" + normalizedUri;
 		}

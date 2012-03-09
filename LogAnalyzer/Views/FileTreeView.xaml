@@ -3,11 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:FilesTree="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesTree" 
-			 mc:Ignorable="d" 
+             xmlns:FilesTree="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesTree"
+             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 
+		<Style TargetType="FrameworkElement" x:Key="collapsibleStyle">
+			<Setter Property="Visibility" Value="Collapsed"/>
+			<Style.Triggers>
+				<Trigger Property="Common:IsMouseOverService.IsMouseOver" Value="True">
+					<Setter Property="Visibility" Value="Visible"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		
 		<HierarchicalDataTemplate DataType="{x:Type FilesTree:DirectoryTreeItem}"
 								  ItemsSource="{Binding Files}"
 								  x:Key="directoriesTemplate">
@@ -17,34 +26,62 @@
 				</Style>
 			</HierarchicalDataTemplate.ItemContainerStyle>
 			
-			<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Horizontal"
+						Background="Transparent"
+						Margin="0,2,0,2">
 				<StackPanel.ContextMenu>
 					<ContextMenu>
 						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
 					</ContextMenu>	
 				</StackPanel.ContextMenu>
+				<StackPanel.Style>
+					<Style TargetType="FrameworkElement">
+						<Style.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Common:IsMouseOverService.IsMouseOver" Value="True"/>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</StackPanel.Style>
 				
 				<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
 				<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"
+					   VerticalAlignment="Center"
 					   Stretch="None"/>
 				<TextBlock Text="{Binding Header}"/>
+
+				<Button Margin="10,0,0,0"
+						Style="{StaticResource collapsibleStyle}"
+						Padding="0"
+						Command="{Binding ShowCommand}"
+						ToolTip="Show">
+					<Image Stretch="None"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
+				</Button>
+
 			</StackPanel>
 		</HierarchicalDataTemplate>
-
+		
 		<DataTemplate DataType="{x:Type FilesTree:FileTreeItem}">
-			<StackPanel Orientation="Horizontal">
-				<StackPanel.ContextMenu>
+			<StackPanel Orientation="Horizontal"
+						Common:IsMouseOverService.IsMouseOver="True">
+				<!--<StackPanel.ContextMenu>
 					<ContextMenu>
 						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
 					</ContextMenu>
-				</StackPanel.ContextMenu>
+				</StackPanel.ContextMenu>-->
 				
-				<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
-				<Image Source="{Binding IconSource}"
+	
+				
+				<!--<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>-->
+				<!--<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"
-					   Stretch="None"/>
+					   Stretch="None"/>-->
 				<TextBlock Text="{Binding Header}"/>
+				
 			</StackPanel>
 		</DataTemplate>
 		
@@ -54,7 +91,8 @@
 
 	</UserControl.Resources>
 	
-	<TreeView ItemsSource="{Binding Directories}" ItemContainerStyle="{StaticResource directoryStyle}"
+	<TreeView ItemsSource="{Binding Directories}" 
+			  ItemContainerStyle="{StaticResource directoryStyle}"
 			  ItemTemplate="{StaticResource directoriesTemplate}"/>
 	
 </UserControl>
