@@ -47,7 +47,6 @@ namespace LogAnalyzer.Filters
 			return result;
 		}
 
-		[DebuggerStepThrough]
 		public bool ValidateProperties()
 		{
 			Type myType = GetType();

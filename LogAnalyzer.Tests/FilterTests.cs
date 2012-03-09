@@ -241,6 +241,40 @@ namespace LogAnalyzer.Tests
 			Assert.IsTrue( include );
 		}
 
+		[Test]
+		public void ShouldCompile()
+		{
+			StringConstant str = new StringConstant( "" );
+			var func = str.CompileToFunc<string>();
+			string value = func();
+
+			Assert.That( value, Is.EqualTo( "" ) );
+		}
+
+		[Test]
+		public void ShouldFailPatternValidation()
+		{
+			RegexMatchesFilterBuilder regex = new RegexMatchesFilterBuilder { Substring = new StringConstant( "[a-z" ), Inner = new Argument() };
+			Assert.IsFalse( regex.ValidateProperties() );
+		}
+
+		[Test]
+		public void ShouldSucceedPatternValidation()
+		{
+			RegexMatchesFilterBuilder regex = new RegexMatchesFilterBuilder { Substring = new StringConstant( "[a-z]+" ), Inner = new Argument() };
+			Assert.IsTrue( regex.ValidateProperties() );
+		}
+
+		[Test]
+		public void RegexFilterShouldWork()
+		{
+			RegexMatchesFilterBuilder regex = new RegexMatchesFilterBuilder( @"\d{2}", new Argument() );
+			var filter = regex.BuildFilter<string>();
+
+			Assert.IsTrue( filter.Include( "22" ) );
+			Assert.IsFalse( filter.Include( "2a" ) );
+		}
+
 		private sealed class ThrowingClass
 		{
 			[UsedImplicitly]

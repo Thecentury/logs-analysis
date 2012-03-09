@@ -18,6 +18,9 @@ namespace LogAnalyzer.Filters
 			set { Set( "Substring", value ); }
 		}
 
+		/// <summary>
+		/// То, где мы ищем.
+		/// </summary>
 		[FilterParameter( typeof( ExpressionBuilder ), "Inner", ParameterReturnType = typeof( string ) )]
 		public ExpressionBuilder Inner
 		{
@@ -25,9 +28,9 @@ namespace LogAnalyzer.Filters
 			set { Set( "Inner", value ); }
 		}
 
-		protected sealed override Expression CreateExpressionCore( ParameterExpression argument )
+		protected override Expression CreateExpressionCore( ParameterExpression argument )
 		{
-			MethodInfo methodInfo = GetMethod<string, bool>( GetMethod() );
+			MethodInfo methodInfo = GetMethod( GetMethod() );
 			Expression target = Inner.CreateExpression( argument );
 
 			Expression[] arguments = GetParameters( argument ).ToArray();
@@ -45,7 +48,10 @@ namespace LogAnalyzer.Filters
 			yield return substringExpression;
 		}
 
-		protected abstract Expression<Func<string, bool>> GetMethod();
+		protected virtual Expression<Func<string, bool>> GetMethod()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public abstract class StringComparisonFilterBuilder : StringFilterBuilder

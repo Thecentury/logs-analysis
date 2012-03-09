@@ -34,7 +34,7 @@ namespace LogAnalyzer.Filters
 		private void Recompile()
 		{
 			Func<T, bool> temp;
-			if ( expressionBuilder.TryCompile( out temp ) )
+			if ( expressionBuilder.TryCompileToFilter( out temp ) )
 			{
 				filter = temp;
 				Changed.Raise( this );
