@@ -17,7 +17,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		public SearchViewModel( LogEntriesListViewModel parentList )
 			: base( parentList, new AlwaysFalse() )
 		{
-			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 );
+			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
 			Filter.ExpressionBuilder = _textContainsFilter;
 		}
 

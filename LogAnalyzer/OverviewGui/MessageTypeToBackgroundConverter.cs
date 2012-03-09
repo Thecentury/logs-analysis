@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using LogAnalyzer.GUI.Extensions;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Converters;
 
@@ -15,9 +16,9 @@ namespace LogAnalyzer.GUI.OverviewGui
 		{
 			Error = Brushes.Red;
 			Warning = Brushes.Orange;
-			Info = Brushes.LimeGreen.MakeTransparent( 0.5 );
+			Info = Brushes.LimeGreen.MakeTransparent( 0.5 ).AsFrozen();
 			Debug = Brushes.RoyalBlue;
-			Verbose = Brushes.BlueViolet.MakeTransparent( 0.4 );
+			Verbose = Brushes.BlueViolet.MakeTransparent( 0.4 ).AsFrozen();
 			Other = Brushes.LightGray;
 		}
 
