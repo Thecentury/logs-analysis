@@ -18,6 +18,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			: base( parentList, new AlwaysFalse() )
 		{
 			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 );
+			Filter.ExpressionBuilder = _textContainsFilter;
 		}
 
 		private readonly TextContains _textContainsFilter = new TextContains();
@@ -93,12 +94,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			if ( _isRegexSearch )
 			{
 				_regexMatchesFilter.Pattern = _substring;
-				Filter.ExpressionBuilder = _regexMatchesFilter;
+				//Filter.ExpressionBuilder = _regexMatchesFilter;
 			}
 			else
 			{
 				_textContainsFilter.Substring = _substring;
-				Filter.ExpressionBuilder = _textContainsFilter;
+				//Filter.ExpressionBuilder = _textContainsFilter;
 			}
 
 			HaveSearched = true;
