@@ -120,7 +120,7 @@ namespace LogAnalyzer.GUI.Controls
 				int index = i;
 				double size = offset * index;
 
-				rect = new Rect( 0 + size, 0 + size, width - 2 * size, height - 2 * size );
+				rect = new Rect( 0 + size, 0 + size, Math.Max( width - 2 * size, 0 ), Math.Max( height - 2 * size, 0 ) );
 
 				dc.DrawRectangle( highlightingViewModel.Brush, null, rect );
 			}
@@ -128,7 +128,7 @@ namespace LogAnalyzer.GUI.Controls
 			int count = hvms.Count;
 			if ( count > 0 )
 			{
-				rect = new Rect( 0 + offset * count, 0 + offset * count, width - 2 * offset * count, height - 2 * offset * count );
+				rect = new Rect( 0 + offset * count, 0 + offset * count, Math.Max( width - 2 * offset * count, 0 ), Math.Max( height - 2 * offset * count, 0 ) );
 				dc.DrawRectangle( null, null, rect );
 			}
 		}
