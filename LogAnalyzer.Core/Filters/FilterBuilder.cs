@@ -15,12 +15,12 @@ namespace LogAnalyzer.Filters
 
 		public static IFilter<T> BuildFilter<T>( Func<ParameterExpression, Expression> createExpressionHandler )
 		{
-			Func<T, bool> predicate = Compile<T>( createExpressionHandler );
+			Func<T, bool> predicate = CompileToFilter<T>( createExpressionHandler );
 
 			return new DelegateFilter<T>( predicate );
 		}
 
-		public static Func<T, bool> Compile<T>( Func<ParameterExpression, Expression> createExpressionHandler )
+		public static Func<T, bool> CompileToFilter<T>( Func<ParameterExpression, Expression> createExpressionHandler )
 		{
 			ParameterExpression parameter = Expression.Parameter( typeof( T ) );
 			Expression expression = createExpressionHandler( parameter );

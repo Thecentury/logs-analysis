@@ -32,12 +32,21 @@ namespace LogAnalyzer.Filters
 			return GetResultType<LogEntry>( builder );
 		}
 
-		public static Func<T, bool> Compile<T>( this ExpressionBuilder builder )
+		public static Func<T> CompileToFunc<T>( this ExpressionBuilder builder )
 		{
-			return FilterBuilder.Compile<T>( builder.CreateExpression );
+			ParameterExpression parameter = Expression.Parameter( typeof( object ), "p" );
+			var expression = builder.CreateExpression( parameter );
+			var lambda = Expression.Lambda<Func<T>>( expression );
+			var compiled = lambda.Compile();
+			return compiled;
 		}
 
-		public static bool TryCompile<T>( this ExpressionBuilder builder, out Func<T, bool> filter )
+		public static Func<T, bool> CompileToFilter<T>( this ExpressionBuilder builder )
+		{
+			return FilterBuilder.CompileToFilter<T>( builder.CreateExpression );
+		}
+
+		public static bool TryCompileToFilter<T>( this ExpressionBuilder builder, out Func<T, bool> filter )
 		{
 			filter = null;
 
@@ -48,7 +57,7 @@ namespace LogAnalyzer.Filters
 
 			try
 			{
-				filter = Compile<T>( builder );
+				filter = CompileToFilter<T>( builder );
 				return true;
 			}
 			catch ( Exception )

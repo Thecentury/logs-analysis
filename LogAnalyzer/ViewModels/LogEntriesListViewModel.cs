@@ -245,12 +245,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private List<OverviewInfo> messageTypeOverviewInfos;
+		private List<OverviewInfo> _messageTypeOverviewInfos;
 		public List<OverviewInfo> MessageTypeOverview
 		{
 			get
 			{
-				if ( messageTypeOverviewInfos == null )
+				if ( _messageTypeOverviewInfos == null )
 				{
 					var collector = new GroupingByIndexOverviewCollector<LogEntry>();
 					var builder = new MessageTypeOverviewBuilder();
@@ -264,34 +264,34 @@ namespace LogAnalyzer.GUI.ViewModels
 						LogEntry entry = map[i];
 						if ( entry == null )
 							continue;
-						if ( !entry.Type.In( MessageTypes.Error, MessageTypes.Warning ) )
-							continue;
+						//if ( !entry.Type.In( MessageTypes.Error, MessageTypes.Warning ) )
+						//    continue;
 
 						OverviewInfo info = new OverviewInfo( map[i], i / length, this );
 						list.Add( info );
 					}
 
-					messageTypeOverviewInfos = list;
+					_messageTypeOverviewInfos = list;
 				}
 
-				return messageTypeOverviewInfos;
+				return _messageTypeOverviewInfos;
 			}
 		}
 
-		private DelegateCommand<LogEntry> scrollToItemCommand;
+		private DelegateCommand<LogEntry> _scrollToItemCommand;
 		public DelegateCommand<LogEntry> ScrollToItemCommand
 		{
 			get
 			{
-				if ( scrollToItemCommand == null )
+				if ( _scrollToItemCommand == null )
 				{
-					scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
+					_scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
 					{
 						var index = _entries.SequentialIndexOf( entry );
 						SelectedEntryIndex = index;
 					} );
 				}
-				return scrollToItemCommand;
+				return _scrollToItemCommand;
 			}
 		}
 
