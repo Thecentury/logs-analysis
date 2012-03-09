@@ -108,6 +108,7 @@
     <Compile Include="Filters\FilterTargetAttribute.cs" />
     <Compile Include="Filters\FluentFilterExtensions.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
+    <Compile Include="Filters\RegexMatchesFilterBuilder.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="Collections\IBidirectionalEnumerable.cs" />
     <Compile Include="Collections\IBidirectionalEnumerator.cs" />

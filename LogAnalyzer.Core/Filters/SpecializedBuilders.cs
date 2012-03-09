@@ -110,7 +110,7 @@ namespace LogAnalyzer.Filters
 
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			return 
+			return
 				Expression.NotEqual(
 					Expression.Property(
 						Expression.Property( parameterExpression, "ParentLogFile" ),
@@ -142,6 +142,30 @@ namespace LogAnalyzer.Filters
 			StringContains containsBuilder = new StringContains { Inner = getPropertyBuilder, Substring = new StringConstant { Value = Substring } };
 
 			return containsBuilder.CreateExpression( parameterExpression );
+		}
+	}
+
+	[ContentProperty( "Pattern" )]
+	public sealed class TextMatchesRegex : ExpressionBuilder
+	{
+		[FilterParameter( typeof( string ), "Pattern" )]
+		public string Pattern
+		{
+			get { return Get<string>( "Pattern" ); }
+			set { Set( "Pattern", value ); }
+		}
+
+		public override Type GetResultType( ParameterExpression target )
+		{
+			return typeof( bool );
+		}
+
+		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		{
+			GetProperty getPropertyBuilder = new GetProperty { Target = new Argument(), PropertyName = "UnitedText" };
+			var regex = new RegexMatchesFilterBuilder( Pattern, getPropertyBuilder );
+
+			return regex.CreateExpression( parameterExpression );
 		}
 	}
 

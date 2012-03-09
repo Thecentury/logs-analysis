@@ -80,6 +80,11 @@ namespace LogAnalyzer.Filters
 	{
 		public StringConstant() { }
 		public StringConstant( string value ) { Value = value; }
+
+		public static implicit operator StringConstant( string value )
+		{
+			return new StringConstant( value );
+		}
 	}
 
 	public sealed class DoubleConstant : ConstantExpressionBuilder<double>
