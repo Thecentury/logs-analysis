@@ -18,7 +18,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			: base( parentList, new AlwaysFalse() )
 		{
 			Filter.ExpressionBuilder = _textContainsFilter;
-			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 );
+			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
 		}
 
 		private readonly TextContains _textContainsFilter = new TextContains();

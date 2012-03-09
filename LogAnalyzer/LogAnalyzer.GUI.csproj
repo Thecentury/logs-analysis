@@ -158,6 +158,7 @@
     <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
     <Compile Include="Controls\HighlightingBorderControl.cs" />
+    <Compile Include="Extensions\FreezableExtensions.cs" />
     <Compile Include="Extensions\ICommandExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
