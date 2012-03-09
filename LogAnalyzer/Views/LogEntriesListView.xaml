@@ -367,6 +367,7 @@
 													Offset="{StaticResource highlightingOffset}"/>
 					
 				<TextBox
+					Background="Transparent"
 					IsReadOnly="True"
 					BorderBrush="{x:Null}"
 					BorderThickness="0"
