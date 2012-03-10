@@ -37,13 +37,19 @@
 	</UserControl.Resources>
 
 	<StackPanel Orientation="Horizontal" Margin="3" VerticalAlignment="Center">
-		<CheckBox IsChecked="{Binding IsRegexSearch, Mode=TwoWay}"
-				  VerticalAlignment="Center"
-				  Margin="3"
-				  ToolTip="Regex Search"/>
+		<ToggleButton 
+			Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ToggleButtonStyleKey}}"
+			IsChecked="{Binding IsRegexSearch}"
+			VerticalAlignment="Center"
+			Margin="3"
+			ToolTip="Regex Search">
+			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/regular-expression-search.png"
+				   Style="{StaticResource imageStyle}"/>
+		</ToggleButton>
 
 		<TextBox MinWidth="150" 
 				 MaxWidth="250" 
+				 Style="{DynamicResource ResourceKey={x:Static ToolBar.TextBoxStyleKey}}"
 				 Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 			<TextBox.InputBindings>
 				<KeyBinding Command="{Binding LaunchSearchCommand}" Key="Enter"/>
@@ -78,7 +84,8 @@
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/arrow-270.png" Style="{StaticResource imageStyle}"/>
 		</RepeatButton>
 
-		<Button Style="{StaticResource findButtonStyle}"
+		<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
+				Margin="2"
 				ToolTip="Search"
 				Command="{Binding LaunchSearchCommand}">
 			<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/magnifier.png" Style="{StaticResource imageStyle}"/>
