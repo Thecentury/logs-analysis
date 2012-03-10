@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using LogAnalyzer.ColorOverviews;
-using LogAnalyzer.GUI.OverviewGui;
+using LogAnalyzer.GUI.ViewModels;
 
-namespace LogAnalyzer.GUI.ViewModels
+namespace LogAnalyzer.GUI.OverviewGui
 {
-	internal sealed class MessageTypeOverview : OverviewViewModelBase
+	internal sealed class MessageTypeOverview : AsyncOverview
 	{
 		private readonly IList<LogEntry> _entries;
 		private readonly LogEntriesListViewModel _parent;
@@ -34,7 +31,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			_builder = new MessageTypeOverviewBuilder();
 		}
 
-		private void UpdateOverviews()
+		protected override IEnumerable UpdateOverviews()
 		{
 			var map = _builder.CreateOverviewMap( _collector.Build( _entries ) );
 
@@ -55,36 +52,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				list.Add( info );
 			}
 
-			SetOverviews( list );
-		}
-
-		private Task _populationTask;
-		private bool _overviewsPopulated;
-		private List<OverviewInfo> _overviews = new List<OverviewInfo>();
-
-		public override IEnumerable Items
-		{
-			get
-			{
-				if ( !_overviewsPopulated && _populationTask == null )
-				{
-					_populationTask = new Task( UpdateOverviews );
-					_populationTask.ContinueWith( t =>
-					{
-						_overviewsPopulated = true;
-						_populationTask = null;
-					} );
-
-					_populationTask.Start();
-				}
-				return _overviews;
-			}
-		}
-
-		private void SetOverviews( List<OverviewInfo> overviews )
-		{
-			_overviews = overviews;
-			RaisePropertyChanged( "Items" );
+			return list;
 		}
 	}
 }

@@ -68,6 +68,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		public LogEntriesListViewModel ParentView
+		{
+			get { return _parentViewModel; }
+		}
+
 		private Brush _brush;
 		public Brush Brush
 		{
@@ -237,15 +242,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Show editor
 
-		private DelegateCommand showEditorCommand;
+		private DelegateCommand _showEditorCommand;
 		public ICommand ShowEditorCommand
 		{
 			get
 			{
-				if ( showEditorCommand == null )
-					showEditorCommand = new DelegateCommand( ShowEditorExecute, ShowEditorCanExecute );
+				if ( _showEditorCommand == null )
+					_showEditorCommand = new DelegateCommand( ShowEditorExecute, ShowEditorCanExecute );
 
-				return showEditorCommand;
+				return _showEditorCommand;
 			}
 		}
 
@@ -266,14 +271,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Remove highlighting command
 
-		private DelegateCommand removeHighlightingCommand;
+		private DelegateCommand _removeHighlightingCommand;
 		public ICommand RemoveHighlightingCommand
 		{
 			get
 			{
-				if ( removeHighlightingCommand == null )
-					removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute, RemoveHighlightingCanExecute );
-				return removeHighlightingCommand;
+				if ( _removeHighlightingCommand == null )
+					_removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute, RemoveHighlightingCanExecute );
+				return _removeHighlightingCommand;
 			}
 		}
 
@@ -339,15 +344,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Move to next highlighted
 
-		private DelegateCommand moveToNextHighlightedCommand;
+		private DelegateCommand _moveToNextHighlightedCommand;
 		public ICommand MoveToNextHighlightedCommand
 		{
 			get
 			{
-				if ( moveToNextHighlightedCommand == null )
-					moveToNextHighlightedCommand = new DelegateCommand( MoveToNextHighlightedExecute, MoveToNextHighlightedCanExecute );
+				if ( _moveToNextHighlightedCommand == null )
+					_moveToNextHighlightedCommand = new DelegateCommand( MoveToNextHighlightedExecute, MoveToNextHighlightedCanExecute );
 
-				return moveToNextHighlightedCommand;
+				return _moveToNextHighlightedCommand;
 			}
 		}
 
@@ -363,15 +368,15 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		// Move to previous highlighted
 
-		private DelegateCommand moveToPreviousHighlightedCommand;
+		private DelegateCommand _moveToPreviousHighlightedCommand;
 		public ICommand MoveToPreviousHighlightedCommand
 		{
 			get
 			{
-				if ( moveToPreviousHighlightedCommand == null )
-					moveToPreviousHighlightedCommand = new DelegateCommand( MoveToPreviousHighlightedExecute, MoveToPreviousHighlightedCanExecute );
+				if ( _moveToPreviousHighlightedCommand == null )
+					_moveToPreviousHighlightedCommand = new DelegateCommand( MoveToPreviousHighlightedExecute, MoveToPreviousHighlightedCanExecute );
 
-				return moveToPreviousHighlightedCommand;
+				return _moveToPreviousHighlightedCommand;
 			}
 		}
 

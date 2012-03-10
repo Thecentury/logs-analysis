@@ -8,8 +8,8 @@ using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.OverviewGui
 {
-	public abstract class OverviewViewModelBase : BindingObject
+	public interface IOverviewViewModel
 	{
-		public abstract IEnumerable Items { get; }
+		IEnumerable Items { get; }
 	}
 }

@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using System.Xaml;
 using LogAnalyzer.ColorOverviews;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
@@ -252,21 +248,21 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private ObservableCollection<OverviewViewModelBase> _overviews;
-		public ObservableCollection<OverviewViewModelBase> Overviews
+		private ObservableCollection<IOverviewViewModel> _overviews;
+		public ObservableCollection<IOverviewViewModel> Overviews
 		{
 			get
 			{
 				if ( _overviews == null )
 				{
-					_overviews = new ObservableCollection<OverviewViewModelBase>();
+					_overviews = new ObservableCollection<IOverviewViewModel>();
 					PopulateOverviews( _overviews );
 				}
 				return _overviews;
 			}
 		}
 
-		protected virtual void PopulateOverviews( IList<OverviewViewModelBase> overviewsList )
+		protected virtual void PopulateOverviews( IList<IOverviewViewModel> overviewsList )
 		{
 			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
 		}
@@ -427,27 +423,27 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void AddHighlighting()
 		{
-			var highlightVM = ApplicationViewModel.ShowHighlightEditorWindow();
-			if ( highlightVM == null )
+			var highlightVm = ApplicationViewModel.ShowHighlightEditorWindow();
+			if ( highlightVm == null )
 				return;
 
-			var vm = new HighlightingViewModel( this, highlightVM.SelectedBuilder, new SolidColorBrush( highlightVM.SelectedColor ) );
+			var vm = new HighlightingViewModel( this, highlightVm.SelectedBuilder, new SolidColorBrush( highlightVm.SelectedColor ).AsFrozen() );
 
 			highlightingFilters.Add( vm );
 		}
 
 		// SaveToFile command
 
-		private DelegateCommand saveToFileCommand;
+		private DelegateCommand _saveToFileCommand;
 		public ICommand SaveToFileCommand
 		{
 			get
 			{
-				if ( saveToFileCommand == null )
+				if ( _saveToFileCommand == null )
 				{
-					saveToFileCommand = new DelegateCommand( SaveToFileExecute );
+					_saveToFileCommand = new DelegateCommand( SaveToFileExecute );
 				}
-				return saveToFileCommand;
+				return _saveToFileCommand;
 			}
 		}
 
