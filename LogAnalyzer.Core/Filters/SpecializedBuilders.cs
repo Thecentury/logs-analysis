@@ -7,6 +7,7 @@ using System.Windows.Markup;
 
 namespace LogAnalyzer.Filters
 {
+	[Icon( "processor.png" )]
 	[IgnoreBuilder]
 	[ContentProperty( "ThreadId" )]
 	public abstract class ThreadIdFilterBase : ExpressionBuilder

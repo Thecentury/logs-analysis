@@ -16,7 +16,7 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
-		
+
 		<HierarchicalDataTemplate DataType="{x:Type FilesTree:DirectoryTreeItem}"
 								  ItemsSource="{Binding Files}"
 								  x:Key="directoriesTemplate">
@@ -25,14 +25,14 @@
 					<Setter Property="Margin" Value="2"/>
 				</Style>
 			</HierarchicalDataTemplate.ItemContainerStyle>
-			
+
 			<StackPanel Orientation="Horizontal"
 						Background="Transparent"
 						Margin="0,2,0,2">
 				<StackPanel.ContextMenu>
 					<ContextMenu>
 						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
-					</ContextMenu>	
+					</ContextMenu>
 				</StackPanel.ContextMenu>
 				<StackPanel.Style>
 					<Style TargetType="FrameworkElement">
@@ -43,7 +43,7 @@
 						</Style.Triggers>
 					</Style>
 				</StackPanel.Style>
-				
+
 				<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
 				<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"
@@ -51,20 +51,23 @@
 					   Stretch="None"/>
 				<TextBlock Text="{Binding Header}"/>
 
-				<Button Margin="10,0,0,0"
+				<Canvas Background="Transparent"
 						Style="{StaticResource collapsibleStyle}"
+						Width="26">
+					<Button Margin="10,0,0,0"
 						Padding="0"
 						Command="{Binding ShowCommand}"
 						ToolTip="Show">
-					<Image Stretch="None"
+						<Image Stretch="None"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"
 						   Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
-				</Button>
-
+					</Button>
+				</Canvas>
+				
 			</StackPanel>
 		</HierarchicalDataTemplate>
-		
+
 		<DataTemplate DataType="{x:Type FilesTree:FileTreeItem}">
 			<StackPanel Orientation="Horizontal"
 						Common:IsMouseOverService.IsMouseOver="True">
@@ -73,26 +76,26 @@
 						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>
 					</ContextMenu>
 				</StackPanel.ContextMenu>-->
-				
-	
-				
+
+
+
 				<!--<CheckBox Margin="0,0,3,0" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>-->
 				<!--<Image Source="{Binding IconSource}"
 					   Margin="0,0,2,0"
 					   Stretch="None"/>-->
 				<TextBlock Text="{Binding Header}"/>
-				
+
 			</StackPanel>
 		</DataTemplate>
-		
+
 		<Style TargetType="TreeViewItem" x:Key="directoryStyle">
 			<Setter Property="IsExpanded" Value="True"/>
 		</Style>
 
 	</UserControl.Resources>
-	
+
 	<TreeView ItemsSource="{Binding Directories}" 
 			  ItemContainerStyle="{StaticResource directoryStyle}"
 			  ItemTemplate="{StaticResource directoriesTemplate}"/>
-	
+
 </UserControl>
