@@ -14,10 +14,19 @@
 
 	<UserControl.Resources>
 
+		<BooleanToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+		
 		<FilterEditing:FilterBuilderTemplateSelector x:Key="templateSelector"/>
 
 		<DataTemplate x:Key="comboboxItemTemplate">
-			<TextBlock Text="{Binding Description}"/>
+			<StackPanel Orientation="Horizontal">
+				<Image Visibility="{Binding HasIcon, Converter={StaticResource boolToVisibilityConverter}}"
+					   Source="{Binding Icon}"
+					   Margin="0,0,4,0"
+					   Stretch="None"/>
+				
+				<TextBlock Text="{Binding Description}"/>
+			</StackPanel>
 		</DataTemplate>
 
 		<Style TargetType="ComboBox" x:Key="comboboxStyle">

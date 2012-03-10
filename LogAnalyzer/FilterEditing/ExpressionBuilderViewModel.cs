@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.FilterEditing
@@ -24,7 +27,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 			if ( parameter == null )
 				throw new ArgumentNullException( "parameter" );
 
-			this.builder = builder;
+			this._builder = builder;
 			this.parameter = parameter;
 
 			// todo отписываться
@@ -38,71 +41,71 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		protected virtual Type GetResultType()
 		{
-			Type result = builder.GetResultType( parameter );
+			Type result = _builder.GetResultType( parameter );
 			return result;
 		}
 
-		private List<ExpressionBuilderViewModel> builderViewModels;
+		private List<ExpressionBuilderViewModel> _builderViewModels;
 		public IList<ExpressionBuilderViewModel> Builders
 		{
 			get
 			{
-				if ( builderViewModels == null )
+				if ( _builderViewModels == null )
 				{
 					Type resultType = GetResultType();
 					ExpressionBuilder[] builders = ExpressionBuilderManager
 						.GetBuilders( resultType, typeof( LogEntry ) )
 						.OrderBy( b => b.GetType().Name )
 						.ToArray();
-					builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
+					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
 
 					ReplaceWithSelected();
 				}
 
-				return builderViewModels;
+				return _builderViewModels;
 			}
 		}
 
 		private void ReplaceWithSelected()
 		{
-			if ( selectedChild != null )
+			if ( _selectedChild != null )
 			{
 				var selectedBuilderType = SelectedChild.Builder.GetType();
-				var builderWithTypeSameAsSelected = builderViewModels.FirstOrDefault( b => b.builder.GetType() == selectedBuilderType );
+				var builderWithTypeSameAsSelected = _builderViewModels.FirstOrDefault( b => b._builder.GetType() == selectedBuilderType );
 				if ( builderWithTypeSameAsSelected != null )
 				{
-					int index = builderViewModels.IndexOf( builderWithTypeSameAsSelected );
-					builderViewModels[index] = selectedChild;
+					int index = _builderViewModels.IndexOf( builderWithTypeSameAsSelected );
+					_builderViewModels[index] = _selectedChild;
 				}
 			}
 		}
 
-		private readonly ExpressionBuilder builder;
+		private readonly ExpressionBuilder _builder;
 		public ExpressionBuilder Builder
 		{
-			get { return builder; }
+			get { return _builder; }
 		}
 
-		private ExpressionBuilderViewModel selectedChild;
+		private ExpressionBuilderViewModel _selectedChild;
 		public ExpressionBuilderViewModel SelectedChild
 		{
-			get { return selectedChild; }
+			get { return _selectedChild; }
 			set
 			{
-				selectedChild = value;
+				_selectedChild = value;
 				RaisePropertyChanged( "SelectedChild" );
 				RaisePropertyChanged( "IsInline" );
 				RaisePropertyChanged( "Builder" );
-				if ( selectedChild != null )
+				if ( _selectedChild != null )
 				{
-					OnSelectedChildChanged( selectedChild.Builder );
+					OnSelectedChildChanged( _selectedChild.Builder );
 				}
 			}
 		}
 
 		protected virtual void OnSelectedChildChanged( ExpressionBuilder newBuilder )
 		{
-			TransparentBuilder transparentBuilder = builder as TransparentBuilder;
+			TransparentBuilder transparentBuilder = _builder as TransparentBuilder;
 			if ( transparentBuilder != null )
 			{
 				transparentBuilder.Inner = newBuilder;
@@ -113,9 +116,49 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			get
 			{
-				string description = builder.ToString().Replace( "Filter", String.Empty ).Replace( "Builder", String.Empty );
+				string description = _builder.ToString().Replace( "Filter", String.Empty ).Replace( "Builder", String.Empty );
 				return description;
 			}
+		}
+
+		public bool HasIcon
+		{
+			get
+			{
+				if ( !_iconLoaded )
+				{
+					LoadIcon();
+				}
+
+				return _icon != null;
+			}
+		}
+
+		private bool _iconLoaded;
+		private ImageSource _icon;
+		public ImageSource Icon
+		{
+			get
+			{
+				if ( !_iconLoaded )
+				{
+					LoadIcon();
+				}
+				return _icon;
+			}
+		}
+
+		private void LoadIcon()
+		{
+			var iconAttribute =
+				_builder.GetType().GetCustomAttributes( typeof( IconAttribute ), true ).Cast<IconAttribute>().FirstOrDefault();
+
+			if ( iconAttribute != null )
+			{
+				_icon = new BitmapImage( new Uri( PackUriHelper.MakePackUri( "/Resources/" + iconAttribute.IconName ) ) );
+			}
+
+			_iconLoaded = true;
 		}
 
 		public virtual bool IsInline
@@ -123,9 +166,9 @@ namespace LogAnalyzer.GUI.FilterEditing
 			get
 			{
 				bool isInline = false;
-				if ( selectedChild != null )
+				if ( _selectedChild != null )
 				{
-					ExpressionBuilder innerBuilder = selectedChild.Builder;
+					ExpressionBuilder innerBuilder = _selectedChild.Builder;
 					if ( innerBuilder != null )
 					{
 						isInline = innerBuilder is IntermediateConstantBuilder;

@@ -136,7 +136,14 @@ namespace LogAnalyzer.GUI.ViewModels
 					//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
 
 					//timer.Restart();
-					DataGrid.ScrollIntoView( selectedValue );
+					try
+					{
+						DataGrid.ScrollIntoView( selectedValue );
+					}
+					catch ( Exception exc )
+					{
+						Logger.Instance.WriteException( exc );
+					}
 					//elapsed = timer.ElapsedMilliseconds;
 					//Logger.Instance.WriteInfo( "Scrolled into view in {0}", elapsed );
 				}

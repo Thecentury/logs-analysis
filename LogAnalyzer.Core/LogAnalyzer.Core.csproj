@@ -107,6 +107,7 @@
     <Compile Include="Filters\FileFilters\SizeLessThanFilter.cs" />
     <Compile Include="Filters\FilterTargetAttribute.cs" />
     <Compile Include="Filters\FluentFilterExtensions.cs" />
+    <Compile Include="Filters\IconAttribute.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
     <Compile Include="Filters\RegexMatchesFilterBuilder.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
