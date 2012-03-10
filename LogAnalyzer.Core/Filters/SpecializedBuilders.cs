@@ -60,6 +60,7 @@ namespace LogAnalyzer.Filters
 		}
 	}
 
+	[Icon( "document-text.png" )]
 	[ContentProperty( "FileName" )]
 	public abstract class FileNameFilterBase : ExpressionBuilder
 	{
@@ -146,6 +147,7 @@ namespace LogAnalyzer.Filters
 		}
 	}
 
+	[Icon( "regular-expression-search.png" )]
 	[ContentProperty( "Pattern" )]
 	public sealed class TextMatchesRegex : ExpressionBuilder
 	{
@@ -170,6 +172,7 @@ namespace LogAnalyzer.Filters
 		}
 	}
 
+	[Icon( "burn.png" )]
 	[ContentProperty( "Value" )]
 	public sealed class MessageTypeEquals : ExpressionBuilder
 	{

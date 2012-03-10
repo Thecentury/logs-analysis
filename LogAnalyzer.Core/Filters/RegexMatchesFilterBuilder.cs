@@ -5,21 +5,22 @@ using JetBrains.Annotations;
 
 namespace LogAnalyzer.Filters
 {
+	[Icon( "regular-expression-search.png" )]
 	public sealed class RegexMatchesFilterBuilder : StringFilterBuilder
 	{
 		public RegexMatchesFilterBuilder() { }
 
-		public RegexMatchesFilterBuilder([NotNull] string regex, [NotNull] ExpressionBuilder target)
+		public RegexMatchesFilterBuilder( [NotNull] string regex, [NotNull] ExpressionBuilder target )
 		{
-			if (regex == null)
+			if ( regex == null )
 			{
-				throw new ArgumentNullException("regex");
+				throw new ArgumentNullException( "regex" );
 			}
-			if (target == null)
+			if ( target == null )
 			{
-				throw new ArgumentNullException("target");
+				throw new ArgumentNullException( "target" );
 			}
-			Substring = new StringConstant(regex);
+			Substring = new StringConstant( regex );
 			Inner = target;
 		}
 
