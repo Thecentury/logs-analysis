@@ -7,7 +7,8 @@
 			 xmlns:views="clr-namespace:LogAnalyzer.GUI.Views" 
 			 xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" xmlns:OverviewGui="clr-namespace:LogAnalyzer.GUI.OverviewGui"
              xmlns:Controls="clr-namespace:LogAnalyzer.GUI.Controls"
-             xmlns:System="clr-namespace:System;assembly=mscorlib" mc:Ignorable="d" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.InputBindings>
@@ -413,6 +414,24 @@
 		<Style x:Key="overviewContainerStyle">
 			<Setter Property="OverviewGui:OverviewCanvas.Coordinate" Value="{Binding Coordinate}"/>
 		</Style>
+		
+		<ItemsPanelTemplate x:Key="overviewsPanelTemplate">
+			<StackPanel Orientation="Horizontal"
+						VerticalAlignment="Stretch"/>
+		</ItemsPanelTemplate>
+
+		<DataTemplate DataType="{x:Type ViewModels:MessageTypeOverview}">
+			<ItemsControl ItemsSource="{Binding Items}"
+					  DockPanel.Dock="Right"
+					  Width="20"
+					  ItemContainerStyle="{StaticResource overviewContainerStyle}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
 
 	</UserControl.Resources>
 
@@ -426,20 +445,12 @@
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
 		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
-		<Image Source="{Binding MessageTypeImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
 
-		<ItemsControl ItemsSource="{Binding MessageTypeOverview}"
+		<ItemsControl ItemsSource="{Binding Overviews}"
 					  DockPanel.Dock="Right"
-					  Width="20"
-					  Margin="0,22,0,0"
-					  ItemContainerStyle="{StaticResource overviewContainerStyle}">
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<OverviewGui:OverviewCanvas IsItemsHost="True"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-		</ItemsControl>
-
+					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
+					  Margin="0,22,0,0"/>
+		
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
 				  DataContextChanged="DataGridDataContextChanged"

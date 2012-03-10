@@ -5,16 +5,16 @@ namespace LogAnalyzer.ColorOverviews
 {
 	public abstract class IndexOverviewCollectorBase<TItem, TResult> : OverviewCollectorBase<TItem, TResult>
 	{
-		private int maxSegmentsCount = 1000;
+		private int _maxSegmentsCount = 1000;
 		public int MaxSegmentsCount
 		{
-			get { return maxSegmentsCount; }
-			set { maxSegmentsCount = value; }
+			get { return _maxSegmentsCount; }
+			set { _maxSegmentsCount = value; }
 		}
 
 		public sealed override TResult[] Build( IList<TItem> items )
 		{
-			int count = Math.Min( maxSegmentsCount, items.Count );
+			int count = Math.Min( _maxSegmentsCount, items.Count );
 			TResult[] result = new TResult[count];
 
 			for ( int i = 0; i < count; i++ )
