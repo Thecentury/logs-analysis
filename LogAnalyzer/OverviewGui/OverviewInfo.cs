@@ -11,14 +11,14 @@ namespace LogAnalyzer.GUI.OverviewGui
 {
 	public sealed class OverviewInfo : BindingObject
 	{
-		private readonly LogEntriesListViewModel parent;
+		private readonly LogEntriesListViewModel _parent;
 
 		public OverviewInfo( [NotNull] LogEntry logEntry, double coordinate, [NotNull] LogEntriesListViewModel parent )
 		{
 			if ( logEntry == null ) throw new ArgumentNullException( "logEntry" );
 			if ( parent == null ) throw new ArgumentNullException( "parent" );
 
-			this.parent = parent;
+			this._parent = parent;
 
 			LogEntry = logEntry;
 			Coordinate = coordinate;
@@ -28,15 +28,17 @@ namespace LogAnalyzer.GUI.OverviewGui
 
 		public double Coordinate { get; private set; }
 
-		private DelegateCommand scrollToItemCommand;
+		private DelegateCommand _scrollToItemCommand;
 		public ICommand ScrollToItemCommand
 		{
 			get
 			{
-				if ( scrollToItemCommand == null )
-					scrollToItemCommand = new DelegateCommand( () => parent.ScrollToItemCommand.Execute( LogEntry ));
+				if ( _scrollToItemCommand == null )
+				{
+					_scrollToItemCommand = new DelegateCommand( () => _parent.ScrollToItemCommand.Execute( LogEntry ) );
+				}
 
-				return scrollToItemCommand;
+				return _scrollToItemCommand;
 			}
 		}
 	}

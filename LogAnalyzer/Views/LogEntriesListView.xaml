@@ -25,9 +25,9 @@
 		<SolidColorBrush Color="#99FFEE3A" x:Key="dynamicHighlightBrush"/>
 
 		<Common:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
-		
+
 		<System:Double x:Key="highlightingOffset">4</System:Double>
-		
+
 		<Common:HighlightingCountToMarginConverter x:Key="highlightingCountToMarginConverter" Offset="{StaticResource highlightingOffset}"/>
 
 		<!-- Базовый стиль ячейки - поддержка динамической подсветки -->
@@ -351,7 +351,7 @@
 													HorizontalAlignment="Stretch"
 													VerticalAlignment="Stretch"
 													Offset="{StaticResource highlightingOffset}"/>
-					
+
 				<TextBox
 					Background="Transparent"
 					IsReadOnly="True"
@@ -369,7 +369,7 @@
 
 			<!--<Control Template="{Binding Template}"
 					 DataContext="{Binding TemplateContext}"/>-->
-			
+
 		</DataTemplate>
 
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>
@@ -405,26 +405,50 @@
 			</Style.Triggers>
 		</Style>
 
-		<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
-			<Rectangle Style="{StaticResource overviewRectangleStyle}"
-					   Fill="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
-					   />
-		</DataTemplate>
-
 		<Style x:Key="overviewContainerStyle">
 			<Setter Property="OverviewGui:OverviewCanvas.Coordinate" Value="{Binding Coordinate}"/>
 		</Style>
-		
+
 		<ItemsPanelTemplate x:Key="overviewsPanelTemplate">
 			<StackPanel Orientation="Horizontal"
 						VerticalAlignment="Stretch"/>
 		</ItemsPanelTemplate>
 
-		<DataTemplate DataType="{x:Type ViewModels:MessageTypeOverview}">
-			<ItemsControl ItemsSource="{Binding Items}"
-					  DockPanel.Dock="Right"
-					  Width="20"
-					  ItemContainerStyle="{StaticResource overviewContainerStyle}">
+		<DataTemplate DataType="{x:Type OverviewGui:FilterOverview}">
+			<DataTemplate.Resources>
+				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
+					<Rectangle 
+						Style="{StaticResource overviewRectangleStyle}"
+						Fill="{Binding DataContext.Brush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+					   />
+				</DataTemplate>
+			</DataTemplate.Resources>
+
+			<ItemsControl 
+				ItemsSource="{Binding Items}"
+				Width="20"
+				ItemContainerStyle="{StaticResource overviewContainerStyle}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type OverviewGui:MessageTypeOverview}">
+			<DataTemplate.Resources>
+				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
+					<Rectangle Style="{StaticResource overviewRectangleStyle}"
+					   Fill="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
+					   />
+				</DataTemplate>
+			</DataTemplate.Resources>
+
+			<ItemsControl 
+				ItemsSource="{Binding Items}"
+				Width="20"
+				ItemContainerStyle="{StaticResource overviewContainerStyle}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
@@ -450,7 +474,7 @@
 					  DockPanel.Dock="Right"
 					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
 					  Margin="0,22,0,0"/>
-		
+
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
 				  DataContextChanged="DataGridDataContextChanged"
@@ -481,7 +505,7 @@
 									CellStyle="{StaticResource timeCellStyle}"/>
 
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
-				
+
 				<!--<DataGridTextColumn Binding="{Binding UnitedText}"/>-->
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->

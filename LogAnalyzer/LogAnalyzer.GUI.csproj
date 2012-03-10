@@ -187,7 +187,7 @@
     <Compile Include="OverviewGui\OverviewBitmapBuilderBase.cs" />
     <Compile Include="OverviewGui\OverviewCanvas.cs" />
     <Compile Include="OverviewGui\OverviewInfo.cs" />
-    <Compile Include="OverviewGui\OverviewViewModelBase.cs" />
+    <Compile Include="OverviewGui\IOverviewViewModel.cs" />
     <Compile Include="OverviewGui\PaletteOverviewBitmapBuilder.cs" />
     <Compile Include="Regions\FutureRegion.cs" />
     <Compile Include="Regions\GenericRegionAdapter.cs" />
@@ -249,7 +249,7 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
-    <Compile Include="ViewModels\MessageTypeOverview.cs" />
+    <Compile Include="OverviewGui\MessageTypeOverview.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />

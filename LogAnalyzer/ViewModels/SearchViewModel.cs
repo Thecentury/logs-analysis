@@ -8,6 +8,7 @@ using System.Windows.Media;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Extensions;
+using LogAnalyzer.GUI.OverviewGui;
 using Microsoft.Research.DynamicDataDisplay;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -18,10 +19,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			: base( parentList, new AlwaysFalse() )
 		{
 			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
+
+			_overview = new FilterOverview( parentList.Entries, parentList ) { Brush = Brush };
 		}
 
 		private readonly TextContains _textContainsFilter = new TextContains();
 		private readonly TextMatchesRegex _regexMatchesFilter = new TextMatchesRegex();
+		private readonly FilterOverview _overview;
 
 		private bool _isRegexSearch;
 		public bool IsRegexSearch
@@ -82,10 +86,19 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( _clearSearchBoxCommand == null )
-					_clearSearchBoxCommand = new DelegateCommand( () => Substring = null, () => Substring != null );
+				{
+					_clearSearchBoxCommand = new DelegateCommand( CLearSearchBoxExecute, () => Substring != null );
+				}
 
 				return _clearSearchBoxCommand;
 			}
+		}
+
+		private void CLearSearchBoxExecute()
+		{
+			Substring = null;
+			ParentView.Overviews.Remove( _overview );
+			_overview.Filter = null;
 		}
 
 		// LaunchSearch command
@@ -96,7 +109,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( _launchSearchCommand == null )
+				{
 					_launchSearchCommand = new DelegateCommand( LaunchSearchExecute, LaunchSearchCanExecute );
+				}
 
 				return _launchSearchCommand;
 			}
@@ -117,6 +132,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			HaveSearched = true;
 			MoveToFirstHighlightedCommand.ExecuteIfCan();
+
+			_overview.Filter = Filter;
+			if ( !ParentView.Overviews.Contains( _overview ) )
+			{
+				ParentView.Overviews.Add(_overview);
+			}
 		}
 
 		private bool LaunchSearchCanExecute()
@@ -127,3 +148,4 @@ namespace LogAnalyzer.GUI.ViewModels
 		#endregion
 	}
 }
+
