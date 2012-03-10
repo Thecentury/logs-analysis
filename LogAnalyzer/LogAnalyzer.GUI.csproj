@@ -249,6 +249,7 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
+    <Compile Include="ViewModels\MessageTypeOverview.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />

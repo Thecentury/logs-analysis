@@ -230,12 +230,12 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Overviews
 
-		private BitmapSource densityImage;
+		private BitmapSource _densityImage;
 		public BitmapSource DensityImage
 		{
 			get
 			{
-				if ( densityImage == null )
+				if ( _densityImage == null )
 				{
 					var collector = new DensityOverviewCollector<LogEntry>();
 					var builder = new DensityOverviewBuilder<LogEntry>();
@@ -245,44 +245,30 @@ namespace LogAnalyzer.GUI.ViewModels
 						.ToArray();
 
 					var bitmapBuilder = new PaletteOverviewBitmapBuilder( new LinearPalette( Colors.White, Colors.DarkBlue ) );
-					densityImage = bitmapBuilder.CreateBitmap( map );
+					_densityImage = bitmapBuilder.CreateBitmap( map );
 				}
 
-				return densityImage;
+				return _densityImage;
 			}
 		}
 
-		private List<OverviewInfo> _messageTypeOverviewInfos;
-		public List<OverviewInfo> MessageTypeOverview
+		private ObservableCollection<OverviewViewModelBase> _overviews;
+		public ObservableCollection<OverviewViewModelBase> Overviews
 		{
 			get
 			{
-				if ( _messageTypeOverviewInfos == null )
+				if ( _overviews == null )
 				{
-					var collector = new GroupingByIndexOverviewCollector<LogEntry>();
-					var builder = new MessageTypeOverviewBuilder();
-					var map = builder.CreateOverviewMap( collector.Build( _entries ) );
-
-					double length = map.Length;
-
-					List<OverviewInfo> list = new List<OverviewInfo>();
-					for ( int i = 0; i < map.Length; i++ )
-					{
-						LogEntry entry = map[i];
-						if ( entry == null )
-							continue;
-						//if ( !entry.Type.In( MessageTypes.Error, MessageTypes.Warning ) )
-						//    continue;
-
-						OverviewInfo info = new OverviewInfo( map[i], i / length, this );
-						list.Add( info );
-					}
-
-					_messageTypeOverviewInfos = list;
+					_overviews = new ObservableCollection<OverviewViewModelBase>();
+					PopulateOverviews( _overviews );
 				}
-
-				return _messageTypeOverviewInfos;
+				return _overviews;
 			}
+		}
+
+		protected virtual void PopulateOverviews( IList<OverviewViewModelBase> overviewsList )
+		{
+			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
 		}
 
 		private DelegateCommand<LogEntry> _scrollToItemCommand;
@@ -300,25 +286,6 @@ namespace LogAnalyzer.GUI.ViewModels
 				}
 				return _scrollToItemCommand;
 			}
-		}
-
-		private ObservableCollection<OverviewViewModelBase> overviews;
-		public ObservableCollection<OverviewViewModelBase> Overviews
-		{
-			get
-			{
-				if ( overviews == null )
-				{
-					overviews = new ObservableCollection<OverviewViewModelBase>();
-					PopulateOverviews( overviews );
-				}
-				return overviews;
-			}
-		}
-
-		protected virtual void PopulateOverviews( IList<OverviewViewModelBase> overviewsList )
-		{
-
 		}
 
 		#endregion Overviews

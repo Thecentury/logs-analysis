@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace LogAnalyzer.GUI.OverviewGui
 {
 	public abstract class OverviewViewModelBase : BindingObject
 	{
-		public abstract ObservableList<LogEntry> Items { get; }
+		public abstract IEnumerable Items { get; }
 	}
 }
