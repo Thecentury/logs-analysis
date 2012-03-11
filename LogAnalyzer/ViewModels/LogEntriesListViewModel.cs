@@ -43,7 +43,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
-			highlightingFilters.CollectionChanged += OnHighlightingFilters_CollectionChanged;
+			_highlightingFilters.CollectionChanged += OnHighlightingFiltersCollectionChanged;
 		}
 
 		public int TotalEntries
@@ -429,7 +429,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			var vm = new HighlightingViewModel( this, highlightVm.SelectedBuilder, new SolidColorBrush( highlightVm.SelectedColor ).AsFrozen() );
 
-			highlightingFilters.Add( vm );
+			_highlightingFilters.Add( vm );
 		}
 
 		// SaveToFile command
@@ -482,44 +482,44 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Highlighting
 
-		private readonly ObservableCollection<HighlightingViewModel> highlightingFilters =
+		private readonly ObservableCollection<HighlightingViewModel> _highlightingFilters =
 			new ObservableCollection<HighlightingViewModel>();
 
 		public ObservableCollection<HighlightingViewModel> HighlightingFilters
 		{
-			get { return highlightingFilters; }
+			get { return _highlightingFilters; }
 		}
 
-		private void OnHighlightingFilters_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnHighlightingFiltersCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.NewItems != null )
 			{
 				foreach ( HighlightingViewModel added in e.NewItems )
 				{
-					added.Changed += OnHighlightingFilter_Changed;
+					added.Changed += OnHighlightingFilterChanged;
 				}
 			}
 			if ( e.OldItems != null )
 			{
 				foreach ( HighlightingViewModel removed in e.OldItems )
 				{
-					removed.Changed -= OnHighlightingFilter_Changed;
+					removed.Changed -= OnHighlightingFilterChanged;
 					removed.Dispose();
 				}
 			}
 		}
 
-		private void OnHighlightingFilter_Changed( object sender, EventArgs e )
+		private void OnHighlightingFilterChanged( object sender, EventArgs e )
 		{
-			var filter = (HighlightingViewModel)sender;
+			var highlighter = (HighlightingViewModel)sender;
 
 			foreach ( LogEntryViewModel entryViewModel in LogEntriesViewModels.CreatedEntries )
 			{
-				entryViewModel.HighlightedByList.Remove( filter );
+				entryViewModel.HighlightedByList.Remove( highlighter );
 
-				if ( filter.Filter.Include( entryViewModel.LogEntry ) )
+				if ( highlighter.Filter.Include( entryViewModel.LogEntry ) )
 				{
-					entryViewModel.HighlightedByList.Add( filter );
+					entryViewModel.HighlightedByList.Add( highlighter );
 				}
 			}
 		}

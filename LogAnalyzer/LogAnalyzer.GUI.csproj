@@ -181,6 +181,8 @@
     <Compile Include="FilterEditing\StringFilterBuilderViewModel.cs" />
     <Compile Include="FilterEditing\TransparentBuilder.cs" />
     <Compile Include="Interop\FlashWindow.cs" />
+    <Compile Include="OverviewGui\AsyncOverview.cs" />
+    <Compile Include="OverviewGui\FilterOverview.cs" />
     <Compile Include="OverviewGui\IOverviewBitmapBuilder.cs" />
     <Compile Include="OverviewGui\MessageTypeBitmapBuilder.cs" />
     <Compile Include="OverviewGui\MessageTypeToBackgroundConverter.cs" />

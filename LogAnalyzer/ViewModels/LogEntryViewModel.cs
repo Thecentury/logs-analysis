@@ -16,6 +16,7 @@ using LogAnalyzer.Extensions;
 using System.Windows.Input;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Logging;
@@ -529,7 +530,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			DelegateCommand command = new DelegateCommand( () =>
 			{
-				HighlightingViewModel vm = new HighlightingViewModel( _parentViewModel, filter, new SolidColorBrush( ColorHelper.GetRandomColor() ) );
+				HighlightingViewModel vm = new HighlightingViewModel( _parentViewModel, filter, new SolidColorBrush( ColorHelper.GetRandomColor() ).AsFrozen() );
 				_parentViewModel.HighlightingFilters.Add( vm );
 			} );
 
