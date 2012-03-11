@@ -473,7 +473,7 @@
 		<ItemsControl ItemsSource="{Binding Overviews}"
 					  DockPanel.Dock="Right"
 					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
-					  Margin="0,22,0,0"/>
+					  Margin="0,40,0,18"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"

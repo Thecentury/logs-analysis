@@ -11,6 +11,7 @@ using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Collections;
 
@@ -22,13 +23,13 @@ namespace LogAnalyzer.GUI.ViewModels
 		private readonly SparseLogEntryViewModelList _logEntriesViewModels;
 		private readonly LogEntriesListViewModel _parentViewModel;
 		private readonly IDisposable _collectionChangedSubscription;
+		private readonly FilterOverview _overview;
 
-		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
-			[NotNull] ExpressionBuilder builder )
-			: this( parentViewModel, builder, null ) { }
+		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel, [NotNull] ExpressionBuilder builder, Brush brush = null ) :
+			this( parentViewModel, builder, true, brush ) { }
 
-		protected internal HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
-			[NotNull] ExpressionBuilder builder, Brush brush )
+		protected HighlightingViewModel( [NotNull] LogEntriesListViewModel parentViewModel,
+			 [NotNull] ExpressionBuilder builder, bool addOverview, Brush brush = null )
 		{
 			if ( parentViewModel == null ) throw new ArgumentNullException( "parentViewModel" );
 			if ( builder == null ) throw new ArgumentNullException( "builder" );
@@ -55,6 +56,12 @@ namespace LogAnalyzer.GUI.ViewModels
 			ScanCreatedEntries();
 
 			_filter.Changed += OnFilterChanged;
+
+			_overview = new FilterOverview( parentViewModel.Entries, parentViewModel ) { Brush = brush, Filter = Filter };
+			if ( addOverview )
+			{
+				parentViewModel.Overviews.Add( _overview );
+			}
 		}
 
 		private void ScanCreatedEntries()
@@ -66,6 +73,11 @@ namespace LogAnalyzer.GUI.ViewModels
 					logEntryViewModel.HighlightedByList.Add( this );
 				}
 			}
+		}
+
+		public FilterOverview Overview
+		{
+			get { return _overview; }
 		}
 
 		public LogEntriesListViewModel ParentView
@@ -80,6 +92,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			set
 			{
 				_brush = value;
+				_overview.Brush = value;
 				RaisePropertyChanged( "Brush" );
 			}
 		}
@@ -100,6 +113,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			ScanCreatedEntries();
 
 			RaisePropertyChanged( "Description" );
+			_overview.Filter = _filter;
 			Changed.Raise( this );
 		}
 
@@ -225,6 +239,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		public override void Dispose()
 		{
 			base.Dispose();
+
 			_collectionChangedSubscription.Dispose();
 			_logEntriesViewModels.ItemCreated -= OnLogEntriesViewModelsItemCreated;
 			RemoveSelfFromCreatedEntries();
@@ -277,14 +292,19 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( _removeHighlightingCommand == null )
+				{
 					_removeHighlightingCommand = new DelegateCommand( RemoveHighlightingExecute, RemoveHighlightingCanExecute );
+				}
+
 				return _removeHighlightingCommand;
 			}
 		}
 
 		private void RemoveHighlightingExecute()
 		{
+			_parentViewModel.Overviews.Remove( _overview );
 			_parentViewModel.HighlightingFilters.Remove( this );
+			RemoveSelfFromCreatedEntries();
 		}
 
 		protected virtual bool RemoveHighlightingCanExecute()

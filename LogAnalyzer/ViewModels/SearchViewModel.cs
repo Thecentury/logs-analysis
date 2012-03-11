@@ -15,17 +15,14 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	public sealed class SearchViewModel : HighlightingViewModel
 	{
-		public SearchViewModel( LogEntriesListViewModel parentList )
-			: base( parentList, new AlwaysFalse() )
-		{
-			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
-
-			_overview = new FilterOverview( parentList.Entries, parentList ) { Brush = Brush };
-		}
-
 		private readonly TextContains _textContainsFilter = new TextContains();
 		private readonly TextMatchesRegex _regexMatchesFilter = new TextMatchesRegex();
-		private readonly FilterOverview _overview;
+
+		public SearchViewModel( LogEntriesListViewModel parentList )
+			: base( parentList, new AlwaysFalse(), false )
+		{
+			Brush = Brushes.RoyalBlue.MakeTransparent( 0.5 ).AsFrozen();
+		}
 
 		private bool _isRegexSearch;
 		public bool IsRegexSearch
@@ -53,7 +50,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		private bool _haveSearched;
 		private bool HaveSearched
 		{
-			get { return _haveSearched; }
 			set
 			{
 				_haveSearched = value;
@@ -70,7 +66,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		protected override bool RemoveHighlightingCanExecute()
 		{
-			return false;
+			return true;
 		}
 
 		protected override bool ShowEditorCanExecute()
@@ -97,8 +93,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void CLearSearchBoxExecute()
 		{
 			Substring = null;
-			ParentView.Overviews.Remove( _overview );
-			_overview.Filter = null;
+			ParentView.Overviews.Remove( Overview );
+			Overview.Filter = null;
+			RemoveHighlightingCommand.Execute();
 		}
 
 		// LaunchSearch command
@@ -133,10 +130,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			HaveSearched = true;
 			MoveToFirstHighlightedCommand.ExecuteIfCan();
 
-			_overview.Filter = Filter;
-			if ( !ParentView.Overviews.Contains( _overview ) )
+			if ( !ParentView.Overviews.Contains( Overview ) )
 			{
-				ParentView.Overviews.Add(_overview);
+				ParentView.Overviews.Add( Overview );
 			}
 		}
 
