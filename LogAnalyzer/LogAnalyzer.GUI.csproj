@@ -106,9 +106,11 @@
   <ItemGroup>
     <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\Ext\ICSharpCode.TextEditor.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ShaderEffectLibrary">
       <HintPath>..\Ext\ShaderEffectLibrary.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -116,9 +118,11 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Ext\Rx .NET 4.0\System.Reactive.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive.Windows.Threading, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Ext\Rx .NET 4.0\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -131,15 +135,18 @@
     </Reference>
     <Reference Include="VistaBridgeLibrary">
       <HintPath>..\Ext\VistaBridgeLibrary.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Windows7.DesktopIntegration">
       <HintPath>..\Ext\Windows7.DesktopIntegration.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WPFToolkit.Extended">
       <HintPath>..\Ext\WPFToolkit.Extended.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -424,10 +431,12 @@
     <ProjectReference Include="..\DynamicDataDisplay\DynamicDataDisplay.csproj">
       <Project>{ECD37682-DF7E-409F-912D-0965634556B5}</Project>
       <Name>DynamicDataDisplay</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

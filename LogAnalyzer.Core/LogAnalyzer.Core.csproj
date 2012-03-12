@@ -55,9 +55,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Ext\Rx .NET 4.0\System.Reactive.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive.Windows.Threading, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Ext\Rx .NET 4.0\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
