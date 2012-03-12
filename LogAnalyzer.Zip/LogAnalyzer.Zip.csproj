@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\Ext\Ionic.Zip.Reduced.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +53,7 @@
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
       <Name>LogAnalyzer.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
