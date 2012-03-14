@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
+using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.ViewModels.FilesTree;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -42,7 +43,10 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void Visit( DirectoryTreeItem dir )
 		{
-			throw new NotImplementedException();
+			var filters = dir.Files.Where( f => f.IsChecked ).Select( f => new FileNameEquals( f.LogFile.Name ) ).Cast<ExpressionBuilder>().ToArray();
+			OrCollection or = new OrCollection( filters );
+
+			_application.Tabs.Add( new FilterTabViewModel( _application.Core.MergedEntries, _application, or ) );
 		}
 	}
 }

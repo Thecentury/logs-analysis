@@ -8,7 +8,8 @@
 			 xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" xmlns:OverviewGui="clr-namespace:LogAnalyzer.GUI.OverviewGui"
              xmlns:Controls="clr-namespace:LogAnalyzer.GUI.Controls"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels" mc:Ignorable="d" 
+             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
+             xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.InputBindings>
@@ -468,13 +469,17 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
+		<d3:ChartPlotter DockPanel.Dock="Bottom" Height="200" Name="plotter">
+			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Red"/>
+		</d3:ChartPlotter>
+		
 		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
-
+	
 		<ItemsControl ItemsSource="{Binding Overviews}"
 					  DockPanel.Dock="Right"
 					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
 					  Margin="0,40,0,18"/>
-
+	
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
 				  DataContextChanged="DataGridDataContextChanged"

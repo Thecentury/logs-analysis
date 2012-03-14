@@ -36,7 +36,7 @@
 			<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 					Command="{Binding EditFilterCommand}" 
 					ToolTip="Edit current filter">
-				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/pencil.png" Stretch="None"/>
+				<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/funnel--pencil.png" Stretch="None"/>
 			</Button>
 			<Button Style="{DynamicResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 					Command="{Binding RefreshCommand}" 
