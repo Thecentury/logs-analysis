@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
@@ -95,7 +96,9 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			set
 			{
 				if ( _isChecked == value )
+				{
 					return;
+				}
 
 				_isChecked = value;
 
@@ -118,5 +121,28 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		}
 
 		public event EventHandler<RequestShowEventArgs> RequestShow;
+
+		// Commands
+
+		// ShowCommand
+		
+		private DelegateCommand _showCommand;
+		public ICommand ShowCommand
+		{
+			get
+			{
+				if ( _showCommand == null )
+				{
+					_showCommand = new DelegateCommand( ShowExecute );
+				}
+
+				return _showCommand;
+			}
+		}
+
+		private void ShowExecute()
+		{
+			RequestShow.Raise( this, new RequestShowEventArgs( this ) );
+		}
 	}
 }

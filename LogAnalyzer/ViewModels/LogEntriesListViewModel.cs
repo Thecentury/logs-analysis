@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -23,6 +24,7 @@ using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
 using Microsoft.Research.DynamicDataDisplay.Common.Palettes;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -245,6 +247,30 @@ namespace LogAnalyzer.GUI.ViewModels
 				}
 
 				return _densityImage;
+			}
+		}
+
+		private IPointDataSource _messagesDensityDataSource;
+		public IPointDataSource MessagesDensityDataSource
+		{
+			get
+			{
+				if ( _messagesDensityDataSource == null )
+				{
+					Task.Factory.StartNew( () =>
+					                       	{
+												var collector = new DensityOverviewCollector<LogEntry>();
+												var builder = new AbsoluteCountOverviewBuilder<LogEntry>();
+												var grouped = collector.Build( _entries );
+												var map = builder.CreateOverviewMap( grouped );
+
+												_messagesDensityDataSource = new RawDataSource( map.Select( ( value, index ) => new Point( index, Math.Pow( value, 0.33 ) ) ) );
+
+												RaisePropertyChanged( "MessagesDensityDataSource" );
+					                       	} );
+				}
+
+				return _messagesDensityDataSource;
 			}
 		}
 
