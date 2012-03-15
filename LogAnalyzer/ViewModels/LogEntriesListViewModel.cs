@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using LogAnalyzer.ColorOverviews;
 using LogAnalyzer.Extensions;
@@ -24,7 +22,6 @@ using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
-using Microsoft.Research.DynamicDataDisplay.Common.Palettes;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace LogAnalyzer.GUI.ViewModels

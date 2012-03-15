@@ -15,39 +15,43 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	[DebuggerDisplay( "SparseLogEntryViewModelList Count={Count}" )]
 	public sealed class SparseLogEntryViewModelList : DispatcherObservableCollection, IList<LogEntryViewModel>, IList, ILogEntryHost
 	{
-		private readonly IList<LogEntry> logEntries;
-		private readonly Func<LogEntry, LogFileViewModel> fileViewModelFactory;
-		private readonly Dictionary<int, LogEntryViewModel> viewModelsCache = new Dictionary<int, LogEntryViewModel>();
-		private readonly LogEntriesListViewModel parent;
+		private readonly IList<LogEntry> _logEntries;
+		private readonly Func<LogEntry, LogFileViewModel> _fileViewModelFactory;
+		private readonly Dictionary<int, LogEntryViewModel> _viewModelsCache = new Dictionary<int, LogEntryViewModel>();
+		private readonly LogEntriesListViewModel _parent;
 
 		public LogEntriesListViewModel Parent
 		{
-			get { return parent; }
+			get { return _parent; }
 		}
 
 		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> fileViewModelFactory )
 			: base( parentViewModel.Entries, parentViewModel.Scheduler )
 		{
 			if ( parentViewModel == null )
+			{
 				throw new ArgumentNullException( "parentViewModel" );
+			}
 			if ( fileViewModelFactory == null )
+			{
 				throw new ArgumentNullException( "fileViewModelFactory" );
+			}
 
-			this.parent = parentViewModel;
-			this.logEntries = parentViewModel.Entries;
-			this.fileViewModelFactory = fileViewModelFactory;
+			this._parent = parentViewModel;
+			this._logEntries = parentViewModel.Entries;
+			this._fileViewModelFactory = fileViewModelFactory;
 		}
 
 		internal ICollection<LogEntryViewModel> CreatedEntries
 		{
-			get { return viewModelsCache.Values; }
+			get { return _viewModelsCache.Values; }
 		}
 
 		#region LogEntryHost Members
 
 		void ILogEntryHost.Release( LogEntryViewModel vm )
 		{
-			viewModelsCache.Remove( vm.IndexInParentCollection );
+			_viewModelsCache.Remove( vm.IndexInParentCollection );
 			vm.Dispose();
 
 			ItemRemoved.Raise( this, new LogEntryHostChangedEventArgs( vm ) );
@@ -70,7 +74,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				case NotifyCollectionChangedAction.Move:
 					throw new NotSupportedException();
 				case NotifyCollectionChangedAction.Reset:
-					viewModelsCache.Clear();
+					_viewModelsCache.Clear();
 					base.OnCollectionChanged( e );
 					break;
 			}
@@ -94,7 +98,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		private int AdjustIndex( LogEntry entry, int index )
 		{
-			var compositeList = logEntries as CompositeObservableListWrapper<LogEntry>;
+			var compositeList = _logEntries as CompositeObservableListWrapper<LogEntry>;
 			if ( compositeList == null )
 				return index;
 
@@ -128,16 +132,16 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		{
 			LogEntryViewModel logEntryViewModel;
 
-			if ( !viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
+			if ( !_viewModelsCache.TryGetValue( index, out logEntryViewModel ) )
 			{
-				LogEntry logEntry = logEntries[index];
-				LogFileViewModel fileViewModel = fileViewModelFactory( logEntry );
+				LogEntry logEntry = _logEntries[index];
+				LogFileViewModel fileViewModel = _fileViewModelFactory( logEntry );
 
-				logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, parent, index );
+				logEntryViewModel = new LogEntryViewModel( logEntry, fileViewModel, this, _parent, index );
 
 				if ( addToCache )
 				{
-					viewModelsCache.Add( index, logEntryViewModel );
+					_viewModelsCache.Add( index, logEntryViewModel );
 					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 				}
 
@@ -174,7 +178,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			{
 				LogEntry logEntry = (LogEntry)value;
 
-				int index = logEntries.SequentialIndexOf( logEntry );
+				int index = _logEntries.SequentialIndexOf( logEntry );
 				// тут элемент всегда ожидается в коллекции
 				if ( index < 0 )
 				{
@@ -187,7 +191,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public object SyncRoot
 		{
-			get { return logEntries; }
+			get { return _logEntries; }
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -203,7 +207,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public int Count
 		{
-			get { return logEntries.Count; }
+			get { return _logEntries.Count; }
 		}
 
 		#region IList<LogEntryViewModel> Members
