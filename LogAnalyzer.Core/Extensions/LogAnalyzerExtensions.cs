@@ -60,7 +60,6 @@ namespace LogAnalyzer.Extensions
 					try
 					{
 						evt.Signal();
-						Debug.WriteLine( "Signal " + e.AddedLogEntry.TextLines.FirstOrDefault() );
 					}
 					catch ( ObjectDisposedException ) { }
 				};

@@ -27,7 +27,7 @@ namespace LogAnalyzer
 
 		public LogFile ParentLogFile { get; set; }
 
-		private readonly List<string> _textLines = new List<string>();
+		private List<string> _textLines = new List<string>();
 		public IList<string> TextLines
 		{
 			get { return _textLines; }
@@ -36,12 +36,30 @@ namespace LogAnalyzer
 		private string _unitedText;
 		public string UnitedText
 		{
-			get { return _unitedText ?? (_unitedText = String.Join( Environment.NewLine, _textLines )); }
+			get { return _unitedText ?? CreateUnitedText(); }
+		}
+
+		private string CreateUnitedText()
+		{
+			return _unitedText = String.Join( Environment.NewLine, _textLines );
 		}
 
 		public int LinesCount
 		{
-			get { return _textLines.Count; }
+			get
+			{
+				int count;
+				if ( _textLines != null )
+				{
+					count = _textLines.Count;
+				}
+				else
+				{
+					count = _unitedText.Count( c => c == '\n' );
+				}
+
+				return count;
+			}
 		}
 
 		/// <summary>
@@ -92,7 +110,7 @@ namespace LogAnalyzer
 				throw new ArgumentOutOfRangeException( "threadId" );
 			if ( textLine == null )
 				throw new ArgumentNullException( "textLine" );
-			if ( isFrozen )
+			if ( _isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
 			this.Type = type;
@@ -122,7 +140,7 @@ namespace LogAnalyzer
 			if ( lastLineIndex != newLineIndex )
 				throw new InvalidOperationException();
 
-			if ( isFrozen )
+			if ( _isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
 			_textLines[_textLines.Count - 1] = newLine;
@@ -138,7 +156,7 @@ namespace LogAnalyzer
 			if ( _textLines.Count == 0 )
 				throw new InvalidOperationException();
 
-			if ( isFrozen )
+			if ( _isFrozen )
 				throw new InvalidOperationException( "Cannot modify frozen object." );
 
 			_textLines.Add( newLine );
@@ -149,7 +167,9 @@ namespace LogAnalyzer
 		public FileLineInfo GetExceptionLine( string line )
 		{
 			if ( line == null )
+			{
 				throw new ArgumentNullException( "line" );
+			}
 
 			Match match = exceptionRegex.Match( line );
 			if ( match.Success )
@@ -158,7 +178,7 @@ namespace LogAnalyzer
 				string fileName = match.Groups["File"].Value;
 				string excLineNumberText = match.Groups["LineNumber"].Value;
 
-				int excLineNumber = 0;
+				int excLineNumber;
 				if ( Int32.TryParse( excLineNumberText, out excLineNumber ) )
 				{
 					FileLineInfo result = new FileLineInfo
@@ -185,7 +205,7 @@ namespace LogAnalyzer
 			add
 			{
 				// не подписываем на события, если Frozen
-				if ( isFrozen )
+				if ( _isFrozen )
 				{
 					return;
 				}
@@ -195,7 +215,7 @@ namespace LogAnalyzer
 			[MethodImpl( MethodImplOptions.Synchronized )]
 			remove
 			{
-				if ( isFrozen )
+				if ( _isFrozen )
 				{
 					return;
 				}
@@ -221,24 +241,23 @@ namespace LogAnalyzer
 		public void Freeze()
 		{
 			// already frozen?
-			if ( isFrozen )
-				return;
-			//throw new InvalidOperationException();
-
-			isFrozen = true;
-
-			if ( _textLines.Count < _textLines.Capacity )
+			if ( _isFrozen )
 			{
-				_textLines.TrimExcess();
+				return;
 			}
 
+			_isFrozen = true;
+
+			CreateUnitedText();
+
+			_textLines = null;
 			propertyChanged = null;
 		}
 
-		private bool isFrozen = false;
+		private bool _isFrozen;
 		public bool IsFrozen
 		{
-			get { return isFrozen; }
+			get { return _isFrozen; }
 		}
 
 		#endregion

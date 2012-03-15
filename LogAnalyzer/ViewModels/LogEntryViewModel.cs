@@ -170,7 +170,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		public DateTime Time { get { return _logEntry.Time; } }
 		public int IndexInFile { get { return _logEntry.LineIndex; } }
 		public int LinesCount { get { return _logEntry.LinesCount; } }
-		public IList<string> Text { get { return _logEntry.TextLines; } }
 		public LogFileViewModel File { get { return _parentFile; } }
 		public LogDirectoryViewModel Directory { get { return _parentFile.ParentDirectory; } }
 		public ApplicationViewModel ApplicationViewModel { get { return Directory.CoreViewModel.ApplicationViewModel; } }
@@ -185,41 +184,41 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _logEntry; }
 		}
 
-		private string highlightedColumnName;
+		private string _highlightedColumnName;
 		public string HighlightedColumnName
 		{
-			get { return highlightedColumnName; }
+			get { return _highlightedColumnName; }
 			internal set
 			{
-				if ( highlightedColumnName == value )
+				if ( _highlightedColumnName == value )
+				{
 					return;
+				}
 
-				highlightedColumnName = value;
+				_highlightedColumnName = value;
 				RaisePropertyChanged( "HighlightedColumnName" );
 			}
 		}
 
-		private bool isDynamicHighlighted;
+		private bool _isDynamicHighlighted;
 		public bool IsDynamicHighlighted
 		{
-			get { return isDynamicHighlighted; }
+			get { return _isDynamicHighlighted; }
 			internal set
 			{
-				if ( isDynamicHighlighted == value )
+				if ( _isDynamicHighlighted == value )
+				{
 					return;
+				}
 
-				isDynamicHighlighted = value;
+				_isDynamicHighlighted = value;
 				RaisePropertyChanged( "IsDynamicHighlighted" );
 			}
 		}
 
 		public string UnitedText
 		{
-			get
-			{
-				string text = _logEntry.UnitedText;
-				return text;
-			}
+			get { return _logEntry.UnitedText; }
 		}
 
 		public bool IsException
@@ -252,48 +251,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		#endregion
-
-		protected override void OnInnerPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			_linesViewModel = null;
-			base.OnInnerPropertyChanged( sender, e );
-		}
-
-		// todo аналогично, избавиться от поля.
-		private List<MessageLineViewModel> _linesViewModel;
-		public List<MessageLineViewModel> LinesView
-		{
-			get
-			{
-				if ( _linesViewModel == null )
-				{
-					// todo тут не учитывается возможность, что LogEntry обновится
-					_linesViewModel = new List<MessageLineViewModel>( _logEntry.LinesCount );
-					FillLinesViewModel();
-				}
-				return _linesViewModel;
-			}
-		}
-
-		private void FillLinesViewModel()
-		{
-			foreach ( string line in _logEntry.TextLines )
-			{
-				MessageLineViewModel lineViewModel;
-				FileLineInfo lineInfo = _logEntry.GetExceptionLine( line );
-				// в строке нет информации о методе, вызвавшем исключение
-				if ( lineInfo == null )
-				{
-					lineViewModel = new MessageLineViewModel( line );
-				}
-				else
-				{
-					lineViewModel = new ExceptionLineViewModel( lineInfo, line );
-				}
-
-				_linesViewModel.Add( lineViewModel );
-			}
-		}
 
 		#region Parent tab views
 
