@@ -10,7 +10,7 @@ namespace LogAnalyzer.GUI.OverviewGui
 	{
 		public override object ConvertCore( LogEntry value, Type targetType, object parameter, CultureInfo culture )
 		{
-			Brush brush = LogFileNameBrushesCache.GetBrush( value.ParentLogFile.Name );
+			Brush brush = LogFileNameBrushesCache.Solid.GetBrush( value.ParentLogFile.Name );
 			return brush;
 		}
 	}

@@ -7,37 +7,69 @@ using System.Windows.Media;
 
 namespace LogAnalyzer.GUI.Common
 {
-	public static class LogFileNameBrushesCache
+	public abstract class LogFileNameBrushesCache
 	{
-		private static readonly Dictionary<int, Brush> logFileNameBrushesCache = new Dictionary<int, Brush>();
+		private readonly Dictionary<int, Brush> _logFileNameBrushesCache = new Dictionary<int, Brush>();
 
-		private static readonly ReaderWriterLockSlim sync = new ReaderWriterLockSlim();
+		private readonly ReaderWriterLockSlim _sync = new ReaderWriterLockSlim();
 
-		public static Brush GetBrush( string name )
+		public Brush GetBrush( string name )
 		{
 			int hashCode = name.GetHashCode();
 			Brush logNameBackground;
 
-			sync.EnterUpgradeableReadLock();
+			_sync.EnterUpgradeableReadLock();
 
-			if ( !logFileNameBrushesCache.TryGetValue( hashCode, out logNameBackground ) )
+			if ( !_logFileNameBrushesCache.TryGetValue( hashCode, out logNameBackground ) )
 			{
-				sync.EnterWriteLock();
+				_sync.EnterWriteLock();
 
 				double hue = (hashCode - (double)Int32.MinValue) / ((double)Int32.MaxValue - Int32.MinValue) * 360;
-				HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
-				HsbColor darkerColor = new HsbColor( hue, 0.2, 0.95 );
-				logNameBackground = new LinearGradientBrush( hsbColor.ToArgbColor(), darkerColor.ToArgbColor(), 90 );
+				logNameBackground = CreateBrush( hue );
 				logNameBackground.Freeze();
 
-				logFileNameBrushesCache.Add( hashCode, logNameBackground );
+				_logFileNameBrushesCache.Add( hashCode, logNameBackground );
 
-				sync.ExitWriteLock();
+				_sync.ExitWriteLock();
 			}
 
-			sync.ExitUpgradeableReadLock();
+			_sync.ExitUpgradeableReadLock();
 
 			return logNameBackground;
+		}
+
+		protected abstract Brush CreateBrush( double hue );
+
+		private static readonly SolidColorBrushCache solidCache = new SolidColorBrushCache();
+		public static LogFileNameBrushesCache Solid
+		{
+			get { return solidCache; }
+		}
+
+		private static readonly GradientBrushCache gradientCache = new GradientBrushCache();
+		public static LogFileNameBrushesCache Gradient
+		{
+			get { return gradientCache; }
+		}
+	}
+
+	internal sealed class GradientBrushCache : LogFileNameBrushesCache
+	{
+		protected override Brush CreateBrush( double hue )
+		{
+			HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
+			HsbColor darkerColor = new HsbColor( hue, 0.2, 0.95 );
+			Brush logNameBackground = new LinearGradientBrush( hsbColor.ToArgbColor(), darkerColor.ToArgbColor(), 90 );
+			return logNameBackground;
+		}
+	}
+
+	internal sealed class SolidColorBrushCache : LogFileNameBrushesCache
+	{
+		protected override Brush CreateBrush( double hue )
+		{
+			HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
+			return new SolidColorBrush( hsbColor.ToArgbColor() );
 		}
 	}
 }
