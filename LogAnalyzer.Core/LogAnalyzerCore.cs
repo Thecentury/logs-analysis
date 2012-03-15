@@ -2,48 +2,42 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
 using System.Threading;
-using System.Security.AccessControl;
 using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
-using System.Globalization;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer
 {
 	public sealed class LogAnalyzerCore : LogEntriesList, ILogVisitable
 	{
-		private readonly LogAnalyzerConfiguration config;
-		private readonly IOperationsQueue operationsQueue;
+		private readonly LogAnalyzerConfiguration _config;
+		private readonly IOperationsQueue _operationsQueue;
 
 		public IOperationsQueue OperationsQueue
 		{
-			get { return operationsQueue; }
+			get { return _operationsQueue; }
 		}
 
-		private readonly List<LogDirectory> directories = new List<LogDirectory>();
-		private readonly ReadOnlyCollection<LogDirectory> readonlyDirectories;
+		private readonly List<LogDirectory> _directories = new List<LogDirectory>();
+		private readonly ReadOnlyCollection<LogDirectory> _readonlyDirectories;
 		public IList<LogDirectory> Directories
 		{
-			get { return readonlyDirectories; }
+			get { return _readonlyDirectories; }
 		}
 
 		public void AddDirectory( [NotNull] LogDirectory dir )
 		{
-			if ( dir == null ) throw new ArgumentNullException( "dir" );
+			if ( dir == null )
+			{
+				throw new ArgumentNullException( "dir" );
+			}
 
 			dir.Loaded += OnDirectoryLoaded;
 			dir.ReadProgress += OnDirectoryReadProgress;
-			directories.Add( dir );
+			_directories.Add( dir );
 		}
 
 		public void RemoveDirectory( [NotNull] LogDirectory dir )
@@ -52,17 +46,17 @@ namespace LogAnalyzer
 
 			dir.Loaded -= OnDirectoryLoaded;
 			dir.ReadProgress -= OnDirectoryReadProgress;
-			directories.Remove( dir );
+			_directories.Remove( dir );
 		}
 
 		internal override int TotalFilesCount
 		{
-			get { return directories.Sum( d => d.TotalFilesCount ); }
+			get { return _directories.Sum( d => d.TotalFilesCount ); }
 		}
 
 		public LogAnalyzerConfiguration Config
 		{
-			get { return config; }
+			get { return _config; }
 		}
 
 		// todo заменить NotImplementedException на NotSupportedException
@@ -75,19 +69,25 @@ namespace LogAnalyzer
 		//Process.Start(vsCommandLine, vsArgs);
 		//Environment.Exit(0);
 
-		private int directoriesLoadedCount;
+		private int _directoriesLoadedCount;
 
 		public LogAnalyzerCore( LogAnalyzerConfiguration config, IEnvironment environment )
 			: base( environment, config.Logger )
 		{
 			if ( config == null )
+			{
 				throw new ArgumentNullException( "config" );
+			}
 			if ( config.Logger == null )
+			{
 				throw new ArgumentException( "config.Logger should not be null." );
+			}
 			if ( environment == null )
+			{
 				throw new ArgumentNullException( "environment" );
+			}
 
-			this.config = config;
+			this._config = config;
 			config.Directories.CollectionChanged += OnConfigDirectoriesCollectionChanged;
 
 			Logger.DebugWriteInfo( "" );
@@ -99,28 +99,32 @@ namespace LogAnalyzer
 				AddDirectory( dir );
 			}
 
-			this.readonlyDirectories = directories.AsReadOnly();
+			this._readonlyDirectories = _directories.AsReadOnly();
 
-			this.operationsQueue = environment.OperationsQueue;
+			this._operationsQueue = environment.OperationsQueue;
 		}
 
 		private void AddDirectory( LogDirectoryConfigurationInfo dir )
 		{
 			if ( String.IsNullOrWhiteSpace( dir.EncodingName ) )
 			{
-				dir.EncodingName = config.DefaultEncodingName;
+				dir.EncodingName = _config.DefaultEncodingName;
 			}
 
-			var logDirectory = new LogDirectory( dir, config, Environment, this );
+			var logDirectory = new LogDirectory( dir, _config, Environment, this );
 			AddDirectory( logDirectory );
 		}
 
 		private void OnConfigDirectoriesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.Action != NotifyCollectionChangedAction.Add )
+			{
 				throw new NotSupportedException( "Collection change actions other than Add are not supported." );
+			}
 			if ( HaveStarted )
+			{
 				throw new InvalidOperationException( "Collection changes are not allowed after core have started." );
+			}
 
 			foreach ( LogDirectoryConfigurationInfo dir in e.NewItems )
 			{
@@ -135,26 +139,30 @@ namespace LogAnalyzer
 
 		private void OnDirectoryLoaded( object sender, EventArgs e )
 		{
-			Interlocked.Increment( ref directoriesLoadedCount );
-			if ( directoriesLoadedCount == directories.Count )
+			Interlocked.Increment( ref _directoriesLoadedCount );
+			if ( _directoriesLoadedCount == _directories.Count )
 			{
 				PerformInitialMerge();
 				RaiseLoadedEvent();
 			}
 
-			loadedEvent.Signal();
+			_loadedEvent.Signal();
 			LogDirectory dir = (LogDirectory)sender;
 			dir.Loaded -= OnDirectoryLoaded;
 		}
 
 		protected override void StartImpl()
 		{
-			if ( config.Directories.Count == 0 )
+			if ( _config.Directories.Count == 0 )
+			{
 				throw new InvalidOperationException( "Config should have at least one LogDirectory." );
-			if ( !config.EnabledDirectories.Any() )
+			}
+			if ( !_config.EnabledDirectories.Any() )
+			{
 				throw new InvalidOperationException( "Config should have at least one enabled LogDirectory." );
+			}
 
-			loadedEvent = new CountdownEvent( directories.Count );
+			_loadedEvent = new CountdownEvent( _directories.Count );
 
 			foreach ( var dir in Directories )
 			{
@@ -162,15 +170,17 @@ namespace LogAnalyzer
 			}
 		}
 
-		private CountdownEvent loadedEvent;
+		private CountdownEvent _loadedEvent;
 
 		public void WaitForLoaded()
 		{
 			if ( IsLoaded )
+			{
 				return;
+			}
 
-			loadedEvent.Wait();
-			loadedEvent.Dispose();
+			_loadedEvent.Wait();
+			_loadedEvent.Dispose();
 		}
 
 		private void PerformInitialMerge()
