@@ -23,7 +23,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected TabViewModel( ApplicationViewModel applicationViewModel )
 		{
 			if ( applicationViewModel == null )
+			{
 				throw new ArgumentNullException( "applicationViewModel" );
+			}
 
 			this._applicationViewModel = applicationViewModel;
 		}

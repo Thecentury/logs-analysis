@@ -113,9 +113,7 @@
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
 		</Style>
 
-		<Common:DebuggingConverter x:Key="debuggingConverter"/>
-
-		<!-- Стиль ячейки имени файла -->
+	  <!-- Стиль ячейки имени файла -->
 		<Style TargetType="DataGridCell" x:Key="fileCellStyle">
 			<Setter Property="local:DynamicHighlighting.PropertyName" Value="File.Name"/>
 			<Setter Property="ToolTip" Value="{Binding File.Name}"/>
@@ -384,7 +382,7 @@
 			<Setter Property="ToolTip">
 				<Setter.Value>
 					<ToolTip ToolTipService.BetweenShowDelay="0" ToolTipService.ShowDuration="100000" ToolTipService.InitialShowDelay="0">
-						<TextBlock MaxWidth="300" TextWrapping="WrapWithOverflow">
+						<TextBlock MaxWidth="300" MaxHeight="300" TextWrapping="WrapWithOverflow">
 							<Run Text="{Binding LogEntry.Type, Mode=OneWay}"
 								 Foreground="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
 								 />

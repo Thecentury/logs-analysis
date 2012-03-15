@@ -41,6 +41,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			var unsubscribeAdd = observable.Where( e => e.EventArgs.Action == NotifyCollectionChangedAction.Add )
 				.Buffer( TimeSpan.FromSeconds( 1 ) )
+				.Where( e => e.Count > 0 )
 				.ObserveOn( scheduler )
 				.SelectMany( e => e )
 				.Subscribe( e => OnAdded( e.EventArgs ) );

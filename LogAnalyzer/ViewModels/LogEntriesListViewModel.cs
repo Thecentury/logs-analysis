@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -129,21 +130,24 @@ namespace LogAnalyzer.GUI.ViewModels
 				if ( DataGrid != null )
 				{
 					//Stopwatch timer = Stopwatch.StartNew();
-					var selectedValue = _logEntriesViewModels[value];
-					//var elapsed = timer.ElapsedMilliseconds;
-					//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
+					if ( value < _logEntriesViewModels.Count )
+					{
+						var selectedValue = _logEntriesViewModels[value];
+						//var elapsed = timer.ElapsedMilliseconds;
+						//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
 
-					//timer.Restart();
-					try
-					{
-						DataGrid.ScrollIntoView( selectedValue );
+						//timer.Restart();
+						try
+						{
+							DataGrid.ScrollIntoView(selectedValue);
+						}
+						catch (Exception exc)
+						{
+							Logger.Instance.WriteException(exc);
+						}
+						//elapsed = timer.ElapsedMilliseconds;
+						//Logger.Instance.WriteInfo( "Scrolled into view in {0}", elapsed );
 					}
-					catch ( Exception exc )
-					{
-						Logger.Instance.WriteException( exc );
-					}
-					//elapsed = timer.ElapsedMilliseconds;
-					//Logger.Instance.WriteInfo( "Scrolled into view in {0}", elapsed );
 				}
 			}
 		}

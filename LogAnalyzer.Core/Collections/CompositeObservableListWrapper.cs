@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 using System.Diagnostics;
-using LogAnalyzer.Collections;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Collections
 {
 	/// <summary>
 	/// Композитный список, объединяющий 2 списка.
@@ -15,8 +13,8 @@ namespace LogAnalyzer
 	/// Использует только индексаторы.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	[DebuggerDisplay( "CompositeObservableListWrapper<{TypeForDebugger}> Count = {first.Count}+{second.Count}" )]
-	public sealed class CompositeObservableListWrapper<T> : ThinObservableCollection, IList<T>, IEnumerable
+	[DebuggerDisplay( "CompositeObservableListWrapper<{TypeForDebugger}> Count = {First.Count}+{Second.Count}" )]
+	public sealed class CompositeObservableListWrapper<T> : ThinObservableCollection, IList<T>
 	{
 		private IList<T> _first;
 		public IList<T> First
@@ -49,22 +47,23 @@ namespace LogAnalyzer
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		[UsedImplicitly]
 		private string TypeForDebugger
 		{
 			get { return typeof( T ).Name; }
 		}
 
-		public int IndexOf( T item )
+		int IList<T>.IndexOf( T item )
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Insert( int index, T item )
+		void IList<T>.Insert( int index, T item )
 		{
 			throw new NotImplementedException();
 		}
 
-		public void RemoveAt( int index )
+		void IList<T>.RemoveAt( int index )
 		{
 			throw new NotImplementedException();
 		}
@@ -93,7 +92,7 @@ namespace LogAnalyzer
 			}
 		}
 
-		public void Add( T item )
+		void ICollection<T>.Add( T item )
 		{
 			throw new NotImplementedException();
 		}
