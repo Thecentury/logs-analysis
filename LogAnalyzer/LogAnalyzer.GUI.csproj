@@ -161,6 +161,7 @@
     <Compile Include="Common\HighlightingCountToMarginConverter.cs" />
     <Compile Include="Common\HsbColor.cs" />
     <Compile Include="Common\IsMouseOverService.cs" />
+    <Compile Include="Common\LogFileNameBrushesCache.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\ColorHelper.cs" />
@@ -190,8 +191,12 @@
     <Compile Include="Interop\FlashWindow.cs" />
     <Compile Include="OverviewGui\AsyncOverview.cs" />
     <Compile Include="OverviewGui\FilterOverview.cs" />
+    <Compile Include="OverviewGui\GroupingOverview.cs" />
     <Compile Include="OverviewGui\IOverviewBitmapBuilder.cs" />
+    <Compile Include="OverviewGui\LogFileOverview.cs" />
+    <Compile Include="OverviewGui\LogFileToBackgroundConverter.cs" />
     <Compile Include="OverviewGui\MessageTypeBitmapBuilder.cs" />
+    <Compile Include="OverviewGui\MessageTypeOverview.cs" />
     <Compile Include="OverviewGui\MessageTypeToBackgroundConverter.cs" />
     <Compile Include="OverviewGui\OverviewBitmapBuilderBase.cs" />
     <Compile Include="OverviewGui\OverviewCanvas.cs" />
@@ -258,7 +263,6 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
-    <Compile Include="OverviewGui\MessageTypeOverview.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
     <Compile Include="ViewModels\SelfWorkingSetStatusBarItem.cs" />

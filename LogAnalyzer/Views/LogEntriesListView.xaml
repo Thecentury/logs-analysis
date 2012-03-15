@@ -373,6 +373,7 @@
 
 		</DataTemplate>
 
+		<OverviewGui:LogFileToBackgroundConverter x:Key="logFileToBackgroundConverter"/>
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>
 
 		<!-- Стиль прямоугольника из Overview -->
@@ -387,6 +388,7 @@
 							<Run Text="{Binding LogEntry.Type, Mode=OneWay}"
 								 Foreground="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
 								 />
+							<Run Text="{Binding LogEntry.ParentLogFile.Name, Mode=OneWay}" Foreground="Black"/>
 							<Run Text="{Binding LogEntry.Time.TimeOfDay, Mode=OneWay}"/>:
 							<Run Text="{Binding LogEntry.UnitedText, Mode=OneWay}"/>
 						</TextBlock>
@@ -421,6 +423,27 @@
 					<Rectangle 
 						Style="{StaticResource overviewRectangleStyle}"
 						Fill="{Binding DataContext.Brush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+					   />
+				</DataTemplate>
+			</DataTemplate.Resources>
+
+			<ItemsControl 
+				ItemsSource="{Binding Items}"
+				Width="20"
+				ItemContainerStyle="{StaticResource overviewContainerStyle}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type OverviewGui:LogFileOverview}">
+			<DataTemplate.Resources>
+				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
+					<Rectangle Style="{StaticResource overviewRectangleStyle}"
+					   Fill="{Binding LogEntry, Converter={StaticResource logFileToBackgroundConverter}}"
 					   />
 				</DataTemplate>
 			</DataTemplate.Resources>
@@ -472,12 +495,12 @@
 		<d3:ChartPlotter DockPanel.Dock="Bottom" Height="200" Name="plotter">
 			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Red"/>
 		</d3:ChartPlotter>
-		
+
 		<ItemsControl ItemsSource="{Binding Overviews}"
 					  DockPanel.Dock="Right"
 					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
 					  Margin="0,40,0,18"/>
-	
+
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"
 				  DataContextChanged="DataGridDataContextChanged"

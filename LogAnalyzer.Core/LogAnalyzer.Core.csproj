@@ -94,6 +94,7 @@
     <Compile Include="ColorOverviews\IOverviewCollector.cs" />
     <Compile Include="ColorOverviews\LastMatchingOverviewCollector.cs" />
     <Compile Include="ColorOverviews\LogEntryEnumerableExtensions.cs" />
+    <Compile Include="ColorOverviews\LogFileOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\MessageTypeOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\OverviewBuilderBase.cs" />
     <Compile Include="ColorOverviews\OverviewCollectorBase.cs" />

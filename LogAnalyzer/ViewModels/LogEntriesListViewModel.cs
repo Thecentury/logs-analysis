@@ -240,7 +240,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				if ( _messagesDensityDataSource == null )
 				{
 					Task.Factory.StartNew( () =>
-					                       	{
+											{
 												var collector = new DensityOverviewCollector<LogEntry>();
 												var builder = new AbsoluteCountOverviewBuilder<LogEntry>();
 												var grouped = collector.Build( _entries );
@@ -249,7 +249,7 @@ namespace LogAnalyzer.GUI.ViewModels
 												_messagesDensityDataSource = new RawDataSource( map.Select( ( value, index ) => new Point( index, Math.Pow( value, 0.33 ) ) ) );
 
 												RaisePropertyChanged( "MessagesDensityDataSource" );
-					                       	} );
+											} );
 				}
 
 				return _messagesDensityDataSource;
@@ -273,6 +273,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void PopulateOverviews( IList<IOverviewViewModel> overviewsList )
 		{
 			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
+			overviewsList.Add( new LogFileOverview( _entries, this ) );
 		}
 
 		private DelegateCommand<LogEntry> _scrollToItemCommand;
