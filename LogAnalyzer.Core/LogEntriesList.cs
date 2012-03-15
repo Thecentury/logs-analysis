@@ -40,9 +40,13 @@ namespace LogAnalyzer
 		protected LogEntriesList( IEnvironment environment, Logger logger )
 		{
 			if ( environment == null )
+			{
 				throw new ArgumentNullException( "environment" );
+			}
 			if ( logger == null )
+			{
 				throw new ArgumentNullException( "logger" );
+			}
 
 			this.Logger = logger;
 			this._environment = environment;

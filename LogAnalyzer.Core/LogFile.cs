@@ -13,9 +13,8 @@ using LogAnalyzer.Logging;
 namespace LogAnalyzer
 {
 	[DebuggerDisplay( "LogFile {FullPath}" )]
-	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ILogVisitable
+	public sealed class LogFile : INotifyPropertyChanged, IReportReadProgress, ILogFile, ILogVisitable, INavigatable<LogEntry>
 	{
-		private readonly Logger _logger;
 		private readonly LogDirectory _parentDirectory;
 		private readonly Encoding _encoding;
 		public Encoding Encoding
@@ -78,7 +77,6 @@ namespace LogAnalyzer
 			_parentDirectory = parentDirectory;
 			if ( parentDirectory != null )
 			{
-				_logger = this._parentDirectory.Config.Logger;
 				_encoding = this._parentDirectory.Encoding;
 				_logFileReader = fileInfo.GetReader( new LogFileReaderArguments( parentDirectory, this ) );
 				_logFileReader.FileReadProgress += OnLogFileReaderFileReadProgress;
