@@ -23,8 +23,12 @@ namespace LogAnalyzer.GUI.Views
 		private void OnOverviewItemLeftMouseButtonDown( object sender, MouseEventArgs e )
 		{
 			FrameworkElement fe = (FrameworkElement)sender;
-			OverviewInfo info = (OverviewInfo)fe.DataContext;
-			info.ScrollToItemCommand.Execute();
+			OverviewInfo info = fe.DataContext as OverviewInfo;
+
+			if(info != null)
+			{
+				info.ScrollToItemCommand.Execute();
+			}
 		}
 
 		private void OnLoaded( object sender, RoutedEventArgs e )

@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using JetBrains.Annotations;
 using LogAnalyzer.ColorOverviews;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.OverviewGui
@@ -33,6 +37,20 @@ namespace LogAnalyzer.GUI.OverviewGui
 			_parent = parent;
 			_collector = new GroupingByIndexOverviewCollector<LogEntry>();
 			_overviewBuilder = overviewBuilder;
+
+			INotifyCollectionChanged observableCollection = _entries as INotifyCollectionChanged;
+			if ( observableCollection != null )
+			{
+				var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection,
+																							   "CollectionChanged" );
+				var scheduler = parent.ApplicationViewModel.Config.ResolveNotNull<IScheduler>();
+
+				observable
+					.Buffer( TimeSpan.FromSeconds( 1 ) )
+					.Where( e => e.Count > 0 )
+					.ObserveOn( scheduler )
+					.Subscribe( e => Update() );
+			}
 		}
 
 		protected sealed override IEnumerable UpdateOverviews()

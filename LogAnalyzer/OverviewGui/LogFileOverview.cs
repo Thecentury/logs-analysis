@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using JetBrains.Annotations;
 using LogAnalyzer.ColorOverviews;
 using LogAnalyzer.GUI.ViewModels;
