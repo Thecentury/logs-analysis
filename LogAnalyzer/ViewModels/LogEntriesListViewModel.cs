@@ -154,7 +154,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			set
 			{
 				if ( _autoScrollToBottom == value )
+				{
 					return;
+				}
 
 				_autoScrollToBottom = value;
 				RaisePropertyChanged( "AutoScrollToBottom" );
@@ -169,7 +171,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			set
 			{
 				if ( _addedEntriesCountString == value )
+				{
 					return;
+				}
 
 				_addedEntriesCountString = value;
 				RaisePropertyChanged( "AddedEntriesCountString" );
@@ -227,28 +231,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		#endregion
 
 		#region Overviews
-
-		private BitmapSource _densityImage;
-		public BitmapSource DensityImage
-		{
-			get
-			{
-				if ( _densityImage == null )
-				{
-					var collector = new DensityOverviewCollector<LogEntry>();
-					var builder = new DensityOverviewBuilder<LogEntry>();
-					var grouped = collector.Build( _entries );
-					var map = builder.CreateOverviewMap( grouped )
-						.Select( e => Math.Pow( e, 0.33 ) )
-						.ToArray();
-
-					var bitmapBuilder = new PaletteOverviewBitmapBuilder( new LinearPalette( Colors.White, Colors.DarkBlue ) );
-					_densityImage = bitmapBuilder.CreateBitmap( map );
-				}
-
-				return _densityImage;
-			}
-		}
 
 		private IPointDataSource _messagesDensityDataSource;
 		public IPointDataSource MessagesDensityDataSource

@@ -473,8 +473,6 @@
 			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Red"/>
 		</d3:ChartPlotter>
 		
-		<Image Source="{Binding DensityImage}" DockPanel.Dock="Right" Width="20" Stretch="Fill" Margin="0,22,0,0"/>
-	
 		<ItemsControl ItemsSource="{Binding Overviews}"
 					  DockPanel.Dock="Right"
 					  ItemsPanel="{StaticResource overviewsPanelTemplate}"
