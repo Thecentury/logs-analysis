@@ -78,6 +78,7 @@
     <Compile Include="Collections\CollectionDebugView.cs" />
     <Compile Include="Collections\CollectionHelper.cs" />
     <Compile Include="Collections\CompositeObservableListWrapper.cs" />
+    <Compile Include="Collections\INavigatable.cs" />
     <Compile Include="Collections\IndexerEnumerator.cs" />
     <Compile Include="Collections\ParallelHelper.cs" />
     <Compile Include="Collections\ParallelSort.cs" />
