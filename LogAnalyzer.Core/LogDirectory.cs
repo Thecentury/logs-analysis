@@ -155,9 +155,9 @@ namespace LogAnalyzer
 			BeginLoadFiles( filesInDirectory );
 		}
 
-		private int initialFilesLoadedCount;
-		private bool loadStarted;
-		private int initialFilesLoadingCount;
+		private int _initialFilesLoadedCount;
+		private bool _loadStarted;
+		private int _initialFilesLoadingCount;
 		private void BeginLoadFiles( IEnumerable<IFileInfo> filesInDirectory )
 		{
 			foreach ( IFileInfo file in filesInDirectory )
@@ -165,7 +165,9 @@ namespace LogAnalyzer
 				file.Refresh();
 
 				if ( !_fileFilter.Include( file ) )
+				{
 					continue;
+				}
 
 				IFileInfo local = file;
 
@@ -179,34 +181,28 @@ namespace LogAnalyzer
 
 					_operationsQueue.EnqueueOperation( () =>
 					{
-						Logger.WriteInfo( "Loaded file \"{0}\"", local.Name );
-						Interlocked.Increment( ref initialFilesLoadedCount );
+						Logger.WriteInfo( "Loaded file '{0}'", local.Name );
+						Interlocked.Increment( ref _initialFilesLoadedCount );
 						AnalyzeIfLoaded();
 					} );
 				} );
 
-				//// todo какая-то обработка ошибки чтения файла
-				//fileReadTask.ContinueWith( parentTask =>
-				//{
-				//    parentTask.Exception.Handle( e => e is LogAnalyzerIOException );
-
-				//    throw new NotImplementedException();
-				//}, TaskContinuationOptions.OnlyOnFaulted );
-
-				Interlocked.Increment( ref initialFilesLoadingCount );
+				Interlocked.Increment( ref _initialFilesLoadingCount );
 			}
 
-			loadStarted = true;
+			_loadStarted = true;
 			AnalyzeIfLoaded();
 		}
 
 		private void AnalyzeIfLoaded()
 		{
-			if ( !loadStarted )
+			if ( !_loadStarted )
+			{
 				return;
+			}
 
 			// все файлы в начальной загрузке загружены?
-			if ( initialFilesLoadedCount == initialFilesLoadingCount )
+			if ( _initialFilesLoadedCount == _initialFilesLoadingCount )
 			{
 				_environment.Scheduler.StartNewOperation( () =>
 				{
@@ -215,7 +211,7 @@ namespace LogAnalyzer
 					_notificationsSource.Start();
 					_operationsQueue.EnqueueOperation( () =>
 					{
-						Logger.WriteInfo( "LogDirectory \"{0}\": loaded {1} file(s).",
+						Logger.WriteInfo( "LogDirectory '{0}': loaded {1} file(s).",
 											this.DisplayName, _files.Count );
 
 						RaiseLoadedEvent();
@@ -239,16 +235,18 @@ namespace LogAnalyzer
 			}
 
 			if ( addedEntries.Count == 0 )
+			{
 				return;
+			}
 
-			_operationsQueue.EnqueueOperation( () => OnLogEntryAddedToFileHandler( addedEntries ) );
+			_operationsQueue.EnqueueOperation( () => OnLogEntriesAddedToFileInner( addedEntries ) );
 		}
 
 		/// <summary>
 		/// Происходит в потоке FileSystemWatcherEventsThread.
 		/// </summary>
 		/// <param name="addedEntries"></param>
-		private void OnLogEntryAddedToFileHandler( IList<LogEntry> addedEntries )
+		private void OnLogEntriesAddedToFileInner( IList<LogEntry> addedEntries )
 		{
 			EnqueueToMerge( addedEntries );
 			_core.EnqueueToMerge( addedEntries );
@@ -314,7 +312,7 @@ namespace LogAnalyzer
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
 		{
-			Logger.WriteInfo( "Core.OnFileDelete: '{0}' '{1}'", e.ChangeType, e.Name );
+			Logger.WriteInfo( "Core.OnFileDelete: '{0}'", e.Name );
 		}
 
 		private void OnFileChanged( object sender, FileSystemEventArgs e )
@@ -363,7 +361,9 @@ namespace LogAnalyzer
 		private void AddFile( LogFile logFile )
 		{
 			if ( logFile == null )
+			{
 				throw new ArgumentNullException( "logFile" );
+			}
 
 			Condition.DebugAssert( !_files.Contains( logFile ) );
 

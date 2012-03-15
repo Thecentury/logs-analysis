@@ -17,7 +17,10 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 
 		public FileTreeItem( [NotNull] ILogFile logFile )
 		{
-			if ( logFile == null ) throw new ArgumentNullException( "logFile" );
+			if ( logFile == null )
+			{
+				throw new ArgumentNullException( "logFile" );
+			}
 			this._logFile = logFile;
 		}
 

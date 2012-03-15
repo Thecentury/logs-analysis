@@ -157,7 +157,6 @@ namespace LogAnalyzer
 
 		protected void PerformInitialMerge( int capacity, IEnumerable<LogEntry> entries )
 		{
-			// todo не сделать ли тут запас по Capacity?
 			MergedEntriesList.Capacity = capacity;
 
 			Stopwatch timer = Stopwatch.StartNew();
@@ -181,7 +180,6 @@ namespace LogAnalyzer
 			MergedEntries.RaiseCollectionReset();
 			MessageSeverityCount.Update( _mergedEntriesList );
 		}
-
 
 		#region IReportReadProgress Members
 

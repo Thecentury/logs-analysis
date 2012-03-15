@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Reactive.Concurrency;
 using System.Windows;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
@@ -116,12 +117,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnCoreLoaded()
 		{
 			if ( _onCoreLoadedCalled )
+			{
 				return;
+			}
 
 			_onCoreLoadedCalled = true;
 
 			_coreViewModel = new CoreViewModel( _core, this ) { IsActive = true };
-			FilesTree = new CoreTreeItem( _core );
+			FilesTree = new CoreTreeItem( _core, _config.ResolveNotNull<IScheduler>() );
 			FilesTree.RequestShow += OnFilesTreeRequestShow;
 
 			BeginInvokeInUIDispatcher( () =>
