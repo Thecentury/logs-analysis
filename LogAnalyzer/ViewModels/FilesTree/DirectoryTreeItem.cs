@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
@@ -15,12 +17,24 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		private readonly LogDirectory _directory;
 		private readonly ObservableCollection<FileTreeItem> _files;
 
-		public DirectoryTreeItem( [NotNull] LogDirectory directory )
+		public DirectoryTreeItem( [NotNull] LogDirectory directory, [NotNull] IScheduler scheduler )
 		{
-			if ( directory == null ) throw new ArgumentNullException( "directory" );
+			if ( directory == null )
+			{
+				throw new ArgumentNullException( "directory" );
+			}
+			if ( scheduler == null )
+			{
+				throw new ArgumentNullException( "scheduler" );
+			}
+
+			var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( directory.Files,
+																			   "CollectionChanged" );
+			observable
+				.ObserveOn( scheduler )
+				.Subscribe( e => OnFilesCollectionChanged( e.EventArgs ) );
 
 			this._directory = directory;
-			directory.Files.CollectionChanged += OnFiles_CollectionChanged;
 			_files = new ObservableCollection<FileTreeItem>( directory.Files.Select( CreateFile ).OrderBy( f => f.Header ) );
 		}
 
@@ -66,12 +80,25 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			IsChecked = null;
 		}
 
-		private void OnFiles_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnFilesCollectionChanged( NotifyCollectionChangedEventArgs e )
 		{
-#if DEBUG
-			throw new NotImplementedException();
-#endif
-			// todo brinchuk implement
+			if ( e.NewItems != null )
+			{
+				foreach ( LogFile logFile in e.NewItems )
+				{
+					var fileModel = CreateFile( logFile );
+					_files.Add( fileModel );
+				}
+			}
+
+			if ( e.OldItems != null )
+			{
+				foreach ( LogFile logFile in e.OldItems )
+				{
+					var fileModel = _files.First( f => f.LogFile == logFile );
+					_files.Remove( fileModel );
+				}
+			}
 		}
 
 		public override string Header
@@ -125,7 +152,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		// Commands
 
 		// ShowCommand
-		
+
 		private DelegateCommand _showCommand;
 		public ICommand ShowCommand
 		{
