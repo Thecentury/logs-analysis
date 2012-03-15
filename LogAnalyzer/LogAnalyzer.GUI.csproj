@@ -203,6 +203,8 @@
     <Compile Include="OverviewGui\OverviewInfo.cs" />
     <Compile Include="OverviewGui\IOverviewViewModel.cs" />
     <Compile Include="OverviewGui\PaletteOverviewBitmapBuilder.cs" />
+    <Compile Include="OverviewGui\ThreadOverview.cs" />
+    <Compile Include="OverviewGui\ThreadToBackgroundConverter.cs" />
     <Compile Include="Regions\FutureRegion.cs" />
     <Compile Include="Regions\GenericRegionAdapter.cs" />
     <Compile Include="Regions\IRegion.cs" />

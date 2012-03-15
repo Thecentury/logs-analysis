@@ -373,7 +373,8 @@
 
 		<OverviewGui:LogFileToBackgroundConverter x:Key="logFileToBackgroundConverter"/>
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>
-
+		<OverviewGui:ThreadToBackgroundConverter x:Key="threadToBackgroundConverter"/>
+		
 		<!-- Стиль прямоугольника из Overview -->
 		<Style TargetType="{x:Type Rectangle}" x:Key="overviewRectangleStyle">
 			<Setter Property="Height" Value="2"/>
@@ -420,7 +421,7 @@
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
 					<Rectangle 
 						Style="{StaticResource overviewRectangleStyle}"
-						Fill="{Binding DataContext.Brush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+						Fill="{Binding DataContext.Brush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Mode=OneTime}"
 					   />
 				</DataTemplate>
 			</DataTemplate.Resources>
@@ -441,7 +442,28 @@
 			<DataTemplate.Resources>
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
 					<Rectangle Style="{StaticResource overviewRectangleStyle}"
-					   Fill="{Binding LogEntry, Converter={StaticResource logFileToBackgroundConverter}}"
+					   Fill="{Binding LogEntry, Converter={StaticResource logFileToBackgroundConverter}, Mode=OneTime}"
+					   />
+				</DataTemplate>
+			</DataTemplate.Resources>
+
+			<ItemsControl 
+				ItemsSource="{Binding Items}"
+				Width="20"
+				ItemContainerStyle="{StaticResource overviewContainerStyle}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
+		
+		<DataTemplate DataType="{x:Type OverviewGui:ThreadOverview}">
+			<DataTemplate.Resources>
+				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
+					<Rectangle Style="{StaticResource overviewRectangleStyle}"
+					   Fill="{Binding LogEntry, Converter={StaticResource threadToBackgroundConverter}, Mode=OneTime}"
 					   />
 				</DataTemplate>
 			</DataTemplate.Resources>
@@ -462,7 +484,7 @@
 			<DataTemplate.Resources>
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
 					<Rectangle Style="{StaticResource overviewRectangleStyle}"
-					   Fill="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}}"
+					   Fill="{Binding LogEntry, Converter={StaticResource messageTypeToOverviewBackgroundConverter}, Mode=OneTime}"
 					   />
 				</DataTemplate>
 			</DataTemplate.Resources>

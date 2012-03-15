@@ -274,6 +274,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
 			overviewsList.Add( new LogFileOverview( _entries, this ) );
+			overviewsList.Add( new ThreadOverview( _entries, this ) );
 		}
 
 		private DelegateCommand<LogEntry> _scrollToItemCommand;
