@@ -13,9 +13,8 @@ namespace LogAnalyzer.GUI.Common
 
 		private readonly ReaderWriterLockSlim _sync = new ReaderWriterLockSlim();
 
-		public Brush GetBrush( string name )
+		public Brush GetBrush( int hashCode )
 		{
-			int hashCode = name.GetHashCode();
 			Brush logNameBackground;
 
 			_sync.EnterUpgradeableReadLock();
@@ -68,7 +67,7 @@ namespace LogAnalyzer.GUI.Common
 	{
 		protected override Brush CreateBrush( double hue )
 		{
-			HsbColor hsbColor = new HsbColor( hue, 0.2, 1 );
+			HsbColor hsbColor = new HsbColor( hue, 0.4, 1 );
 			return new SolidColorBrush( hsbColor.ToArgbColor() );
 		}
 	}

@@ -99,6 +99,7 @@
     <Compile Include="ColorOverviews\MessageTypeOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\OverviewBuilderBase.cs" />
     <Compile Include="ColorOverviews\OverviewCollectorBase.cs" />
+    <Compile Include="ColorOverviews\ThreadOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\TimeOverviewCollectorBase.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
     <Compile Include="DefaultLogEntryFormatter.cs" />

@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -19,7 +18,6 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
-using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -238,7 +236,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				Brush logNameBackground = LogFileNameBrushesCache.Gradient.GetBrush( File.Name );
+				Brush logNameBackground = LogFileNameBrushesCache.Gradient.GetBrush( File.Name.GetHashCode() );
 				return logNameBackground;
 			}
 		}
