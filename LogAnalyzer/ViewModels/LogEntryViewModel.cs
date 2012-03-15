@@ -238,7 +238,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				Brush logNameBackground = LogFileNameBrushesCache.GetBrush( File.Name );
+				Brush logNameBackground = LogFileNameBrushesCache.Gradient.GetBrush( File.Name );
 				return logNameBackground;
 			}
 		}

@@ -124,31 +124,30 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _selectedEntryIndex; }
 			set
 			{
+				if ( _selectedEntryIndex == value )
+				{
+					return;
+				}
+
 				_selectedEntryIndex = value;
-				RaisePropertyChanged( "SelectedEntryIndex" );
 
 				if ( DataGrid != null )
 				{
-					//Stopwatch timer = Stopwatch.StartNew();
 					if ( value < _logEntriesViewModels.Count )
 					{
 						var selectedValue = _logEntriesViewModels[value];
-						//var elapsed = timer.ElapsedMilliseconds;
-						//Logger.Instance.WriteInfo( "Got selectedValue in {0}", elapsed );
-
-						//timer.Restart();
 						try
 						{
-							DataGrid.ScrollIntoView(selectedValue);
+							DataGrid.ScrollIntoView( selectedValue );
 						}
-						catch (Exception exc)
+						catch ( Exception exc )
 						{
-							Logger.Instance.WriteException(exc);
+							Logger.Instance.WriteException( exc );
 						}
-						//elapsed = timer.ElapsedMilliseconds;
-						//Logger.Instance.WriteInfo( "Scrolled into view in {0}", elapsed );
 					}
 				}
+
+				RaisePropertyChanged( "SelectedEntryIndex" );
 			}
 		}
 
