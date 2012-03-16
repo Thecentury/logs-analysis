@@ -383,8 +383,17 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
-		<d3:ChartPlotter DockPanel.Dock="Bottom" Height="200" Name="plotter">
-			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Red"/>
+		<d3:ChartPlotter 
+			DockPanel.Dock="Bottom" 
+			LegendVisibility="Collapsed"
+			NewLegendVisible="False"
+			Height="200">
+			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Blue"/>
+			
+			<d3:ChartPlotter.MainHorizontalAxis>
+				<d3:HorizontalDateTimeAxis Name="dateAxis"/>
+			</d3:ChartPlotter.MainHorizontalAxis>
+			
 		</d3:ChartPlotter>
 
 		<views:OverviewControl 

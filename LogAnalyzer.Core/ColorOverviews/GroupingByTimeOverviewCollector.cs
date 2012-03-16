@@ -7,7 +7,7 @@ namespace LogAnalyzer.ColorOverviews
 	public sealed class GroupingByTimeOverviewCollector<T> : TimeOverviewCollectorBase<T, IList<T>>
 		where T : IHaveTime
 	{
-		private readonly Func<T, bool> filter;
+		private readonly Func<T, bool> _filter;
 
 		public GroupingByTimeOverviewCollector()
 			: this( e => true )
@@ -17,7 +17,7 @@ namespace LogAnalyzer.ColorOverviews
 		public GroupingByTimeOverviewCollector( [NotNull] Func<T, bool> filter )
 		{
 			if ( filter == null ) throw new ArgumentNullException( "filter" );
-			this.filter = filter;
+			this._filter = filter;
 		}
 
 		protected override IList<T> InitResult()
@@ -25,11 +25,11 @@ namespace LogAnalyzer.ColorOverviews
 			return new List<T>();
 		}
 
-		protected override void Append( IList<T>[] result, int index, T entry )
+		protected override void Append( TimeProxy<IList<T>>[] result, int index, T entry )
 		{
-			if ( filter( entry ) )
+			if ( _filter( entry ) )
 			{
-				var list = result[index];
+				var list = result[index].Item;
 				list.Add( entry );
 			}
 		}
@@ -37,7 +37,7 @@ namespace LogAnalyzer.ColorOverviews
 
 	public sealed class GroupingByIndexOverviewCollector<T> : IndexOverviewCollectorBase<T, IList<T>>
 	{
-		private readonly Func<T, bool> filter;
+		private readonly Func<T, bool> _filter;
 
 		public GroupingByIndexOverviewCollector()
 			: this( e => true )
@@ -47,7 +47,7 @@ namespace LogAnalyzer.ColorOverviews
 		public GroupingByIndexOverviewCollector( [NotNull] Func<T, bool> filter )
 		{
 			if ( filter == null ) throw new ArgumentNullException( "filter" );
-			this.filter = filter;
+			this._filter = filter;
 		}
 
 		protected override IList<T> InitResult()
@@ -57,7 +57,7 @@ namespace LogAnalyzer.ColorOverviews
 
 		protected override void Append( IList<T>[] result, int index, T entry )
 		{
-			if ( filter( entry ) )
+			if ( _filter( entry ) )
 			{
 				var list = result[index];
 				list.Add( entry );

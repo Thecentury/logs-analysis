@@ -52,6 +52,19 @@
 						VerticalAlignment="Stretch"/>
 		</ItemsPanelTemplate>
 
+		<Style TargetType="{x:Type ItemsControl}" x:Key="overviewItemsControlStyle">
+			<Setter Property="ItemsSource" Value="{Binding Items}"/>
+			<Setter Property="Width" Value="20"/>
+			<Setter Property="ItemContainerStyle" Value="{StaticResource overviewContainerStyle}"/>
+			<Setter Property="ItemsPanel">
+				<Setter.Value>
+					<ItemsPanelTemplate>
+						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
 		<DataTemplate DataType="{x:Type OverviewGui:FilterOverview}">
 			<DataTemplate.Resources>
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
@@ -62,16 +75,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl 
-				ItemsSource="{Binding Items}"
-				Width="20"
-				ItemContainerStyle="{StaticResource overviewContainerStyle}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type OverviewGui:LogFileOverview}">
@@ -83,16 +87,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl 
-				ItemsSource="{Binding Items}"
-				Width="20"
-				ItemContainerStyle="{StaticResource overviewContainerStyle}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type OverviewGui:ThreadOverview}">
@@ -104,16 +99,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl 
-				ItemsSource="{Binding Items}"
-				Width="20"
-				ItemContainerStyle="{StaticResource overviewContainerStyle}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type OverviewGui:MessageTypeOverview}">
@@ -125,16 +111,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl 
-				ItemsSource="{Binding Items}"
-				Width="20"
-				ItemContainerStyle="{StaticResource overviewContainerStyle}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<OverviewGui:OverviewCanvas IsItemsHost="True"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
 		</DataTemplate>
 	</UserControl.Resources>
 

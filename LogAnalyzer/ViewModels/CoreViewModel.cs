@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using LogAnalyzer.GUI.Common;
-using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -27,11 +26,17 @@ namespace LogAnalyzer.GUI.ViewModels
 			: base( applicationViewModel )
 		{
 			if ( core == null )
+			{
 				throw new ArgumentNullException( "core" );
+			}
 			if ( !core.IsLoaded )
+			{
 				throw new InvalidOperationException( "Core should be loaded by this moment." );
+			}
 			if ( applicationViewModel == null )
+			{
 				throw new ArgumentNullException( "applicationViewModel" );
+			}
 
 			this._core = core;
 
@@ -42,7 +47,6 @@ namespace LogAnalyzer.GUI.ViewModels
 			_messageSeverityCount = new MessageSeverityCountViewModel( core.MessageSeverityCount );
 		}
 
-		// todo не нужно ли оптимизировать поиск?
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )
 		{
 			LogFile logFile = logEntry.ParentLogFile;
@@ -68,7 +72,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				new ToggleButtonViewModel(
 					() => _directories.Any( d => d.IsNotificationSourceEnabled ),
 					value => _directories.ForEach( d => d.IsNotificationSourceEnabled = value ),
-					"Toggle autoscroll to bottom on updates", PackUriHelper.MakePackUri( "/Resources/control-record.png" ) ) );
+					"Toggle file updates notification",
+					PackUriHelper.MakePackUri( "/Resources/control-record.png" ) ) );
 		}
 
 		public override string Header

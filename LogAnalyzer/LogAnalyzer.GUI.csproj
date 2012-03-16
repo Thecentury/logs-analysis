@@ -444,7 +444,6 @@
     <ProjectReference Include="..\DynamicDataDisplay\DynamicDataDisplay.csproj">
       <Project>{ECD37682-DF7E-409F-912D-0965634556B5}</Project>
       <Name>DynamicDataDisplay</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\LogAnalyzer.Core\LogAnalyzer.Core.csproj">
       <Project>{C5AE0D58-C471-4AE1-A2D3-6AE1FED2AF78}</Project>
