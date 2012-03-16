@@ -20,17 +20,6 @@ namespace LogAnalyzer.GUI.Views
 			Loaded += OnLoaded;
 		}
 
-		private void OnOverviewItemLeftMouseButtonDown( object sender, MouseEventArgs e )
-		{
-			FrameworkElement fe = (FrameworkElement)sender;
-			OverviewInfo info = fe.DataContext as OverviewInfo;
-
-			if(info != null)
-			{
-				info.ScrollToItemCommand.Execute();
-			}
-		}
-
 		private void OnLoaded( object sender, RoutedEventArgs e )
 		{
 			var border = VisualTreeHelper.GetChild( entriesDataGrid, 0 );
