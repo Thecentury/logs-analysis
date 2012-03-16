@@ -55,7 +55,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			ExpressionBuilder filterBuilder = ShowFilterEditorWindow();
 			if ( filterBuilder == null )
+			{
 				return;
+			}
 
 			FilterTabViewModel filterViewModel = new FilterTabViewModel( _coreViewModel.Entries, this );
 			filterViewModel.Filter.ExpressionBuilder = filterBuilder;

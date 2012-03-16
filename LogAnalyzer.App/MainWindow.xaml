@@ -9,7 +9,7 @@
 		awad:Windows7Helper.ProgressState="{Binding ProgressState}"
 		awad:Windows7Helper.ProgressValue="{Binding ProgressValue}"
 		Icon="pack://application:,,,/LogAnalyzer.GUI;component/Resources/icon.png">
-	
+
 	<Window.InputBindings>
 		<KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
 		<KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
@@ -24,29 +24,6 @@
 	</Window.Resources>
 
 	<Grid>
-
-		<DockPanel>
-			<!--Header-->
-			<ToolBar DockPanel.Dock="Top" Margin="0,5,0,5">
-				<ToolBar.Resources>
-					<Style TargetType="Button">
-						<Setter Property="Margin" Value="5,0,5,0"/>
-					</Style>
-				</ToolBar.Resources>
-
-				<Button Command="{Binding NewViewFromSavedFilterCommand}" Content="Load filter"/>
-				<Button Command="{Binding CreateFilterAndViewCommand}" 
-						ToolTip="Add new filter view"
-						Style="{StaticResource toolbarButtonStyle}">
-					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"
-						   Style="{StaticResource toolbarImageStyle}"/>
-				</Button>
-			</ToolBar>
-
-			<Grid>
-				<Views:TabsView DataContext="{Binding}"/>
-			</Grid>
-
-		</DockPanel>
+		<Views:TabsView DataContext="{Binding}"/>
 	</Grid>
 </Window>
