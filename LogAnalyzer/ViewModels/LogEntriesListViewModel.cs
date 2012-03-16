@@ -22,6 +22,7 @@ using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
+using Microsoft.Research.DynamicDataDisplay.Charts;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -242,18 +243,31 @@ namespace LogAnalyzer.GUI.ViewModels
 					Task.Factory.StartNew( () =>
 											{
 												var collector = new DensityOverviewCollector<LogEntry>();
-												var builder = new AbsoluteCountOverviewBuilder<LogEntry>();
 												var grouped = collector.Build( _entries );
-												var map = builder.CreateOverviewMap( grouped );
 
-												_messagesDensityDataSource = new RawDataSource( map.Select( ( value, index ) => new Point( index, value ) ) );
+												EnumerableDataSource<IndexedLogEntry> dataSource = new EnumerableDataSource<IndexedLogEntry>(
+													grouped.Select( collection => new IndexedLogEntry { Count = collection.Item.Count, Time = collection.Time } ) );
 
-												RaisePropertyChanged( "MessagesDensityDataSource" );
+												dataSource.SetXMapping( item => item.Time.Ticks / 10000000000.0 );
+												dataSource.SetYMapping( item => item.Count );
+
+												MessagesDensityDataSource = dataSource;
 											} );
 				}
 
 				return _messagesDensityDataSource;
 			}
+			private set
+			{
+				_messagesDensityDataSource = value;
+				RaisePropertyChanged( "MessagesDensityDataSource" );
+			}
+		}
+
+		private struct IndexedLogEntry
+		{
+			public int Count { get; set; }
+			public DateTime Time { get; set; }
 		}
 
 		private ObservableCollection<IOverviewViewModel> _overviews;

@@ -12,6 +12,8 @@ namespace LogAnalyzer.ColorOverviews
 			set { _maxSegmentsCount = value; }
 		}
 
+		protected abstract TResult InitResult();
+
 		public sealed override TResult[] Build( IList<TItem> items )
 		{
 			int count = Math.Min( _maxSegmentsCount, items.Count );

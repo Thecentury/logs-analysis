@@ -8,17 +8,14 @@ namespace LogAnalyzer.ColorOverviews
 	public sealed class DensityOverviewCollector<T> : TimeOverviewCollectorBase<T, ICollection<T>>
 		where T : IHaveTime
 	{
-		private readonly Func<T, bool> predicate;
+		private readonly Func<T, bool> _predicate;
 
-		public DensityOverviewCollector()
-			: this( e => true )
-		{
-		}
+		public DensityOverviewCollector() : this( e => true ) { }
 
 		public DensityOverviewCollector( [NotNull] Func<T, bool> predicate )
 		{
 			if ( predicate == null ) throw new ArgumentNullException( "predicate" );
-			this.predicate = predicate;
+			this._predicate = predicate;
 		}
 
 		protected override ICollection<T> InitResult()
@@ -26,21 +23,21 @@ namespace LogAnalyzer.ColorOverviews
 			return new CountOnlyCollection<T>();
 		}
 
-		protected override void Append( ICollection<T>[] result, int index, T entry )
+		protected override void Append( TimeProxy<ICollection<T>>[] result, int index, T entry )
 		{
-			if ( predicate( entry ) )
+			if ( _predicate( entry ) )
 			{
-				var collection = result[index];
+				var collection = result[index].Item;
 				collection.Add( entry );
 			}
 		}
 
 		private sealed class CountOnlyCollection<TItem> : ICollection<TItem>
 		{
-			private int count;
+			private int _count;
 			public int Count
 			{
-				get { return count; }
+				get { return _count; }
 			}
 
 			public bool IsReadOnly
@@ -50,7 +47,7 @@ namespace LogAnalyzer.ColorOverviews
 
 			public void Add( TItem item )
 			{
-				count++;
+				_count++;
 			}
 
 			#region Not supported
