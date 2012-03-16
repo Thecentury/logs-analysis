@@ -387,11 +387,12 @@
 			DockPanel.Dock="Bottom" 
 			LegendVisibility="Collapsed"
 			NewLegendVisible="False"
+			Name="plotter"
 			Height="200">
 			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Blue"/>
 			
 			<d3:ChartPlotter.MainHorizontalAxis>
-				<d3:HorizontalDateTimeAxis Name="dateAxis"/>
+				<d3:HorizontalDateTimeAxis/>
 			</d3:ChartPlotter.MainHorizontalAxis>
 			
 		</d3:ChartPlotter>

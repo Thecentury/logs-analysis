@@ -76,6 +76,12 @@ namespace LogAnalyzer.Filters
 		public IntConstant( int value ) { Value = value; }
 	}
 
+	public sealed class LongConstant : ConstantExpressionBuilder<long>
+	{
+		public LongConstant() { }
+		public LongConstant( long value ) { Value = value; }
+	}
+
 	public sealed class StringConstant : ConstantExpressionBuilder<string>
 	{
 		public StringConstant() { }

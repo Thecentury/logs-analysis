@@ -15,12 +15,12 @@ namespace LogAnalyzer.Filters
 	[ContentProperty( "FileNames" )]
 	public abstract class FilesByNameFilterBase : ExpressionBuilder
 	{
-		private readonly IList<string> fileNames = new List<string>();
+		private readonly IList<string> _fileNames = new List<string>();
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public IList<string> FileNames
 		{
-			get { return fileNames; }
+			get { return _fileNames; }
 		}
 
 		public override Type GetResultType( ParameterExpression target )

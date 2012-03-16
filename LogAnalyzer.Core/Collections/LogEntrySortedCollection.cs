@@ -1,4 +1,4 @@
-﻿#if DEBUG
+﻿#if __DEBUG
 #define DEBUGCHECK
 #endif
 
@@ -21,31 +21,35 @@ namespace LogAnalyzer.Collections
 	[DebuggerDisplay( "Count = {sortedLogEntries.Count}" )]
 	internal sealed class LogEntrySortedCollection
 	{
-		private readonly LogEntriesList parent;
-		private readonly Thread allowedAccessThread;
-		private readonly ITimeService timeService;
+		private readonly LogEntriesList _parent;
+		private readonly Thread _allowedAccessThread;
+		private readonly ITimeService _timeService;
 
-		private readonly CollectionToListWrapper<LogEntry> unappendedSetWrapper;
+		private readonly CollectionToListWrapper<LogEntry> _unappendedSetWrapper;
 
 		public IList<LogEntry> UnappendedLogEntries
 		{
-			get { return unappendedSetWrapper; }
+			get { return _unappendedSetWrapper; }
 		}
 
-		private readonly SortedSet<LogEntry> sortedLogEntries = new SortedSet<LogEntry>( LogEntryByDateAndIndexComparer.Instance );
+		private readonly SortedSet<LogEntry> _sortedLogEntries = new SortedSet<LogEntry>( LogEntryByDateAndIndexComparer.Instance );
 
 		public LogEntrySortedCollection( LogEntriesList parent, IEnvironment environment )
 		{
 			if ( parent == null )
+			{
 				throw new ArgumentNullException( "parent" );
+			}
 			if ( environment == null )
+			{
 				throw new ArgumentNullException( "environment" );
+			}
 
-			this.parent = parent;
-			allowedAccessThread = environment.OperationsQueue.Thread;
-			timeService = environment.TimeService;
+			this._parent = parent;
+			_allowedAccessThread = environment.OperationsQueue.Thread;
+			_timeService = environment.TimeService;
 
-			unappendedSetWrapper = new CollectionToListWrapper<LogEntry>( sortedLogEntries );
+			_unappendedSetWrapper = new CollectionToListWrapper<LogEntry>( _sortedLogEntries );
 		}
 
 		/// <summary>
@@ -77,18 +81,18 @@ namespace LogAnalyzer.Collections
 
 			foreach ( var addedEntry in addedEntries )
 			{
-				sortedLogEntries.Add( addedEntry );
+				_sortedLogEntries.Add( addedEntry );
 			}
 
-			Condition.DebugAssert( !sortedLogEntries.Overlaps( parent.MergedEntries.First ),
+			Condition.DebugAssert( !_sortedLogEntries.Overlaps( _parent.MergedEntries.First ),
 				"У коллекций sortedLogEntries и parent.MergedEntries не должно быть общих элементов." );
 
 			// todo добавлять в список mergedEntries и по разнице времени между записью и now
 
-			int capacity = sortedLogEntries.Count + addedEntries.Count;
+			int capacity = _sortedLogEntries.Count + addedEntries.Count;
 			AwaitingLogEntriesCollection awaitingEntries = new AwaitingLogEntriesCollection( capacity );
 
-			awaitingEntries.AddAllElements( sortedLogEntries.Union( addedEntries ).GroupBy( logEntry => logEntry.ParentLogFile ) );
+			awaitingEntries.AddAllElements( _sortedLogEntries.Union( addedEntries ).GroupBy( logEntry => logEntry.ParentLogFile ) );
 
 			// новая запись в файл, из которого тут раньше не было записей
 
@@ -100,18 +104,18 @@ namespace LogAnalyzer.Collections
 			// которая будет раньше самой ранней из sortedLogEntries
 			// (случай, что есть недобавленный файл, мы пока не рассматриваем)
 
-			int totalFilesCount = parent.TotalFilesCount;
+			int totalFilesCount = _parent.TotalFilesCount;
 
 			if ( totalFilesCount > 0 )
 			{
 				while ( awaitingEntries.Keys.Count >= totalFilesCount )
 				{
-					LogEntry min = sortedLogEntries.Min;
-					parent.AppendLogEntryToMergedList( min );
+					LogEntry min = _sortedLogEntries.Min;
+					_parent.AppendLogEntryToMergedList( min );
 
-					int sortedSetLength = sortedLogEntries.Count;
-					sortedLogEntries.Remove( min );
-					Condition.DebugAssert( sortedLogEntries.Count == (sortedSetLength - 1), "" );
+					int sortedSetLength = _sortedLogEntries.Count;
+					_sortedLogEntries.Remove( min );
+					Condition.DebugAssert( _sortedLogEntries.Count == (sortedSetLength - 1), "" );
 					//AssertParentMergedEntriesAreSorted();
 
 					awaitingEntries.Remove( min.ParentLogFile, min );
@@ -120,7 +124,7 @@ namespace LogAnalyzer.Collections
 
 			// переносит в parent.MergedEntries записи относительно старые записи лога,
 			// т.к. мы считаем, что такие старые записи больше не появятся.
-			LogEntry max = sortedLogEntries.Max;
+			LogEntry max = _sortedLogEntries.Max;
 			if ( max != null )
 			{
 				DateTime maxTime = max.Time;
@@ -128,11 +132,11 @@ namespace LogAnalyzer.Collections
 				bool hasRemoved;
 				do
 				{
-					LogEntry min = sortedLogEntries.Min;
+					LogEntry min = _sortedLogEntries.Min;
 					if ( min == null )
 						break;
 
-					if ( timeService.IsRelativelyOld( min.Time, maxTime ) )
+					if ( _timeService.IsRelativelyOld( min.Time, maxTime ) )
 					{
 #if DEBUGCHECK
 						LogEntry last = parent.MergedEntries.Last();
@@ -140,8 +144,8 @@ namespace LogAnalyzer.Collections
 						Condition.DebugAssert( comparison <= 0, "Добавляемый элемент меньше последнего в списке parent.MergedEntries." );
 #endif
 
-						parent.AppendLogEntryToMergedList( min );
-						sortedLogEntries.Remove( min );
+						_parent.AppendLogEntryToMergedList( min );
+						_sortedLogEntries.Remove( min );
 						hasRemoved = true;
 					}
 					else
@@ -151,34 +155,34 @@ namespace LogAnalyzer.Collections
 				} while ( hasRemoved );
 			}
 
-			unappendedSetWrapper.MarkDirty();
+			_unappendedSetWrapper.MarkDirty();
 
 #if DEBUGCHECK
 			Condition.DebugAssert( parent.MergedEntries.Count > mergedCount, "Число смерженных записей должно было увеличиться." );
 			AssertParentMergedEntriesAreSorted();
 #endif
 
-			Logger.Instance.DebugWriteInfo( "LogEntrySortedCollection<" + ParentName + ">.Enqueue: MergedCount = " + parent.MergedEntries.Count );
+			Logger.Instance.DebugWriteInfo( "LogEntrySortedCollection<" + ParentName + ">.Enqueue: MergedCount = " + _parent.MergedEntries.Count );
 
-			parent.RaiseLogEntryAdded( addedEntries );
+			_parent.RaiseLogEntryAdded( addedEntries );
 		}
 
 		[Conditional( "DEBUG" )]
 		private void AssertParentMergedEntriesAreSorted()
 		{
-			Condition.DebugAssert( parent.MergedEntries.IsSorted( LogEntryByTimeComparer.Instance ),
+			Condition.DebugAssert( _parent.MergedEntries.IsSorted( LogEntryByTimeComparer.Instance ),
 				"Коллекция parent.MergedEntries должна быть отсортирована по времени." );
 		}
 
 		private string ParentName
 		{
-			get { return parent.GetType().Name; }
+			get { return _parent.GetType().Name; }
 		}
 
 		[Conditional( "DEBUG" )]
 		private void ValidateThread()
 		{
-			if ( Thread.CurrentThread != allowedAccessThread )
+			if ( Thread.CurrentThread != _allowedAccessThread )
 			{
 				Debugger.Launch();
 				throw new InvalidOperationException( "Attempt to modify collection from other thread." );

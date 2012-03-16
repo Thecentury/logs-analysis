@@ -19,3 +19,4 @@ Ext/FugueIcons/*
 *.ncrunchsolution.user
 *.ncrunchsolution
 *.ncrunchproject
+*.DotSettings
