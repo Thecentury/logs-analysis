@@ -447,6 +447,37 @@ namespace LogAnalyzer.GUI.ViewModels
 			_highlightingFilters.Add( vm );
 		}
 
+		// Add filter tab command
+
+		private DelegateCommand _addFilterTabCommand;
+		public ICommand AddFilterTabCommand
+		{
+			get
+			{
+				if ( _addFilterTabCommand == null )
+				{
+					_addFilterTabCommand = new DelegateCommand( AddFilterTabExecute );
+				}
+				return _addFilterTabCommand;
+			}
+		}
+
+		private void AddFilterTabExecute()
+		{
+			ExpressionBuilder filterBuilder = ApplicationViewModel.ShowFilterEditorWindow();
+			if ( filterBuilder == null )
+			{
+				return;
+			}
+
+			FilterTabViewModel filterTab = new FilterTabViewModel( _entries, ApplicationViewModel );
+			filterTab.Filter.ExpressionBuilder = filterBuilder;
+
+			ApplicationViewModel.Tabs.Add( filterTab );
+			filterTab.StartFiltering();
+
+		}
+
 		// SaveToFile command
 
 		private DelegateCommand _saveToFileCommand;
@@ -563,6 +594,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void PopulateToolbarItems( IList<object> collection )
 		{
 			collection.Add( new LogEntryListToolbarViewModel( this ) );
+			collection.Add( new ToolBarItemViewModel( "Add filter tab", AddFilterTabCommand, MakePackUri( "/Resources/funnel--plus.png" ) ) );
 			collection.Add( new ToolBarItemViewModel( "Save entries to file", SaveToFileCommand, MakePackUri( "/Resources/disk.png" ) ) );
 			collection.Add( new ToolBarItemViewModel( "Add highlighting", AddHighlightingCommand, MakePackUri( "/Resources/flag--plus.png" ) ) );
 		}
