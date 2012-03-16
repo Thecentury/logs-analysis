@@ -62,7 +62,9 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			var compositeList = _collection as CompositeObservableListWrapper<LogEntry>;
 			if ( compositeList == null )
+			{
 				return;
+			}
 
 			for ( int i = 0; i < e.NewItems.Count; i++ )
 			{
@@ -73,7 +75,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 				if ( adjustedIndex != index )
 				{
-					Logger.Instance.WriteError( "Adjusted index: was {0}, now {1}", index, adjustedIndex );
+					//Logger.Instance.WriteError( "Adjusted index: was {0}, now {1}", index, adjustedIndex );
 				}
 			}
 		}

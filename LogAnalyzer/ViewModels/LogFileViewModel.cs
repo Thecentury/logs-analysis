@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.OverviewGui;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -57,13 +59,17 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Properties
 
 		public string Name { get { return _logFile.Name; } }
-		public long LinesCount { get { return _logFile.LinesCount; } }
 
 		#endregion
 
 		public string ShowInExplorerCommandHeader
 		{
 			get { return "Show \"{0}\" in Explorer".Format2( Name ); }
+		}
+
+		protected override void AddLogFileOverview( IList<IOverviewViewModel> overviewsList )
+		{
+			// do nothing
 		}
 
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )

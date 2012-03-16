@@ -160,6 +160,27 @@ namespace LogAnalyzer
 		private int _initialFilesLoadingCount;
 		private void BeginLoadFiles( IEnumerable<IFileInfo> filesInDirectory )
 		{
+#if false
+			List<IBidirectionalEnumerable<LogEntry>> enumerators = new List<IBidirectionalEnumerable<LogEntry>>();
+
+			foreach ( var file in filesInDirectory )
+			{
+				file.Refresh();
+
+				if ( !_fileFilter.Include( file ) )
+				{
+					continue;
+				}
+
+				LogFile logFile = CreateLogFile( file );
+				enumerators.Add( logFile.GetNavigator() );
+			}
+
+			MergingNavigator merger = new MergingNavigator( enumerators );
+
+			RaiseLoadedEvent();
+#endif
+
 			foreach ( IFileInfo file in filesInDirectory )
 			{
 				file.Refresh();
@@ -208,7 +229,11 @@ namespace LogAnalyzer
 				{
 					PerformInitialMerge();
 
-					_notificationsSource.Start();
+					if ( DirectoryConfig.NotificationsEnabled )
+					{
+						_notificationsSource.Start();
+					}
+
 					_operationsQueue.EnqueueOperation( () =>
 					{
 						Logger.WriteInfo( "LogDirectory '{0}': loaded {1} file(s).",

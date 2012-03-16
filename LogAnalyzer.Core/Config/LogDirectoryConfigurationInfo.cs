@@ -17,10 +17,14 @@ namespace LogAnalyzer.Config
 		{
 			UseCache = false;
 			if ( path.IsNullOrEmpty() )
+			{
 				throw new ArgumentNullException( "path" );
+			}
 
 			if ( displayName == null )
+			{
 				throw new ArgumentNullException( "displayName" );
+			}
 
 			Path = path;
 			FileNameFilter = fileNameFilter;
@@ -32,41 +36,48 @@ namespace LogAnalyzer.Config
 		/// </summary>
 		public string Path { get; set; }
 
-		private string fileNameFilter = "*.log";
+		private string _fileNameFilter = "*.log";
 		public string FileNameFilter
 		{
-			get { return fileNameFilter; }
-			set { fileNameFilter = value; }
+			get { return _fileNameFilter; }
+			set { _fileNameFilter = value; }
 		}
 
 		public string DisplayName { get; set; }
-		private string encodingName = "windows-1251";
+		private string _encodingName = "windows-1251";
 		public string EncodingName
 		{
-			get { return encodingName; }
-			set { encodingName = value; }
+			get { return _encodingName; }
+			set { _encodingName = value; }
 		}
 
-		private bool enabled = true;
+		private bool _enabled = true;
 		public bool Enabled
 		{
-			get { return enabled; }
-			set { enabled = value; }
+			get { return _enabled; }
+			set { _enabled = value; }
 		}
 
 		public bool IncludeNestedDirectories { get; set; }
 
 		public bool UseCache { get; set; }
 
-		private readonly List<string> predefinedFiles = new List<string>();
+		private readonly List<string> _predefinedFiles = new List<string>();
 		/// <summary>
 		/// Список из заданных наперед имен файлов. Используется при открытии набора файлов при вызове из системы.
 		/// </summary>
 		public List<string> PredefinedFiles
 		{
-			get { return predefinedFiles; }
+			get { return _predefinedFiles; }
 		}
 
 		public ILogLineParser LineParser { get; set; }
+
+		private bool _notificationsEnabled = true;
+		public bool NotificationsEnabled
+		{
+			get { return _notificationsEnabled; }
+			set { _notificationsEnabled = value; }
+		}
 	}
 }
