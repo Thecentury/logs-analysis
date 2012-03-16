@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
+using LogAnalyzer.Extensions;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Properties;
+using Timer = System.Timers.Timer;
 
 namespace LogAnalyzer.Kernel.Notifications
 {
@@ -26,7 +32,9 @@ namespace LogAnalyzer.Kernel.Notifications
 		public PollingFileSystemNotificationSource( string logsPath, string filesFilter, bool includeSubdirectories, TimeSpan updateInterval )
 		{
 			if ( !Directory.Exists( logsPath ) )
+			{
 				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
+			}
 
 			this._logsPath = logsPath;
 			this._filesFilter = filesFilter;
@@ -58,6 +66,9 @@ namespace LogAnalyzer.Kernel.Notifications
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
+			Stopwatch stopwatch = Stopwatch.StartNew();
+
+			List<FileInfo> filesClone;
 			lock ( _sync )
 			{
 				var currentFileNames = GetFileNamesSnapshot();
@@ -81,19 +92,24 @@ namespace LogAnalyzer.Kernel.Notifications
 				}
 
 				_fileNames = currentFileNames;
-
-				foreach ( var fileInfo in _files )
-				{
-					var prevLength = fileInfo.Length;
-					fileInfo.Refresh();
-					var currentLength = fileInfo.Length;
-
-					if ( currentLength != prevLength )
-					{
-						RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, _logsPath, fileInfo.Name ) );
-					}
-				}
+				filesClone = new List<FileInfo>( _files );
 			}
+
+			Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource: after lock: {0} ms", stopwatch.ElapsedMilliseconds );
+
+			Parallel.ForEach(filesClone, fileInfo =>
+			                             	{
+												var prevLength = fileInfo.Length;
+												fileInfo.Refresh();
+												var currentLength = fileInfo.Length;
+
+												if ( currentLength != prevLength )
+												{
+													RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, _logsPath, fileInfo.Name ) );
+												}
+											} );
+
+			Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource.OnTimerElapsed: {0} ms", stopwatch.ElapsedMilliseconds );
 		}
 
 		private IEnumerable<string> GetAdded( IEnumerable<string> current, HashSet<string> prev )

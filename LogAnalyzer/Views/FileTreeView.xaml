@@ -28,7 +28,7 @@
 
 			<StackPanel Orientation="Horizontal"
 						Background="Transparent"
-						Margin="0,2,0,2">
+						Margin="0">
 				<StackPanel.ContextMenu>
 					<ContextMenu>
 						<MenuItem Header="Show" Command="{Binding ShowCommand}"/>

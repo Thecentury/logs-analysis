@@ -73,11 +73,18 @@ namespace LogAnalyzer.Config
 
 		public ILogLineParser LineParser { get; set; }
 
-		private bool _notificationsEnabled = true;
-		public bool NotificationsEnabled
+		private bool _notificationsEnabledAtStart = true;
+		public bool NotificationsEnabledAtStart
 		{
-			get { return _notificationsEnabled; }
-			set { _notificationsEnabled = value; }
+			get { return _notificationsEnabledAtStart; }
+			set { _notificationsEnabledAtStart = value; }
+		}
+
+		private int _pollingIntervalMillisecods;
+		public int PollingIntervalMillisecods
+		{
+			get { return _pollingIntervalMillisecods; }
+			set { _pollingIntervalMillisecods = value; }
 		}
 	}
 }
