@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using LogAnalyzer.Kernel;
 
-// ReSharper disable CheckNamespace
 namespace LogAnalyzer.Filters
-// ReSharper restore CheckNamespace
 {
 	[FilterTarget( typeof( IFileInfo ) )]
 	public sealed class ExcludePreviousDaysFileFilter : ExpressionBuilder

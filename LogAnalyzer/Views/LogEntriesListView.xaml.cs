@@ -6,6 +6,7 @@ using System.Windows.Media;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.ViewModels;
+using Microsoft.Research.DynamicDataDisplay.ViewportRestrictions;
 
 namespace LogAnalyzer.GUI.Views
 {
@@ -17,6 +18,9 @@ namespace LogAnalyzer.GUI.Views
 		public LogEntriesListView()
 		{
 			InitializeComponent();
+
+			plotter.Viewport.Restrictions.Add( new DataHeightRestriction() );
+
 			Loaded += OnLoaded;
 		}
 
@@ -50,10 +54,10 @@ namespace LogAnalyzer.GUI.Views
 
 		private void RichTextBoxLoaded( object sender, RoutedEventArgs e )
 		{
-			RichTextBox textBox = (RichTextBox) sender;
+			RichTextBox textBox = (RichTextBox)sender;
 			textBox.Loaded -= RichTextBoxLoaded;
 
-			LogEntryViewModel vm = (LogEntryViewModel) textBox.DataContext;
+			LogEntryViewModel vm = (LogEntryViewModel)textBox.DataContext;
 			vm.Document = textBox.Document;
 		}
 	}

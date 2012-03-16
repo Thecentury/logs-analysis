@@ -5,9 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using LogAnalyzer.Kernel;
 
-// ReSharper disable CheckNamespace
 namespace LogAnalyzer.Filters
-// ReSharper restore CheckNamespace
 {
 	[FilterTarget( typeof( IFileInfo ) )]
 	public sealed class SizeLessThanFilter : ExpressionBuilder
@@ -31,7 +29,7 @@ namespace LogAnalyzer.Filters
 
 			var filter = new LessThan(
 							new GetProperty( new Argument(), "Length" ),
-							new IntConstant( (int)(Megabytes * 1024 * 1024) ) );
+							new LongConstant( (long)(Megabytes * 1024 * 1024) ) );
 
 			return filter.CreateExpression( parameterExpression );
 		}

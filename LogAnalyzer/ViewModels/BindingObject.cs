@@ -39,19 +39,16 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 
 		[DebuggerStepThrough]
-		protected void InvokeInUIDispatcher( Action action )
+		protected void InvokeInUIDispatcher( Action action, DispatcherPriority priority = DispatcherPriority.Normal )
 		{
 			Dispatcher dispatcher = DispatcherHelper.GetDispatcher();
-			dispatcher.Invoke( action, DispatcherPriority.Normal );
+			dispatcher.Invoke( action, priority );
 		}
 
-		protected void BeginInvokeInUIDispatcher( Action action )
+		protected void BeginInvokeInUIDispatcher( Action action, DispatcherPriority priority = DispatcherPriority.Normal)
 		{
-			// application is shutting down?
-			if ( Application.Current == null )
-				return;
-
-			Application.Current.Dispatcher.BeginInvoke( action, DispatcherPriority.Normal );
+			Dispatcher dispatcher = DispatcherHelper.GetDispatcher();
+			dispatcher.BeginInvoke( action, priority );
 		}
 
 		protected virtual void OnPropertyChangedSubscribe() { }

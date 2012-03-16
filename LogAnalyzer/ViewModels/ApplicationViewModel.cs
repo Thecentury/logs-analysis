@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive.Concurrency;
 using System.Windows;
+using System.Windows.Threading;
 using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using System.Windows.Input;

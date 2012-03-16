@@ -138,21 +138,26 @@ namespace LogAnalyzer
 
 		protected override void StartImpl()
 		{
-			IDirectoryInfo dir = _environment.GetDirectory( Path );
+			_operationsQueue.EnqueueOperation( () =>
+												{
+													IDirectoryInfo dir = _environment.GetDirectory( Path );
 
-			// отсекаем ситуации, когда по фильтру *.log возвращаются файлы *.log__
-			int extensionLength = 100;
-			if ( !String.IsNullOrEmpty( FileNameFilter ) && FileNameFilter != "*" && FileNameFilter.Contains( '.' ) )
-			{
-				// для трехбуквенного extension будет 4
-				extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
-			}
+													// отсекаем ситуации, когда по фильтру *.log возвращаются файлы *.log__
+													int extensionLength = 100;
+													if ( !String.IsNullOrEmpty( FileNameFilter ) && FileNameFilter != "*" &&
+														FileNameFilter.Contains( '.' ) )
+													{
+														// для трехбуквенного extension будет 4
+														extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
+													}
 
-			var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
-									where file.Extension.Length <= extensionLength // Например, file.Extension = ".log"
-									select file).ToList();
+													var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
+																			where file.Extension.Length <= extensionLength
+																			// Например, file.Extension = ".log"
+																			select file).ToList();
 
-			BeginLoadFiles( filesInDirectory );
+													BeginLoadFiles( filesInDirectory );
+												} );
 		}
 
 		private int _initialFilesLoadedCount;
