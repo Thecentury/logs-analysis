@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using LogAnalyzer.Extensions;
@@ -53,7 +54,14 @@ namespace LogAnalyzer.GUI.ViewModels
 		public bool IsNotificationSourceEnabled
 		{
 			get { return _directory.NotificationsSource.IsEnabled; }
-			set { _directory.NotificationsSource.SetIsEnabled( value ); }
+			set
+			{
+				Task.Factory.StartNew( () =>
+				{
+					_directory.NotificationsSource.SetIsEnabled( value );
+					RaisePropertyChanged( "IsNotificationSourceEnabled" );
+				} );
+			}
 		}
 
 		private readonly DispatcherObservableCollection _syncronizedFilesViewModels;

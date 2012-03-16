@@ -41,6 +41,30 @@ namespace LogAnalyzer.Extensions
 			WriteInfo( logger, format, parameters );
 		}
 
+		[Conditional( "DEBUG" )]
+		public static void DebugWriteDebug( this Logger logger, string message )
+		{
+			if ( logger == null )
+			{
+				return;
+			}
+
+			logger.WriteLine( MessageType.Debug, message );
+		}
+
+		[StringFormatMethod( "format" )]
+		[Conditional( "DEBUG" )]
+		public static void DebugWriteDebug( this Logger logger, string format, params object[] parameters )
+		{
+			if ( logger == null )
+			{
+				return;
+			}
+
+			string message = String.Format( format, parameters );
+			logger.WriteLine( MessageType.Debug, message );
+		}
+
 		public static void WriteError( this Logger logger, string message )
 		{
 			if ( logger == null )

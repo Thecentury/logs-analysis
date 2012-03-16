@@ -234,7 +234,7 @@ namespace LogAnalyzer
 				{
 					PerformInitialMerge();
 
-					if ( DirectoryConfig.NotificationsEnabled )
+					if ( DirectoryConfig.NotificationsEnabledAtStart )
 					{
 						_notificationsSource.Start();
 					}

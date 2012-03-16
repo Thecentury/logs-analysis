@@ -10,7 +10,7 @@ namespace LogAnalyzer.Logging
 		private static volatile Logger instance;
 		public static Logger Instance
 		{
-			get { return Logger.instance; }
+			get { return instance; }
 		}
 
 		public Logger()
@@ -30,33 +30,35 @@ namespace LogAnalyzer.Logging
 		public void WriteLine( MessageType messageType, string message )
 		{
 			if ( !Accepts( messageType ) )
+			{
 				return;
+			}
 
 			string fullMessage = CreateFullMessage( message, messageType );
 
-			for ( int i = 0; i < writers.Count; i++ )
+			for ( int i = 0; i < _writers.Count; i++ )
 			{
-				var writer = writers[i];
+				var writer = _writers[i];
 				writer.WriteLine( fullMessage );
 			}
 		}
 
-		private readonly List<MessageType> acceptedTypes = new List<MessageType>();
+		private readonly List<MessageType> _acceptedTypes = new List<MessageType>();
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
-		public List<MessageType> AcceptedTypes { get { return acceptedTypes; } }
+		public List<MessageType> AcceptedTypes { get { return _acceptedTypes; } }
 
-		private readonly List<LogWriter> writers = new List<LogWriter>();
+		private readonly List<LogWriter> _writers = new List<LogWriter>();
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<LogWriter> Writers
 		{
-			get { return writers; }
+			get { return _writers; }
 		}
 
 		public bool Accepts( MessageType messageType )
 		{
-			return acceptedTypes.Contains( messageType );
+			return _acceptedTypes.Contains( messageType );
 		}
 
 		private static string CreateFullMessage( string message, MessageType messageType )

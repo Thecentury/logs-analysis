@@ -6,6 +6,7 @@ using System.Diagnostics;
 using LogAnalyzer.Caching;
 using LogAnalyzer.Config;
 using LogAnalyzer.Kernel.Notifications;
+using LogAnalyzer.Properties;
 
 namespace LogAnalyzer.Kernel
 {
@@ -32,7 +33,9 @@ namespace LogAnalyzer.Kernel
 		public FileSystemDirectoryInfo( LogDirectoryConfigurationInfo directoryConfig )
 		{
 			if ( directoryConfig == null )
+			{
 				throw new ArgumentNullException( "directoryConfig" );
+			}
 
 			this._directoryConfig = directoryConfig;
 
@@ -56,6 +59,10 @@ namespace LogAnalyzer.Kernel
 
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
 		{
+			TimeSpan pollInterval = _directoryConfig.PollingIntervalMillisecods == 0
+										? Settings.Default.FileSystemPollInterval
+										: TimeSpan.FromMilliseconds( _directoryConfig.PollingIntervalMillisecods );
+
 			return
 				new PausableNotificationSource(
 					new CompositeLogNotificationsSource(
@@ -64,7 +71,7 @@ namespace LogAnalyzer.Kernel
 															  NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.FileName,
 															  _directoryConfig.IncludeNestedDirectories )
 							),
-							new PollingFileSystemNotificationSource( _path, filesFilter, _directoryConfig.IncludeNestedDirectories )
+						new PollingFileSystemNotificationSource( _path, filesFilter, _directoryConfig.IncludeNestedDirectories, pollInterval )
 						) );
 		}
 
