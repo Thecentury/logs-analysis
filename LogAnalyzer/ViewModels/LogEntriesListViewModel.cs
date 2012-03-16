@@ -246,7 +246,7 @@ namespace LogAnalyzer.GUI.ViewModels
 												var grouped = collector.Build( _entries );
 												var map = builder.CreateOverviewMap( grouped );
 
-												_messagesDensityDataSource = new RawDataSource( map.Select( ( value, index ) => new Point( index, Math.Pow( value, 0.33 ) ) ) );
+												_messagesDensityDataSource = new RawDataSource( map.Select( ( value, index ) => new Point( index, value ) ) );
 
 												RaisePropertyChanged( "MessagesDensityDataSource" );
 											} );
@@ -273,8 +273,13 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void PopulateOverviews( IList<IOverviewViewModel> overviewsList )
 		{
 			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
-			overviewsList.Add( new LogFileOverview( _entries, this ) );
+			AddLogFileOverview( overviewsList );
 			overviewsList.Add( new ThreadOverview( _entries, this ) );
+		}
+
+		protected virtual void AddLogFileOverview( IList<IOverviewViewModel> overviewsList )
+		{
+			overviewsList.Add( new LogFileOverview( _entries, this ) );
 		}
 
 		private DelegateCommand<LogEntry> _scrollToItemCommand;

@@ -50,6 +50,7 @@ namespace LogAnalyzer.Kernel
 			SearchOption searchOption = _directoryConfig.IncludeNestedDirectories
 											? SearchOption.AllDirectories
 											: SearchOption.TopDirectoryOnly;
+
 			return Directory.EnumerateFiles( _path, searchPattern, searchOption ).Select( GetFileInfo );
 		}
 

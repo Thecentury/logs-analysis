@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,12 +38,6 @@ namespace LogAnalyzer
 		public string Name { get; private set; }
 		public string FullPath { get; private set; }
 
-		private int _linesCount;
-		public int LinesCount
-		{
-			get { return _linesCount; }
-		}
-
 		private readonly IList<LogEntry> _logEntries = CollectionHelper.CreateList<LogEntry>();
 
 		private readonly ObservableList<LogEntry> _entries;
@@ -55,6 +50,63 @@ namespace LogAnalyzer
 		public IBidirectionalEnumerable<LogEntry> GetNavigator()
 		{
 			return new LogFileNavigator( _fileInfo, new LogFileReaderArguments( ParentDirectory, this ) );
+		}
+
+		private IBidirectionalEnumerable<LogEntry> _fillingNavigator;
+		public IBidirectionalEnumerable<LogEntry> GetFillingNavigator()
+		{
+			throw new NotImplementedException();
+		}
+
+		private sealed class FillingNavigator : IBidirectionalEnumerable<LogEntry>
+		{
+			private sealed class FillingEnumerator : IBidirectionalEnumerator<LogEntry>
+			{
+				public bool MoveBack()
+				{
+					throw new NotImplementedException();
+				}
+
+				public void Dispose()
+				{
+					throw new NotImplementedException();
+				}
+
+				public bool MoveNext()
+				{
+					throw new NotImplementedException();
+				}
+
+				public void Reset()
+				{
+					throw new NotImplementedException();
+				}
+
+				public LogEntry Current
+				{
+					get { throw new NotImplementedException(); }
+				}
+
+				object IEnumerator.Current
+				{
+					get { return Current; }
+				}
+			}
+
+			public IBidirectionalEnumerator<LogEntry> GetEnumerator()
+			{
+				throw new NotImplementedException();
+			}
+
+			IEnumerator<LogEntry> IEnumerable<LogEntry>.GetEnumerator()
+			{
+				return GetEnumerator();
+			}
+
+			IEnumerator IEnumerable.GetEnumerator()
+			{
+				return GetEnumerator();
+			}
 		}
 
 		public LogDirectory ParentDirectory
@@ -71,7 +123,7 @@ namespace LogAnalyzer
 		{
 			if ( fileInfo == null )
 			{
-				throw new ArgumentNullException("fileInfo");
+				throw new ArgumentNullException( "fileInfo" );
 			}
 
 			_parentDirectory = parentDirectory;
@@ -102,8 +154,6 @@ namespace LogAnalyzer
 
 		private void ProcessAddedEntries( IList<LogEntry> addedEntries, int startingIndex )
 		{
-			this._linesCount = addedEntries.Sum( e => e.LinesCount );
-
 			_logEntries.AddRange( addedEntries );
 
 			_entries.RaiseGenericCollectionItemsAdded( addedEntries, startingIndex );
