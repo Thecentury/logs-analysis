@@ -17,13 +17,12 @@ namespace LogAnalyzer.GUI.Views
 	[TemplatePart( Name = "PART_ItemsHolder", Type = typeof( Panel ) )]
 	public class TabControlEx : TabControl
 	{
-		private Panel _itemsHolder = null;
+		private Panel _itemsHolder;
 
 		public TabControlEx()
-			: base()
 		{
 			// this is necessary so that we get the initial databound selected item
-			this.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+			this.ItemContainerGenerator.StatusChanged += ItemContainerGeneratorStatusChanged;
 		}
 
 		/// <summary>
@@ -31,11 +30,11 @@ namespace LogAnalyzer.GUI.Views
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		void ItemContainerGenerator_StatusChanged( object sender, EventArgs e )
+		private void ItemContainerGeneratorStatusChanged( object sender, EventArgs e )
 		{
 			if ( this.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated )
 			{
-				this.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
+				this.ItemContainerGenerator.StatusChanged -= ItemContainerGeneratorStatusChanged;
 				UpdateSelectedItem();
 			}
 		}
@@ -130,7 +129,7 @@ namespace LogAnalyzer.GUI.Views
 			// show the right child
 			foreach ( ContentPresenter child in _itemsHolder.Children )
 			{
-				child.Visibility = ( ( child.Tag as TabItem ).IsSelected ) ? Visibility.Visible : Visibility.Collapsed;
+				child.Visibility = ((child.Tag as TabItem).IsSelected) ? Visibility.Visible : Visibility.Collapsed;
 			}
 		}
 
@@ -155,12 +154,12 @@ namespace LogAnalyzer.GUI.Views
 
 			// the actual child to be added.  cp.Tag is a reference to the TabItem
 			cp = new ContentPresenter();
-			cp.Content = ( item is TabItem ) ? ( item as TabItem ).Content : item;
+			cp.Content = (item is TabItem) ? (item as TabItem).Content : item;
 			cp.ContentTemplate = this.SelectedContentTemplate;
 			cp.ContentTemplateSelector = this.SelectedContentTemplateSelector;
 			cp.ContentStringFormat = this.SelectedContentStringFormat;
 			cp.Visibility = Visibility.Collapsed;
-			cp.Tag = ( item is TabItem ) ? item : ( this.ItemContainerGenerator.ContainerFromItem( item ) );
+			cp.Tag = (item is TabItem) ? item : (this.ItemContainerGenerator.ContainerFromItem( item ));
 			_itemsHolder.Children.Add( cp );
 			return cp;
 		}
@@ -174,7 +173,7 @@ namespace LogAnalyzer.GUI.Views
 		{
 			if ( data is TabItem )
 			{
-				data = ( data as TabItem ).Content;
+				data = (data as TabItem).Content;
 			}
 
 			if ( data == null )
