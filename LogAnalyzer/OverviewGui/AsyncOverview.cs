@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Threading.Tasks;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.OverviewGui
@@ -35,16 +36,29 @@ namespace LogAnalyzer.GUI.OverviewGui
 			}
 		}
 
+		public string Icon
+		{
+			get
+			{
+				string fullPath = PackUriHelper.MakePackUri( "/Resources/" + GetIcon() );
+				return fullPath;
+			}
+		}
+
+		protected abstract string GetIcon();
+
+		public abstract string Tooltip { get; }
+
 		private void UpdateItems()
 		{
 			_populationTask = new Task<IEnumerable>( UpdateOverviews );
 			_populationTask.ContinueWith( t =>
-			                              	{
-			                              		_overviewsPopulated = true;
-			                              		_populationTask = null;
+											{
+												_overviewsPopulated = true;
+												_populationTask = null;
 
-			                              		SetOverviews( t.Result );
-			                              	} );
+												SetOverviews( t.Result );
+											} );
 			_populationTask.Start();
 		}
 	}

@@ -11,5 +11,15 @@ namespace LogAnalyzer.GUI.OverviewGui
 			: base( entries, parent, new ThreadOverviewBuilder() )
 		{
 		}
+
+		protected override string GetIcon()
+		{
+			return "processor.png";
+		}
+
+		public override string Tooltip
+		{
+			get { return "Thread"; }
+		}
 	}
 }

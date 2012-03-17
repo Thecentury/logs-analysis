@@ -6,6 +6,7 @@
              xmlns:OverviewGui="clr-namespace:LogAnalyzer.GUI.OverviewGui" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
+
 		<OverviewGui:LogFileToBackgroundConverter x:Key="logFileToBackgroundConverter"/>
 		<OverviewGui:MessageTypeToBackgroundConverter x:Key="messageTypeToOverviewBackgroundConverter"/>
 		<OverviewGui:ThreadToBackgroundConverter x:Key="threadToBackgroundConverter"/>
@@ -65,6 +66,14 @@
 			</Setter>
 		</Style>
 
+		<ControlTemplate TargetType="Control" x:Key="overviewTemplate">
+			<DockPanel LastChildFill="True">
+				<Image Source="{Binding Icon}" ToolTip="{Binding Tooltip}" Stretch="None" Margin="2"
+					   DockPanel.Dock="Top"/>
+				<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
+			</DockPanel>
+		</ControlTemplate>
+
 		<DataTemplate DataType="{x:Type OverviewGui:FilterOverview}">
 			<DataTemplate.Resources>
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
@@ -75,7 +84,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
+			<Control Template="{StaticResource overviewTemplate}"/>
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type OverviewGui:LogFileOverview}">
@@ -87,9 +96,9 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
+			<Control Template="{StaticResource overviewTemplate}"/>
 		</DataTemplate>
-
+		
 		<DataTemplate DataType="{x:Type OverviewGui:ThreadOverview}">
 			<DataTemplate.Resources>
 				<DataTemplate DataType="{x:Type OverviewGui:OverviewInfo}">
@@ -99,7 +108,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
+			<Control Template="{StaticResource overviewTemplate}"/>
 		</DataTemplate>
 
 		<DataTemplate DataType="{x:Type OverviewGui:MessageTypeOverview}">
@@ -111,7 +120,7 @@
 				</DataTemplate>
 			</DataTemplate.Resources>
 
-			<ItemsControl Style="{StaticResource overviewItemsControlStyle}"/>
+			<Control Template="{StaticResource overviewTemplate}"/>
 		</DataTemplate>
 	</UserControl.Resources>
 
