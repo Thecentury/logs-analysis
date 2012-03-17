@@ -81,5 +81,15 @@ namespace LogAnalyzer.GUI.OverviewGui
 
 			return list;
 		}
+
+		public override string Tooltip
+		{
+			get { return "Filter"; }
+		}
+
+		protected override string GetIcon()
+		{
+			return "funnel.png";
+		}
 	}
 }

@@ -399,7 +399,7 @@
 
 		<views:OverviewControl 
 			DockPanel.Dock="Right"
-			Margin="0,40,0,18"/>
+			Margin="0,20,0,18"/>
 
 		<DataGrid ItemsSource="{Binding EntriesView}"  
 				  Name="entriesDataGrid"

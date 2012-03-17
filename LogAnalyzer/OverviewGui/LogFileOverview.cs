@@ -12,5 +12,15 @@ namespace LogAnalyzer.GUI.OverviewGui
 			: base( entries, parent, new LogFileOverviewBuilder() )
 		{
 		}
+
+		protected override string GetIcon()
+		{
+			return "document-text.png";
+		}
+
+		public override string Tooltip
+		{
+			get { return "LogFile"; }
+		}
 	}
 }

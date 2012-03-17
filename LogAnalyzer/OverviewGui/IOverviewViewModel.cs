@@ -11,5 +11,7 @@ namespace LogAnalyzer.GUI.OverviewGui
 	public interface IOverviewViewModel
 	{
 		IEnumerable Items { get; }
+		string Icon { get; }
+		string Tooltip { get; }
 	}
 }

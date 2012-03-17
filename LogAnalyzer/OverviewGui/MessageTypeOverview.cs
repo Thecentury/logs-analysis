@@ -14,5 +14,15 @@ namespace LogAnalyzer.GUI.OverviewGui
 			: base( entries, parent, new MessageTypeOverviewBuilder() )
 		{
 		}
+
+		protected override string GetIcon()
+		{
+			return "burn.png";
+		}
+
+		public override string Tooltip
+		{
+			get { return "Message Type"; }
+		}
 	}
 }

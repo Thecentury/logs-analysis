@@ -362,7 +362,9 @@ namespace LogAnalyzer
 					var changedFile = _files.Single( f => f.FullPath == fullPath );
 
 					if ( !_fileFilter.Include( changedFile.FileInfo ) )
+					{
 						return;
+					}
 
 					changedFile.OnFileChanged();
 				}
@@ -371,14 +373,12 @@ namespace LogAnalyzer
 
 		private void OnFileRenamed( object sender, RenamedEventArgs e )
 		{
-			// todo
-			throw new NotImplementedException();
+			Logger.WriteError( "File was renamed, which is unsupported. {0} -> {1}", e.OldFullPath, e.FullPath );
 		}
 
 		private void OnWatcherError( object sender, ErrorEventArgs e )
 		{
-			// todo
-			throw new NotImplementedException();
+			Logger.WriteError( "OnWatcherError: {0}", e.GetException() );
 		}
 
 		#endregion
