@@ -61,7 +61,7 @@
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
 								<views:LoadingView/>
 							</DataTemplate>
-							
+
 							<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
 								<views:DropFilesView/>
 							</DataTemplate>
@@ -73,7 +73,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-
+		
 	</UserControl.Resources>
 
 
@@ -85,11 +85,21 @@
 		</ad:ResizingPanel>
 	</ad:DockingManager>-->
 
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="3*"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
+	<DockPanel LastChildFill="True">
+		<Expander ExpandDirection="Left" 
+				  MaxWidth="400" 
+				  IsExpanded="False"
+				  DockPanel.Dock="Right">
+			<Expander.Header>
+				<TextBlock>
+					<TextBlock.LayoutTransform>
+						<RotateTransform Angle="90"/>
+					</TextBlock.LayoutTransform>
+					Directories &amp; Files
+				</TextBlock>
+			</Expander.Header>
+			<views:FileTreeView Grid.Column="1" DataContext="{Binding FilesTree}"/>
+		</Expander>
 
 		<views:TabControlEx Grid.Column="0"
 			ItemsSource="{Binding Tabs}" 
@@ -106,8 +116,6 @@
 			</TabControl.Template>
 		</views:TabControlEx>
 
-		<views:FileTreeView Grid.Column="1" DataContext="{Binding FilesTree}"/>
-
-	</Grid>
+	</DockPanel>
 
 </UserControl>

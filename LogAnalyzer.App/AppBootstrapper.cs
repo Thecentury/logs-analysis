@@ -20,6 +20,8 @@ namespace LogAnalyzer.App
 {
 	internal sealed class AppBootstrapper : Bootstrapper
 	{
+		private const string ProjectExtension = ".logproj";
+
 		protected override void Init()
 		{
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
@@ -30,36 +32,7 @@ namespace LogAnalyzer.App
 				Debugger.Launch();
 			}
 
-			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-			if ( exeLocation == null )
-			{
-				throw new InvalidOperationException("Exe location should not be null.");
-			}
-
-			string settingsSubPath = Properties.Settings.Default.ConfigPath;
-			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
-			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
-
-			LogAnalyzerConfiguration config;
-			bool configPathExists = File.Exists( configPath );
-			if ( !configPathExists )
-			{
-				configPath = Path.Combine( exeLocation, configPath );
-				configPathExists = File.Exists( configPath );
-			}
-			
-			if ( configPathExists )
-			{
-				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
-			}
-			else
-			{
-				config = new LogAnalyzerConfiguration()
-					.AcceptAllLogTypes()
-					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
-
-				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
-			}
+			var config = LoadConfig();
 
 			SetDebugParameters();
 			InitConfig( config );
@@ -73,6 +46,49 @@ namespace LogAnalyzer.App
 			{
 				Application.Current.MainWindow.DataContext = applicationViewModel;
 			} );
+		}
+
+		private LogAnalyzerConfiguration LoadConfig()
+		{
+			string exeLocation = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
+			if ( exeLocation == null )
+			{
+				throw new InvalidOperationException( "Exe location should not be null." );
+			}
+
+			string settingsSubPath = Properties.Settings.Default.ConfigPath;
+			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
+			var args = GetPathsFromCommandArgs( CommandLineArgs );
+			var projectFile = args.OfType<FileInfo>().FirstOrDefault( f => f.Extension == ProjectExtension );
+
+			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
+			if ( projectFile != null )
+			{
+				configPath = projectFile.FullName;
+			}
+
+			LogAnalyzerConfiguration config;
+			bool configPathExists = File.Exists( configPath );
+			if ( !configPathExists )
+			{
+				configPath = Path.Combine( exeLocation, configPath );
+				configPathExists = File.Exists( configPath );
+			}
+
+			if ( configPathExists )
+			{
+				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+			}
+			else
+			{
+				config = new LogAnalyzerConfiguration()
+					.AcceptAllLogTypes()
+					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+
+				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
+			}
+
+			return config;
 		}
 
 		private void CurrentDomainUnhandledException( object sender, UnhandledExceptionEventArgs e )
@@ -93,7 +109,10 @@ namespace LogAnalyzer.App
 		/// <param name="config"></param>
 		private void HandleOpenWithCalls( LogAnalyzerConfiguration config )
 		{
-			var paths = GetPathsFromCommandArgs( CommandLineArgs );
+			var paths = GetPathsFromCommandArgs( CommandLineArgs )
+				.Where( item => item.Extension != ProjectExtension )
+				.ToList();
+
 			if ( paths.Count > 0 )
 			{
 				config.Directories.Clear();
@@ -142,7 +161,9 @@ namespace LogAnalyzer.App
 			{
 				bool isForConfig = arg.StartsWith( "/" ) && arg.Contains( ":" );
 				if ( isForConfig )
+				{
 					continue;
+				}
 
 				if ( File.Exists( arg ) )
 				{
