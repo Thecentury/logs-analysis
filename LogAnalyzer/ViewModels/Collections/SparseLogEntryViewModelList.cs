@@ -83,7 +83,9 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		private void ProcessItemsAdded( NotifyCollectionChangedEventArgs e )
 		{
 			if ( e.NewItems.Count != 1 )
+			{
 				throw new InvalidOperationException( "Should add only by one new item at a time." );
+			}
 
 			int index = e.NewStartingIndex;
 			LogEntry entry = (LogEntry)e.NewItems[0];
@@ -107,11 +109,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				return index;
 
 			int adjustedIndex = ParallelHelper.SequentialIndexOf( compositeList, entry, 0 );
-
-			if ( adjustedIndex != index )
-			{
-				Logger.Instance.WriteError( "Adjusted index: was {0}, now {1}", index, adjustedIndex );
-			}
 
 			return adjustedIndex;
 		}
@@ -144,12 +141,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 					_viewModelsCache.Add( index, logEntryViewModel );
 					ItemCreated.Raise( this, new LogEntryHostChangedEventArgs( logEntryViewModel ) );
 				}
-
-				//Logger.Instance.WriteInfo( "Created new EntryViewModel for index {0}", index );
-			}
-			else
-			{
-				//Logger.Instance.WriteInfo( "Used existing EntryViewModel for index {0}", index );
 			}
 
 			return logEntryViewModel;

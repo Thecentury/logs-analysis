@@ -22,17 +22,17 @@ namespace LogAnalyzer.Config
 			RegisterCommonDependencies();
 		}
 
-		private string defaultEncodingName = "windows-1251";
+		private string _defaultEncodingName = "windows-1251";
 		public string DefaultEncodingName
 		{
-			get { return defaultEncodingName; }
-			set { defaultEncodingName = value; }
+			get { return _defaultEncodingName; }
+			set { _defaultEncodingName = value; }
 		}
 
-		private readonly IDependencyInjectionContainer container = DependencyInjectionContainer.Instance;
+		private readonly IDependencyInjectionContainer _container = DependencyInjectionContainer.Instance;
 		public IDependencyInjectionContainer Container
 		{
-			get { return container; }
+			get { return _container; }
 		}
 
 		private void RegisterCommonDependencies()
@@ -45,55 +45,55 @@ namespace LogAnalyzer.Config
 			Container.RegisterInstance<IScheduler>( scheduler );
 		}
 
-		private readonly WpfViewManager viewManager = new WpfViewManager();
+		private readonly WpfViewManager _viewManager = new WpfViewManager();
 		public IViewManager<FrameworkElement> ViewManager
 		{
-			get { return viewManager; }
+			get { return _viewManager; }
 		}
 
-		private readonly ObservableCollection<LogDirectoryConfigurationInfo> directories = new ObservableCollection<LogDirectoryConfigurationInfo>();
+		private readonly ObservableCollection<LogDirectoryConfigurationInfo> _directories = new ObservableCollection<LogDirectoryConfigurationInfo>();
 		
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public ObservableCollection<LogDirectoryConfigurationInfo> Directories
 		{
-			get { return directories; }
+			get { return _directories; }
 		}
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
 		public IEnumerable<LogDirectoryConfigurationInfo> EnabledDirectories
 		{
-			get { return directories.Where( dir => dir.Enabled ); }
+			get { return _directories.Where( dir => dir.Enabled ); }
 		}
 
-		private readonly Logger logger = new Logger();
+		private readonly Logger _logger = new Logger();
 		public Logger Logger
 		{
-			get { return logger; }
+			get { return _logger; }
 		}
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<MessageType> LoggerAcceptedTypes
 		{
-			get { return logger.AcceptedTypes; }
+			get { return _logger.AcceptedTypes; }
 		}
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<LogWriter> LoggerWriters
 		{
-			get { return logger.Writers; }
+			get { return _logger.Writers; }
 		}
 
-		private readonly ExpressionFilter<LogEntry> globalEntryFilter = new ExpressionFilter<LogEntry>();
+		private readonly ExpressionFilter<LogEntry> _globalEntryFilter = new ExpressionFilter<LogEntry>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
 		public ExpressionFilter<LogEntry> GlobalLogEntryFilter
 		{
-			get { return globalEntryFilter; }
+			get { return _globalEntryFilter; }
 		}
 
 		public ExpressionBuilder GlobalLogEntityFilterBuilder
 		{
-			get { return globalEntryFilter.ExpressionBuilder; }
-			set { globalEntryFilter.ExpressionBuilder = value; }
+			get { return _globalEntryFilter.ExpressionBuilder; }
+			set { _globalEntryFilter.ExpressionBuilder = value; }
 		}
 
 		#region Files filter
@@ -147,7 +147,7 @@ namespace LogAnalyzer.Config
 		{
 			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
 
-			config.directories.Add( new LogDirectoryConfigurationInfo
+			config._directories.Add( new LogDirectoryConfigurationInfo
 			{
 				DisplayName = "SampleDir",
 				FileNameFilter = "*.log",

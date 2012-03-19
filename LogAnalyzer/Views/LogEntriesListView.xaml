@@ -114,7 +114,7 @@
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
 		</Style>
 
-	  <!-- Стиль ячейки имени файла -->
+		<!-- Стиль ячейки имени файла -->
 		<Style TargetType="DataGridCell" x:Key="fileCellStyle">
 			<Setter Property="local:DynamicHighlighting.PropertyName" Value="File.Name"/>
 			<Setter Property="ToolTip" Value="{Binding File.Name}"/>
@@ -383,19 +383,23 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
-		<d3:ChartPlotter 
+		<Expander
+			ExpandDirection="Up"
+			IsExpanded="False"
+			Header="Timeline"
 			DockPanel.Dock="Bottom" 
-			LegendVisibility="Collapsed"
-			NewLegendVisible="False"
-			Name="plotter"
-			Height="200">
-			<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Blue"/>
-			
-			<d3:ChartPlotter.MainHorizontalAxis>
-				<d3:HorizontalDateTimeAxis/>
-			</d3:ChartPlotter.MainHorizontalAxis>
-			
-		</d3:ChartPlotter>
+			MaxHeight="200">
+
+			<d3:ChartPlotter 
+				LegendVisibility="Collapsed"
+				NewLegendVisible="False"
+				Name="plotter">
+				<d3:LineGraph DataSource="{Binding MessagesDensityDataSource}" Stroke="Blue"/>
+				<d3:ChartPlotter.MainHorizontalAxis>
+					<d3:HorizontalDateTimeAxis/>
+				</d3:ChartPlotter.MainHorizontalAxis>
+			</d3:ChartPlotter>
+		</Expander>
 
 		<views:OverviewControl 
 			DockPanel.Dock="Right"
@@ -416,23 +420,23 @@
 			<DataGrid.Columns>
 				<DataGridTemplateColumn CellTemplate="{StaticResource highlightedCellTemplate}"/>
 
-				<DataGridTextColumn Header="T" Binding="{Binding Type}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>
+				<DataGridTextColumn Header="T" Binding="{Binding Type, Mode=OneTime}" Width="20" CellStyle="{StaticResource typeCellStyle}"/>
 
-				<DataGridTextColumn Header="File" Binding="{Binding File.Name}" Width="150" CellStyle="{StaticResource fileCellStyle}"/>
+				<DataGridTextColumn Header="File" Binding="{Binding File.Name, Mode=OneTime}" Width="150" CellStyle="{StaticResource fileCellStyle}"/>
 
 				<DataGridTextColumn Header="Directory" x:Name="directoryColumn"
-									Binding="{Binding Directory.DisplayName}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
+									Binding="{Binding Directory.DisplayName, Mode=OneTime}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
 
-				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}'}" 
+				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}', Mode=OneTime}" 
 									CellStyle="{StaticResource threadCellStyle}" 
 									Width="40"/>
 
-				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss}" Width="120"
+				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss, Mode=OneTime}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 
 				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 
-				<!--<DataGridTextColumn Binding="{Binding UnitedText}"/>-->
+				<!--<DataGridTextColumn Binding="{Binding UnitedText, Mode=OneTime}"/>-->
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->
 				<!--<DataGridTextColumn Header="ColumnName" Binding="{Binding HighlightedColumnName}" Width="60"/>-->
