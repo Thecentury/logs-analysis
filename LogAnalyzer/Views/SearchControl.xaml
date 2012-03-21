@@ -5,8 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ShaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary"
              mc:Ignorable="d" 
+			 Focusable="True"
              d:DesignHeight="300" d:DesignWidth="300">
-
+	<UserControl.InputBindings>
+		<KeyBinding Key="F3" Command="{Binding MoveToNextHighlightedCommand}"/>
+		<KeyBinding Modifiers="Shift" Key="F3" Command="{Binding MoveToPreviousHighlightedCommand}"/>
+	</UserControl.InputBindings>
+	
 	<UserControl.Resources>
 
 		<ShaderEffectLibrary:MonochromeEffect x:Key="monochromeEffect"/>
@@ -50,6 +55,8 @@
 		<TextBox MinWidth="150" 
 				 MaxWidth="250" 
 				 Style="{DynamicResource ResourceKey={x:Static ToolBar.TextBoxStyleKey}}"
+				 Focusable="True"
+				 Name="searchTextBox"
 				 Text="{Binding Substring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 			<TextBox.InputBindings>
 				<KeyBinding Command="{Binding LaunchSearchCommand}" Key="Enter"/>

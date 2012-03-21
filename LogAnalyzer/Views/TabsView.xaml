@@ -59,11 +59,17 @@
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type vm:PreloaderViewModel}">
-								<views:LogEntriesListView/>
+								<Grid>
+									<views:LogEntriesListView/>
+									<views:LoadingView Opacity="0.5"/>
+								</Grid>
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
-								<views:LoadingView/>
+								<Grid>
+									<views:LogEntriesListView/>
+									<views:LoadingView/>
+								</Grid>
 							</DataTemplate>
 
 							<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
@@ -77,7 +83,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		
+
 	</UserControl.Resources>
 
 

@@ -23,5 +23,10 @@ namespace LogAnalyzer.GUI.Views
 		{
 			InitializeComponent();
 		}
+
+		protected override void OnGotFocus( RoutedEventArgs e )
+		{
+			searchTextBox.Focus();
+		}
 	}
 }
