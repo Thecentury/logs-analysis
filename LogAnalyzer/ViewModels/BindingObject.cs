@@ -106,7 +106,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected void RaisePropertiesChanged( params string[] propertiesNames )
 		{
 			if ( propertiesNames == null )
+			{
 				throw new ArgumentNullException( "propertiesNames" );
+			}
 
 			foreach ( string propertyName in propertiesNames )
 			{
