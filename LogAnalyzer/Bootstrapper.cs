@@ -111,7 +111,7 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
 				.RegisterInstance<IFileSystem>( new RealFileSystem() )
 				.RegisterInstance( colorizationManager )
-				.Register<ISaveFileDialog>( () => new UISaveFileDialog() );
+				.Register<ISaveToStreamDialog>( () => new UISaveFileDialog() );
 		}
 	}
 }

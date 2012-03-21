@@ -84,7 +84,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			else
 			{
 				var fileSystem = config.ResolveNotNull<IFileSystem>();
-				DropFilesViewModel dropViewModel = new DropFilesViewModel( this, fileSystem );
+				DropFilesViewModel dropViewModel = new DropFilesViewModel( this, fileSystem, new DefaultSaveFileDialog( Constants.ProjectExtension ) );
 				AddNewTab( dropViewModel );
 				dropViewModel.Finished += OnDropViewModelFinished;
 			}

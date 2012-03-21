@@ -154,12 +154,15 @@
     <Compile Include="Common\AttachedCommandBinding.cs" />
     <Compile Include="Common\AttachedCommandBindingCollection.cs" />
     <Compile Include="Common\CommandManagerHelper.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\DebuggingConverter.cs" />
+    <Compile Include="Common\DefaultSaveFileDialog.cs" />
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\DynamicHighlighting.cs" />
     <Compile Include="Common\GenericDelegateCommand.cs" />
     <Compile Include="Common\HighlightingCountToMarginConverter.cs" />
     <Compile Include="Common\HsbColor.cs" />
+    <Compile Include="Common\ISaveToStreamDialog.cs" />
     <Compile Include="Common\IsMouseOverService.cs" />
     <Compile Include="Common\LogFileNameBrushesCache.cs" />
     <Compile Include="Common\PackUriHelper.cs" />
