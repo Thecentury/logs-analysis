@@ -110,10 +110,64 @@ namespace LogAnalyzer.GUI.ViewModels
 			set
 			{
 				if ( _selectedEntry == value )
+				{
 					return;
+				}
 
 				_selectedEntry = value;
+
+				UpdateTimeDelta();
+
 				RaisePropertyChanged( "SelectedEntry" );
+			}
+		}
+
+		private void UpdateTimeDelta()
+		{
+			var selectedTime = DateTime.MinValue;
+			if ( SelectedEntry != null )
+			{
+				selectedTime = SelectedEntry.Time;
+			}
+			foreach ( var entry in _logEntriesViewModels.CreatedEntries )
+			{
+				if ( entry == SelectedEntry || SelectedEntry == null )
+				{
+					entry.TimeDelta = null;
+				}
+				else
+				{
+					var delta = entry.Time - selectedTime;
+					string format;
+					if ( delta.Days == 0 )
+					{
+						if ( delta.Hours == 0 )
+						{
+							if ( delta.Minutes == 0 )
+							{
+								format = @"s\s";
+							}
+							else
+							{
+								format = @"m\m\ s\s";
+							}
+						}
+						else
+						{
+							format = @"h\h\ m\m";
+						}
+					}
+					else
+					{
+						format = @"d\d\ h\h"; 
+					}
+
+					if ( delta.TotalDays < 0 )
+					{
+						format = @"\-" + format;
+					}
+					entry.TimeDelta = delta.ToString( format );
+				}
 			}
 		}
 

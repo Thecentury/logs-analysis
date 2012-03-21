@@ -61,6 +61,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			RaisePropertyChanged( "HasNoFiles" );
 			RaisePropertyChanged( "HasFiles" );
 			AnalyzeCommand.RaiseCanExecuteChanged();
+			CommandManager.InvalidateRequerySuggested();
 		}
 
 		protected override bool CanBeClosedCore()
@@ -110,15 +111,15 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		// Drop Command
 
-		private DelegateCommand<IDataObject> dropCommand;
+		private DelegateCommand<IDataObject> _dropCommand;
 		public DelegateCommand<IDataObject> DropCommand
 		{
 			get
 			{
-				if ( dropCommand == null )
-					dropCommand = new DelegateCommand<IDataObject>( DropCommandExecute );
+				if ( _dropCommand == null )
+					_dropCommand = new DelegateCommand<IDataObject>( DropCommandExecute );
 
-				return dropCommand;
+				return _dropCommand;
 			}
 		}
 
@@ -176,17 +177,17 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		// Clear command
 
-		private DelegateCommand clearCommand;
+		private DelegateCommand _clearCommand;
 		public ICommand ClearCommand
 		{
 			get
 			{
-				if ( clearCommand == null )
+				if ( _clearCommand == null )
 				{
-					clearCommand = new DelegateCommand( ClearExecute );
+					_clearCommand = new DelegateCommand( ClearExecute );
 				}
 
-				return clearCommand;
+				return _clearCommand;
 			}
 		}
 

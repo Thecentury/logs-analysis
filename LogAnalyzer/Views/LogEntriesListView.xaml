@@ -79,6 +79,8 @@
 				<DataGridTextColumn Header="Directory" x:Name="directoryColumn"
 									Binding="{Binding Directory.DisplayName, Mode=OneTime}" Width="80" CellStyle="{StaticResource directoryCellStyle}"/>
 
+				<DataGridTextColumn Header="Δ" MaxWidth="120" Binding="{Binding TimeDelta}"/>
+
 				<DataGridTextColumn Header="Thread" Binding="{Binding ThreadId, StringFormat='{}{0,3}', Mode=OneTime}" 
 									CellStyle="{StaticResource threadCellStyle}" 
 									Width="40"/>

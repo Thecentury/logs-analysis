@@ -216,6 +216,17 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
+		private string _timeDelta;
+		public string TimeDelta
+		{
+			get { return _timeDelta; }
+			set
+			{
+				_timeDelta = value;
+				RaisePropertyChanged( "TimeDelta" );
+			}
+		}
+
 		public string UnitedText
 		{
 			get { return _logEntry.UnitedText; }
@@ -225,7 +236,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				// todo probably optimize for frozen state
 				bool isException = LinesCount > 1 && UnitedText.Contains( ":line " );
 				return isException;
 			}
