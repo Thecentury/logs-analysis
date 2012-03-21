@@ -338,7 +338,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected override void OnLoaded( RoutedEventArgs e )
 		{
 			base.OnLoaded( e );
-			ScrollToBottomIfShould();
+			ScrollToBottomCommand.ExecuteIfCan();
 		}
 
 		#region Scroll commands

@@ -6,6 +6,7 @@ using System.Reactive.Concurrency;
 using System.Windows;
 using System.Windows.Threading;
 using JetBrains.Annotations;
+using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Regions;
@@ -13,6 +14,7 @@ using LogAnalyzer.GUI.ViewModels.FilesDropping;
 using LogAnalyzer.GUI.ViewModels.FilesTree;
 using LogAnalyzer.GUI.Views;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using Microsoft.Win32;
 using System.Xaml;
 using LogAnalyzer.Filters;
@@ -56,8 +58,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public ApplicationViewModel( [NotNull] LogAnalyzerConfiguration config, [NotNull] IEnvironment environment )
 		{
-			if ( config == null ) throw new ArgumentNullException( "config" );
-			if ( environment == null ) throw new ArgumentNullException( "environment" );
+			if ( config == null )
+			{
+				throw new ArgumentNullException( "config" );
+			}
+			if ( environment == null )
+			{
+				throw new ArgumentNullException( "environment" );
+			}
 
 			this._config = config;
 			this._environment = environment;
@@ -66,6 +74,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			_core = new LogAnalyzerCore( config, environment );
 			_core.Loaded += OnCoreLoaded;
+
+			Logger.Instance.WriteInfo( "Before starting core." );
 
 			if ( config.EnabledDirectories.Any() )
 			{
@@ -78,6 +88,8 @@ namespace LogAnalyzer.GUI.ViewModels
 				AddNewTab( dropViewModel );
 				dropViewModel.Finished += OnDropViewModelFinished;
 			}
+
+			Logger.Instance.WriteInfo( "After starting core." );
 		}
 
 		private void OnDropViewModelFinished( object sender, EventArgs e )
@@ -96,6 +108,8 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			LoadingViewModel loadingViewModel = new LoadingViewModel( this );
 			AddNewTab( loadingViewModel );
+			//PreloaderViewModel preloader = new PreloaderViewModel( this );
+			//_tabs.Add( preloader );
 
 			_config.Logger.WriteInfo( "Starting..." );
 
@@ -112,7 +126,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void OnCoreLoaded( object sender, EventArgs e )
 		{
+			Logger.Instance.WriteInfo( "Before OnCoreLoaded." );
+
 			OnCoreLoaded();
+
+			Logger.Instance.WriteInfo( "After OnCoreLoaded." );
 		}
 
 		private bool _onCoreLoadedCalled;
@@ -131,12 +149,14 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			BeginInvokeInUIDispatcher( () =>
 			{
-				_tabs.RemoveAt( 0 );
+				_tabs.Clear();
 				_tabs.Add( _coreViewModel );
 
 				ProgressValue = 0;
 				ProgressState = Windows7Taskbar.ThumbnailProgressState.NoProgress;
 				RaisePropertyChanged( "SelectedTab" );
+
+				Logger.Instance.WriteInfo( "Added CoreViewModel tab" );
 			} );
 		}
 

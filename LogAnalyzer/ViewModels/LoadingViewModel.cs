@@ -2,62 +2,82 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using LogAnalyzer.GUI.ViewModels;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
-	public sealed class LoadingViewModel : TabViewModel, IHierarchyMember<ApplicationViewModel, LogEntriesList>
+	internal sealed class PreloaderViewModel : TabViewModel
 	{
-		public override string Header
+		public PreloaderViewModel( ApplicationViewModel applicationViewModel )
+			: base( applicationViewModel )
 		{
-			get
-			{
-				return "Loading...";
-			}
 		}
 
 		public override string IconFile
 		{
-			get
-			{
-				return MakePackUri( "/Resources/clock-history.png" );
-			}
+			get { return MakePackUri( "/Resources/clock-history.png" ); }
 		}
 
-		private int loadedBytes;
-		private readonly ApplicationViewModel applicationViewModel;
+		public override string Header
+		{
+			get { return ""; }
+		}
+
+		protected override bool CanBeClosedCore()
+		{
+			return false;
+		}
+	}
+
+	public sealed class LoadingViewModel : TabViewModel, IHierarchyMember<ApplicationViewModel, LogEntriesList>
+	{
+		public override string Header
+		{
+			get { return "Loading..."; }
+		}
+
+		public override string IconFile
+		{
+			get { return MakePackUri( "/Resources/clock-history.png" ); }
+		}
+
+		private int _loadedBytes;
+		private readonly ApplicationViewModel _applicationViewModel;
 
 		public LoadingViewModel( ApplicationViewModel applicationViewModel )
 			: base( applicationViewModel )
 		{
 			if ( applicationViewModel == null )
+			{
 				throw new ArgumentNullException( "applicationViewModel" );
+			}
 
-			this.applicationViewModel = applicationViewModel;
+			this._applicationViewModel = applicationViewModel;
 
 			LogAnalyzerCore core = applicationViewModel.Core;
-			core.ReadProgress += OnCore_ReadProgress;
+			core.ReadProgress += OnCoreReadProgress;
 
 			IsActive = true;
 		}
 
-		private double loadingProgress;
+		private double _loadingProgress;
 		public double LoadingProgress
 		{
-			get { return loadingProgress; }
+			get { return _loadingProgress; }
 			private set
 			{
-				loadingProgress = value;
+				_loadingProgress = value;
 				RaisePropertyChanged( "LoadingProgress" );
 
-				applicationViewModel.ProgressValue = (int)value;
+				_applicationViewModel.ProgressValue = (int)value;
 			}
 		}
 
-		private void OnCore_ReadProgress( object sender, FileReadEventArgs e )
+		private void OnCoreReadProgress( object sender, FileReadEventArgs e )
 		{
-			loadedBytes += e.BytesReadSincePreviousCall;
-			LoadingProgress = 100.0 * loadedBytes / applicationViewModel.Core.TotalLengthInBytes;
+			_loadedBytes += e.BytesReadSincePreviousCall;
+			LoadingProgress = 100.0 * _loadedBytes / _applicationViewModel.Core.TotalLengthInBytes;
 		}
 
 		protected override bool CanBeClosedCore()
@@ -67,7 +87,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		ApplicationViewModel IHierarchyMember<ApplicationViewModel, LogEntriesList>.Parent
 		{
-			get { return applicationViewModel; }
+			get { return _applicationViewModel; }
 		}
 
 		LogEntriesList IHierarchyMember<ApplicationViewModel, LogEntriesList>.Data

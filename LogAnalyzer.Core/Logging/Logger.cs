@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.ComponentModel;
 
@@ -7,24 +8,14 @@ namespace LogAnalyzer.Logging
 {
 	public sealed class Logger
 	{
-		private static volatile Logger instance;
+		private Logger() { }
+
+		private readonly Stopwatch _timer = Stopwatch.StartNew();
+
+		private static readonly Logger instance = new Logger();
 		public static Logger Instance
 		{
 			get { return instance; }
-		}
-
-		public Logger()
-		{
-			if ( instance == null )
-			{
-				lock ( typeof( Logger ) )
-				{
-					if ( instance == null )
-					{
-						instance = this;
-					}
-				}
-			}
 		}
 
 		public void WriteLine( MessageType messageType, string message )
@@ -36,9 +27,8 @@ namespace LogAnalyzer.Logging
 
 			string fullMessage = CreateFullMessage( message, messageType );
 
-			for ( int i = 0; i < _writers.Count; i++ )
+			foreach ( var writer in _writers )
 			{
-				var writer = _writers[i];
 				writer.WriteLine( fullMessage );
 			}
 		}
@@ -61,14 +51,14 @@ namespace LogAnalyzer.Logging
 			return _acceptedTypes.Contains( messageType );
 		}
 
-		private static string CreateFullMessage( string message, MessageType messageType )
+		private string CreateFullMessage( string message, MessageType messageType )
 		{
 			DateTime now = DateTime.Now;
 
 			string typeString = messageType.ToString()[0].ToString();
 
 			string threadString = Thread.CurrentThread.ManagedThreadId.ToString().PadLeft( 3 );
-			string logLine = String.Format( "[{0}] [{1}] {2:G} {3}", typeString, threadString, now, message );
+			string logLine = String.Format( "[{0}] [{1}] {2:dd.MM HH:mm:ss.fff}\t({3} ms)\t{4}", typeString, threadString, now, _timer.ElapsedMilliseconds, message );
 
 			return logLine;
 		}

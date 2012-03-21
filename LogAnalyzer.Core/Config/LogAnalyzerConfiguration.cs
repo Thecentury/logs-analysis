@@ -65,7 +65,7 @@ namespace LogAnalyzer.Config
 			get { return _directories.Where( dir => dir.Enabled ); }
 		}
 
-		private readonly Logger _logger = new Logger();
+		private readonly Logger _logger = Logger.Instance;
 		public Logger Logger
 		{
 			get { return _logger; }

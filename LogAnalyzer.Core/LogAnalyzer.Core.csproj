@@ -73,6 +73,7 @@
     <Compile Include="Auxilliary\CodeAnnotations.cs" />
     <Compile Include="Auxilliary\SlowStream.cs" />
     <Compile Include="Auxilliary\SlowStreamTransformer.cs" />
+    <Compile Include="Auxilliary\TimerStorage.cs" />
     <Compile Include="Collections\BidirectionalEnumerableExtensions.cs" />
     <Compile Include="Caching\CacheManager.cs" />
     <Compile Include="Collections\CollectionDebugView.cs" />
@@ -187,7 +188,6 @@
     <Compile Include="Extensions\IListExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\LogAnalyzerExtensions.cs" />
-    <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FileLineInfo.cs" />
     <Compile Include="Kernel\FileSystemDirectoryInfo.cs" />
@@ -241,10 +241,12 @@
     <Compile Include="LogFileIndex.cs" />
     <Compile Include="LogFileIndexer.cs" />
     <Compile Include="Collections\LogFileNavigator.cs" />
+    <Compile Include="LogFileNameCleaner.cs" />
     <Compile Include="Logging\ConsoleLogWriter.cs" />
     <Compile Include="Logging\DebugLogWriter.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\FileLogWriter.cs" />
+    <Compile Include="Logging\LoggerExtensions.cs" />
     <Compile Include="Logging\LogWriter.cs" />
     <Compile Include="Logging\MessageType.cs" />
     <Compile Include="Logging\SingleThreadedLogWriter.cs" />

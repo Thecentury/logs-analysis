@@ -12,6 +12,7 @@ using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Kernel.Parsers;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer
 {

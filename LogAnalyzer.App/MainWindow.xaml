@@ -15,14 +15,6 @@
 		<KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding SelectedTab.CloseCommand}"/>
 	</Window.InputBindings>
 
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/LogAnalyzer.GUI;component/Views/CommonStyles.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</Window.Resources>
-
 	<Grid>
 		<Views:TabsView DataContext="{Binding}"/>
 	</Grid>
