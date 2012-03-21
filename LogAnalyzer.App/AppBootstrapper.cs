@@ -10,6 +10,7 @@ using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI;
+using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.Kernel;
@@ -20,8 +21,6 @@ namespace LogAnalyzer.App
 {
 	internal sealed class AppBootstrapper : Bootstrapper
 	{
-		private const string ProjectExtension = ".logproj";
-
 		protected override void Init()
 		{
 			Logger logger = Logger.Instance;
@@ -62,7 +61,7 @@ namespace LogAnalyzer.App
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			var args = GetPathsFromCommandArgs( CommandLineArgs );
-			var projectFile = args.OfType<FileInfo>().FirstOrDefault( f => f.Extension == ProjectExtension );
+			var projectFile = args.OfType<FileInfo>().FirstOrDefault( f => f.Extension == Constants.ProjectExtension );
 
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 			if ( projectFile != null )
@@ -113,7 +112,7 @@ namespace LogAnalyzer.App
 		private void HandleOpenWithCalls( LogAnalyzerConfiguration config )
 		{
 			var paths = GetPathsFromCommandArgs( CommandLineArgs )
-				.Where( item => item.Extension != ProjectExtension )
+				.Where( item => item.Extension != Constants.ProjectExtension )
 				.ToList();
 
 			if ( paths.Count > 0 )

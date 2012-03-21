@@ -8,26 +8,26 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
 	public sealed class StartAnalyzingVisitor : IDroppedObjectVisitor
 	{
-		private readonly LogDirectory droppedFilesDirectory;
-		private readonly LogAnalyzerCore core;
+		private readonly LogDirectory _droppedFilesDirectory;
+		private readonly LogAnalyzerCore _core;
 
 		public StartAnalyzingVisitor( [NotNull] LogDirectory droppedFilesDirectory, [NotNull] LogAnalyzerCore core )
 		{
 			if ( droppedFilesDirectory == null ) throw new ArgumentNullException( "droppedFilesDirectory" );
 			if ( core == null ) throw new ArgumentNullException( "core" );
 
-			this.droppedFilesDirectory = droppedFilesDirectory;
-			this.core = core;
+			this._droppedFilesDirectory = droppedFilesDirectory;
+			this._core = core;
 		}
 
 		public void Visit( DroppedFileViewModel file )
 		{
-			droppedFilesDirectory.Files.Add( file.LogFile );
+			_droppedFilesDirectory.Files.Add( file.LogFile );
 		}
 
 		public void Visit( DroppedDirectoryViewModel directory )
 		{
-			core.AddDirectory( directory.LogDirectory );
+			_core.AddDirectory( directory.LogDirectory );
 		}
 	}
 }

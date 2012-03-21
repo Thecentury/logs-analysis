@@ -16,30 +16,43 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
 	public sealed class DropFilesViewModel : TabViewModel
 	{
-		private readonly IFileSystem fileSystem;
-		private readonly IDirectoryInfo directoryInfo;
-		private readonly LogDirectory logDirectory;
-		private readonly LogDirectoryConfigurationInfo directoryConfig;
+		private readonly IFileSystem _fileSystem;
+		private readonly ISaveToStreamDialog _saveToStreamDialog;
+		private readonly IDirectoryInfo _directoryInfo;
+		private readonly LogDirectory _logDirectory;
+		private readonly LogDirectoryConfigurationInfo _directoryConfig;
 
-		public DropFilesViewModel( [NotNull] ApplicationViewModel applicationViewModel, [NotNull] IFileSystem fileSystem )
+		public DropFilesViewModel( [NotNull] ApplicationViewModel applicationViewModel, [NotNull] IFileSystem fileSystem,
+			[NotNull] ISaveToStreamDialog saveToStreamDialog )
 			: base( applicationViewModel )
 		{
-			this.fileSystem = fileSystem;
-			if ( applicationViewModel == null ) throw new ArgumentNullException( "applicationViewModel" );
-			if ( fileSystem == null ) throw new ArgumentNullException( "fileSystem" );
+			if ( applicationViewModel == null )
+			{
+				throw new ArgumentNullException( "applicationViewModel" );
+			}
+			if ( fileSystem == null )
+			{
+				throw new ArgumentNullException( "fileSystem" );
+			}
+			if ( saveToStreamDialog == null )
+			{
+				throw new ArgumentNullException( "saveToStreamDialog" );
+			}
+			this._fileSystem = fileSystem;
+			_saveToStreamDialog = saveToStreamDialog;
 
-			directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
+			_directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
 
-			directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( directoryConfig,
-				files.OfType<DroppedFileViewModel>().Select( f => f.Name ) );
+			_directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( _directoryConfig,
+				_files.OfType<DroppedFileViewModel>().Select( f => f.Name ) );
 
-			applicationViewModel.Environment.Directories.Add( directoryInfo );
+			applicationViewModel.Environment.Directories.Add( _directoryInfo );
 
-			files.CollectionChanged += OnFilesCollectionChanged;
+			_files.CollectionChanged += OnFilesCollectionChanged;
 
-			applicationViewModel.Config.Directories.Add( directoryConfig );
+			applicationViewModel.Config.Directories.Add( _directoryConfig );
 
-			logDirectory = applicationViewModel.Core.Directories.First( d => d.DirectoryConfig == directoryConfig );
+			_logDirectory = applicationViewModel.Core.Directories.First( d => d.DirectoryConfig == _directoryConfig );
 		}
 
 		private void OnFilesCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -57,36 +70,32 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		public override string Header
 		{
-			get
-			{
-				return "Drop files";
-			}
+			get { return "Drop files"; }
 		}
 
 		public override string IconFile
 		{
 			get
 			{
-				string icon = files.Count > 0 ? "battery-charge" : "battery-low";
-
-				return MakePackUri( string.Format( "/Resources/{0}.png", icon ) );
+				string icon = _files.Count > 0 ? "battery-charge" : "battery-low";
+				return MakePackUri( String.Format( "/Resources/{0}.png", icon ) );
 			}
 		}
 
 		public bool HasNoFiles
 		{
-			get { return files.Count == 0; }
+			get { return _files.Count == 0; }
 		}
 
 		public bool HasFiles
 		{
-			get { return files.Count > 0; }
+			get { return _files.Count > 0; }
 		}
 
-		private readonly ObservableCollection<DroppedObjectViewModel> files = new ObservableCollection<DroppedObjectViewModel>();
+		private readonly ObservableCollection<DroppedObjectViewModel> _files = new ObservableCollection<DroppedObjectViewModel>();
 		public IList<DroppedObjectViewModel> Files
 		{
-			get { return files; }
+			get { return _files; }
 		}
 
 		public override void Dispose()
@@ -122,11 +131,11 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 				string[] paths = (string[])data.GetData( "FileDrop" );
 				foreach ( string path in paths )
 				{
-					if ( fileSystem.FileExists( path ) )
+					if ( _fileSystem.FileExists( path ) )
 					{
 						AddDroppedFile( path );
 					}
-					else if ( fileSystem.DirectoryExists( path ) )
+					else if ( _fileSystem.DirectoryExists( path ) )
 					{
 						AddDroppedDir( path );
 					}
@@ -150,17 +159,17 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			var core = ApplicationViewModel.Core;
 			LogDirectory dir = new LogDirectory( dirConfig, config, env, core );
 
-			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, files );
-			files.Add( droppedDir );
+			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, _files );
+			_files.Add( droppedDir );
 
 			return droppedDir;
 		}
 
 		public DroppedFileViewModel AddDroppedFile( string path )
 		{
-			var file = directoryInfo.GetFileInfo( path );
-			DroppedFileViewModel fileViewModel = new DroppedFileViewModel( file, logDirectory, path, files );
-			files.Add( fileViewModel );
+			var file = _directoryInfo.GetFileInfo( path );
+			DroppedFileViewModel fileViewModel = new DroppedFileViewModel( file, _logDirectory, path, _files );
+			_files.Add( fileViewModel );
 
 			return fileViewModel;
 		}
@@ -183,42 +192,76 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		private void ClearExecute()
 		{
-			files.ForEach( f => f.Dispose() );
-			files.Clear();
+			_files.ForEach( f => f.Dispose() );
+			_files.Clear();
 		}
 
 		// Analyze command
 
-		private DelegateCommand analyzeCommand;
+		private DelegateCommand _analyzeCommand;
 
 		public DelegateCommand AnalyzeCommand
 		{
 			get
 			{
-				if ( analyzeCommand == null )
+				if ( _analyzeCommand == null )
 				{
-					analyzeCommand = new DelegateCommand( AnalyzeExecute, AnalyzeCanExecute );
+					_analyzeCommand = new DelegateCommand( AnalyzeExecute, AnalyzeCanExecute );
 				}
 
-				return analyzeCommand;
+				return _analyzeCommand;
 			}
 		}
 
 		private void AnalyzeExecute()
 		{
-			if ( !files.Any( f => f is DroppedFileViewModel ) )
+			if ( !_files.Any( f => f is DroppedFileViewModel ) )
 			{
-				ApplicationViewModel.Core.RemoveDirectory( logDirectory );
+				ApplicationViewModel.Core.RemoveDirectory( _logDirectory );
 			}
 
-			StartAnalyzingVisitor visitor = new StartAnalyzingVisitor( logDirectory, ApplicationViewModel.Core );
-			files.ForEach( visitor.Visit );
+			StartAnalyzingVisitor visitor = new StartAnalyzingVisitor( _logDirectory, ApplicationViewModel.Core );
+			_files.ForEach( visitor.Visit );
+
 			Finished.Raise( this );
 		}
 
 		private bool AnalyzeCanExecute()
 		{
-			return files.Count > 0;
+			return _files.Count > 0;
+		}
+
+		private DelegateCommand _saveCommand;
+		public DelegateCommand SaveCommand
+		{
+			get
+			{
+				if ( _saveCommand == null )
+				{
+					_saveCommand = new DelegateCommand( SaveExecute );
+				}
+
+				return _saveCommand;
+			}
+		}
+
+		private void SaveExecute()
+		{
+			var stream = _saveToStreamDialog.ShowDialog();
+			if ( stream == null )
+			{
+				return;
+			}
+
+			using ( stream )
+			{
+				LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
+				foreach ( var dir in _files.OfType<DroppedDirectoryViewModel>() )
+				{
+					config.AddLogDirectory( dir.LogDirectory.DirectoryConfig );
+				}
+				config.SaveToStream( stream );
+			}
 		}
 
 		#endregion

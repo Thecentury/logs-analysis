@@ -79,6 +79,11 @@
 						HorizontalAlignment="Center">
 					<TextBlock>Analyze!</TextBlock>
 				</Button>
+				
+				<Button Command="{Binding SaveCommand}"
+						Padding="10"
+						HorizontalAlignment="Right"
+						Content="Save"/>
 			</Grid>
 
 

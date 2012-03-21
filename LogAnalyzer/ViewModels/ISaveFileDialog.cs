@@ -14,21 +14,21 @@ namespace LogAnalyzer.GUI.ViewModels
 
 	internal sealed class UISaveFileDialog : ISaveFileDialog
 	{
-		private readonly SaveFileDialog dialog;
+		private readonly SaveFileDialog _dialog;
 		public UISaveFileDialog()
 		{
-			dialog = new SaveFileDialog { AddExtension = true, DefaultExt = ".log" };
+			_dialog = new SaveFileDialog { AddExtension = true, DefaultExt = ".log" };
 		}
 
 		public bool? ShowDialog()
 		{
-			bool? result = dialog.ShowDialog();
+			bool? result = _dialog.ShowDialog();
 			return result;
 		}
 
 		public string FileName
 		{
-			get { return dialog.FileName; }
+			get { return _dialog.FileName; }
 		}
 	}
 }
