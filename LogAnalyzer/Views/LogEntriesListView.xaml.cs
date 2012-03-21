@@ -24,7 +24,20 @@ namespace LogAnalyzer.GUI.Views
 
 			plotter.Viewport.Restrictions.Add( new DataHeightRestriction() );
 
+			Logger.Instance.WriteInfo( "LogEntriesListView.ctor()" );
+
 			Loaded += OnLoaded;
+		}
+
+		protected override void OnKeyDown( KeyEventArgs e )
+		{
+			if ( e.Key.HasFlag( Key.F ) && (Keyboard.IsKeyDown( Key.LeftCtrl ) || Keyboard.IsKeyDown( Key.RightCtrl )) )
+			{
+				searchControl.Focus();
+				e.Handled = true;
+			}
+
+			base.OnKeyDown( e );
 		}
 
 		private void OnLoaded( object sender, RoutedEventArgs e )

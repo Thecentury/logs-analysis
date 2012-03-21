@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 Cursor="Wait"
 			 mc:Ignorable="d" 
-			 Background="Transparent"
+			 Background="#22FFFFFF"
              d:DesignHeight="300" d:DesignWidth="300">
 	
 	<StackPanel Orientation="Vertical"

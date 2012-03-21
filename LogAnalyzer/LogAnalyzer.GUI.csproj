@@ -394,6 +394,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LogEntriesListViewResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MessageSeverityCountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
