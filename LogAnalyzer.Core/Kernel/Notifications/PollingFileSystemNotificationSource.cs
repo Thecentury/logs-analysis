@@ -66,6 +66,8 @@ namespace LogAnalyzer.Kernel.Notifications
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
+			_timer.Stop();
+
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			List<FileInfo> filesClone;
@@ -95,7 +97,7 @@ namespace LogAnalyzer.Kernel.Notifications
 				filesClone = new List<FileInfo>( _files );
 			}
 
-			Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource: after lock: {0} ms", stopwatch.ElapsedMilliseconds );
+			//Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource: after lock: {0} ms", stopwatch.ElapsedMilliseconds );
 
 			Parallel.ForEach(filesClone, fileInfo =>
 			                             	{
@@ -109,7 +111,9 @@ namespace LogAnalyzer.Kernel.Notifications
 												}
 											} );
 
-			Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource.OnTimerElapsed: {0} ms", stopwatch.ElapsedMilliseconds );
+			//Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource.OnTimerElapsed: {0} ms", stopwatch.ElapsedMilliseconds );
+
+			_timer.Start();
 		}
 
 		private IEnumerable<string> GetAdded( IEnumerable<string> current, HashSet<string> prev )

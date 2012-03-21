@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Diagnostics;
 using JetBrains.Annotations;
-using LogAnalyzer.Logging;
 
-namespace LogAnalyzer.Extensions
+namespace LogAnalyzer.Logging
 {
 	public static class LoggerExtensions
 	{

@@ -10,52 +10,51 @@ namespace LogAnalyzer.Kernel
 {
 	public sealed class WorkerThreadOperationsQueue : IOperationsQueue
 	{
-		private int totalOperationsCount;
+		private int _totalOperationsCount;
 
-		private readonly Logger logger;
-		private readonly BlockingCollection<IAsyncOperation> operationsQueue;
-		private readonly Thread workerThread;
+		private readonly Logger _logger;
+		private readonly BlockingCollection<IAsyncOperation> _operationsQueue;
+		private readonly Thread _workerThread;
 
-		private readonly PerformanceCounter operationsCountCounter;
+		private readonly PerformanceCounter _operationsCountCounter;
 
 		/// <summary>
 		/// Объект для синхронизации WaitAllRunningOperationsToComplete.
 		/// </summary>
-		private readonly object operationsSync = new object();
+		private readonly object _operationsSync = new object();
 
-		public WorkerThreadOperationsQueue() : this( new Logger() ) { }
+		public WorkerThreadOperationsQueue() : this( Logger.Instance ) { }
 
 		public WorkerThreadOperationsQueue( Logger logger )
 		{
 			if ( logger == null )
 				throw new ArgumentNullException( "logger" );
 
-			operationsCountCounter = PerformanceCountersService.GetPendingOperationsCountCounter();
+			_operationsCountCounter = PerformanceCountersService.GetPendingOperationsCountCounter();
 
-			this.logger = logger;
+			this._logger = logger;
 
-			operationsQueue = new BlockingCollection<IAsyncOperation>( new ConcurrentQueue<IAsyncOperation>() );
+			_operationsQueue = new BlockingCollection<IAsyncOperation>( new ConcurrentQueue<IAsyncOperation>() );
 
-			workerThread = new Thread( MainThreadProcedure );
-			workerThread.IsBackground = true;
+			_workerThread = new Thread( MainThreadProc ) { IsBackground = true };
 
 			if ( Settings.Default.DecreaseWorkerThreadsPriorities )
 			{
-				workerThread.Priority = ThreadPriority.BelowNormal;
+				_workerThread.Priority = ThreadPriority.BelowNormal;
 			}
-			workerThread.Name = "OperationsQueueThread";
-			workerThread.Start();
+			_workerThread.Name = "OperationsQueueThread";
+			_workerThread.Start();
 		}
 
 		public void EnqueueOperation( Action action )
 		{
-			PerformanceCountersService.Increment( operationsCountCounter );
+			PerformanceCountersService.Increment( _operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( operationsQueue.Count + 1 ) );
-			operationsQueue.Add( operation );
+			_logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (_operationsQueue.Count + 1) );
+			_operationsQueue.Add( operation );
 
-			Interlocked.Increment( ref totalOperationsCount );
+			Interlocked.Increment( ref _totalOperationsCount );
 		}
 
 		/// <summary>
@@ -63,24 +62,30 @@ namespace LogAnalyzer.Kernel
 		/// </summary>
 		public int TotalOperationsCount
 		{
-			get { return totalOperationsCount; }
+			get { return _totalOperationsCount; }
 		}
 
 		public Thread Thread
 		{
-			get { return workerThread; }
+			get { return _workerThread; }
 		}
 
 		public void WaitAllRunningOperationsToComplete()
 		{
-			if ( operationsQueue.Count == 0 )
+			if ( _operationsQueue.Count == 0 )
+			{
 				return;
+			}
 
-			lock ( operationsSync )
-				while ( operationsQueue.Count > 0 )
-					Monitor.Wait( operationsSync );
+			lock ( _operationsSync )
+			{
+				while ( _operationsQueue.Count > 0 )
+				{
+					Monitor.Wait( _operationsSync );
+				}
+			}
 
-			Condition.DebugAssert( operationsQueue.Count == 0, "Число ожидающих операций должно быть равно 0." );
+			Condition.DebugAssert( _operationsQueue.Count == 0, "Число ожидающих операций должно быть равно 0." );
 		}
 
 		public bool IsSynchronous
@@ -88,31 +93,33 @@ namespace LogAnalyzer.Kernel
 			get { return false; }
 		}
 
-		private void MainThreadProcedure( object state )
+		private void MainThreadProc( object state )
 		{
 			while ( true )
 			{
 				try
 				{
-					IAsyncOperation operation = operationsQueue.Take();
+					IAsyncOperation operation = _operationsQueue.Take();
 
-					PerformanceCountersService.Decrement( operationsCountCounter );
+					PerformanceCountersService.Decrement( _operationsCountCounter );
 
-					logger.DebugWriteVerbose( "Core.MainThreadProc: → {0}:{1}", operation, operation.GetHashCode() );
+					_logger.DebugWriteVerbose( "Core.MainThreadProc: → {0}:{1}", operation, operation.GetHashCode() );
 					operation.Execute();
-					logger.DebugWriteVerbose( "Core.MainThreadProc: ← {0}:{1} Count = {2}", operation, operation.GetHashCode(),
-											 operationsQueue.Count );
+					_logger.DebugWriteVerbose( "Core.MainThreadProc: ← {0}:{1} Count = {2}", operation, operation.GetHashCode(),
+											 _operationsQueue.Count );
 
 					// todo не удалить ли это в Release?
 					// для WaitAllRunningOperationsToComplete
-					lock ( operationsSync )
-						Monitor.Pulse( operationsSync );
+					lock ( _operationsSync )
+					{
+						Monitor.Pulse( _operationsSync );
+					}
 				}
 				catch ( Exception exc )
 				{
 					string exceptionMessage = exc.ToString();
 
-					logger.WriteError( "WorkerThreadOperationQueue.MainThreadProcedure: Exc = " + exceptionMessage );
+					_logger.WriteError( "WorkerThreadOperationQueue.MainThreadProcedure: Exc = " + exceptionMessage );
 
 					bool shouldRethrow = ShouldRethrow( exc );
 					if ( shouldRethrow )
@@ -126,7 +133,7 @@ namespace LogAnalyzer.Kernel
 
 		private bool ShouldRethrow( Exception exc )
 		{
-			bool shouldRethrow = !( exc is ThreadAbortException );
+			bool shouldRethrow = !(exc is ThreadAbortException);
 			return shouldRethrow;
 		}
 	}

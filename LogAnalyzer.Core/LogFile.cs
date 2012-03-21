@@ -36,7 +36,17 @@ namespace LogAnalyzer
 		}
 
 		public string Name { get; private set; }
+
 		public string FullPath { get; private set; }
+
+		public string CleanedName
+		{
+			get
+			{
+				string cleanName = LogFileNameCleaner.GetCleanedName( Name );
+				return cleanName;
+			}
+		}
 
 		private readonly IList<LogEntry> _logEntries = CollectionHelper.CreateList<LogEntry>();
 

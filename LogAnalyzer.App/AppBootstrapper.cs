@@ -24,6 +24,9 @@ namespace LogAnalyzer.App
 
 		protected override void Init()
 		{
+			Logger logger = Logger.Instance;
+			logger.WriteInfo( "Bootstrapper.Init()" );
+
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
 			bool breakAtStart = Properties.Settings.Default.BreakAtStart;

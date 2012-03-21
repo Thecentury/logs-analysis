@@ -30,18 +30,10 @@ namespace LogAnalyzer.GUI.ViewModels.Helpers
 			get { return fileNameToIconMap; }
 		}
 
-		private static readonly Regex startsWithDigitsRegex = new Regex( @"^\d{4}-\d{2}-\d{2}-(?<name>.*)", RegexOptions.Compiled );
-
 		public static string GetIcon( string logFileName )
 		{
-			string cleanName = logFileName;
-			Match match = startsWithDigitsRegex.Match( logFileName );
-			if ( match.Success )
-			{
-				cleanName = match.Groups["name"].Value;
-			}
+			string cleanName = LogFileNameCleaner.GetCleanedName( logFileName ).ToLower();
 
-			cleanName = cleanName.ToLower().Replace( ".log", "" );
 			if ( fileNameToIconMap.ContainsKey( cleanName ) )
 			{
 				string icon = fileNameToIconMap[cleanName];

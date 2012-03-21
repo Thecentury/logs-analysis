@@ -58,6 +58,10 @@
 								<!--<views:ItemsControlLogEntriesView/>-->
 							</DataTemplate>
 
+							<DataTemplate DataType="{x:Type vm:PreloaderViewModel}">
+								<views:LogEntriesListView/>
+							</DataTemplate>
+
 							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
 								<views:LoadingView/>
 							</DataTemplate>

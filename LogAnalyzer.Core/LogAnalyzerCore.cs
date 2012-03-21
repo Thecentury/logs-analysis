@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer
 {
@@ -90,9 +91,7 @@ namespace LogAnalyzer
 			this._config = config;
 			config.Directories.CollectionChanged += OnConfigDirectoriesCollectionChanged;
 
-			Logger.DebugWriteInfo( "" );
-			Logger.DebugWriteInfo( "" );
-			Logger.DebugWriteInfo( "" );
+			Logger.DebugWriteInfo( "================================================" );
 
 			foreach ( LogDirectoryConfigurationInfo dir in config.EnabledDirectories )
 			{

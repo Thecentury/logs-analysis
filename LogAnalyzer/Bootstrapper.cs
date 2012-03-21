@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
@@ -20,32 +22,44 @@ namespace LogAnalyzer.GUI
 {
 	public abstract class Bootstrapper
 	{
-		private Logger logger;
+		private Logger _logger;
 		public Logger Logger
 		{
-			get { return logger; }
+			get { return _logger; }
 		}
 
-		private string[] commandLineArgs;
+		private string[] _commandLineArgs;
 		public string[] CommandLineArgs
 		{
-			get { return commandLineArgs; }
+			get { return _commandLineArgs; }
 		}
 
-		private CommandLineArgumentsParser argsParser;
+		private CommandLineArgumentsParser _argsParser;
 		protected CommandLineArgumentsParser ArgsParser
 		{
-			get { return argsParser; }
+			get { return _argsParser; }
 		}
 
-		protected readonly DirectoryManager DirectoryManager = new DirectoryManager();
+		private readonly DirectoryManager _directoryManager = new DirectoryManager();
+		protected DirectoryManager DirectoryManager
+		{
+			get { return _directoryManager; }
+		}
 
 		public void Start( string[] commandLineArgs )
 		{
-			if ( commandLineArgs == null ) throw new ArgumentNullException( "commandLineArgs" );
-			this.commandLineArgs = commandLineArgs;
+			if ( commandLineArgs == null )
+			{
+				throw new ArgumentNullException( "commandLineArgs" );
+			}
 
-			argsParser = new CommandLineArgumentsParser( commandLineArgs );
+			Logger logger = Logger.Instance;
+			logger.WriteInfo( "Bootstrapper.Start()" );
+			TimerStorage.Instance.StartTimer( "AppStartup" );
+
+			this._commandLineArgs = commandLineArgs;
+
+			_argsParser = new CommandLineArgumentsParser( commandLineArgs );
 
 			Thread.CurrentThread.Name = "UIThread";
 
@@ -70,9 +84,9 @@ namespace LogAnalyzer.GUI
 
 		protected void InitConfig( LogAnalyzerConfiguration config )
 		{
-			this.logger = config.Logger;
+			this._logger = config.Logger;
 
-			var operationsQueue = new WorkerThreadOperationsQueue( logger );
+			var operationsQueue = new WorkerThreadOperationsQueue( _logger );
 
 			DirectoryManager.RegisterCommonFactories();
 

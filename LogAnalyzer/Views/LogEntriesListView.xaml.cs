@@ -3,9 +3,12 @@ using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using LogAnalyzer.Auxilliary;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.ViewModels;
+using LogAnalyzer.Logging;
 using Microsoft.Research.DynamicDataDisplay.ViewportRestrictions;
 
 namespace LogAnalyzer.GUI.Views
@@ -28,10 +31,14 @@ namespace LogAnalyzer.GUI.Views
 		{
 			var border = VisualTreeHelper.GetChild( entriesDataGrid, 0 );
 			ScrollViewer viewer = VisualTreeHelper.GetChild( border, 0 ) as ScrollViewer;
-			LogEntriesListViewModel vm = (LogEntriesListViewModel)DataContext;
-			vm.ScrollViewer = viewer;
+			LogEntriesListViewModel vm = DataContext as LogEntriesListViewModel;
+			if ( vm != null )
+			{
+				vm.ScrollViewer = viewer;
+				vm.DataGrid = entriesDataGrid;
+			}
 
-			vm.DataGrid = entriesDataGrid;
+			Logger.Instance.WriteInfo( "LogEntriesListView was loaded" );
 		}
 
 		private void DataGridDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
