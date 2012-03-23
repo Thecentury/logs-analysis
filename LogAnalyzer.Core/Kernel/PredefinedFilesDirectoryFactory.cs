@@ -11,9 +11,13 @@ namespace LogAnalyzer.Kernel
 		public IDirectoryInfo CreateDirectory( LogDirectoryConfigurationInfo config )
 		{
 			if ( config.PredefinedFiles.Count > 0 )
+			{
 				return new PredefinedFilesDirectoryInfo( config );
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		public static IDirectoryInfo CreateDirectory( LogDirectoryConfigurationInfo config, IEnumerable<string> fileNames )

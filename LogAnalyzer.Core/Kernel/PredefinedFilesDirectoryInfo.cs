@@ -46,7 +46,13 @@ namespace LogAnalyzer.Kernel
 
 		protected override LogNotificationsSourceBase CreateNotificationSource( string filesFilter )
 		{
-			ListMultiDictionary<string, string> dirToFileNames = new ListMultiDictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
+			return new FutureNotificationSource( CreateNotificationSource );
+		}
+
+		private LogNotificationsSourceBase CreateNotificationSource()
+		{
+			ListMultiDictionary<string, string> dirToFileNamesMap =
+				new ListMultiDictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
 			foreach ( var fileName in _fileNames )
 			{
@@ -55,21 +61,24 @@ namespace LogAnalyzer.Kernel
 					string fullPath = System.IO.Path.GetFullPath( fileName );
 					string dirName = System.IO.Path.GetDirectoryName( fullPath );
 
-					dirToFileNames.Append( dirName, fileName );
+					dirToFileNamesMap.Append( dirName, fileName );
 				}
 				catch ( IOException exc )
 				{
-					Logger.Instance.WriteLine( MessageType.Error, string.Format( "PredefinedFilesDirectoryInfo.CreateNotificationSource: '{0}'; Exc = {1}", fileName, exc ) );
+					Logger.Instance.WriteLine( MessageType.Error,
+											  string.Format( "PredefinedFilesDirectoryInfo.CreateNotificationSource: '{0}'; Exc = {1}",
+															fileName, exc ) );
 				}
 			}
 
-			List<LogNotificationsSourceBase> notificationsSources = new List<LogNotificationsSourceBase>( dirToFileNames.Count );
-			foreach ( var pair in dirToFileNames )
+			List<LogNotificationsSourceBase> notificationsSources = new List<LogNotificationsSourceBase>( dirToFileNamesMap.Count );
+			foreach ( var pair in dirToFileNamesMap )
 			{
 				string dirName = pair.Key;
 				var files = pair.Value;
 				var notificationsSource = new FileSystemNotificationsSource( dirName, "*",
-					NotifyFilters.Size | NotifyFilters.FileName | NotifyFilters.LastWrite, includeSubdirectories: false );
+																			NotifyFilters.Size | NotifyFilters.FileName |
+																			NotifyFilters.LastWrite, includeSubdirectories: false );
 
 				var pollingNotificationSource = new PollingFileSystemNotificationSource( dirName, "*", includeSubdirectories: false );
 
@@ -80,11 +89,10 @@ namespace LogAnalyzer.Kernel
 				notificationsSources.Add( filteringSource );
 			}
 
-			CompositeLogNotificationsSource compositeSource = new CompositeLogNotificationsSource( notificationsSources );
-
-			DelayedLogRecordsSource delayedSource = new DelayedLogRecordsSource( compositeSource );
-
-			PausableNotificationSource pausableSource = new PausableNotificationSource( delayedSource );
+			PausableNotificationSource pausableSource =
+				new PausableNotificationSource(
+					new DelayedLogRecordsSource(
+						new CompositeLogNotificationsSource( notificationsSources ) ) );
 
 			return pausableSource;
 		}

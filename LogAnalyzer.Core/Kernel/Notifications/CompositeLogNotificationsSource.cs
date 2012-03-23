@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reactive.Linq;
 
 namespace LogAnalyzer.Kernel.Notifications
 {
-	public sealed class CompositeLogNotificationsSource : LogNotificationsSourceBase
+	public sealed class CompositeLogNotificationsSource : SubscribableLogNotificationSourceBase
 	{
 		private readonly List<LogNotificationsSourceBase> _children = new List<LogNotificationsSourceBase>();
 
@@ -20,30 +18,15 @@ namespace LogAnalyzer.Kernel.Notifications
 
 			foreach ( var child in this._children )
 			{
-				CreateObservable( child, "Changed" ).Subscribe( RaiseChanged );
-				CreateObservable( child, "Created" ).Subscribe( RaiseCreated );
-				CreateObservable( child, "Deleted" ).Subscribe( RaiseDeleted );
-				CreateObservable<ErrorEventArgs>( child, "Error" ).Subscribe( RaiseError );
+				SubscribeToEvents( child );
 			}
-		}
-
-		private IObservable<T> CreateObservable<T>( object child, string eventName ) where T : EventArgs
-		{
-			return Observable.FromEventPattern<T>( child, eventName )
-				.Select( e => e.EventArgs );
-		}
-
-		private IObservable<FileSystemEventArgs> CreateObservable( object child, string eventName )
-		{
-			return Observable.FromEventPattern<FileSystemEventArgs>( child, eventName )
-				.Select( e => e.EventArgs );
 		}
 
 		protected override void StartCore()
 		{
 			base.StartCore();
 
-			foreach (var child in _children)
+			foreach ( var child in _children )
 			{
 				child.Start();
 			}
@@ -51,7 +34,7 @@ namespace LogAnalyzer.Kernel.Notifications
 
 		protected override void StopCore()
 		{
-			foreach (var child in _children)
+			foreach ( var child in _children )
 			{
 				child.Stop();
 			}

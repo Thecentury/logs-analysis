@@ -66,6 +66,8 @@ namespace LogAnalyzer.Kernel.Notifications
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
+			Logger.Instance.DebugWriteVerbose( "PollingFileSystemBotificationSource.OnTimerElapsed()" );
+
 			_timer.Stop();
 
 			Stopwatch stopwatch = Stopwatch.StartNew();
@@ -99,8 +101,8 @@ namespace LogAnalyzer.Kernel.Notifications
 
 			//Logger.Instance.DebugWriteDebug( "PollingFileSystemNotificationSource: after lock: {0} ms", stopwatch.ElapsedMilliseconds );
 
-			Parallel.ForEach(filesClone, fileInfo =>
-			                             	{
+			Parallel.ForEach( filesClone, fileInfo =>
+											{
 												var prevLength = fileInfo.Length;
 												fileInfo.Refresh();
 												var currentLength = fileInfo.Length;

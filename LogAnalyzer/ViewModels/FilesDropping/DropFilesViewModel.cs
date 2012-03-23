@@ -38,7 +38,8 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			{
 				throw new ArgumentNullException( "saveToStreamDialog" );
 			}
-			this._fileSystem = fileSystem;
+
+			_fileSystem = fileSystem;
 			_saveToStreamDialog = saveToStreamDialog;
 
 			_directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
@@ -221,8 +222,13 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 				ApplicationViewModel.Core.RemoveDirectory( _logDirectory );
 			}
 
-			StartAnalyzingVisitor visitor = new StartAnalyzingVisitor( _logDirectory, ApplicationViewModel.Core );
+			StartAnalyzingVisitor visitor = new StartAnalyzingVisitor( ApplicationViewModel.Core );
 			_files.ForEach( visitor.Visit );
+
+			if ( _logDirectory.Files.Count > 0 )
+			{
+				_logDirectory.NotificationsSource.Start();
+			}
 
 			Finished.Raise( this );
 		}
