@@ -10,7 +10,7 @@ using AvalonDock.Layout;
 
 namespace AvalonDock.Controls
 {
-    public class LayoutDocumentPaneControl : TabControl, ILayoutControl, ILogicalChildrenContainer
+	public class LayoutDocumentPaneControl : TabControlEx, ILayoutControl, ILogicalChildrenContainer
     {
         static LayoutDocumentPaneControl()
         {

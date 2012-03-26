@@ -76,6 +76,7 @@
     <Compile Include="Controls\Shell\SystemParameters2.cs" />
     <Compile Include="Controls\Shell\WindowChrome.cs" />
     <Compile Include="Controls\Shell\WindowChromeWorker.cs" />
+    <Compile Include="Controls\TabControlEx.cs" />
     <Compile Include="Converters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="DocumentCloseEventArgs.cs" />
     <Compile Include="DocumentClosingEventArgs.cs" />
