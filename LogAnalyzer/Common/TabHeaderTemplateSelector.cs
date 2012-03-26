@@ -32,7 +32,7 @@ namespace LogAnalyzer.GUI.Common
 			}
 			else
 			{
-				throw new NotSupportedException( string.Format( "Cannot find template for '{0}'", item ?? "null" ) );
+				return base.SelectTemplate(item, container);
 			}
 		}
 	}

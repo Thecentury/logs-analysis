@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Concurrency;
 using System.Windows;
 using System.Windows.Threading;
+using AvalonDock.Layout;
 using JetBrains.Annotations;
 using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
@@ -232,6 +233,43 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				int selectedIndex = _tabs.IndexOf( value );
 				SelectedIndex = selectedIndex;
+			}
+		}
+
+		private DelegateCommand<LayoutDocument> _closeSelectedTabCommand;
+		public ICommand CloseSelectedTabCommand
+		{
+			get
+			{
+				if ( _closeSelectedTabCommand == null )
+				{
+					_closeSelectedTabCommand = new DelegateCommand<LayoutDocument>( CloseSelectedTabExecute, CloseSelectedTabCanExecute );
+				}
+				return _closeSelectedTabCommand;
+			}
+		}
+
+		private void CloseSelectedTabExecute( LayoutDocument layoutDocument )
+		{
+			var tab = (TabViewModel)layoutDocument.Content;
+			tab.Close();
+		}
+
+		private bool CloseSelectedTabCanExecute( LayoutDocument layoutDocument )
+		{
+			if ( layoutDocument == null )
+			{
+				return false;
+			}
+
+			var tab = (TabViewModel)layoutDocument.Content;
+			if ( tab != null )
+			{
+				return tab.CanBeClosed;
+			}
+			else
+			{
+				return false;
 			}
 		}
 

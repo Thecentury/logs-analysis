@@ -15,12 +15,6 @@
 
 		<BooleanToVisibilityConverter x:Key="visibilityConverter"/>
 
-		<!--<Style TargetType="{x:Type ad:DockableContent}" x:Key="tabStyle">
-			<Setter Property="Title" Value="{Binding Header}"/>
-			<Setter Property="IsCloseable" Value="{Binding CanBeClosed}"/>
-			<Setter Property="DockableStyle" Value="Document"/>
-		</Style>-->
-
 		<!-- Обычный заголовок -->
 		<DataTemplate x:Key="defaultHeaderTemplate">
 			<views:DefaultTabHeaderControl DataContext="{Binding Content}"/>
@@ -72,7 +66,7 @@
 		DocumentHeaderTemplateSelector="{StaticResource headerTemplateSelector}"
 		DocumentTitleTemplateSelector="{StaticResource headerTemplateSelector}"
 		DocumentTemplateSelector="{StaticResource tabTemplateSelector}"
-		DocumentCloseCommand="{Binding CloseCommand}">
+		DocumentCloseCommand="{Binding CloseSelectedTabCommand}">
 
 		<adl:LayoutRoot>
 			<adl:LayoutPanel>
