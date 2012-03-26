@@ -171,7 +171,8 @@ namespace LogAnalyzer
 										.OrderBy( LogEntryByDateAndIndexComparer.Instance ) );
 #else
 			_mergedEntriesList.AddRange( entries );
-			ParallelSort.QuicksortParallel( _mergedEntriesList, LogEntryByDateAndIndexComparer.Instance );
+			_mergedEntriesList.Sort( LogEntryByDateAndIndexComparer.Instance );
+			//ParallelSort.QuicksortParallel( _mergedEntriesList, LogEntryByDateAndIndexComparer.Instance );
 #endif
 
 			timer.Stop();

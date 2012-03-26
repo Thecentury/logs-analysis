@@ -574,7 +574,7 @@ namespace LogAnalyzer.GUI.ViewModels
 														{
 															try
 															{
-																using ( FileStream fs = new FileStream( path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None ) )
+																using ( FileStream fs = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ) )
 																using ( var writer = new StreamWriter( fs ) )
 																{
 																	LogSaveVisitor saveVisitor = new LogSaveVisitor( writer, new DefaultLogEntryFormatter() );

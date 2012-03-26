@@ -397,6 +397,7 @@ namespace LogAnalyzer
 			}
 
 			Condition.DebugAssert( !_files.Contains( logFile ) );
+			Condition.Assert( !_files.Any( f => f.FullPath == logFile.FullPath ) );
 
 			_files.Add( logFile );
 

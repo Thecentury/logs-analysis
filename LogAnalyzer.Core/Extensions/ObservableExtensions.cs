@@ -40,12 +40,12 @@ namespace LogAnalyzer.Extensions
 			return Observable.Create<T>( observer =>
 			{
 				object sync = new object();
-				T value;
 				bool hasValue = false;
 
 				source.Subscribe( item =>
 				{
 					bool hadValue;
+					T value;
 					lock ( sync )
 					{
 						hadValue = hasValue;
@@ -89,6 +89,37 @@ namespace LogAnalyzer.Extensions
 				evt.Wait();
 				subscription.Dispose();
 			} );
+		}
+
+		public static IDisposable SubscribeWeakly<T, TTarget>( this IObservable<T> observable, TTarget target, Action<TTarget, T> onNext ) where TTarget : class
+		{
+			var reference = new WeakReference( target );
+
+			if ( onNext.Target != null )
+			{
+				throw new ArgumentException( "onNext must refer to a static method, or else the subscription will still hold a strong reference to target" );
+			}
+
+			IDisposable subscription = null;
+			subscription = observable.Subscribe( item =>
+			{
+				var currentTarget = reference.Target as TTarget;
+				if ( currentTarget != null )
+				{
+					onNext( currentTarget, item );
+				}
+				else
+				{
+					// ReSharper disable AccessToModifiedClosure
+					if ( subscription != null )
+					{
+						subscription.Dispose();
+					}
+					// ReSharper restore AccessToModifiedClosure
+				}
+			} );
+
+			return subscription;
 		}
 	}
 }

@@ -3,7 +3,10 @@
                     xmlns:Controls="clr-namespace:LogAnalyzer.GUI.Controls"
                     xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common"
                     xmlns:System="clr-namespace:System;assembly=mscorlib" 
-					xmlns:local="clr-namespace:LogAnalyzer.GUI">
+					xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+					mc:Ignorable="d"
+					xmlns:local="clr-namespace:LogAnalyzer.GUI" xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels">
 	<SolidColorBrush Color="#99FFEE3A" x:Key="dynamicHighlightBrush"/>
 
 	<Common:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
@@ -40,7 +43,10 @@
 
 	<!-- Стиль ячейки подсветки -->
 	<DataTemplate x:Key="highlightedCellTemplate">
-		<ItemsControl ItemsSource="{Binding HighlightedByList}" VerticalAlignment="Top">
+		<ItemsControl 
+			d:DataContext="{d:DesignInstance ViewModels:LogEntryViewModel, IsDesignTimeCreatable=False}"
+			ItemsSource="{Binding HighlightedByList}" 
+			VerticalAlignment="Top">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 
