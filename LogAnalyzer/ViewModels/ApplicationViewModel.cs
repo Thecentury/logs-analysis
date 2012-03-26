@@ -208,7 +208,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			{
 				_selectedIndex = value;
 				if ( _selectedIndex < 0 )
+				{
 					_selectedIndex = 0;
+				}
 
 				RaisePropertyChanged( "SelectedIndex" );
 				RaisePropertyChanged( "SelectedTab" );
@@ -220,9 +222,16 @@ namespace LogAnalyzer.GUI.ViewModels
 			get
 			{
 				if ( _tabs.Count == 0 )
+				{
 					return null;
+				}
 
 				return _tabs[_selectedIndex];
+			}
+			set
+			{
+				int selectedIndex = _tabs.IndexOf( value );
+				SelectedIndex = selectedIndex;
 			}
 		}
 

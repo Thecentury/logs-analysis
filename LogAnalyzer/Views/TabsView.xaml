@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:LogAnalyzer.GUI.ViewModels" xmlns:views="clr-namespace:LogAnalyzer.GUI.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" mc:Ignorable="d" 
+             xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" 
+			 xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+			 xmlns:adc="clr-namespace:AvalonDock.Controls;assembly=AvalonDock"
+			 xmlns:adl="clr-namespace:AvalonDock.Layout;assembly=AvalonDock" xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common"
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
 	<UserControl.Resources>
@@ -17,115 +21,69 @@
 			<Setter Property="DockableStyle" Value="Document"/>
 		</Style>-->
 
-		<!-- Заголовок TabControl'а -->
-		<DataTemplate x:Key="headerTemplate">
-			<DataTemplate.Resources>
-
-				<!-- Обычный заголовок -->
-				<DataTemplate DataType="{x:Type vm:TabViewModel}">
-					<views:DefaultTabHeaderControl/>
-				</DataTemplate>
-
-				<!-- Заголовок таба фильтра -->
-				<DataTemplate DataType="{x:Type vm:FilterTabViewModel}">
-					<StackPanel Orientation="Vertical">
-						<views:DefaultTabHeaderControl/>
-						<ProgressBar Margin="4" Value="{Binding FilteringProgress, Mode=OneWay}" Minimum="0" Maximum="100">
-							<ProgressBar.Style>
-								<Style TargetType="ProgressBar">
-									<Setter Property="Visibility" Value="{Binding IsFiltering, Converter={StaticResource visibilityConverter}, Mode=OneWay}"/>
-								</Style>
-							</ProgressBar.Style>
-						</ProgressBar>
-					</StackPanel>
-				</DataTemplate>
-
-			</DataTemplate.Resources>
-			<ContentControl Content="{Binding}"/>
+		<!-- Обычный заголовок -->
+		<DataTemplate x:Key="defaultHeaderTemplate">
+			<views:DefaultTabHeaderControl DataContext="{Binding Content}"/>
 		</DataTemplate>
 
-		<!-- Стиль самого TabContol'а -->
-		<Style TargetType="TabItem" x:Key="tabStyle">
-			<Setter Property="HeaderTemplate" Value="{StaticResource headerTemplate}"/>
-			<Setter Property="IsSelected" Value="{Binding IsActive}"/>
-			<Setter Property="ContentTemplate">
-				<Setter.Value>
-					<DataTemplate>
-						<DataTemplate.Resources>
+		<!-- Заголовок таба фильтра -->
+		<DataTemplate x:Key="filterHeaderTemplate">
+			<StackPanel Orientation="Vertical" DataContext="{Binding Content}">
+				<views:DefaultTabHeaderControl/>
+				<ProgressBar Margin="4" Value="{Binding FilteringProgress, Mode=OneWay}" Minimum="0" Maximum="100">
+					<ProgressBar.Style>
+						<Style TargetType="ProgressBar">
+							<Setter Property="Visibility" Value="{Binding IsFiltering, Converter={StaticResource visibilityConverter}, Mode=OneWay}"/>
+						</Style>
+					</ProgressBar.Style>
+				</ProgressBar>
+			</StackPanel>
+		</DataTemplate>
 
-							<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
-								<views:LogEntriesListView/>
-								<!--<views:ItemsControlLogEntriesView/>-->
-							</DataTemplate>
+		<Common:TabHeaderTemplateSelector x:Key="headerTemplateSelector"
+										  DefaultTemplate="{StaticResource defaultHeaderTemplate}"
+										  FilterTabTemplate="{StaticResource filterHeaderTemplate}"/>
 
-							<DataTemplate DataType="{x:Type vm:PreloaderViewModel}">
-								<Grid>
-									<views:LogEntriesListView/>
-									<views:LoadingView Opacity="0.5"/>
-								</Grid>
-							</DataTemplate>
-
-							<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
-								<Grid>
-									<views:LogEntriesListView/>
-									<views:LoadingView/>
-								</Grid>
-							</DataTemplate>
-
-							<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
-								<views:DropFilesView/>
-							</DataTemplate>
-
-						</DataTemplate.Resources>
-
-						<ContentPresenter Content="{Binding}"/>
-					</DataTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-
+		<Common:TabTemplateSelector x:Key="tabTemplateSelector">
+			<Common:TabTemplateSelector.LogEntriesListViewTemplate>
+				<DataTemplate DataType="{x:Type vm:LogEntriesListViewModel}">
+					<views:LogEntriesListView/>
+				</DataTemplate>
+			</Common:TabTemplateSelector.LogEntriesListViewTemplate>
+			<Common:TabTemplateSelector.LoadingTemplate>
+				<DataTemplate DataType="{x:Type vm:LoadingViewModel}">
+					<Grid>
+						<views:LogEntriesListView/>
+						<views:LoadingView/>
+					</Grid>
+				</DataTemplate>
+			</Common:TabTemplateSelector.LoadingTemplate>
+			<Common:TabTemplateSelector.DropTemplate>
+				<DataTemplate DataType="{x:Type FilesDropping:DropFilesViewModel}">
+					<views:DropFilesView/>
+				</DataTemplate>
+			</Common:TabTemplateSelector.DropTemplate>
+		</Common:TabTemplateSelector>
 	</UserControl.Resources>
 
+	<ad:DockingManager
+		DocumentsSource="{Binding Tabs}"
+		ActiveContent="{Binding SelectedTab, Mode=TwoWay}"
+		DocumentHeaderTemplateSelector="{StaticResource headerTemplateSelector}"
+		DocumentTitleTemplateSelector="{StaticResource headerTemplateSelector}"
+		DocumentTemplateSelector="{StaticResource tabTemplateSelector}"
+		DocumentCloseCommand="{Binding CloseCommand}">
 
-	<!--<ad:DockingManager>
-		<ad:ResizingPanel Orientation="Horizontal">
-			<ad:DockablePane ItemsSource="{Binding}"
-							 ItemContainerStyle="{StaticResource tabStyle}">
-			</ad:DockablePane>
-		</ad:ResizingPanel>
-	</ad:DockingManager>-->
-
-	<DockPanel LastChildFill="True">
-		<Expander ExpandDirection="Left" 
-				  MaxWidth="400" 
-				  IsExpanded="False"
-				  DockPanel.Dock="Right">
-			<Expander.Header>
-				<TextBlock>
-					<TextBlock.LayoutTransform>
-						<RotateTransform Angle="90"/>
-					</TextBlock.LayoutTransform>
-					Directories &amp; Files
-				</TextBlock>
-			</Expander.Header>
-			<views:FileTreeView Grid.Column="1" DataContext="{Binding FilesTree}"/>
-		</Expander>
-
-		<views:TabControlEx Grid.Column="0"
-			ItemsSource="{Binding Tabs}" 
-			SelectedIndex="{Binding SelectedIndex}"
-			ItemContainerStyle="{StaticResource tabStyle}">
-			<TabControl.Template>
-				<ControlTemplate TargetType="TabControl">
-					<DockPanel>
-						<TabPanel DockPanel.Dock="Top" IsItemsHost="True" />
-						<Grid DockPanel.Dock="Bottom" x:Name="PART_ItemsHolder" />
-					</DockPanel>
-					<!-- no content presenter -->
-				</ControlTemplate>
-			</TabControl.Template>
-		</views:TabControlEx>
-
-	</DockPanel>
+		<adl:LayoutRoot>
+			<adl:LayoutPanel>
+				<adl:LayoutDocumentPane/>
+				<adl:LayoutAnchorablePane DockWidth="150" IsMaximized="False">
+					<adl:LayoutAnchorable Title="Directories &amp; Files">
+						<views:FileTreeView DataContext="{Binding FilesTree}"/>
+					</adl:LayoutAnchorable>
+				</adl:LayoutAnchorablePane>
+			</adl:LayoutPanel>
+		</adl:LayoutRoot>
+	</ad:DockingManager>
 
 </UserControl>

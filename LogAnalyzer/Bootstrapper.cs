@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -96,11 +97,19 @@ namespace LogAnalyzer.GUI
 
 			ColorizationManager colorizationManager = null;
 			DispatcherHelper.GetDispatcher().Invoke( () =>
-			{
-				ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
-				var templates = colorizationLoader.Load();
-				colorizationManager = new ColorizationManager( templates );
-			}, DispatcherPriority.Send );
+														{
+															List<ColorizeTemplateBase> templates;
+															if ( Directory.Exists( templatesDir ) )
+															{
+																ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
+																templates = colorizationLoader.Load();
+															}
+															else
+															{
+																templates = new List<ColorizeTemplateBase>();
+															}
+															colorizationManager = new ColorizationManager( templates );
+														}, DispatcherPriority.Send );
 
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )

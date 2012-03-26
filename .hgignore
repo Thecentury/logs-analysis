@@ -20,3 +20,4 @@ Ext/FugueIcons/*
 *.ncrunchsolution
 *.ncrunchproject
 *.DotSettings
+*/publish/*
