@@ -34,6 +34,7 @@
 							<StackPanel Orientation="Horizontal">
 								<Button Command="{Binding RemoveCommand}"
 										Width="20" Height="20"
+										Style="{StaticResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 										ToolTip="Remove filter">
 									<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/cross-circle.png"/>
 								</Button>
@@ -44,6 +45,7 @@
 				</ItemsControl>
 				<Button Command="{Binding AddChildCommand}"
 						Width="20" Height="20"
+						Style="{StaticResource ResourceKey={x:Static Member=ToolBar.ButtonStyleKey}}"
 						ToolTip="Add one more filter">
 					<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/plus-circle.png"/>
 				</Button>
