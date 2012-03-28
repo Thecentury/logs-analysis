@@ -63,13 +63,9 @@ namespace DecompilerSample
 				Console.WriteLine( visitor.Usages.Count.ToString() );
 			}
 
-
-			XmlSerializer serializer = new XmlSerializer( usages.GetType(), "" );
 			using ( var stream = new FileStream( "usages.xml", FileMode.Create, FileAccess.Write ) )
 			{
-				XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-				namespaces.Add( "", "" );
-				serializer.Serialize( stream, usages );
+				LoggerUsageInAssembly.Serialize( usages, stream );
 			}
 		}
 
