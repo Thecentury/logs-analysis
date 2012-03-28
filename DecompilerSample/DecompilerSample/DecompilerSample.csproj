@@ -59,8 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildrenFirstTraversal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferencesTreeBuilder.cs" />
+    <Compile Include="ReferencesTreeItem.cs" />
+    <Compile Include="ReferencesTreeItemExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Decompiler.Core\Decompiler.Core.csproj">
