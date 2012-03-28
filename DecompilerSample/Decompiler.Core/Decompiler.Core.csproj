@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D028938E-0434-4831-83F7-7A5C1A098714}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{256A9095-887E-4F62-AAFD-9D7F410E6E58}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DecompilerSample</RootNamespace>
-    <AssemblyName>DecompilerSample</AssemblyName>
+    <RootNamespace>Decompiler.Core</RootNamespace>
+    <AssemblyName>Decompiler.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,9 +37,6 @@
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\Ext\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
-    <Reference Include="ILSpy">
-      <HintPath>..\Ext\ILSpy.exe</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\Ext\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -51,7 +45,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,14 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="InstructionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Decompiler.Core\Decompiler.Core.csproj">
-      <Project>{256A9095-887E-4F62-AAFD-9D7F410E6E58}</Project>
-      <Name>Decompiler.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Decompiler.Funcs\Decompiler.Funcs.fsproj">
       <Project>{0ACDCCB7-A943-45D5-B148-2AC82248C37B}</Project>
       <Name>Decompiler.Funcs</Name>

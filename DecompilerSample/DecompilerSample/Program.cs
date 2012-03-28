@@ -2,82 +2,84 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using DecompilerSample.Namespace;
+using System.Xml.Serialization;
+using Decompiler.Core;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.Ast;
-using ICSharpCode.ILSpy;
 using Mono.Cecil;
 
 namespace DecompilerSample
 {
-	class Hello
+	internal class Program
 	{
-		public Hello()
+		private static void Main( string[] args )
 		{
-			Logger logger = new Logger();
-			logger.WriteMessage( "Test" );
-		}
-	}
+			const string projectDir = @"D:\MOST\AWAD\Bin-server\Project\";
+			const string platformDir = @"D:\MOST\AWAD\Bin-server\Common\";
+			const string environmentDir = @"D:\MOST\AWAD\BIN-SERVER\ENVIROMENT";
 
-	class Program
-	{
-		static void Main( string[] args )
-		{
-			Application app = new Application();
+			var dlls = Directory.GetFiles( projectDir, "*.dll" ).Concat( Directory.GetFiles( platformDir, "*.dll" ) );
 
-			var assembliesList = new AssemblyList( "1" );
-			LoadedAssembly assembly = assembliesList.OpenAssembly(
-				@"C:\Development\AWAD-Brinchuk\LogsAnalysis\DecompilerSample\DecompilerSample\bin\Debug\DecompilerSample.exe" );
+			List<AssemblyDefinition> assemblies = dlls.AsParallel().Select( LoadAssembly ).ToList();
 
-			ModuleDefinition mainModule = assembly.AssemblyDefinition.MainModule;
-			AstBuilder astBuilder = new AstBuilder( new DecompilerContext( mainModule )
+			DefaultAssemblyResolver resolver = (DefaultAssemblyResolver)GlobalAssemblyResolver.Instance;
+			resolver.AddSearchDirectory( projectDir );
+			resolver.AddSearchDirectory( platformDir );
+			resolver.AddSearchDirectory( environmentDir );
+			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\ZLibs\" );
+			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\mongodb\" );
+			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\Microsoft\" );
+			resolver.AddSearchDirectory( @"d:\MOST\AWAD\BIN-SERVER\PROJECT\Controllers\" );
+			resolver.AddSearchDirectory( @"D:\Dev\Mikhail\Projects\Eticket\Version31_jet\Source\FastSerializer\bin\Debug" );
+
+			List<LoggerUsageInAssembly> usages = new List<LoggerUsageInAssembly>();
+
+			foreach ( var assembly in assemblies )
 			{
-			} );
-			astBuilder.AddAssembly( assembly.AssemblyDefinition );
-			astBuilder.RunTransformations();
+				string name = assembly.Name.Name;
+				if ( name.Contains( "XmlSerializers" ) )
+				{
+					Console.WriteLine( "Skipping '{0}'", name );
+					continue;
+				}
 
-			Visitor visitor = new Visitor();
-			astBuilder.CompilationUnit.AcceptVisitor( visitor, null );
+				Console.WriteLine( "Decompiling '{0}'", name );
 
-			var children = astBuilder.CompilationUnit.Children;
+				var module = assembly.MainModule;
 
-			//StringBuilder builder = new StringBuilder();
-			//astBuilder.GenerateCode( new PlainTextOutput( new StringWriter( builder ) ) );
+				var decompilerContext = new DecompilerContext( module );
+				AstBuilder astBuilder = new AstBuilder( decompilerContext );
+				astBuilder.AddAssembly( assembly );
 
-			//Console.WriteLine( builder );
+				var visitor = new Visitor();
+				astBuilder.CompilationUnit.AcceptVisitor( visitor, decompilerContext );
 
-			Console.WriteLine( "End" );
-			Console.ReadLine();
+				if ( visitor.Usages.Count > 0 )
+				{
+					LoggerUsageInAssembly usage = new LoggerUsageInAssembly( visitor.Usages ) { AssemblyName = assembly.Name.Name };
+					usages.Add( usage );
+				}
 
-			//astBuilder.RunTransformations( this.transformAbortCondition );
-			//astBuilder.GenerateCode( output );
+				Console.WriteLine( visitor.Usages.Count.ToString() );
+			}
 
-			//CSharpLanguage lang = new CSharpLanguage();
-			//var assemblyList = new AssemblyList( "list" );
-			//var assembly = assemblyList.OpenAssembly( @"C:\Development\AWAD-Brinchuk\LogsAnalysis\DecompilerSample\DecompilerSample\bin\Debug\DecompilerSample.exe" );
-			//StringBuilder builder = new StringBuilder();
-			//var output = new PlainTextOutput( new StringWriter( builder ) );
-			//lang.DecompileAssembly( assembly, output, new DecompilationOptions { } );
 
-			//Console.WriteLine( builder.ToString() );
+			XmlSerializer serializer = new XmlSerializer( usages.GetType(), "" );
+			using ( var stream = new FileStream( "usages.xml", FileMode.Create, FileAccess.Write ) )
+			{
+				XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+				namespaces.Add( "", "" );
+				serializer.Serialize( stream, usages );
+			}
 		}
-	}
-}
 
-namespace DecompilerSample.Namespace
-{
-	public interface ILogger
-	{
-		void WriteMessage( string message );
-	}
-
-	public sealed class Logger : ILogger
-	{
-		public void WriteMessage( string message )
+		private static AssemblyDefinition LoadAssembly( string dll )
 		{
-			Console.WriteLine( message );
+			bool readSymbols = File.Exists( Path.ChangeExtension( dll, "pdb" ) );
+			var assembly = AssemblyDefinition.ReadAssembly( dll, new ReaderParameters( ReadingMode.Immediate ) { ReadSymbols = readSymbols } );
+
+			Console.WriteLine( "Loaded '{0}'", dll );
+			return assembly;
 		}
 	}
 }
