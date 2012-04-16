@@ -6,7 +6,8 @@ namespace LogAnalyzer.Kernel
 	public interface IDirectoryInfo
 	{
 		LogNotificationsSourceBase NotificationSource { get; }
-		IEnumerable<IFileInfo> EnumerateFiles( string searchPattern );
+		IEnumerable<IFileInfo> EnumerateFiles();
+		IEnumerable<string> EnumerateFileNames();
 		IFileInfo GetFileInfo( string fullPath );
 
 		string Path { get; }

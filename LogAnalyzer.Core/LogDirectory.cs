@@ -41,6 +41,7 @@ namespace LogAnalyzer
 		private readonly LogAnalyzerCore _core;
 		private readonly ExpressionFilter<IFileInfo> _fileFilter;
 		private readonly IFilter<LogEntry> _globalEntriesFilter;
+		private readonly IFilter<string> _fileNameFilter;
 		private readonly Encoding _encoding = Encoding.Unicode;
 		private readonly ILogLineParser _lineParser;
 
@@ -84,7 +85,6 @@ namespace LogAnalyzer
 		/// Path to directory.
 		/// </summary>
 		public string Path { get; private set; }
-		public string FileNameFilter { get; private set; }
 		public string DisplayName { get; private set; }
 		public bool UseCache { get; private set; }
 
@@ -103,7 +103,6 @@ namespace LogAnalyzer
 
 			this._directoryConfig = directoryConfigurationInfo;
 			this.Path = directoryConfigurationInfo.Path;
-			this.FileNameFilter = directoryConfigurationInfo.FileNameFilter;
 			this.DisplayName = directoryConfigurationInfo.DisplayName;
 			this.UseCache = directoryConfigurationInfo.UseCache;
 
@@ -117,6 +116,7 @@ namespace LogAnalyzer
 			this._globalEntriesFilter = config.GlobalLogEntryFilter;
 			this._lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
 			this._fileFilter = config.GlobalFilesFilter;
+			this._fileNameFilter = config.FlobalFileNamesFilter;
 
 			_fileFilter.Changed += OnFileFilterChanged;
 
@@ -143,18 +143,9 @@ namespace LogAnalyzer
 												{
 													IDirectoryInfo dir = _environment.GetDirectory( Path );
 
-													// отсекаем ситуации, когда по фильтру *.log возвращаются файлы *.log__
-													int extensionLength = 100;
-													if ( !String.IsNullOrEmpty( FileNameFilter ) && FileNameFilter != "*" &&
-														FileNameFilter.Contains( '.' ) )
-													{
-														// для трехбуквенного extension будет 4
-														extensionLength = FileNameFilter.Length - FileNameFilter.LastIndexOf( '.' );
-													}
-
-													var filesInDirectory = (from file in dir.EnumerateFiles( FileNameFilter )
-																			where file.Extension.Length <= extensionLength
-																			// Например, file.Extension = ".log"
+													var filesInDirectory = (from fileName in dir.EnumerateFileNames()
+																			where _fileNameFilter.Include( fileName )
+																			let file = dir.GetFileInfo( fileName )
 																			select file).ToList();
 
 													BeginLoadFiles( filesInDirectory );
@@ -164,6 +155,7 @@ namespace LogAnalyzer
 		private int _initialFilesLoadedCount;
 		private bool _loadStarted;
 		private int _initialFilesLoadingCount;
+
 		private void BeginLoadFiles( IEnumerable<IFileInfo> filesInDirectory )
 		{
 #if false

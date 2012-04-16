@@ -36,9 +36,14 @@ namespace LogAnalyzer.Tests.Mocks
 			_recordsSource = new MockLogRecordsSource( path );
 		}
 
-		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
+		public IEnumerable<IFileInfo> EnumerateFiles()
 		{
 			return _files;
+		}
+
+		public IEnumerable<string> EnumerateFileNames()
+		{
+			return _files.Select( f => f.FullName );
 		}
 
 		private LogNotificationsSourceBase _notificationsSource;

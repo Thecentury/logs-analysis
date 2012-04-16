@@ -33,7 +33,7 @@ namespace LogAnalyzer.Kernel
 			this._fileNames = fileNames;
 		}
 
-		public override IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
+		public override IEnumerable<IFileInfo> EnumerateFiles()
 		{
 			return _fileNames.Select( CreateFile );
 		}

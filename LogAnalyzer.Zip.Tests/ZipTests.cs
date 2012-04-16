@@ -46,7 +46,7 @@ namespace LogAnalyzer.Zip.Tests
 		public void TestGetZippedLogs()
 		{
 			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, null );
-			var files = zip.EnumerateFiles( "" ).ToList();
+			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 4, files.Count );
 
@@ -69,7 +69,7 @@ namespace LogAnalyzer.Zip.Tests
 		public void TestSetRootFolder()
 		{
 			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1" );
-			var files = zip.EnumerateFiles( "" ).ToList();
+			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 2, files.Count );
 		}
@@ -78,7 +78,7 @@ namespace LogAnalyzer.Zip.Tests
 		public void TestSetRootFolderWithNestedEnabled()
 		{
 			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ) { IncludeNestedDirectories = true }, zipFileName, "Logs1" );
-			var files = zip.EnumerateFiles( "" ).ToList();
+			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 3, files.Count );
 		}
@@ -87,7 +87,7 @@ namespace LogAnalyzer.Zip.Tests
 		public void TestSetDeepRootFolderWithNestedEnabled()
 		{
 			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1/Inner" );
-			var files = zip.EnumerateFiles( "" ).ToList();
+			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 1, files.Count );
 		}
