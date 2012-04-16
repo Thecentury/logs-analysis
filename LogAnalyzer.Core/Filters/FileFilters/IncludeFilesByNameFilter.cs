@@ -8,13 +8,8 @@ namespace LogAnalyzer.Filters
 {
 	public sealed class IncludeFilesByNameFilter : FilesByNameFilterBase
 	{
-		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		protected override Expression CreateExpressionCore2( ParameterExpression parameterExpression )
 		{
-			if ( parameterExpression.Type != typeof( IFileInfo ) )
-			{
-				throw new NotSupportedException( "IncludeFilesByNameFilter is for IFileInfo only." );
-			}
-
 			return Expression.Call(
 				Expression.Constant( FileNames ), typeof( HashSet<string> ).GetMethod( "Contains" ),
 				Expression.Property( parameterExpression, "Name" ) );

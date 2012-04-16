@@ -10,7 +10,7 @@ namespace LogAnalyzer.Filters
 		public ExcludeFilesByCleanedNameFilter() { }
 		public ExcludeFilesByCleanedNameFilter( params string[] fileNames ) : base( fileNames ) { }
 
-		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		protected override Expression CreateExpressionCore2( ParameterExpression parameterExpression )
 		{
 			if ( parameterExpression.Type != typeof( IFileInfo ) )
 			{

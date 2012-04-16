@@ -10,13 +10,8 @@ namespace LogAnalyzer.Filters
 		public IncludeFilesByCleanedNameFilter() { }
 		public IncludeFilesByCleanedNameFilter( params string[] fileNames ) : base( fileNames ) { }
 
-		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		protected override Expression CreateExpressionCore2( ParameterExpression parameterExpression )
 		{
-			if ( parameterExpression.Type != typeof( IFileInfo ) )
-			{
-				throw new NotSupportedException( "IncludeFilesByCleanedNameFilter is for IFileInfo only." );
-			}
-
 			return Expression.Call(
 				Expression.Constant( FileNames ), typeof( HashSet<string> ).GetMethod( "Contains" ),
 				Expression.Call( typeof( FileInfoExtensions ).GetMethod( "GetCleanedName" ), parameterExpression ) );

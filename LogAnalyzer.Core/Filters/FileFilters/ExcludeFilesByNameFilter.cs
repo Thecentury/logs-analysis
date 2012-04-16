@@ -7,13 +7,8 @@ namespace LogAnalyzer.Filters
 {
 	public sealed class ExcludeFilesByNameFilter : FilesByNameFilterBase
 	{
-		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		protected override Expression CreateExpressionCore2( ParameterExpression parameterExpression )
 		{
-			if ( parameterExpression.Type != typeof( IFileInfo ) )
-			{
-				throw new NotSupportedException( "ExcludeFilesByNameFilter is for IFileInfo only." );
-			}
-
 			return
 				Expression.Not(
 					Expression.Call(

@@ -32,7 +32,11 @@ namespace LogAnalyzer.Config
 
 		public static T AddLogWriter<T>( this T config, LogWriter writer ) where T : LogAnalyzerConfiguration
 		{
-			if ( writer == null ) throw new ArgumentNullException( "writer" );
+			if ( writer == null )
+			{
+				throw new ArgumentNullException( "writer" );
+			}
+
 			config.LoggerWriters.Add( writer );
 			return config;
 		}
