@@ -48,13 +48,29 @@ namespace LogAnalyzer.Kernel
 			}
 		}
 
-		public virtual IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
+		public virtual IEnumerable<IFileInfo> EnumerateFiles(  )
 		{
-			SearchOption searchOption = _directoryConfig.IncludeNestedDirectories
-											? SearchOption.AllDirectories
-											: SearchOption.TopDirectoryOnly;
+			var searchOption = SearchOption;
 
-			return Directory.EnumerateFiles( _path, searchPattern, searchOption ).Select( GetFileInfo );
+			return Directory.EnumerateFiles( _path, "*", searchOption ).Select( GetFileInfo );
+		}
+
+		private SearchOption SearchOption
+		{
+			get
+			{
+				SearchOption searchOption = _directoryConfig.IncludeNestedDirectories
+												? SearchOption.AllDirectories
+												: SearchOption.TopDirectoryOnly;
+				return searchOption;
+			}
+		}
+
+		public IEnumerable<string> EnumerateFileNames()
+		{
+			var searchOption = SearchOption;
+
+			return Directory.EnumerateFiles( _path, "*", searchOption );
 		}
 
 		protected virtual LogNotificationsSourceBase CreateNotificationSource( string filesFilter )

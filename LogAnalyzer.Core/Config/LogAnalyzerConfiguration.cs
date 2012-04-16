@@ -98,17 +98,30 @@ namespace LogAnalyzer.Config
 
 		#region Files filter
 
-		private readonly ExpressionFilter<IFileInfo> globalFilesFilter = new ExpressionFilter<IFileInfo>();
+		private readonly ExpressionFilter<IFileInfo> _globalFilesFilter = new ExpressionFilter<IFileInfo>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
 		public ExpressionFilter<IFileInfo> GlobalFilesFilter
 		{
-			get { return globalFilesFilter; }
+			get { return _globalFilesFilter; }
 		}
 
 		public ExpressionBuilder GlobalFilesFilterBuilder
 		{
-			get { return globalFilesFilter.ExpressionBuilder; }
-			set { globalFilesFilter.ExpressionBuilder = value; }
+			get { return _globalFilesFilter.ExpressionBuilder; }
+			set { _globalFilesFilter.ExpressionBuilder = value; }
+		}
+
+		private readonly ExpressionFilter<string> _globalFileNamesFilter = new ExpressionFilter<string>();
+		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+		public ExpressionFilter<string> FlobalFileNamesFilter
+		{
+			get { return _globalFileNamesFilter; }
+		}
+
+		public ExpressionBuilder GlobalFileNamesFilterBuilder
+		{
+			get { return _globalFileNamesFilter.ExpressionBuilder; }
+			set { _globalFileNamesFilter.ExpressionBuilder = value; }
 		}
 
 		#endregion

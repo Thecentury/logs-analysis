@@ -16,7 +16,21 @@ namespace LogAnalyzer.Tests
 		{
 			var builder = new IncludeFilesByCleanedNameFilter( includedName );
 
-			bool includes = FilterIncludes( fileName, builder );
+			bool includes = FileFilterIncludes( fileName, builder );
+
+			Assert.IsTrue( includes );
+		}
+
+		[TestCase( "file", "file" )]
+		[TestCase( "file", "file" )]
+		[TestCase( "File", "file" )]
+		[TestCase( "2012-04-12-file", "file" )]
+		public void IncludeByCleanedNameFilterShouldPassForName( string fileName, string includedName )
+		{
+			var builder = new IncludeFilesByCleanedNameFilter( includedName );
+			var filter = builder.BuildFilter<string>();
+
+			bool includes = filter.Include( fileName );
 
 			Assert.IsTrue( includes );
 		}
@@ -27,7 +41,19 @@ namespace LogAnalyzer.Tests
 		{
 			var builder = new IncludeFilesByCleanedNameFilter( includedName );
 
-			bool includes = FilterIncludes( fileName, builder );
+			bool includes = FileFilterIncludes( fileName, builder );
+
+			Assert.IsFalse( includes );
+		}
+
+		[TestCase( "file", "file2" )]
+		[TestCase( "2012-04-12-file", "file2" )]
+		public void IncludeByCleanedNameFilterShouldNotPassForName( string fileName, string includedName )
+		{
+			var builder = new IncludeFilesByCleanedNameFilter( includedName );
+			var filter = builder.BuildFilter<string>();
+
+			bool includes = filter.Include( fileName );
 
 			Assert.IsFalse( includes );
 		}
@@ -38,7 +64,7 @@ namespace LogAnalyzer.Tests
 		{
 			var builder = new ExcludeFilesByCleanedNameFilter( excludedName );
 
-			bool includes = FilterIncludes( fileName, builder );
+			bool includes = FileFilterIncludes( fileName, builder );
 
 			Assert.IsTrue( includes );
 		}
@@ -50,12 +76,12 @@ namespace LogAnalyzer.Tests
 		{
 			var builder = new ExcludeFilesByCleanedNameFilter( excludedName );
 
-			bool includes = FilterIncludes( fileName, builder );
+			bool includes = FileFilterIncludes( fileName, builder );
 
 			Assert.IsFalse( includes );
 		}
 
-		private static bool FilterIncludes( string fileName, ExpressionBuilder builder )
+		private static bool FileFilterIncludes( string fileName, ExpressionBuilder builder )
 		{
 			Mock<IFileInfo> fileMock = new Mock<IFileInfo>();
 			fileMock.SetupGet( f => f.Name ).Returns( fileName );

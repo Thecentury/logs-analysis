@@ -5,23 +5,36 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Filters
 {
-	public sealed class ExcludeFilesByCleanedNameFilter : FilesByNameFilterBase
+	public abstract class FilesByCleanedNameFilterBase : FilesByNameFilterBase
+	{
+		protected FilesByCleanedNameFilterBase() { }
+		protected FilesByCleanedNameFilterBase( params string[] fileNames ) : base( fileNames ) { }
+
+		protected Expression GetNameExpression( ParameterExpression parameterExpression )
+		{
+			if ( parameterExpression.Type == typeof( IFileInfo ) )
+			{
+				return Expression.Call( typeof( FileInfoExtensions ).GetMethod( "GetCleanedName" ), parameterExpression );
+			}
+			else
+			{
+				return Expression.Call( typeof( LogFileNameCleaner ).GetMethod( "GetCleanedName" ), parameterExpression );
+			}
+		}
+	}
+
+	public sealed class ExcludeFilesByCleanedNameFilter : FilesByCleanedNameFilterBase
 	{
 		public ExcludeFilesByCleanedNameFilter() { }
 		public ExcludeFilesByCleanedNameFilter( params string[] fileNames ) : base( fileNames ) { }
 
 		protected override Expression CreateExpressionCore2( ParameterExpression parameterExpression )
 		{
-			if ( parameterExpression.Type != typeof( IFileInfo ) )
-			{
-				throw new NotSupportedException( "ExcludeFilesByCleanedNameFilter is for IFileInfo only." );
-			}
-
 			return
 				Expression.Not(
 					Expression.Call(
 						Expression.Constant( FileNames ), typeof( HashSet<string> ).GetMethod( "Contains" ),
-						Expression.Call( typeof( FileInfoExtensions ).GetMethod( "GetCleanedName" ), parameterExpression ) ) );
+						GetNameExpression( parameterExpression ) ) );
 		}
 	}
 }

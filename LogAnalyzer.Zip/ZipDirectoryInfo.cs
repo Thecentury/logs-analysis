@@ -15,14 +15,20 @@ namespace LogAnalyzer.Zip
 	{
 		private readonly LogNotificationsSourceBase _notificationsSource = new LogNotificationsSourceBase();
 		private readonly string _zipFileName;
-		[UsedImplicitly] 
+		[UsedImplicitly]
 		private readonly string _rootDirectory;
 		private readonly DirectoriesHierarchyHelper _directoriesHierarchyHelper;
 
 		public ZipDirectoryInfo( [NotNull] LogDirectoryConfigurationInfo config, [NotNull] string zipFileName, string rootDirectory )
 		{
-			if ( config == null ) throw new ArgumentNullException( "config" );
-			if ( zipFileName == null ) throw new ArgumentNullException( "zipFileName" );
+			if ( config == null )
+			{
+				throw new ArgumentNullException( "config" );
+			}
+			if ( zipFileName == null )
+			{
+				throw new ArgumentNullException( "zipFileName" );
+			}
 
 			this._zipFileName = zipFileName;
 			this._rootDirectory = rootDirectory;
@@ -34,36 +40,60 @@ namespace LogAnalyzer.Zip
 			get { return _notificationsSource; }
 		}
 
-		public IEnumerable<IFileInfo> EnumerateFiles( string searchPattern )
+		public IEnumerable<IFileInfo> EnumerateFiles()
 		{
 			List<ZipFileInfo> files = new List<ZipFileInfo>();
 
+			foreach ( ZipEntry zipEntry in EnumerateZipEntries() )
+			{
+				ZipFileInfo file = new ZipFileInfo( _zipFileName, zipEntry.FileName );
+				files.Add( file );
+			}
+
+			return files;
+		}
+
+		private IEnumerable<ZipEntry> EnumerateZipEntries()
+		{
 			using ( var zip = new ZipFile( _zipFileName ) )
 			{
 				foreach ( ZipEntry zipEntry in zip )
 				{
 					if ( zipEntry.IsDirectory )
+					{
 						continue;
+					}
 
 					string extension = IOPath.GetExtension( zipEntry.FileName );
 					if ( !String.Equals( extension, ".log", StringComparison.InvariantCultureIgnoreCase ) )
+					{
 						continue;
+					}
 
 					string dir = IOPath.GetDirectoryName( zipEntry.FileName );
 					if ( dir == null )
+					{
 						continue;
+					}
 
 					dir = dir.Replace( '\\', '/' );
 					bool includeByDir = IncludeByDirectory( dir );
 					if ( !includeByDir )
+					{
 						continue;
+					}
 
-					ZipFileInfo file = new ZipFileInfo( _zipFileName, zipEntry.FileName );
-					files.Add( file );
+					yield return zipEntry;
 				}
 			}
+		}
 
-			return files;
+		public IEnumerable<string> EnumerateFileNames()
+		{
+			foreach ( ZipEntry zipEntry in EnumerateZipEntries() )
+			{
+				yield return zipEntry.FileName;
+			}
 		}
 
 		private bool IncludeByDirectory( string directoryName )

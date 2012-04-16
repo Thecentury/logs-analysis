@@ -5,7 +5,7 @@ using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Filters
 {
-	public sealed class IncludeFilesByCleanedNameFilter : FilesByNameFilterBase
+	public sealed class IncludeFilesByCleanedNameFilter : FilesByCleanedNameFilterBase
 	{
 		public IncludeFilesByCleanedNameFilter() { }
 		public IncludeFilesByCleanedNameFilter( params string[] fileNames ) : base( fileNames ) { }
@@ -14,7 +14,7 @@ namespace LogAnalyzer.Filters
 		{
 			return Expression.Call(
 				Expression.Constant( FileNames ), typeof( HashSet<string> ).GetMethod( "Contains" ),
-				Expression.Call( typeof( FileInfoExtensions ).GetMethod( "GetCleanedName" ), parameterExpression ) );
+				GetNameExpression( parameterExpression ) );
 		}
 	}
 }

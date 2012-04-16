@@ -43,9 +43,9 @@ namespace LogAnalyzer.Filters
 
 		private void VerifyParameterType( ParameterExpression parameter )
 		{
-			if ( parameter.Type != typeof( IFileInfo ) )
+			if ( parameter.Type != typeof( IFileInfo ) && parameter.Type != typeof( string ) )
 			{
-				throw new NotSupportedException( String.Format( "Filter '{0}' is for IFileInfo only.", GetType().Name ) );
+				throw new NotSupportedException( String.Format( "Filter '{0}' is for IFileInfo or string only.", GetType().Name ) );
 			}
 		}
 	}
