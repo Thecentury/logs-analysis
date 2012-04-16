@@ -7,18 +7,20 @@ namespace LogAnalyzer.Filters
 {
 	public sealed class DelegateFilter<T> : IFilter<T>
 	{
-		private readonly Func<T, bool> predicate = null;
+		private readonly Func<T, bool> _predicate;
 		public DelegateFilter( Func<T, bool> predicate )
 		{
 			if ( predicate == null )
-				throw new ArgumentNullException( "func" );
+			{
+				throw new ArgumentNullException( "predicate" );
+			}
 
-			this.predicate = predicate;
+			this._predicate = predicate;
 		}
 
 		public bool Include( T argument )
 		{
-			bool include = predicate( argument );
+			bool include = _predicate( argument );
 			return include;
 		}
 
