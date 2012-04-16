@@ -9,18 +9,18 @@ namespace LogAnalyzer.Filters
 {
 	public sealed class ExpressionFilter<T> : IFilter<T>
 	{
-		private ExpressionBuilder expressionBuilder = new AlwaysTrue();
+		private ExpressionBuilder _expressionBuilder = new AlwaysTrue();
 		public ExpressionBuilder ExpressionBuilder
 		{
-			get { return expressionBuilder; }
+			get { return _expressionBuilder; }
 			set
 			{
-				if ( expressionBuilder == null )
+				if ( _expressionBuilder == null )
 					throw new ArgumentNullException();
 
-				expressionBuilder.PropertyChanged -= OnExpressionBuilder_PropertyChanged;
-				expressionBuilder = value;
-				expressionBuilder.PropertyChanged += OnExpressionBuilder_PropertyChanged;
+				_expressionBuilder.PropertyChanged -= OnExpressionBuilderPropertyChanged;
+				_expressionBuilder = value;
+				_expressionBuilder.PropertyChanged += OnExpressionBuilderPropertyChanged;
 
 				Recompile();
 			}
@@ -34,22 +34,22 @@ namespace LogAnalyzer.Filters
 		private void Recompile()
 		{
 			Func<T, bool> temp;
-			if ( expressionBuilder.TryCompileToFilter( out temp ) )
+			if ( _expressionBuilder.TryCompileToFilter( out temp ) )
 			{
-				filter = temp;
+				_filter = temp;
 				Changed.Raise( this );
 			}
 		}
 
-		private void OnExpressionBuilder_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnExpressionBuilderPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			Recompile();
 		}
 
-		private Func<T, bool> filter;
+		private Func<T, bool> _filter;
 		public bool Include( T entity )
 		{
-			bool include = filter( entity );
+			bool include = _filter( entity );
 			return include;
 		}
 

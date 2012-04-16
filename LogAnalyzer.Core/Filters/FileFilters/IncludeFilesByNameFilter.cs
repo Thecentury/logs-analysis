@@ -16,7 +16,7 @@ namespace LogAnalyzer.Filters
 			}
 
 			return Expression.Call(
-				Expression.Constant( FileNames ), typeof( List<string> ).GetMethod( "Contains" ),
+				Expression.Constant( FileNames ), typeof( HashSet<string> ).GetMethod( "Contains" ),
 				Expression.Property( parameterExpression, "Name" ) );
 		}
 	}
