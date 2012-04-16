@@ -61,12 +61,26 @@ namespace LogAnalyzer.App
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			var args = GetPathsFromCommandArgs( CommandLineArgs );
-			var projectFile = args.OfType<FileInfo>().FirstOrDefault( f => f.Extension == Constants.ProjectExtension );
+			var projectFile = args.OfType<FileInfo>().Select( f => f.FullName ).FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
 
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 			if ( projectFile != null )
 			{
-				configPath = projectFile.FullName;
+				configPath = projectFile;
+			}
+			else
+			{
+				var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
+				if ( activationData != null )
+				{
+					projectFile =
+					   activationData
+						   .FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
+					if ( projectFile != null )
+					{
+						configPath = projectFile;
+					}
+				}
 			}
 
 			LogAnalyzerConfiguration config;
