@@ -9,6 +9,8 @@ namespace LogAnalyzer.Tests
 	public class IncludeExcludeFilesFilterTests
 	{
 		[TestCase( "file", "file" )]
+		[TestCase( "file", "file" )]
+		[TestCase( "File", "file" )]
 		[TestCase( "2012-04-12-file", "file" )]
 		public void IncludeByCleanedNameFilterShouldPass( string fileName, string includedName )
 		{
@@ -42,6 +44,7 @@ namespace LogAnalyzer.Tests
 		}
 
 		[TestCase( "file", "file" )]
+		[TestCase( "File", "file" )]
 		[TestCase( "2012-04-12-file", "file" )]
 		public void ExcludeByCleanedNameFilterShouldNotPass( string fileName, string excludedName )
 		{

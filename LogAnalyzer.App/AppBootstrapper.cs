@@ -70,15 +70,18 @@ namespace LogAnalyzer.App
 			}
 			else
 			{
-				var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
-				if ( activationData != null )
+				if ( AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null )
 				{
-					projectFile =
-					   activationData
-						   .FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
-					if ( projectFile != null )
+					var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
+					if (activationData != null)
 					{
-						configPath = projectFile;
+						projectFile =
+							activationData
+								.FirstOrDefault(f => Path.GetExtension(f) == Constants.ProjectExtension);
+						if (projectFile != null)
+						{
+							configPath = projectFile;
+						}
 					}
 				}
 			}

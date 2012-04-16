@@ -19,10 +19,10 @@ namespace LogAnalyzer.Filters
 			_fileNames.AddRange( fileNames );
 		}
 
-		private readonly IList<string> _fileNames = new List<string>();
+		private readonly HashSet<string> _fileNames = new HashSet<string>( StringComparer.InvariantCultureIgnoreCase );
 
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
-		public IList<string> FileNames
+		public ICollection<string> FileNames
 		{
 			get { return _fileNames; }
 		}
