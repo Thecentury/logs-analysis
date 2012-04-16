@@ -29,4 +29,13 @@ namespace LogAnalyzer.Kernel
 		/// </summary>
 		string Extension { get; }
 	}
+
+	public static class FileInfoExtensions
+	{
+		public static string GetCleanedName( this IFileInfo file )
+		{
+			string cleanedName = LogFileNameCleaner.GetCleanedName( file.Name );
+			return cleanedName;
+		}
+	}
 }

@@ -88,6 +88,7 @@
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />
     <Compile Include="HighlightViewModelTests.cs" />
+    <Compile Include="IncludeExcludeFilesFilterTests.cs" />
     <Compile Include="LogDateTimeFilterTests.cs" />
     <Compile Include="LogFileIndexerTests.cs" />
     <Compile Include="LogFileNavigatorTests.cs" />
