@@ -319,25 +319,32 @@ namespace LogAnalyzer
 		{
 			lock ( _sync )
 			{
-				IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
-
-				bool exclude = !_fileFilter.Include( file );
-				if ( exclude )
+				try
 				{
-					Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
-					return;
+					IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
+
+					bool exclude = !_fileFilter.Include( file );
+					if ( exclude )
+					{
+						Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
+						return;
+					}
+
+					LogFile logFile = CreateLogFile( file );
+
+					// todo brinchuk this should be done async!
+					logFile.ReadFile();
+
+					Condition.DebugAssert( !_files.Contains( logFile ) );
+					_files.Add( logFile );
+					_filesWrapper.RaiseCollectionAdded( logFile );
+
+					logFile.LogEntries.RaiseCollectionReset();
 				}
-
-				LogFile logFile = CreateLogFile( file );
-
-				// todo brinchuk this should be done async!
-				logFile.ReadFile();
-
-				Condition.DebugAssert( !_files.Contains( logFile ) );
-				_files.Add( logFile );
-				_filesWrapper.RaiseCollectionAdded( logFile );
-
-				logFile.LogEntries.RaiseCollectionReset();
+				catch ( Exception exc )
+				{
+					Logger.WriteError( "LogDirectory.AddFile(): failed with {0}", exc );
+				}
 			}
 		}
 

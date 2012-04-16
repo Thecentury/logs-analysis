@@ -110,7 +110,10 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
+    <Compile Include="Filters\FileFilters\ExcludeFilesByCleanedNameFilter.cs" />
     <Compile Include="Filters\FileFilters\ExcludeFilesByNameFilter.cs" />
+    <Compile Include="Filters\FileFilters\FilesByNameFilterBase.cs" />
+    <Compile Include="Filters\FileFilters\IncludeFilesByCleanedNameFilter.cs" />
     <Compile Include="Filters\FileFilters\IncludeFilesByNameFilter.cs" />
     <Compile Include="Filters\FileFilters\ExcludePreviousDaysFileFilter.cs" />
     <Compile Include="Filters\FileFilters\SizeLessThanFilter.cs" />
