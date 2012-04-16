@@ -13,8 +13,13 @@ namespace LogAnalyzer.Kernel
 
 		public FileSystemFileInfo( [NotNull] string path )
 		{
-			if ( path == null ) throw new ArgumentNullException( "path" );
+			if ( path == null )
+			{
+				throw new ArgumentNullException( "path" );
+			}
+			
 			_fileInfo = new FileInfo( path );
+			
 			if ( !_fileInfo.Exists )
 			{
 				throw new InvalidOperationException( String.Format( "File '{0}' doesn't exist.", path ) );
