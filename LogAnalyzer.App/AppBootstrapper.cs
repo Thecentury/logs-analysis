@@ -110,6 +110,7 @@ namespace LogAnalyzer.App
 		private void CurrentDomainUnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
 			Logger.WriteLine( MessageType.Error, "AppDomain - Unhandled exception: " + e.ExceptionObject );
+			MessageBox.Show( e.ExceptionObject.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 		}
 
 		private void SetDebugParameters()

@@ -198,7 +198,7 @@ namespace LogAnalyzer
 		#region INotifyPropertyChanged Members
 
 		// todo более экономное к памяти решение
-		private PropertyChangedEventHandler propertyChanged = null;
+		private PropertyChangedEventHandler _propertyChanged;
 		public event PropertyChangedEventHandler PropertyChanged
 		{
 			[MethodImpl( MethodImplOptions.Synchronized )]
@@ -210,7 +210,7 @@ namespace LogAnalyzer
 					return;
 				}
 
-				propertyChanged = (PropertyChangedEventHandler)Delegate.Combine( propertyChanged, value );
+				_propertyChanged = (PropertyChangedEventHandler)Delegate.Combine( _propertyChanged, value );
 			}
 			[MethodImpl( MethodImplOptions.Synchronized )]
 			remove
@@ -220,13 +220,13 @@ namespace LogAnalyzer
 					return;
 				}
 
-				propertyChanged = (PropertyChangedEventHandler)Delegate.Remove( propertyChanged, value );
+				_propertyChanged = (PropertyChangedEventHandler)Delegate.Remove( _propertyChanged, value );
 			}
 		}
 
 		private void RaisePropertyChanged( string propertyName )
 		{
-			propertyChanged.Raise( this, propertyName );
+			_propertyChanged.Raise( this, propertyName );
 		}
 
 		private void RaiseAllPropertiesChanged()
@@ -251,7 +251,7 @@ namespace LogAnalyzer
 			CreateUnitedText();
 
 			_textLines = null;
-			propertyChanged = null;
+			_propertyChanged = null;
 		}
 
 		private bool _isFrozen;
