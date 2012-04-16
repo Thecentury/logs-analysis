@@ -31,5 +31,22 @@ namespace LogAnalyzer.Filters
 		{
 			return typeof( bool );
 		}
+
+		protected sealed override Expression CreateExpressionCore( ParameterExpression parameterExpression )
+		{
+			VerifyParameterType( parameterExpression );
+
+			return CreateExpressionCore2( parameterExpression );
+		}
+
+		protected abstract Expression CreateExpressionCore2( ParameterExpression parameter );
+
+		private void VerifyParameterType( ParameterExpression parameter )
+		{
+			if ( parameter.Type != typeof( IFileInfo ) )
+			{
+				throw new NotSupportedException( String.Format( "Filter '{0}' is for IFileInfo only.", GetType().Name ) );
+			}
+		}
 	}
 }
