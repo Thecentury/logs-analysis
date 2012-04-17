@@ -13,6 +13,7 @@ using LogAnalyzer.Kernel;
 using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Kernel.Parsers;
 using LogAnalyzer.Logging;
+using IOPath = System.IO.Path;
 
 namespace LogAnalyzer
 {
@@ -116,7 +117,7 @@ namespace LogAnalyzer
 			this._globalEntriesFilter = config.GlobalLogEntryFilter;
 			this._lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
 			this._fileFilter = config.GlobalFilesFilter;
-			this._fileNameFilter = config.FlobalFileNamesFilter;
+			this._fileNameFilter = config.GlobalFileNamesFilter;
 
 			_fileFilter.Changed += OnFileFilterChanged;
 
@@ -143,9 +144,10 @@ namespace LogAnalyzer
 												{
 													IDirectoryInfo dir = _environment.GetDirectory( Path );
 
-													var filesInDirectory = (from fileName in dir.EnumerateFileNames()
+													var filesInDirectory = (from path in dir.EnumerateFileNames()
+																			let fileName = IOPath.GetFileNameWithoutExtension( path )
 																			where _fileNameFilter.Include( fileName )
-																			let file = dir.GetFileInfo( fileName )
+																			let file = dir.GetFileInfo( path )
 																			select file).ToList();
 
 													BeginLoadFiles( filesInDirectory );
