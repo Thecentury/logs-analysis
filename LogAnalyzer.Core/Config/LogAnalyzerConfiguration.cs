@@ -113,7 +113,7 @@ namespace LogAnalyzer.Config
 
 		private readonly ExpressionFilter<string> _globalFileNamesFilter = new ExpressionFilter<string>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
-		public ExpressionFilter<string> FlobalFileNamesFilter
+		public ExpressionFilter<string> GlobalFileNamesFilter
 		{
 			get { return _globalFileNamesFilter; }
 		}
