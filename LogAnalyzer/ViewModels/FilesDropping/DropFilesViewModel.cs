@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using JetBrains.Annotations;
@@ -11,6 +13,7 @@ using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
@@ -147,13 +150,18 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			if ( data.GetFormats().Contains( "FileDrop" ) )
 			{
 				string[] paths = (string[])data.GetData( "FileDrop" );
+
+				IsEnabled = false;
+
+				List<Task> tasks = new List<Task>();
 				foreach ( string path in paths )
 				{
 					if ( _fileSystem.FileExists( path ) )
 					{
 						if ( Path.GetExtension( path ) == Constants.ProjectExtension )
 						{
-							AddProject( path );
+							Task t = AddProject( path );
+							tasks.Add( t );
 						}
 						else
 						{
@@ -162,43 +170,81 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 					}
 					else if ( _fileSystem.DirectoryExists( path ) )
 					{
-						AddDroppedDir( path );
+						Task t = AddDroppedDir( path );
+						tasks.Add( t );
 					}
 				}
+
+				Task[] tasksArray = tasks.ToArray();
+				Task.Factory.ContinueWhenAll( tasksArray, tt =>
+					{
+						foreach ( var task in tt )
+						{
+							if ( task.IsFaulted )
+							{
+								Logger.Instance.WriteError( "DropCommandExecute(): {0}", task.Exception );
+							}
+						}
+						IsEnabled = true;
+					} );
 			}
 		}
 
-		private void AddProject( string path )
+		private Task AddProject( string path )
 		{
 			var config = ApplicationViewModel.Config;
 
 			var newProject = LogAnalyzerConfiguration.LoadFromFile( path );
-			foreach ( var directory in newProject.Directories )
-			{
-				CreateAndAddDirectory( directory, config );
-			}
 
-			config.DefaultEncodingName = newProject.DefaultEncodingName;
-			config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
-			config.GlobalFilesFilterBuilder = newProject.GlobalFilesFilterBuilder;
-			config.GlobalLogEntityFilterBuilder = newProject.GlobalLogEntityFilterBuilder;
+			var dispatcherScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+			var loadDirectoryTasks =
+				newProject.Directories.Select( d => CreateAndAddDirectory( d, config, dispatcherScheduler ) ).ToArray();
+
+			TaskCompletionSource<int> unitedCompletion = new TaskCompletionSource<int>();
+
+			Task.Factory.ContinueWhenAll(
+				loadDirectoryTasks,
+				tt =>
+				{
+					var exceptions = tt.Select( t => t.Exception ).Where( e => e != null ).ToList();
+					if ( exceptions.Count > 0 )
+					{
+						unitedCompletion.SetException( new AggregateException( exceptions ) );
+					}
+					else
+					{
+						config.DefaultEncodingName = newProject.DefaultEncodingName;
+						config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
+						config.GlobalFilesFilterBuilder = newProject.GlobalFilesFilterBuilder;
+						config.GlobalLogEntityFilterBuilder = newProject.GlobalLogEntityFilterBuilder;
+
+						unitedCompletion.SetResult( 0 );
+					}
+				}, CancellationToken.None, TaskContinuationOptions.None, dispatcherScheduler );
+
+			return unitedCompletion.Task;
 		}
 
-		public DroppedDirectoryViewModel AddDroppedDir( string path )
+		public Task<DroppedDirectoryViewModel> AddDroppedDir( string path, TaskScheduler uiScheduler = null )
 		{
+			if ( uiScheduler == null )
+			{
+				uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+			}
+
 			var config = ApplicationViewModel.Config;
 
 			string name = Path.GetDirectoryName( path );
 			LogDirectoryConfigurationInfo dirConfig = new LogDirectoryConfigurationInfo( path, "*", name );
 			dirConfig.EncodingName = config.DefaultEncodingName;
 
-			var droppedDir = CreateAndAddDirectory( dirConfig, config );
+			var droppedDirTask = CreateAndAddDirectory( dirConfig, config, uiScheduler );
 
-			return droppedDir;
+			return droppedDirTask;
 		}
 
-		private DroppedDirectoryViewModel CreateAndAddDirectory( LogDirectoryConfigurationInfo dirConfig,
-																LogAnalyzerConfiguration config )
+		private Task<DroppedDirectoryViewModel> CreateAndAddDirectory( LogDirectoryConfigurationInfo dirConfig,
+																LogAnalyzerConfiguration config, TaskScheduler uiSchdeuler )
 		{
 			var dirFactory = config.ResolveNotNull<IDirectoryFactory>();
 			IDirectoryInfo dirInfo = dirFactory.CreateDirectory( dirConfig );
@@ -206,11 +252,26 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			env.Directories.Add( dirInfo );
 
 			var core = ApplicationViewModel.Core;
-			LogDirectory dir = new LogDirectory( dirConfig, config, env, core );
 
-			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, _files );
-			_files.Add( droppedDir );
-			return droppedDir;
+			var task = Task.Factory.StartNew( () =>
+			{
+				LogDirectory dir = new LogDirectory( dirConfig, config, env, core );
+				return dir;
+			} ).ContinueWith( t =>
+			{
+				if ( t.Exception != null )
+				{
+					throw t.Exception;
+				}
+				else
+				{
+					DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( t.Result, dirInfo, _files );
+					_files.Add( droppedDir );
+					return droppedDir;
+				}
+			}, CancellationToken.None, TaskContinuationOptions.None, uiSchdeuler );
+
+			return task;
 		}
 
 		public DroppedFileViewModel AddDroppedFile( string path )
