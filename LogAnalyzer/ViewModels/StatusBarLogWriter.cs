@@ -4,25 +4,29 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Logging;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
 	internal sealed class StatusBarLogWriter : LogWriter, INotifyPropertyChanged
 	{
-		private string message;
+		private string _message;
 		public string Message
 		{
-			get { return message; }
+			get { return _message; }
 			private set
 			{
-				message = value;
+				_message = value;
 				PropertyChanged.Raise( this, "Message" );
 			}
 		}
 
-		public override void WriteLine( string message )
+		public override void WriteLine( string message, MessageType messageType )
 		{
-			Message = message;
+			if ( messageType == MessageType.Error || messageType == MessageType.Warning || messageType == MessageType.Info )
+			{
+				Message = message;
+			}
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

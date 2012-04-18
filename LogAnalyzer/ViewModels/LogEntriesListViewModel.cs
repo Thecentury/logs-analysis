@@ -700,10 +700,9 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 
 			collection.Add( new SelfWorkingSetStatusBarItem() );
-#if DEBUG
+
 			StatusBarLogWriter writer = GetOrCreateLogWriter();
 			collection.Add( new LogStatusBarItem( writer ) );
-#endif
 		}
 
 		private StatusBarLogWriter GetOrCreateLogWriter()

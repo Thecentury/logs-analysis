@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Logging
 {
 	public sealed class DebugLogWriter : LogWriter
 	{
-		public override void WriteLine( string message )
+		public override void WriteLine( string message, MessageType messageType)
 		{
 			Debug.WriteLine( message );
 		}

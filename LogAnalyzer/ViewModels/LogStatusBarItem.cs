@@ -8,18 +8,18 @@ namespace LogAnalyzer.GUI.ViewModels
 {
 	internal sealed class LogStatusBarItem : BindingObject
 	{
-		private readonly StatusBarLogWriter writer;
+		private readonly StatusBarLogWriter _writer;
 
 		public LogStatusBarItem( [NotNull] StatusBarLogWriter writer )
 			: base( writer )
 		{
 			if ( writer == null ) throw new ArgumentNullException( "writer" );
-			this.writer = writer;
+			this._writer = writer;
 		}
 
 		public string Message
 		{
-			get { return writer.Message; }
+			get { return _writer.Message; }
 		}
 	}
 }

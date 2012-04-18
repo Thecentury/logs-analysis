@@ -1,40 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Collections.Concurrent;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Logging
 {
 	public abstract class SingleThreadedLogWriter : LogWriter
 	{
 		protected SingleThreadedLogWriter()
 		{
-			this.loggerThread = new Thread(ThreadProc);
-			loggerThread.IsBackground = true;
-			loggerThread.Name = this.GetType().Name + ".Thread";
-			loggerThread.Start();
+			this._loggerThread = new Thread( ThreadProc );
+			_loggerThread.IsBackground = true;
+			_loggerThread.Name = this.GetType().Name + ".Thread";
+			_loggerThread.Start();
 		}
 
-		private readonly Thread loggerThread;
-		private readonly BlockingCollection<string> operationsQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
+		private readonly Thread _loggerThread;
+		private readonly BlockingCollection<LogMessage> _operationsQueue = new BlockingCollection<LogMessage>( new ConcurrentQueue<LogMessage>() );
 
-		private void ThreadProc(object state)
+		private void ThreadProc( object state )
 		{
-			while (true)
+			while ( true )
 			{
-				string message = operationsQueue.Take();
+				var message = _operationsQueue.Take();
 
-				OnNewMessage(message);
+				OnNewMessage( message );
 			}
 		}
 
-		protected abstract void OnNewMessage(string message);
+		protected abstract void OnNewMessage( LogMessage message );
 
-		public sealed override void WriteLine(string message)
+		public sealed override void WriteLine( string message, MessageType messageType )
 		{
-			operationsQueue.Add(message);
+			_operationsQueue.Add( new LogMessage { Message = message, MessageType = messageType } );
+		}
+
+		protected sealed class LogMessage
+		{
+			public string Message { get; set; }
+			public MessageType MessageType { get; set; }
 		}
 	}
 }
