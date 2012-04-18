@@ -94,6 +94,17 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			get { return _files.Count > 0; }
 		}
 
+		private bool _isEnabled = true;
+		public bool IsEnabled
+		{
+			get { return _isEnabled; }
+			set
+			{
+				_isEnabled = value;
+				RaisePropertyChanged( "IsEnabled" );
+			}
+		}
+
 		private readonly ObservableCollection<DroppedObjectViewModel> _files = new ObservableCollection<DroppedObjectViewModel>();
 		public IList<DroppedObjectViewModel> Files
 		{
@@ -118,7 +129,9 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			get
 			{
 				if ( _dropCommand == null )
+				{
 					_dropCommand = new DelegateCommand<IDataObject>( DropCommandExecute );
+				}
 
 				return _dropCommand;
 			}
@@ -126,7 +139,10 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		private void DropCommandExecute( [NotNull] IDataObject data )
 		{
-			if ( data == null ) throw new ArgumentNullException( "data" );
+			if ( data == null )
+			{
+				throw new ArgumentNullException( "data" );
+			}
 
 			if ( data.GetFormats().Contains( "FileDrop" ) )
 			{
@@ -135,7 +151,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 				{
 					if ( _fileSystem.FileExists( path ) )
 					{
-						AddDroppedFile( path );
+						if ( Path.GetExtension( path ) == Constants.ProjectExtension )
+						{
+							AddProject( path );
+						}
+						else
+						{
+							AddDroppedFile( path );
+						}
 					}
 					else if ( _fileSystem.DirectoryExists( path ) )
 					{
@@ -143,6 +166,22 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 					}
 				}
 			}
+		}
+
+		private void AddProject( string path )
+		{
+			var config = ApplicationViewModel.Config;
+
+			var newProject = LogAnalyzerConfiguration.LoadFromFile( path );
+			foreach ( var directory in newProject.Directories )
+			{
+				CreateAndAddDirectory( directory, config );
+			}
+
+			config.DefaultEncodingName = newProject.DefaultEncodingName;
+			config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
+			config.GlobalFilesFilterBuilder = newProject.GlobalFilesFilterBuilder;
+			config.GlobalLogEntityFilterBuilder = newProject.GlobalLogEntityFilterBuilder;
 		}
 
 		public DroppedDirectoryViewModel AddDroppedDir( string path )
@@ -153,6 +192,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			LogDirectoryConfigurationInfo dirConfig = new LogDirectoryConfigurationInfo( path, "*", name );
 			dirConfig.EncodingName = config.DefaultEncodingName;
 
+			var droppedDir = CreateAndAddDirectory( dirConfig, config );
+
+			return droppedDir;
+		}
+
+		private DroppedDirectoryViewModel CreateAndAddDirectory( LogDirectoryConfigurationInfo dirConfig,
+																LogAnalyzerConfiguration config )
+		{
 			var dirFactory = config.ResolveNotNull<IDirectoryFactory>();
 			IDirectoryInfo dirInfo = dirFactory.CreateDirectory( dirConfig );
 			var env = ApplicationViewModel.Environment;
@@ -163,7 +210,6 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 			DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( dir, dirInfo, _files );
 			_files.Add( droppedDir );
-
 			return droppedDir;
 		}
 
