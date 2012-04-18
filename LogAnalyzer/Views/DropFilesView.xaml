@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels"
              xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
 			 Background="Transparent"
-			 AllowDrop="True">
+			 >
 
 	<UserControl.Resources>
 
@@ -50,10 +49,24 @@
 				</StackPanel>
 			</StackPanel>
 		</DataTemplate>
+		
+		<Style x:Key="controlStyle" TargetType="Panel">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="AllowDrop" Value="True"/>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding IsEnabled}" Value="False">
+					<Setter Property="AllowDrop" Value="False"/>
+					<Setter Property="Cursor" Value="Wait"/>
+					<Setter Property="ForceCursor" Value="True"/>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
 
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid
+		Style="{StaticResource controlStyle}">
+		
 		<TextBlock HorizontalAlignment="Center"
 				   VerticalAlignment="Center"
 				   FontSize="20"

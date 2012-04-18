@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
@@ -27,6 +28,7 @@ namespace LogAnalyzer.App
 			logger.WriteInfo( "Bootstrapper.Init()" );
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+			TaskScheduler.UnobservedTaskException += TaskSchedulerUnobservedTaskException;
 
 			bool breakAtStart = Properties.Settings.Default.BreakAtStart;
 			if ( breakAtStart )
@@ -48,6 +50,12 @@ namespace LogAnalyzer.App
 			{
 				Application.Current.MainWindow.DataContext = applicationViewModel;
 			} );
+		}
+
+		private void TaskSchedulerUnobservedTaskException( object sender, UnobservedTaskExceptionEventArgs e )
+		{
+			Logger.WriteLine( MessageType.Error, "AppDomain - Unhandled exception: " + e.Exception );
+			MessageBox.Show( e.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 		}
 
 		private LogAnalyzerConfiguration LoadConfig()
