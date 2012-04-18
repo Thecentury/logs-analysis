@@ -5,6 +5,7 @@ using System.Text;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Kernel;
+using LogAnalyzer.Logging;
 using LogAnalyzer.Tests.Helpers;
 using LogAnalyzer.Tests.Mocks;
 

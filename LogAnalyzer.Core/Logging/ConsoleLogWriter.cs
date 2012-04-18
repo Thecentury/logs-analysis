@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
 
-namespace LogAnalyzer
+namespace LogAnalyzer.Logging
 {
 	public sealed class ConsoleLogWriter : SingleThreadedLogWriter
 	{
-		protected override void OnNewMessage(string message)
+		protected override void OnNewMessage( LogMessage logMessage )
 		{
-			Console.WriteLine(message);
+			Console.WriteLine( logMessage.Message );
 		}
 	}
 }

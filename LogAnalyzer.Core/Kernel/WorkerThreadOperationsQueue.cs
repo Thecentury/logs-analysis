@@ -28,7 +28,9 @@ namespace LogAnalyzer.Kernel
 		public WorkerThreadOperationsQueue( Logger logger )
 		{
 			if ( logger == null )
+			{
 				throw new ArgumentNullException( "logger" );
+			}
 
 			_operationsCountCounter = PerformanceCountersService.GetPendingOperationsCountCounter();
 

@@ -29,7 +29,7 @@ namespace LogAnalyzer.Logging
 
 			foreach ( var writer in _writers )
 			{
-				writer.WriteLine( fullMessage );
+				writer.WriteLine( fullMessage, messageType );
 			}
 		}
 

@@ -12,11 +12,11 @@ namespace LogAnalyzer.Logging
 
 		public bool ShouldCleanLogFile { get; set; }
 
-		protected override void OnNewMessage( string message )
+		protected override void OnNewMessage( LogMessage logMessage )
 		{
 			try
 			{
-				File.AppendAllLines( FilePath, new[] { message } );
+				File.AppendAllLines( FilePath, new[] { logMessage.Message } );
 			}
 			catch ( IOException )
 			{
