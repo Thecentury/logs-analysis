@@ -135,7 +135,6 @@ namespace LogAnalyzer
 
 		private void OnFileFilterChanged( object sender, EventArgs e )
 		{
-			throw new NotImplementedException();
 		}
 
 		protected override void StartImpl()
