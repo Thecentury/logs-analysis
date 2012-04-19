@@ -66,7 +66,8 @@ namespace LogAnalyzer
 			}
 			set
 			{
-				throw new NotSupportedException();
+				cacheReadStream.Position = value;
+				remoteStream.Position = value;
 			}
 		}
 

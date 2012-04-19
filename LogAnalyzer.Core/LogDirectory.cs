@@ -316,6 +316,13 @@ namespace LogAnalyzer
 				{
 					IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
 
+					string fileName = IOPath.GetFileNameWithoutExtension( file.Name );
+					if ( !_fileNameFilter.Include( fileName ) )
+					{
+						Logger.WriteInfo( "AddFile: Excluded file '{0}' by its name.", fullPath );
+						return;
+					}
+
 					bool exclude = !_fileFilter.Include( file );
 					if ( exclude )
 					{
