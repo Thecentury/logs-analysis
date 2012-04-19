@@ -34,6 +34,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 			Register<TextContains>();
 			Register<GetProperty>();
 			Register<FileNameFilterBase>();
+			Register<DirectoryNameEqualsFilterBase>();
 			Register<MessageTypeEquals>();
 		}
 

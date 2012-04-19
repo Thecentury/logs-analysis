@@ -15,7 +15,7 @@ namespace LogAnalyzer.Filters
 			set { Set( "FileName", value ); }
 		}
 
-		public override Type GetResultType( ParameterExpression target )
+		public sealed override Type GetResultType( ParameterExpression target )
 		{
 			return typeof( bool );
 		}
@@ -43,7 +43,7 @@ namespace LogAnalyzer.Filters
 				);
 		}
 	}
-	
+
 	public sealed class FileNameEquals : FileNameFilterBase
 	{
 		public FileNameEquals() { }

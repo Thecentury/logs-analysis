@@ -110,6 +110,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableExtensions.cs" />
     <Compile Include="Filters\BooleanCollectionBuilder.cs" />
+    <Compile Include="Filters\DirectoryNameEquals.cs" />
     <Compile Include="Filters\FileFilters\ExcludeFilesByCleanedNameFilter.cs" />
     <Compile Include="Filters\FileFilters\ExcludeFilesByNameFilter.cs" />
     <Compile Include="Filters\FileFilters\FilesByNameFilterBase.cs" />
@@ -117,11 +118,16 @@
     <Compile Include="Filters\FileFilters\IncludeFilesByNameFilter.cs" />
     <Compile Include="Filters\FileFilters\ExcludePreviousDaysFileFilter.cs" />
     <Compile Include="Filters\FileFilters\SizeLessThanFilter.cs" />
+    <Compile Include="Filters\FileNameEquals.cs" />
     <Compile Include="Filters\FilterTargetAttribute.cs" />
     <Compile Include="Filters\FluentFilterExtensions.cs" />
     <Compile Include="Filters\IconAttribute.cs" />
     <Compile Include="Filters\LogDateTimeBuilders.cs" />
+    <Compile Include="Filters\MessageTypeEquals.cs" />
     <Compile Include="Filters\RegexMatchesFilterBuilder.cs" />
+    <Compile Include="Filters\TextContains.cs" />
+    <Compile Include="Filters\TextMatchesRegex.cs" />
+    <Compile Include="Filters\ThreadIdEquals.cs" />
     <Compile Include="Filters\VerbatimExpressionBuilder.cs" />
     <Compile Include="Collections\IBidirectionalEnumerable.cs" />
     <Compile Include="Collections\IBidirectionalEnumerator.cs" />
@@ -217,7 +223,6 @@
     <Compile Include="Filters\IgnoreBuilderAttribute.cs" />
     <Compile Include="Filters\IOverridePropertyTypeInfo.cs" />
     <Compile Include="Filters\Slot.cs" />
-    <Compile Include="Filters\SpecializedBuilders.cs" />
     <Compile Include="Filters\StaticBuilder.cs" />
     <Compile Include="Filters\StringFilterBuilders.cs" />
     <Compile Include="FixedDatesAcceptor.cs" />

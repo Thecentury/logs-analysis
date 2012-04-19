@@ -22,7 +22,8 @@ namespace LogAnalyzer.GUI.ViewModels.Helpers
 			{"moduleantifraud", "user-thief-baldie"},
 			{"archive", "box"},
 			{"moduleavia", "paper-plane"},
-			{"moduleordermanager", "flask"}
+			{"moduleordermanager", "flask"},
+			{"controllerhandler", "compass"}
 		};
 
 		public static IDictionary<string, string> FileNameToIconMap
