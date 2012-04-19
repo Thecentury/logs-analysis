@@ -54,8 +54,15 @@ namespace LogAnalyzer.App
 
 		private void TaskSchedulerUnobservedTaskException( object sender, UnobservedTaskExceptionEventArgs e )
 		{
-			Logger.WriteLine( MessageType.Error, "AppDomain - Unhandled exception: " + e.Exception );
-			MessageBox.Show( e.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
+			if ( Debugger.IsAttached )
+			{
+				Debugger.Break();
+			}
+
+			Logger.WriteLine( MessageType.Error, "TaskSchdeduler - Unhandled exception: " + e.Exception );
+			MessageBox.Show( e.Exception.ToString(), "Task Scheduler unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
+			
+			e.SetObserved();
 		}
 
 		private LogAnalyzerConfiguration LoadConfig()
