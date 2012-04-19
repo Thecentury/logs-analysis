@@ -316,17 +316,8 @@ namespace LogAnalyzer
 				{
 					IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
 
-					string fileName = IOPath.GetFileNameWithoutExtension( file.Name );
-					if ( !_fileNameFilter.Include( fileName ) )
+					if ( !IncludeFile( fullPath, file ) )
 					{
-						Logger.WriteInfo( "AddFile: Excluded file '{0}' by its name.", fullPath );
-						return;
-					}
-
-					bool exclude = !_fileFilter.Include( file );
-					if ( exclude )
-					{
-						Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
 						return;
 					}
 
@@ -346,6 +337,26 @@ namespace LogAnalyzer
 					Logger.WriteError( "LogDirectory.AddFile(): failed with {0}", exc );
 				}
 			}
+		}
+
+		[Pure]
+		private bool IncludeFile( string fullPath, IFileInfo file )
+		{
+			string fileName = IOPath.GetFileNameWithoutExtension( file.Name );
+			if ( !_fileNameFilter.Include( fileName ) )
+			{
+				Logger.WriteInfo( "AddFile: Excluded file '{0}' by its name.", fullPath );
+				return false;
+			}
+
+			bool exclude = !_fileFilter.Include( file );
+			if ( exclude )
+			{
+				Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
+				return false;
+			}
+
+			return true;
 		}
 
 		private void OnFileDeleted( object sender, FileSystemEventArgs e )
@@ -369,7 +380,7 @@ namespace LogAnalyzer
 				{
 					var changedFile = _files.Single( f => f.FullPath == fullPath );
 
-					if ( !_fileFilter.Include( changedFile.FileInfo ) )
+					if ( !IncludeFile( fullPath, changedFile.FileInfo ) )
 					{
 						return;
 					}
