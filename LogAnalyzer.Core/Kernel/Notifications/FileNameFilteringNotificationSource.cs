@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using LogAnalyzer.Kernel.Notifications;
+using JetBrains.Annotations;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	internal sealed class FileNameFilteringNotificationSource : LogNotificationsSourceBase
 	{
-		private readonly LogNotificationsSourceBase inner;
-		private readonly HashSet<string> fileNames = new HashSet<string>();
+		private readonly LogNotificationsSourceBase _inner;
+		private readonly HashSet<string> _fileNames;
 
 		public FileNameFilteringNotificationSource( LogNotificationsSourceBase inner, IEnumerable<string> fileNames )
 		{
-			if ( inner == null ) throw new ArgumentNullException( "inner" );
-			if ( fileNames == null ) throw new ArgumentNullException( "fileNames" );
+			if ( inner == null )
+			{
+				throw new ArgumentNullException( "inner" );
+			}
+			if ( fileNames == null )
+			{
+				throw new ArgumentNullException( "fileNames" );
+			}
 
-			this.inner = inner;
-			this.fileNames = new HashSet<string>( fileNames );
+			this._inner = inner;
+			this._fileNames = new HashSet<string>( fileNames );
 
 			CreateObservable( "Changed" ).Subscribe( RaiseChanged );
 			CreateObservable( "Deleted" ).Subscribe( RaiseChanged );
@@ -30,20 +34,25 @@ namespace LogAnalyzer.Kernel
 		protected override void StartCore()
 		{
 			base.StartCore();
-			inner.Start();
+			_inner.Start();
 		}
 
 		protected override void StopCore()
 		{
-			inner.Stop();
+			_inner.Stop();
 			base.StopCore();
+		}
+
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			yield return _inner;
 		}
 
 		private IObservable<FileSystemEventArgs> CreateObservable( string eventName )
 		{
-			return Observable.FromEventPattern<FileSystemEventArgs>( inner, eventName )
+			return Observable.FromEventPattern<FileSystemEventArgs>( _inner, eventName )
 				.Select( e => e.EventArgs )
-				.Where( e => fileNames.Contains( e.FullPath ) );
+				.Where( e => _fileNames.Contains( e.FullPath ) );
 		}
 	}
 }

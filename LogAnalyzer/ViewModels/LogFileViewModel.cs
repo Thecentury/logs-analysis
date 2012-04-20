@@ -5,6 +5,7 @@ using LogAnalyzer.Extensions;
 using System.Windows.Input;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.OverviewGui;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -37,20 +38,17 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Commands
 
-		private DelegateCommand<RoutedEventArgs> selectFileCommand;
+		private DelegateCommand<RoutedEventArgs> _selectFileCommand;
 		public ICommand SelectFileCommand
 		{
 			get
 			{
-				if ( selectFileCommand == null )
+				if ( _selectFileCommand == null )
 				{
-					selectFileCommand = new DelegateCommand<RoutedEventArgs>( _ =>
-					{
-						WindowsInterop.SelectInExplorer( _logFile.FullPath );
-					} );
+					_selectFileCommand = new DelegateCommand<RoutedEventArgs>( _ => WindowsInterop.SelectInExplorer( _logFile.FullPath ));
 				}
 
-				return selectFileCommand;
+				return _selectFileCommand;
 			}
 		}
 
@@ -70,6 +68,11 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected override void AddLogFileOverview( IList<IOverviewViewModel> overviewsList )
 		{
 			// do nothing
+		}
+
+		protected override LogNotificationsSourceBase GetNotificationSource()
+		{
+			return _logFile.ParentDirectory.NotificationsSource;
 		}
 
 		protected internal override LogFileViewModel GetFileViewModel( LogEntry logEntry )

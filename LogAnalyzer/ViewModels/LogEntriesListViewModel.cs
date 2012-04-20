@@ -20,6 +20,7 @@ using LogAnalyzer.GUI.OverviewGui;
 using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.Extensions;
+using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
 using Microsoft.Research.DynamicDataDisplay.Charts;
@@ -159,7 +160,7 @@ namespace LogAnalyzer.GUI.ViewModels
 					}
 					else
 					{
-						format = @"d\d\ h\h"; 
+						format = @"d\d\ h\h";
 					}
 
 					if ( delta.TotalDays < 0 )
@@ -665,26 +666,42 @@ namespace LogAnalyzer.GUI.ViewModels
 			collection.Add( new ToolBarItemViewModel( "Add filter tab", AddFilterTabCommand, MakePackUri( "/Resources/funnel--plus.png" ) ) );
 			collection.Add( new ToolBarItemViewModel( "Save entries to file", SaveToFileCommand, MakePackUri( "/Resources/disk.png" ) ) );
 			collection.Add( new ToolBarItemViewModel( "Add highlighting", AddHighlightingCommand, MakePackUri( "/Resources/flag--plus.png" ) ) );
+
+			var notificationSource = GetNotificationSource();
+			if ( notificationSource != null )
+			{
+				collection.Add( new ToolBarItemViewModel( "Force update", CreateForceUpdateCommand( notificationSource ), MakePackUri( "/Resources/arrow-retweet.png" ) ) );
+			}
+		}
+
+		protected virtual LogNotificationsSourceBase GetNotificationSource()
+		{
+			return null;
+		}
+
+		private ICommand CreateForceUpdateCommand( LogNotificationsSourceBase notificationsSource )
+		{
+			return new DelegateCommand( () => notificationsSource.ForceUpdate() );
 		}
 
 		#endregion
 
 		#region StatusBar
 
-		private readonly ObservableCollection<object> statusBarItems = new ObservableCollection<object>();
-		private bool statusBarItemsPopulated;
+		private readonly ObservableCollection<object> _statusBarItems = new ObservableCollection<object>();
+		private bool _statusBarItemsPopulated;
 
 		public ObservableCollection<object> StatusBarItems
 		{
 			get
 			{
-				if ( !statusBarItemsPopulated )
+				if ( !_statusBarItemsPopulated )
 				{
-					PopulateStatusBarItems( statusBarItems );
-					statusBarItemsPopulated = true;
+					PopulateStatusBarItems( _statusBarItems );
+					_statusBarItemsPopulated = true;
 				}
 
-				return statusBarItems;
+				return _statusBarItems;
 			}
 		}
 

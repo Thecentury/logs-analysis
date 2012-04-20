@@ -61,5 +61,10 @@ namespace LogAnalyzer.Kernel.Notifications
 		{
 			base.StopCore();
 		}
+
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			yield return _inner;
+		}
 	}
 }

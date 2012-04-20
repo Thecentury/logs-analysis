@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using JetBrains.Annotations;
@@ -104,6 +105,11 @@ namespace LogAnalyzer.Kernel.Notifications
 			{
 				_changesStorage.AddEvent( e );
 			}
+		}
+
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			yield return _inner;
 		}
 	}
 }

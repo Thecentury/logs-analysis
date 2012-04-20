@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Properties;
@@ -38,6 +40,11 @@ namespace LogAnalyzer.Kernel.Notifications
 		{
 			_inner.Stop();
 			base.StopCore();
+		}
+
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			yield return _inner;
 		}
 
 		private IObservable<FileSystemEventArgs> CreateDelayed( string eventName )

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace LogAnalyzer.Kernel.Notifications
@@ -40,6 +41,14 @@ namespace LogAnalyzer.Kernel.Notifications
 			_child.Stop();
 
 			base.StopCore();
+		}
+
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			if ( _child != null )
+			{
+				yield return _child;
+			}
 		}
 	}
 }
