@@ -30,7 +30,7 @@ namespace LogAnalyzer.Kernel
 			Logger = logDirectory.Config.Logger;
 			Encoding = logDirectory.Encoding;
 			ParentLogFile = logFile;
-			GlobalEntriesFilter = logDirectory.GlobalEntriesFilter;
+			GlobalEntriesFilter = logDirectory.EntriesFilter;
 			LineParser = logDirectory.LineParser;
 		}
 

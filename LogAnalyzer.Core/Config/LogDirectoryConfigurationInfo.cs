@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Filters;
 using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Config
@@ -44,6 +46,7 @@ namespace LogAnalyzer.Config
 		}
 
 		public string DisplayName { get; set; }
+
 		private string _encodingName = "windows-1251";
 		public string EncodingName
 		{
@@ -71,6 +74,7 @@ namespace LogAnalyzer.Config
 			get { return _predefinedFiles; }
 		}
 
+		[DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
 		public ILogLineParser LineParser { get; set; }
 
 		private bool _notificationsEnabledAtStart = true;
@@ -85,6 +89,27 @@ namespace LogAnalyzer.Config
 		{
 			get { return _pollingIntervalMillisecods; }
 			set { _pollingIntervalMillisecods = value; }
+		}
+
+		private ExpressionBuilder _logEntriesFilter = new AlwaysTrue();
+		public ExpressionBuilder LogEntriesFilter
+		{
+			get { return _logEntriesFilter; }
+			set { _logEntriesFilter = value; }
+		}
+
+		private ExpressionBuilder _filesFilter = new AlwaysTrue();
+		public ExpressionBuilder FilesFilter
+		{
+			get { return _filesFilter; }
+			set { _filesFilter = value; }
+		}
+
+		private ExpressionBuilder _fileNamesFilter = new AlwaysTrue();
+		public ExpressionBuilder FileNamesFilter
+		{
+			get { return _fileNamesFilter; }
+			set { _fileNamesFilter = value; }
 		}
 	}
 }
