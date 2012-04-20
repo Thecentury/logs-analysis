@@ -90,7 +90,7 @@ namespace LogAnalyzer.Config
 			get { return _globalEntryFilter; }
 		}
 
-		public ExpressionBuilder GlobalLogEntityFilterBuilder
+		public ExpressionBuilder GlobalLogEntryFilterBuilder
 		{
 			get { return _globalEntryFilter.ExpressionBuilder; }
 			set { _globalEntryFilter.ExpressionBuilder = value; }
