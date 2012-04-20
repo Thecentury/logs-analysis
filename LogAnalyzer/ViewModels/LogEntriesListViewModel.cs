@@ -237,49 +237,49 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Dynamic highlighting
 
-		private IFilter<LogEntry> dynamicHighlightingFilter;
+		private IFilter<LogEntry> _dynamicHighlightingFilter;
 
-		private string highlightedPropertyName;
+		private string _highlightedPropertyName;
 
 		public IFilter<LogEntry> DynamicHighlightingFilter
 		{
-			get { return dynamicHighlightingFilter; }
+			get { return _dynamicHighlightingFilter; }
 			set
 			{
-				if ( dynamicHighlightingFilter == value )
+				if ( _dynamicHighlightingFilter == value )
 					return;
 
-				dynamicHighlightingFilter = value;
+				_dynamicHighlightingFilter = value;
 				RaisePropertyChanged( "DynamicHighlightingFilter" );
 			}
 		}
 
 		public string HighlightedPropertyName
 		{
-			get { return highlightedPropertyName; }
+			get { return _highlightedPropertyName; }
 			set
 			{
-				if ( highlightedPropertyName == value )
+				if ( _highlightedPropertyName == value )
 					return;
 
-				highlightedPropertyName = value;
+				_highlightedPropertyName = value;
 				RaisePropertyChanged( "HighlightedPropertyName" );
 			}
 		}
 
 		public void UpdateDynamicHighlighting()
 		{
-			if ( dynamicHighlightingFilter == null )
+			if ( _dynamicHighlightingFilter == null )
 				return;
-			if ( highlightedPropertyName == null )
+			if ( _highlightedPropertyName == null )
 				return;
 
 			foreach ( LogEntryViewModel logEntryViewModel in _logEntriesViewModels.CreatedEntries )
 			{
-				bool include = dynamicHighlightingFilter.Include( logEntryViewModel.LogEntry );
+				bool include = _dynamicHighlightingFilter.Include( logEntryViewModel.LogEntry );
 
 				logEntryViewModel.IsDynamicHighlighted = include;
-				logEntryViewModel.HighlightedColumnName = include ? highlightedPropertyName : null;
+				logEntryViewModel.HighlightedColumnName = include ? _highlightedPropertyName : null;
 			}
 		}
 
@@ -770,6 +770,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnLogEntryViewModelCreated( LogEntryViewModel createdViewModel )
 		{
 			UpdateDynamicHighlighting();
+			UpdateTimeDelta();
 		}
 
 		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
@@ -780,6 +781,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected virtual void OnLogEntryViewModelRemoved( LogEntryViewModel removedViewModel )
 		{
 			UpdateDynamicHighlighting();
+			UpdateTimeDelta();
 		}
 
 		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
