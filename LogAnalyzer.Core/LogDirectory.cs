@@ -40,9 +40,15 @@ namespace LogAnalyzer
 
 		private readonly LogAnalyzerConfiguration _config;
 		private readonly LogAnalyzerCore _core;
-		private readonly ExpressionFilter<IFileInfo> _fileFilter;
-		private readonly IFilter<LogEntry> _globalEntriesFilter;
-		private readonly IFilter<string> _fileNameFilter;
+
+		private readonly ExpressionFilter<LogEntry> _entriesFilter;
+
+		private readonly ExpressionFilter<IFileInfo> _globalFileFilter;
+		private readonly ExpressionFilter<string> _globalFileNameFilter;
+
+		private readonly ExpressionFilter<IFileInfo> _localFileFilter;
+		private readonly ExpressionFilter<string> _localFileNameFilter;
+
 		private readonly Encoding _encoding = Encoding.Unicode;
 		private readonly ILogLineParser _lineParser;
 
@@ -56,14 +62,14 @@ namespace LogAnalyzer
 			get { return _notificationsSource; }
 		}
 
-		public IFilter<LogEntry> GlobalEntriesFilter
+		public IFilter<LogEntry> EntriesFilter
 		{
-			get { return _globalEntriesFilter; }
+			get { return _entriesFilter; }
 		}
 
-		public ExpressionFilter<IFileInfo> FileFilter
+		public IFilter<IFileInfo> FileFilter
 		{
-			get { return _fileFilter; }
+			get { return _globalFileFilter; }
 		}
 
 		public LogAnalyzerConfiguration Config
@@ -89,12 +95,12 @@ namespace LogAnalyzer
 		public string DisplayName { get; private set; }
 		public bool UseCache { get; private set; }
 
-		public LogDirectory( [NotNull]LogDirectoryConfigurationInfo directoryConfigurationInfo, [NotNull]LogAnalyzerConfiguration config,
+		public LogDirectory( [NotNull]LogDirectoryConfigurationInfo directoryCfg, [NotNull]LogAnalyzerConfiguration config,
 			[NotNull]IEnvironment environment, [NotNull]LogAnalyzerCore core )
 			: base( environment, config.Logger )
 		{
-			if ( directoryConfigurationInfo == null )
-				throw new ArgumentNullException( "directoryConfigurationInfo" );
+			if ( directoryCfg == null )
+				throw new ArgumentNullException( "directoryCfg" );
 			if ( config == null )
 				throw new ArgumentNullException( "config" );
 			if ( environment == null )
@@ -102,10 +108,10 @@ namespace LogAnalyzer
 			if ( core == null )
 				throw new ArgumentNullException( "core" );
 
-			this._directoryConfig = directoryConfigurationInfo;
-			this.Path = directoryConfigurationInfo.Path;
-			this.DisplayName = directoryConfigurationInfo.DisplayName;
-			this.UseCache = directoryConfigurationInfo.UseCache;
+			this._directoryConfig = directoryCfg;
+			this.Path = directoryCfg.Path;
+			this.DisplayName = directoryCfg.DisplayName;
+			this.UseCache = directoryCfg.UseCache;
 
 			this._directoryInfo = environment.GetDirectory( Path );
 			this._notificationsSource = _directoryInfo.NotificationSource;
@@ -114,12 +120,19 @@ namespace LogAnalyzer
 			this._config = config;
 			this._core = core;
 			this._filesWrapper = new ObservableList<LogFile>( _files );
-			this._globalEntriesFilter = config.GlobalLogEntryFilter;
-			this._lineParser = directoryConfigurationInfo.LineParser ?? new ManualLogLineParser();
-			this._fileFilter = config.GlobalFilesFilter;
-			this._fileNameFilter = config.GlobalFileNamesFilter;
+			this._lineParser = directoryCfg.LineParser ?? new ManualLogLineParser();
 
-			_fileFilter.Changed += OnFileFilterChanged;
+			this._entriesFilter = new ExpressionFilter<LogEntry>( 
+				new And( 
+					config.GlobalLogEntryFilter.ExpressionBuilder, 
+					directoryCfg.LogEntriesFilter ?? new AlwaysTrue() ) );
+
+			this._globalFileFilter = config.GlobalFilesFilter;
+			this._globalFileNameFilter = config.GlobalFileNamesFilter;
+			this._localFileFilter = new ExpressionFilter<IFileInfo>( directoryCfg.FilesFilter ?? new AlwaysTrue() );
+			this._localFileNameFilter = new ExpressionFilter<string>( directoryCfg.FileNamesFilter ?? new AlwaysTrue() );
+
+			_globalFileFilter.Changed += OnFileFilterChanged;
 
 			_notificationsSource.Changed += OnFileChanged;
 			_notificationsSource.Created += OnFileCreated;
@@ -127,9 +140,9 @@ namespace LogAnalyzer
 			_notificationsSource.Error += OnWatcherError;
 			_notificationsSource.Renamed += OnFileRenamed;
 
-			if ( !String.IsNullOrWhiteSpace( directoryConfigurationInfo.EncodingName ) )
+			if ( !String.IsNullOrWhiteSpace( directoryCfg.EncodingName ) )
 			{
-				this._encoding = Encoding.GetEncoding( directoryConfigurationInfo.EncodingName );
+				this._encoding = Encoding.GetEncoding( directoryCfg.EncodingName );
 			}
 		}
 
@@ -145,7 +158,8 @@ namespace LogAnalyzer
 
 													var filesInDirectory = (from path in dir.EnumerateFileNames()
 																			let fileName = IOPath.GetFileNameWithoutExtension( path )
-																			where _fileNameFilter.Include( fileName )
+																			where _globalFileNameFilter.Include( fileName )
+																			where _localFileNameFilter.Include( fileName )
 																			let file = dir.GetFileInfo( path )
 																			select file).ToList();
 
@@ -184,7 +198,7 @@ namespace LogAnalyzer
 			{
 				file.Refresh();
 
-				if ( !_fileFilter.Include( file ) )
+				if ( !_globalFileFilter.Include( file ) )
 				{
 					continue;
 				}
@@ -314,9 +328,8 @@ namespace LogAnalyzer
 			{
 				try
 				{
-					IFileInfo file = _directoryInfo.GetFileInfo( fullPath );
-
-					if ( !IncludeFile( fullPath, file ) )
+					IFileInfo file = null;
+					if ( !IncludeFile( fullPath, ref file ) )
 					{
 						return;
 					}
@@ -340,19 +353,35 @@ namespace LogAnalyzer
 		}
 
 		[Pure]
-		private bool IncludeFile( string fullPath, IFileInfo file )
+		private bool IncludeFile( string fullPath, ref IFileInfo file )
 		{
-			string fileName = IOPath.GetFileNameWithoutExtension( file.Name );
-			if ( !_fileNameFilter.Include( fileName ) )
+			string fileName = IOPath.GetFileNameWithoutExtension( fullPath );
+			if ( !_globalFileNameFilter.Include( fileName ) )
 			{
-				Logger.WriteInfo( "AddFile: Excluded file '{0}' by its name.", fullPath );
+				Logger.WriteInfo( "AddFile: Excluded file '{0}' by global filter by its name", fullPath );
 				return false;
 			}
 
-			bool exclude = !_fileFilter.Include( file );
-			if ( exclude )
+			if ( !_localFileNameFilter.Include( fileName ) )
 			{
-				Logger.WriteInfo( "AddFile: Excluded file '{0}'", fullPath );
+				Logger.WriteInfo( "AddFile: Excluded file '{0}' by local filter by its name", fullPath );
+				return false;
+			}
+
+			if ( file == null )
+			{
+				file = _directoryInfo.GetFileInfo( fullPath );
+			}
+
+			if ( !_globalFileFilter.Include( file ) )
+			{
+				Logger.WriteInfo( "AddFile: Excluded file '{0}' by global filter", fullPath );
+				return false;
+			}
+
+			if ( !_localFileFilter.Include( file ) )
+			{
+				Logger.WriteInfo( "AddFile: Excluded file '{0}' by local filter", fullPath );
 				return false;
 			}
 
@@ -379,8 +408,9 @@ namespace LogAnalyzer
 				else
 				{
 					var changedFile = _files.Single( f => f.FullPath == fullPath );
+					var fileInfo = changedFile.FileInfo;
 
-					if ( !IncludeFile( fullPath, changedFile.FileInfo ) )
+					if ( !IncludeFile( fullPath, ref fileInfo ) )
 					{
 						return;
 					}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Filters
@@ -29,6 +30,16 @@ namespace LogAnalyzer.Filters
 		public ExpressionFilter()
 		{
 			Recompile();
+		}
+
+		public ExpressionFilter( [NotNull] ExpressionBuilder builder )
+		{
+			if ( builder == null )
+			{
+				throw new ArgumentNullException( "builder" );
+			}
+
+			ExpressionBuilder = builder;
 		}
 
 		private void Recompile()
