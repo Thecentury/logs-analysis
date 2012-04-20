@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Windows.Markup;
+using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Filters
 {
@@ -19,28 +20,17 @@ namespace LogAnalyzer.Filters
 		{
 			return typeof( bool );
 		}
-
-		protected Expression CreateGetParentDirectoryDisplayNameExpression( ParameterExpression parameter )
-		{
-			return
-				Expression.Property(
-					Expression.Property(
-						Expression.Property(
-							parameter,
-							"ParentLogFile" ),
-						"ParentDirectory" ),
-					"DisplayName" );
-		}
 	}
 
 	public sealed class DirectoryNameEquals : DirectoryNameEqualsFilterBase
 	{
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			return Expression.Equal(
-				CreateGetParentDirectoryDisplayNameExpression( parameterExpression ),
-				Expression.Constant( DirectoryName, typeof( string ) )
-				);
+			string directoryName = DirectoryName;
+			Expression<Func<LogEntry, bool>> expression =
+				entry => entry.ParentLogFile.ParentDirectory.DisplayName == directoryName;
+
+			return expression.ReplaceParameter( parameterExpression );
 		}
 	}
 
@@ -48,12 +38,11 @@ namespace LogAnalyzer.Filters
 	{
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			return
-				Expression.Not(
-					Expression.Equal(
-						CreateGetParentDirectoryDisplayNameExpression( parameterExpression ),
-						Expression.Constant( DirectoryName, typeof( string ) )
-						) );
+			string directoryName = DirectoryName;
+			Expression<Func<LogEntry, bool>> expression =
+				entry => entry.ParentLogFile.ParentDirectory.DisplayName != directoryName;
+
+			return expression.ReplaceParameter( parameterExpression );
 		}
 	}
 }

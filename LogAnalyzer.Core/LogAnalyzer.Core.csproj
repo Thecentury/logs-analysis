@@ -103,6 +103,8 @@
     <Compile Include="ColorOverviews\ThreadOverviewBuilder.cs" />
     <Compile Include="ColorOverviews\TimeOverviewCollectorBase.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
+    <Compile Include="Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Filters\ParameterReplaceExpressionVisitor.cs" />
     <Compile Include="DefaultLogEntryFormatter.cs" />
     <Compile Include="Extensions\DispatcherHelper.cs" />
     <Compile Include="Extensions\IDependencyInjectionContainerExtensions.cs" />
