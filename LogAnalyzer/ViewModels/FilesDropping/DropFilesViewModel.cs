@@ -196,6 +196,11 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 			var newProject = LogAnalyzerConfiguration.LoadFromFile( path );
 
+			config.DefaultEncodingName = newProject.DefaultEncodingName;
+			config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
+			config.GlobalFilesFilterBuilder = newProject.GlobalFilesFilterBuilder;
+			config.GlobalLogEntryFilterBuilder = newProject.GlobalLogEntryFilterBuilder;
+
 			var dispatcherScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 			var loadDirectoryTasks =
 				newProject.Directories.Select( d => CreateAndAddDirectory( d, config, dispatcherScheduler ) ).ToArray();
@@ -213,11 +218,6 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 					}
 					else
 					{
-						config.DefaultEncodingName = newProject.DefaultEncodingName;
-						config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
-						config.GlobalFilesFilterBuilder = newProject.GlobalFilesFilterBuilder;
-						config.GlobalLogEntityFilterBuilder = newProject.GlobalLogEntityFilterBuilder;
-
 						unitedCompletion.SetResult( 0 );
 					}
 				}, CancellationToken.None, TaskContinuationOptions.None, dispatcherScheduler );
