@@ -22,6 +22,11 @@ namespace LogAnalyzer.Kernel.Notifications
 			}
 		}
 
+		protected override IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			return _children;
+		}
+
 		protected override void StartCore()
 		{
 			base.StartCore();

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels.Collections;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -146,6 +147,11 @@ namespace LogAnalyzer.GUI.ViewModels
 			collection.Insert( 1, _notificationsEnabledToggleButton );
 		}
 
+		protected override LogNotificationsSourceBase GetNotificationSource()
+		{
+			return _directory.NotificationsSource;
+		}
+
 		protected override void PopulateStatusBarItems( ICollection<object> collection )
 		{
 			base.PopulateStatusBarItems( collection );
@@ -158,20 +164,17 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Commands
 
-		private DelegateCommand<RoutedEventArgs> openFolderCommand;
+		private DelegateCommand<RoutedEventArgs> _openFolderCommand;
 		public ICommand OpenFolderCommand
 		{
 			get
 			{
-				if ( openFolderCommand == null )
+				if ( _openFolderCommand == null )
 				{
-					openFolderCommand = new DelegateCommand<RoutedEventArgs>( _ =>
-					{
-						WindowsInterop.SelectInExplorer( _directory.Path );
-					} );
+					_openFolderCommand = new DelegateCommand<RoutedEventArgs>( _ => WindowsInterop.SelectInExplorer( _directory.Path ));
 				}
 
-				return openFolderCommand;
+				return _openFolderCommand;
 			}
 		}
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.Kernel.Notifications;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -74,6 +75,12 @@ namespace LogAnalyzer.GUI.ViewModels
 					value => _directories.ForEach( d => d.IsNotificationSourceEnabled = value ),
 					"Toggle file updates notification",
 					PackUriHelper.MakePackUri( "/Resources/control-record.png" ) ) );
+		}
+
+		protected override LogNotificationsSourceBase GetNotificationSource()
+		{
+			CompositeLogNotificationsSource composite = new CompositeLogNotificationsSource( _directories.Select( d => d.LogDirectory.NotificationsSource ) );
+			return composite;
 		}
 
 		public override string Header

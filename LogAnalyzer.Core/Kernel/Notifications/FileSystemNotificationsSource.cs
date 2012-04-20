@@ -1,39 +1,40 @@
 ﻿using System;
 using System.IO;
-using LogAnalyzer.Kernel.Notifications;
 
-namespace LogAnalyzer.Kernel
+namespace LogAnalyzer.Kernel.Notifications
 {
 	public sealed class FileSystemNotificationsSource : LogNotificationsSourceBase
 	{
-		private readonly FileSystemWatcher watcher;
+		private readonly FileSystemWatcher _watcher;
 
 		public FileSystemNotificationsSource( string logsPath, string filesFilter, NotifyFilters notifyFilters, bool includeSubdirectories )
 		{
 			if ( !Directory.Exists( logsPath ) )
-				throw new InvalidOperationException( string.Format( "Directory '{0}' doesn't exist.", logsPath ) );
+			{
+				throw new InvalidOperationException( String.Format( "Directory '{0}' doesn't exist.", logsPath ) );
+			}
 
-			watcher = new FileSystemWatcher( logsPath, filesFilter )
+			_watcher = new FileSystemWatcher( logsPath, filesFilter )
 			{
 				NotifyFilter = notifyFilters,
 				IncludeSubdirectories = includeSubdirectories
 			};
 
-			watcher.Changed += OnFileChanged;
-			watcher.Created += OnFileCreated;
-			watcher.Deleted += OnFileDeleted;
-			watcher.Error += OnError;
-			watcher.Renamed += OnRenamed;
+			_watcher.Changed += OnFileChanged;
+			_watcher.Created += OnFileCreated;
+			_watcher.Deleted += OnFileDeleted;
+			_watcher.Error += OnError;
+			_watcher.Renamed += OnRenamed;
 		}
 
 		protected override void StartCore()
 		{
-			watcher.EnableRaisingEvents = true;
+			_watcher.EnableRaisingEvents = true;
 		}
 
 		protected override void StopCore()
 		{
-			watcher.EnableRaisingEvents = false;
+			_watcher.EnableRaisingEvents = false;
 		}
 
 		private void OnFileChanged( object sender, FileSystemEventArgs e )

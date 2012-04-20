@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ComponentModel;
+using System.Linq;
 using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
@@ -62,7 +64,7 @@ namespace LogAnalyzer.Kernel.Notifications
 			}
 		}
 
-		public void SetIsEnabled(bool value)
+		public void SetIsEnabled( bool value )
 		{
 			if ( value )
 			{
@@ -71,6 +73,20 @@ namespace LogAnalyzer.Kernel.Notifications
 			else
 			{
 				Stop();
+			}
+		}
+
+		protected virtual IEnumerable<LogNotificationsSourceBase> GetChildren()
+		{
+			return Enumerable.Empty<LogNotificationsSourceBase>();
+		}
+
+		public virtual void ForceUpdate()
+		{
+			var children = GetChildren();
+			foreach ( var child in children )
+			{
+				child.ForceUpdate();
 			}
 		}
 

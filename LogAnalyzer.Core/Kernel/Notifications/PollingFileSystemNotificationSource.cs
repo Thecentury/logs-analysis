@@ -66,6 +66,11 @@ namespace LogAnalyzer.Kernel.Notifications
 
 		private void OnTimerElapsed( object sender, ElapsedEventArgs e )
 		{
+			ForceUpdate();
+		}
+
+		public override void ForceUpdate()
+		{
 			Logger.Instance.DebugWriteVerbose( "PollingFileSystemBotificationSource.OnTimerElapsed()" );
 
 			_timer.Stop();
@@ -81,7 +86,7 @@ namespace LogAnalyzer.Kernel.Notifications
 				foreach ( var fullPath in added )
 				{
 					RaiseCreated( new FileSystemEventArgs( WatcherChangeTypes.Created,
-						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
+														 Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
 
 					_files.Add( new FileInfo( fullPath ) );
 				}
@@ -90,7 +95,7 @@ namespace LogAnalyzer.Kernel.Notifications
 				foreach ( var fullPath in deleted )
 				{
 					RaiseDeleted( new FileSystemEventArgs( WatcherChangeTypes.Deleted,
-						Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
+														 Path.GetDirectoryName( fullPath ), Path.GetFileName( fullPath ) ) );
 
 					_files.RemoveWhere( f => f.FullName == fullPath );
 				}
@@ -109,7 +114,8 @@ namespace LogAnalyzer.Kernel.Notifications
 
 												if ( currentLength != prevLength )
 												{
-													RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, _logsPath, fileInfo.Name ) );
+													RaiseChanged( new FileSystemEventArgs( WatcherChangeTypes.Changed, _logsPath,
+																						 fileInfo.Name ) );
 												}
 											} );
 
