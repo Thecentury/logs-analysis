@@ -748,7 +748,9 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected void Init( IList<LogEntry> entries )
 		{
 			if ( entries == null )
+			{
 				throw new ArgumentNullException( "entries" );
+			}
 
 			this._entries = entries;
 

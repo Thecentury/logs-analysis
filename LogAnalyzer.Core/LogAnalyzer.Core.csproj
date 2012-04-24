@@ -104,6 +104,7 @@
     <Compile Include="ColorOverviews\TimeOverviewCollectorBase.cs" />
     <Compile Include="Config\LogDirectoryConfigurationInfo.FluentApi.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Filters\GetDateByFileNameBuilder.cs" />
     <Compile Include="Filters\ParameterReplaceExpressionVisitor.cs" />
     <Compile Include="DefaultLogEntryFormatter.cs" />
     <Compile Include="Extensions\DispatcherHelper.cs" />

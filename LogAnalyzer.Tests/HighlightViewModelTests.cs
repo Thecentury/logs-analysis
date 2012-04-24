@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -57,7 +58,6 @@ namespace LogAnalyzer.Tests
 			core.Start();
 			core.WaitForLoaded();
 
-
 			_appViewModel = new ApplicationViewModel( _config, env );
 			_coreViewModel = new CoreViewModel( core, _appViewModel );
 		}
@@ -79,8 +79,18 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestRemoveHighlightingCommand()
 		{
+			INotifyCollectionChanged observableCollection =
+				_coreViewModel.EntriesView.SourceCollection as INotifyCollectionChanged;
+
+			ManualResetEventSlim entryAddedAwaiter = new ManualResetEventSlim();
+			observableCollection.ToNotifyCollectionChangedObservable().Subscribe( e =>
+				{
+					entryAddedAwaiter.Set();
+				} );
+
 			_file1.WriteInfo( "Message 1" );
-			Thread.Sleep( 100 );
+
+			entryAddedAwaiter.Wait();
 
 			HighlightingViewModel highlightingViewModel = new HighlightingViewModel( _coreViewModel, new AlwaysTrue() );
 			_coreViewModel.HighlightingFilters.Add( highlightingViewModel );

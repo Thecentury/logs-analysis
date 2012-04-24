@@ -175,8 +175,10 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 					}
 				}
 
-				Task[] tasksArray = tasks.ToArray();
-				Task.Factory.ContinueWhenAll( tasksArray, tt =>
+				if ( tasks.Count > 0 )
+				{
+					Task[] tasksArray = tasks.ToArray();
+					Task.Factory.ContinueWhenAll( tasksArray, tt =>
 					{
 						foreach ( var task in tt )
 						{
@@ -187,6 +189,11 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 						}
 						IsEnabled = true;
 					} );
+				}
+				else
+				{
+					IsEnabled = true;
+				}
 			}
 		}
 
@@ -229,7 +236,15 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		{
 			if ( uiScheduler == null )
 			{
-				uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+				SynchronizationContext ctx = SynchronizationContext.Current;
+				if ( ctx != null )
+				{
+					uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+				}
+				else
+				{
+					uiScheduler = TaskScheduler.Default;
+				}
 			}
 
 			var config = ApplicationViewModel.Config;
@@ -244,7 +259,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		}
 
 		private Task<DroppedDirectoryViewModel> CreateAndAddDirectory( LogDirectoryConfigurationInfo dirConfig,
-																LogAnalyzerConfiguration config, TaskScheduler uiSchdeuler )
+																LogAnalyzerConfiguration config, TaskScheduler uiScheduler )
 		{
 			var dirFactory = config.ResolveNotNull<IDirectoryFactory>();
 			IDirectoryInfo dirInfo = dirFactory.CreateDirectory( dirConfig );
@@ -269,7 +284,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 					_files.Add( droppedDir );
 					return droppedDir;
 				}
-			}, CancellationToken.None, TaskContinuationOptions.None, uiSchdeuler );
+			}, CancellationToken.None, TaskContinuationOptions.None, uiScheduler );
 
 			return task;
 		}

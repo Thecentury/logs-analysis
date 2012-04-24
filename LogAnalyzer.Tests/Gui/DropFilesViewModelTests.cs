@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using LogAnalyzer.Config;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.FilesDropping;
@@ -19,9 +22,9 @@ namespace LogAnalyzer.Tests.Gui
 	public class DropFilesViewModelTests
 	{
 		[TestCase( 0, 0, 0, new object[] { "" } )]
-		[TestCase( 1, 0, 1, new object[] { "file1" } )]
-		[TestCase( 2, 0, 2, new object[] { "file1", "file2" } )]
-		[TestCase( 1, 0, 3, new object[] { "file1", "nonExistingFile" } )]
+		[TestCase( 1, 0, 1, new object[] { @"c:\Windows\notepad.exe" } )]
+		[TestCase( 2, 0, 2, new object[] { @"c:\Windows\notepad.exe", @"c:\Windows\explorer.exe" } )]
+		[TestCase( 1, 0, 3, new object[] { @"c:\Windows\notepad.exe", "nonExistingFile" } )]
 		[TestCase( 1, 0, 4, new object[] { @"c:\Users" }, Description = "1 directory" )]
 		public void ExecuteDropCommand( int totalFilesCount, int directoriesCount, int index, params object[] fileNames )
 		{
@@ -33,21 +36,36 @@ namespace LogAnalyzer.Tests.Gui
 
 			var dropViewModel = CreateDropViewModel( config );
 
-			ExpressionAssert.That( dropViewModel, d => d != null );
+			Assert.That( dropViewModel != null );
+			Assert.That( dropViewModel.DropCommand.CanExecute() );
 
-			ExpressionAssert.That( dropViewModel, d => d.DropCommand.CanExecute() );
+			ManualResetEventSlim awaiter = new ManualResetEventSlim();
+			dropViewModel.ToNotifyPropertyChangedObservable()
+				.Where( e => e.EventArgs.PropertyName == "IsEnabled" )
+				.Subscribe( e =>
+				{
+					if ( dropViewModel.IsEnabled )
+					{
+						awaiter.Set();
+					}
+				} );
 
 			DataObject dataObject = new DataObject( "FileDrop", fileNames.Cast<string>().ToArray() );
 			dropViewModel.DropCommand.Execute( dataObject );
 
-			dropViewModel.Assert( dvm => dvm.Files.Count == totalFilesCount );
+			if ( !dropViewModel.IsEnabled )
+			{
+				awaiter.Wait();
+			}
+
+			Assert.That( dropViewModel.Files.Count == totalFilesCount );
 		}
 
 		private static Mock<IFileSystem> CreateFileSystemMock()
 		{
 			Mock<IFileSystem> fileSystemMock = new Mock<IFileSystem>();
-			fileSystemMock.Setup( fs => fs.FileExists( "file1" ) ).Returns( true );
-			fileSystemMock.Setup( fs => fs.FileExists( "file2" ) ).Returns( true );
+			fileSystemMock.Setup( fs => fs.FileExists( @"c:\Windows\notepad.exe" ) ).Returns( true );
+			fileSystemMock.Setup( fs => fs.FileExists( @"c:\Windows\explorer.exe" ) ).Returns( true );
 			fileSystemMock.Setup( fs => fs.DirectoryExists( "dir1" ) ).Returns( true );
 			fileSystemMock.Setup( fs => fs.DirectoryExists( "dir2" ) ).Returns( true );
 			fileSystemMock.Setup( fs => fs.DirectoryExists( @"c:\Users" ) ).Returns( true );
@@ -60,7 +78,7 @@ namespace LogAnalyzer.Tests.Gui
 			LogAnalyzerConfiguration config = new LogAnalyzerConfiguration();
 			var dropViewModel = CreateDropViewModel( config );
 
-			var file = dropViewModel.AddDroppedFile( "SomePath" );
+			var file = dropViewModel.AddDroppedFile( @"c:\Windows\notepad.exe" );
 			ExpressionAssert.That( dropViewModel, d => d.Files.Count == 1 );
 
 			file.RemoveFileCommand.Execute();
@@ -85,7 +103,7 @@ namespace LogAnalyzer.Tests.Gui
 
 			dropViewModel.Assert( d => d.Files.Count == 0 );
 
-			dropViewModel.AddDroppedFile( "SomePath" );
+			dropViewModel.AddDroppedFile( @"c:\Windows\notepad.exe" );
 			dropViewModel.Assert( d => d.Files.Count == 1 );
 
 			dropViewModel.ClearCommand.Execute();
@@ -115,8 +133,9 @@ namespace LogAnalyzer.Tests.Gui
 		public void ExecuteAnalyzeCommandWithFileAndDirectory()
 		{
 			var dropViewModel = CreateDropViewModel();
-			dropViewModel.AddDroppedFile( "SomePath" );
-			dropViewModel.AddDroppedDir( @"c:\Users" );
+			dropViewModel.AddDroppedFile( @"c:\Windows\notepad.exe" );
+			var directoryAddTask = dropViewModel.AddDroppedDir( @"c:\Users" );
+			directoryAddTask.Wait();
 
 			dropViewModel.Assert( d => d.Files.Count == 2 );
 			dropViewModel.Assert( d => d.AnalyzeCommand.CanExecute() );
@@ -140,7 +159,8 @@ namespace LogAnalyzer.Tests.Gui
 		public void ExecuteAnalyzeCommandWithOneDirectory()
 		{
 			var dropVm = CreateDropViewModel();
-			dropVm.AddDroppedDir( @"c:\Users" );
+			var directoryAddTask = dropVm.AddDroppedDir( @"c:\Users" );
+			directoryAddTask.Wait();
 
 			dropVm.AnalyzeCommand.Execute();
 			dropVm.Assert( d => d.ApplicationViewModel.Core.Directories.Count == 1 );

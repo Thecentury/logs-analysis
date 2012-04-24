@@ -53,7 +53,7 @@ namespace LogAnalyzer.Kernel
 			PerformanceCountersService.Increment( _operationsCountCounter );
 
 			var operation = new DelegateOperation( action );
-			_logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), (_operationsQueue.Count + 1) );
+			_logger.WriteVerbose( "Core.EnqueueOperation: +{0}:{1} Count={2}", operation, operation.GetHashCode(), ( _operationsQueue.Count + 1 ) );
 			_operationsQueue.Add( operation );
 
 			Interlocked.Increment( ref _totalOperationsCount );
@@ -123,20 +123,10 @@ namespace LogAnalyzer.Kernel
 
 					_logger.WriteError( "WorkerThreadOperationQueue.MainThreadProcedure: Exc = " + exceptionMessage );
 
-					bool shouldRethrow = ShouldRethrow( exc );
-					if ( shouldRethrow )
-					{
-						Condition.BreakIfAttached();
-						throw;
-					}
+					Condition.BreakIfAttached();
+					throw;
 				}
 			}
-		}
-
-		private bool ShouldRethrow( Exception exc )
-		{
-			bool shouldRethrow = !(exc is ThreadAbortException);
-			return shouldRethrow;
 		}
 	}
 }
