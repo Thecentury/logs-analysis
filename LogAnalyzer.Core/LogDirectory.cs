@@ -95,18 +95,37 @@ namespace LogAnalyzer
 		public string DisplayName { get; private set; }
 		public bool UseCache { get; private set; }
 
+		private LogDirectory()
+		{
+			_filesWrapper = new ObservableList<LogFile>();
+		}
+
+		internal static LogDirectory CreateEmpty( string displayName )
+		{
+			var logDirectory = new LogDirectory { DisplayName = displayName };
+			return logDirectory;
+		}
+
 		public LogDirectory( [NotNull]LogDirectoryConfigurationInfo directoryCfg, [NotNull]LogAnalyzerConfiguration config,
 			[NotNull]IEnvironment environment, [NotNull]LogAnalyzerCore core )
 			: base( environment, config.Logger )
 		{
 			if ( directoryCfg == null )
+			{
 				throw new ArgumentNullException( "directoryCfg" );
+			}
 			if ( config == null )
+			{
 				throw new ArgumentNullException( "config" );
+			}
 			if ( environment == null )
+			{
 				throw new ArgumentNullException( "environment" );
+			}
 			if ( core == null )
+			{
 				throw new ArgumentNullException( "core" );
+			}
 
 			this._directoryConfig = directoryCfg;
 			this.Path = directoryCfg.Path;
@@ -122,9 +141,9 @@ namespace LogAnalyzer
 			this._filesWrapper = new ObservableList<LogFile>( _files );
 			this._lineParser = directoryCfg.LineParser ?? new ManualLogLineParser();
 
-			this._entriesFilter = new ExpressionFilter<LogEntry>( 
-				new And( 
-					config.GlobalLogEntryFilter.ExpressionBuilder, 
+			this._entriesFilter = new ExpressionFilter<LogEntry>(
+				new And(
+					config.GlobalLogEntryFilter.ExpressionBuilder,
 					directoryCfg.LogEntriesFilter ?? new AlwaysTrue() ) );
 
 			this._globalFileFilter = config.GlobalFilesFilter;
@@ -156,12 +175,12 @@ namespace LogAnalyzer
 												{
 													IDirectoryInfo dir = _environment.GetDirectory( Path );
 
-													var filesInDirectory = (from path in dir.EnumerateFileNames()
-																			let fileName = IOPath.GetFileNameWithoutExtension( path )
-																			where _globalFileNameFilter.Include( fileName )
-																			where _localFileNameFilter.Include( fileName )
-																			let file = dir.GetFileInfo( path )
-																			select file).ToList();
+													var filesInDirectory = ( from path in dir.EnumerateFileNames()
+																			 let fileName = IOPath.GetFileNameWithoutExtension( path )
+																			 where _globalFileNameFilter.Include( fileName )
+																			 where _localFileNameFilter.Include( fileName )
+																			 let file = dir.GetFileInfo( path )
+																			 select file ).ToList();
 
 													BeginLoadFiles( filesInDirectory );
 												} );

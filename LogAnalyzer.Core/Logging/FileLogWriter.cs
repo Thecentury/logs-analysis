@@ -18,10 +18,13 @@ namespace LogAnalyzer.Logging
 			{
 				File.AppendAllLines( FilePath, new[] { logMessage.Message } );
 			}
-			catch ( IOException )
+			catch ( IOException exc )
 			{
 				if ( Debugger.IsAttached )
-					Debugger.Break();
+				{
+					//Debugger.Break();
+					Debug.WriteLine( exc );
+				}
 
 				// todo retry?
 			}
@@ -33,7 +36,9 @@ namespace LogAnalyzer.Logging
 			: this()
 		{
 			if ( String.IsNullOrWhiteSpace( fileName ) )
+			{
 				throw new ArgumentException();
+			}
 
 			string fullPath = Path.GetFullPath( fileName );
 			this.FilePath = fullPath;

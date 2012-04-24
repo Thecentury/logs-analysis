@@ -127,7 +127,20 @@ namespace LogAnalyzer
 		/// <summary>
 		/// Для тестов.
 		/// </summary>
-		internal LogFile() { }
+		private LogFile() { }
+
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		public static LogFile CreateEmpty()
+		{
+			return new LogFile();
+		}
+
+		public static LogFile CreateEmpty( string name )
+		{
+			return new LogFile { Name = name };
+		}
 
 		public LogFile( IFileInfo fileInfo, LogDirectory parentDirectory = null )
 		{

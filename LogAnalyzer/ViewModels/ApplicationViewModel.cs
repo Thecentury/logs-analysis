@@ -55,7 +55,15 @@ namespace LogAnalyzer.GUI.ViewModels
 		/// <summary>
 		/// Для тестов.
 		/// </summary>
-		internal ApplicationViewModel() { }
+		private ApplicationViewModel() { }
+
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		internal static ApplicationViewModel CreateEmpty()
+		{
+			return new ApplicationViewModel();
+		}
 
 		public ApplicationViewModel( [NotNull] LogAnalyzerConfiguration config, [NotNull] IEnvironment environment )
 		{
@@ -275,13 +283,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Files tree
 
-		private CoreTreeItem filesTree;
+		private CoreTreeItem _filesTree;
 		public CoreTreeItem FilesTree
 		{
-			get { return filesTree; }
+			get { return _filesTree; }
 			private set
 			{
-				filesTree = value;
+				_filesTree = value;
 				RaisePropertyChanged( "FilesTree" );
 			}
 		}

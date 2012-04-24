@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using System.Reflection;
 using System.Diagnostics;
@@ -170,7 +171,7 @@ namespace LogAnalyzer.Filters
 
 		protected MethodInfo GetMethod( LambdaExpression expression )
 		{
-			return ((MethodCallExpression)expression.Body).Method;
+			return ( (MethodCallExpression)expression.Body ).Method;
 		}
 
 		protected MethodInfo GetMethod<TResult>( Expression<Func<TResult>> expression )
@@ -203,6 +204,60 @@ namespace LogAnalyzer.Filters
 		public static VerbatimExpressionBuilder<T> Create<T>( T obj, Expression<Func<T, bool>> expression )
 		{
 			return Create( expression );
+		}
+
+		public static ExpressionBuilder CreateOr( [NotNull] params ExpressionBuilder[] children )
+		{
+			return CreateOr( (IEnumerable<ExpressionBuilder>)children );
+		}
+
+		public static ExpressionBuilder CreateOr( [NotNull] IEnumerable<ExpressionBuilder> children )
+		{
+			if ( children == null )
+			{
+				throw new ArgumentNullException( "children" );
+			}
+
+			var childrenList = children.ToList();
+			if ( childrenList.Count == 0 )
+			{
+				throw new ArgumentException( "Children count should be greater than 0." );
+			}
+			if ( childrenList.Count == 1 )
+			{
+				return childrenList[0];
+			}
+			else
+			{
+				return new OrCollection( childrenList );
+			}
+		}
+
+		public static ExpressionBuilder CreateAnd( [NotNull] params ExpressionBuilder[] children )
+		{
+			return CreateAnd( (IEnumerable<ExpressionBuilder>)children );
+		}
+
+		public static ExpressionBuilder CreateAnd( [NotNull] IEnumerable<ExpressionBuilder> children )
+		{
+			if ( children == null )
+			{
+				throw new ArgumentNullException( "children" );
+			}
+
+			var childrenList = children.ToList();
+			if ( childrenList.Count == 0 )
+			{
+				throw new ArgumentException( "Children count should be greater than 0." );
+			}
+			if ( childrenList.Count == 1 )
+			{
+				return childrenList[0];
+			}
+			else
+			{
+				return new AndCollection( childrenList );
+			}
 		}
 
 		public static ExpressionBuilder Parse( string str )
@@ -238,7 +293,7 @@ namespace LogAnalyzer.Filters
 			}
 			catch ( Exception exc )
 			{
-				if ( !(exc is XmlException || exc is XamlObjectWriterException) )
+				if ( !( exc is XmlException || exc is XamlObjectWriterException ) )
 					throw;
 
 				return false;

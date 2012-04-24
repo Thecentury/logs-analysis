@@ -13,9 +13,9 @@ namespace LogAnalyzer.Tests.Gui
 		[Test]
 		public void TestCreateExcludeFileFilter()
 		{
-			ApplicationViewModel applicationViewModel = new ApplicationViewModel();
+			ApplicationViewModel applicationViewModel = ApplicationViewModel.CreateEmpty();
 
-			LogFile file1 = new LogFile();
+			LogFile file1 = LogFile.CreateEmpty();
 			LogEntry entry1 = new LogEntry( file1 );
 			var builder = applicationViewModel.CreateExcludeFileFilter( entry1 );
 			var compiled = builder.BuildLogEntriesFilter();
@@ -23,7 +23,7 @@ namespace LogAnalyzer.Tests.Gui
 			Assert.IsFalse( compiled.Include( entry1 ) );
 			Assert.IsFalse( compiled.Include( new LogEntry( file1 ) ) );
 
-			Assert.IsTrue( compiled.Include( new LogEntry( new LogFile() ) ) );
+			Assert.IsTrue( compiled.Include( new LogEntry( LogFile.CreateEmpty() ) ) );
 		}
 	}
 }

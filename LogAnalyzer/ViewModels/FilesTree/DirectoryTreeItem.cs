@@ -61,7 +61,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 		}
 
-		private void UpdateIsChecked()
+		internal void UpdateIsChecked()
 		{
 			bool allChecked = _files.All( f => f.IsChecked );
 			if ( allChecked )
@@ -78,6 +78,11 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 
 			IsChecked = null;
+		}
+
+		private void OnFilesViewModelsChanged( NotifyCollectionChangedEventArgs e )
+		{
+			UpdateIsChecked();
 		}
 
 		private void OnFilesCollectionChanged( NotifyCollectionChangedEventArgs e )
@@ -99,6 +104,13 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 					_files.Remove( fileModel );
 				}
 			}
+
+			UpdateIsChecked();
+		}
+
+		public LogDirectory LogDirectory
+		{
+			get { return _directory; }
 		}
 
 		public override string Header
@@ -116,7 +128,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			visitor.Visit( this );
 		}
 
-		private bool? _isChecked;
+		private bool? _isChecked = false;
 		public bool? IsChecked
 		{
 			get { return _isChecked; }

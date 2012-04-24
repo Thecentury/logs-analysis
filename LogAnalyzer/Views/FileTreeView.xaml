@@ -64,7 +64,7 @@
 						   Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
 					</Button>
 				</Canvas>
-				
+
 			</StackPanel>
 		</HierarchicalDataTemplate>
 
@@ -94,8 +94,29 @@
 
 	</UserControl.Resources>
 
-	<TreeView ItemsSource="{Binding Directories}" 
-			  ItemContainerStyle="{StaticResource directoryStyle}"
-			  ItemTemplate="{StaticResource directoriesTemplate}"/>
+	<DockPanel LastChildFill="True">
+		<StackPanel 
+			Orientation="Horizontal"
+			DockPanel.Dock="Top">
+			<TextBlock>Files and Folders</TextBlock>
+			<Button Margin="10,0,0,0"
+						Padding="0"
+						Command="{Binding ShowCommand}"
+						ToolTip="Show selected">
+				<Image Stretch="None"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
+			</Button>
+		</StackPanel>
+
+		<TreeView 
+			ItemsSource="{Binding Directories}" 
+			ItemContainerStyle="{StaticResource directoryStyle}"
+			ItemTemplate="{StaticResource directoriesTemplate}"
+			BorderBrush="{x:Null}"
+			BorderThickness="0"
+			/>
+	</DockPanel>
 
 </UserControl>
