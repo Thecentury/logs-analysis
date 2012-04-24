@@ -92,7 +92,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			int actualIndex = AdjustIndex( entry, index );
 
-			var addedItem = GetLogEntryViewModelByIndex( actualIndex, addToCache: true );
+			LogEntryViewModel addedItem = GetLogEntryViewModelByIndex( actualIndex, addToCache: true );
 
 			base.OnCollectionChanged(
 				new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, addedItem, actualIndex ) );
@@ -102,11 +102,15 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		{
 			var compositeList = _logEntries as CompositeObservableListWrapper<LogEntry>;
 			if ( compositeList == null )
+			{
 				return index;
+			}
 
 			int listItemsCount = compositeList.First.Count;
 			if ( index < listItemsCount )
+			{
 				return index;
+			}
 
 			int adjustedIndex = ParallelHelper.SequentialIndexOf( compositeList, entry, 0 );
 
@@ -187,7 +191,8 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return GetEnumerator();
+			IndexerEnumerator<LogEntryViewModel> enumerator = new IndexerEnumerator<LogEntryViewModel>( this );
+			return enumerator;
 		}
 
 		IEnumerator<LogEntryViewModel> IEnumerable<LogEntryViewModel>.GetEnumerator()
@@ -244,7 +249,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public bool IsReadOnly
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		public bool Remove( LogEntryViewModel item )
@@ -282,7 +287,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public bool IsFixedSize
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		public void Remove( object value )
@@ -301,7 +306,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public bool IsSynchronized
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		#endregion

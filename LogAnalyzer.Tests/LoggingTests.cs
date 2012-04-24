@@ -52,6 +52,7 @@ namespace LogAnalyzer.Tests
 		/// Логирование из 2 директорий.
 		/// </summary>
 		[Test]
+		[Timeout( 16000 )]
 		public void TestSeveralDirectories()
 		{
 			logger1.WriteInfo( "1", 1 );
@@ -94,7 +95,7 @@ namespace LogAnalyzer.Tests
 			Assert.AreEqual( 2, core.Directories.Second().MergedEntries.Count );
 		}
 
-		const int messagesCount = 10;
+		const int MessagesCount = 10;
 
 		[Test]
 		public void TestMultiThreadedLogging()
@@ -104,10 +105,10 @@ namespace LogAnalyzer.Tests
 
 			Task.WaitAll( task1, task2 );
 
-			Thread.Sleep( 300 );
+			Thread.Sleep( 3000 );
 
 			core.MergedEntries.AssertIsSorted( LogEntryByDateAndIndexComparer.Instance );
-			Assert.AreEqual( 2 * messagesCount, core.MergedEntries.Count );
+			Assert.AreEqual( 2 * MessagesCount, core.MergedEntries.Count );
 		}
 
 		private Task StartNewLoggingTask( DeterminedTimeLogHelper logger )
@@ -116,7 +117,7 @@ namespace LogAnalyzer.Tests
 			{
 				Random rnd = new Random( logger.GetHashCode() );
 
-				for ( int i = 0; i < messagesCount; i++ )
+				for ( int i = 0; i < MessagesCount; i++ )
 				{
 					logger.WriteInfo( i.ToString(), i );
 					Thread.Sleep( rnd.Next( 50, 150 ) );

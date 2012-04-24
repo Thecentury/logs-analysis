@@ -13,11 +13,11 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal class ExpressionBuilderViewModel : BindingObject
 	{
-		private readonly ParameterExpression parameter;
+		private readonly ParameterExpression _parameter;
 
 		protected ParameterExpression Parameter
 		{
-			get { return parameter; }
+			get { return _parameter; }
 		}
 
 		public ExpressionBuilderViewModel( ExpressionBuilder builder, ParameterExpression parameter )
@@ -28,7 +28,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				throw new ArgumentNullException( "parameter" );
 
 			this._builder = builder;
-			this.parameter = parameter;
+			this._parameter = parameter;
 
 			// todo отписываться
 			builder.PropertyChanged += OnBuilderPropertyChanged;
@@ -41,7 +41,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		protected virtual Type GetResultType()
 		{
-			Type result = _builder.GetResultType( parameter );
+			Type result = _builder.GetResultType( _parameter );
 			return result;
 		}
 
@@ -57,7 +57,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 						.GetBuilders( resultType, typeof( LogEntry ) )
 						.OrderBy( b => b.GetType().Name )
 						.ToArray();
-					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, parameter ) ).ToList();
+					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, _parameter ) ).ToList();
 
 					ReplaceWithSelected();
 				}

@@ -25,6 +25,7 @@ namespace LogAnalyzer.Tests
 			};
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldReadFirst10Entries()
 		{
@@ -64,6 +65,7 @@ namespace LogAnalyzer.Tests
 
 #if !NCRUNCH
 		[Test]
+		[Ignore]
 #endif
 		public void LongLogFileReadingBenchmark()
 		{

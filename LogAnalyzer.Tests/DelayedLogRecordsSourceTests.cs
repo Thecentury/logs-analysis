@@ -41,7 +41,7 @@ namespace LogAnalyzer.Tests
 				.Do( name => Debug.WriteLine( "Called " + name ) )
 				.Subscribe( name => calledTimes[name] = calledTimes[name] + 1 );
 
-			using ( Task task = Task.Factory.StartNew( () =>
+			Task task = Task.Factory.StartNew( () =>
 			{
 				mockSource.RaiseFileChanged( "1" );
 				mockSource.RaiseFileChanged( "1" );
@@ -56,16 +56,16 @@ namespace LogAnalyzer.Tests
 
 				mockSource.RaiseFileChanged( "1" );
 				mockSource.RaiseFileChanged( "1" );
-			} ) )
-			{
-				task.Wait();
-			}
+			} );
+			task.Wait();
 
 			Thread.Sleep( notificationDelay * 4 );
 
 			Assert.AreEqual( 2, calledTimes["1"] );
 			Assert.AreEqual( 1, calledTimes["2"] );
 			Assert.AreEqual( 1, calledTimes["3"] );
+
+			changedEvents.Dispose();
 		}
 	}
 }

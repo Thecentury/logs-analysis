@@ -9,17 +9,17 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class LogDateTimeViewModel : ExpressionBuilderViewModel
 	{
-		private readonly LogDateTimeFilterBase filter;
+		private readonly LogDateTimeFilterBase _filter;
 		public LogDateTimeViewModel( LogDateTimeFilterBase filter, ParameterExpression parameter )
 			: base( filter, parameter )
 		{
-			this.filter = filter;
+			this._filter = filter;
 		}
 
 		public string Time
 		{
-			get { return filter.StringValue; }
-			set { filter.StringValue = value; }
+			get { return _filter.StringValue; }
+			set { _filter.StringValue = value; }
 		}
 	}
 }

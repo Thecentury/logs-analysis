@@ -25,8 +25,14 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 		public DispatcherObservableCollection( IEnumerable collection, IScheduler scheduler )
 		{
-			if ( collection == null ) throw new ArgumentNullException( "collection" );
-			if ( scheduler == null ) throw new ArgumentNullException( "scheduler" );
+			if ( collection == null )
+			{
+				throw new ArgumentNullException( "collection" );
+			}
+			if ( scheduler == null )
+			{
+				throw new ArgumentNullException( "scheduler" );
+			}
 
 			this._collection = collection;
 			this._scheduler = scheduler;

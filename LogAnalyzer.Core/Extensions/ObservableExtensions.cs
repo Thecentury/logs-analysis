@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -77,6 +78,13 @@ namespace LogAnalyzer.Extensions
 			return Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
 				h => collection.CollectionChanged += h,
 				h => collection.CollectionChanged -= h );
+		}
+
+		public static IObservable<EventPattern<PropertyChangedEventArgs>> ToNotifyPropertyChangedObservable( this INotifyPropertyChanged obj)
+		{
+			return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+				h => obj.PropertyChanged += h,
+				h => obj.PropertyChanged -= h );
 		}
 
 		public static IDisposable WaitForCount<T>( this IObservable<T> observable, int times )

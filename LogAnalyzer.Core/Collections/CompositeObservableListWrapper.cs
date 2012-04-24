@@ -33,17 +33,32 @@ namespace LogAnalyzer.Collections
 			get { return _second; }
 		}
 
+		private readonly string _name;
+		public string Name
+		{
+			get { return _name; }
+		}
+
 		private readonly object _syncRoot = new object();
 
-		public CompositeObservableListWrapper( IList<T> first, IList<T> second )
+		public CompositeObservableListWrapper( [NotNull] string name, IList<T> first, IList<T> second )
 		{
+			if ( name == null )
+			{
+				throw new ArgumentNullException( "name" );
+			}
 			if ( first == null )
+			{
 				throw new ArgumentNullException( "first" );
+			}
 			if ( second == null )
+			{
 				throw new ArgumentNullException( "second" );
+			}
 
-			this._first = first;
-			this._second = second;
+			_name = name;
+			_first = first;
+			_second = second;
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
@@ -145,22 +160,26 @@ namespace LogAnalyzer.Collections
 
 		private sealed class CompositeArrayEnumerator<TItem> : IEnumerator<TItem>
 		{
-			private readonly IList<TItem> first;
-			private readonly TItem[] second;
-			private readonly int firstCount;
-			private readonly int totalLength;
+			private readonly IList<TItem> _first;
+			private readonly TItem[] _second;
+			private readonly int _firstCount;
+			private readonly int _totalLength;
 
 			public CompositeArrayEnumerator( IList<TItem> first, TItem[] second )
 			{
 				if ( first == null )
+				{
 					throw new ArgumentNullException( "first" );
+				}
 				if ( second == null )
+				{
 					throw new ArgumentNullException( "second" );
+				}
 
-				this.first = first;
-				this.second = second;
-				this.firstCount = first.Count;
-				this.totalLength = firstCount + second.Length;
+				this._first = first;
+				this._second = second;
+				this._firstCount = first.Count;
+				this._totalLength = _firstCount + second.Length;
 			}
 
 			int index = -1;
@@ -171,13 +190,13 @@ namespace LogAnalyzer.Collections
 				{
 					TItem result;
 
-					if ( index < firstCount )
+					if ( index < _firstCount )
 					{
-						result = first[index];
+						result = _first[index];
 					}
 					else
 					{
-						result = second[index - firstCount];
+						result = _second[index - _firstCount];
 					}
 
 					return result;
@@ -198,7 +217,7 @@ namespace LogAnalyzer.Collections
 			{
 				index++;
 
-				return index < totalLength;
+				return index < _totalLength;
 			}
 
 			public void Reset()

@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
 {
+	[Ignore]
 	[TestFixture]
 	public class LogLineParsingBenchmark
 	{

@@ -46,6 +46,7 @@ namespace LogAnalyzer.Tests
 			Assert.Fail( "Сюда мы придти не должны." );
 		}
 
+		[Ignore]
 		[TestCase( @"D:\Temp\2012 - Apr\Cache.logproj" )]
 		public void TestIncludeLogFilesByCleanedNameDeserialization( string settingsFilePath )
 		{

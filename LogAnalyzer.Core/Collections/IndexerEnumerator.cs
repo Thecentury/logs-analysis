@@ -12,22 +12,24 @@ namespace LogAnalyzer
 	/// <typeparam name="T"></typeparam>
 	public sealed class IndexerEnumerator<T> : IEnumerator<T>
 	{
-		private readonly IList<T> list;
-		private readonly int count;
-		private int index = -1;
+		private readonly IList<T> _list;
+		private readonly int _count;
+		private int _index = -1;
 
 		public IndexerEnumerator( IList<T> list )
 		{
 			if ( list == null )
+			{
 				throw new ArgumentNullException( "list" );
+			}
 
-			this.list = list;
-			this.count = list.Count;
+			this._list = list;
+			this._count = list.Count;
 		}
 
 		public T Current
 		{
-			get { return list[index]; }
+			get { return _list[_index]; }
 		}
 
 		public void Dispose()
@@ -42,9 +44,9 @@ namespace LogAnalyzer
 
 		public bool MoveNext()
 		{
-			index++;
+			_index++;
 
-			return index < count;
+			return _index < _count;
 		}
 
 		public void Reset()
@@ -55,19 +57,19 @@ namespace LogAnalyzer
 
 	public sealed class IndexerEnumerable<T> : IEnumerable<T>
 	{
-		private readonly IList<T> list;
+		private readonly IList<T> _list;
 
 		public IndexerEnumerable( IList<T> list )
 		{
 			if ( list == null )
 				throw new ArgumentNullException( "list" );
 
-			this.list = list;
+			this._list = list;
 		}
 
 		public IEnumerator<T> GetEnumerator()
 		{
-			return new IndexerEnumerator<T>( list );
+			return new IndexerEnumerator<T>( _list );
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

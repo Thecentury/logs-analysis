@@ -53,7 +53,7 @@ namespace LogAnalyzer
 
 			_mergedEntriesList = new List<LogEntry>();
 			_logEntrySortedCollection = new LogEntrySortedCollection( this, environment );
-			_mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( _mergedEntriesList, _logEntrySortedCollection.UnappendedLogEntries );
+			_mergedEntriesWrapper = new CompositeObservableListWrapper<LogEntry>( "LogEntriesList", _mergedEntriesList, _logEntrySortedCollection.UnappendedLogEntries );
 		}
 
 		internal void EnqueueToMerge( IList<LogEntry> addedEntries )
@@ -116,7 +116,7 @@ namespace LogAnalyzer
 
 		internal void AppendLogEntryToMergedList( LogEntry logEntry )
 		{
-			Logger.DebugWriteVerbose( "{0}.AppendMergedLogEntry: +\"{1}\"", GetType().Name, logEntry.TextLines.FirstOrDefault() );
+			Logger.DebugWriteVerbose( "{0}.AppendMergedLogEntry: +\"{1}\"", GetType().Name, logEntry.UnitedText );
 			_mergedEntriesList.Add( logEntry );
 			// todo notify about collection change
 		}
