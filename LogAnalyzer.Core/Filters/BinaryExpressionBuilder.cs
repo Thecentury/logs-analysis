@@ -21,8 +21,8 @@ namespace LogAnalyzer.Filters
 			if ( right == null )
 				throw new ArgumentNullException( "right" );
 
-			children.Add( null );
-			children.Add( null );
+			_children.Add( null );
+			_children.Add( null );
 
 			Left = left;
 			Right = right;
@@ -59,19 +59,19 @@ namespace LogAnalyzer.Filters
 
 		private void InsertChild( ExpressionBuilder child, int insertIndex )
 		{
-			while ( children.Count <= insertIndex )
+			while ( _children.Count <= insertIndex )
 			{
-				children.Add( null );
+				_children.Add( null );
 			}
-			children[insertIndex] = child;
+			_children[insertIndex] = child;
 		}
 
-		public readonly List<ExpressionBuilder> children = new List<ExpressionBuilder>( 2 );
+		private readonly List<ExpressionBuilder> _children = new List<ExpressionBuilder>( 2 );
 		[EditorBrowsable( EditorBrowsableState.Never )]
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public List<ExpressionBuilder> Children
 		{
-			get { return children; }
+			get { return _children; }
 		}
 
 		protected sealed override Expression CreateExpressionCore( ParameterExpression parameterExpression )

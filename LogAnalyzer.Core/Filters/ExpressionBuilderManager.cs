@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace LogAnalyzer.Filters
 {
-	public sealed class ExpressionBuilderManager
+	public static class ExpressionBuilderManager
 	{
 		private static readonly Type[] expressionBuilderTypes;
 		static ExpressionBuilderManager()
@@ -32,7 +32,9 @@ namespace LogAnalyzer.Filters
 		public static ExpressionBuilder[] GetBuilders( Type returnType, Type inputType )
 		{
 			if ( returnType == null )
+			{
 				throw new ArgumentNullException( "returnType" );
+			}
 
 			ParameterExpression target = Expression.Parameter( typeof( LogEntry ) );
 

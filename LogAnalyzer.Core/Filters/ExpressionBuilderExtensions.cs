@@ -41,6 +41,19 @@ namespace LogAnalyzer.Filters
 			return compiled;
 		}
 
+		public static Func<T, TResult> CompileToFunc<T, TResult>( this ExpressionBuilder builder )
+		{
+			ParameterExpression parameter = Expression.Parameter( typeof( T ), "p" );
+			var expression = builder.CreateExpression( parameter );
+			Expression<Func<T, TResult>> lambda = expression as Expression<Func<T, TResult>>;
+			if ( lambda == null )
+			{
+				lambda = Expression.Lambda<Func<T, TResult>>( expression, parameter );
+			}
+			var compiled = lambda.Compile();
+			return compiled;
+		}
+
 		public static Func<T, bool> CompileToFilter<T>( this ExpressionBuilder builder )
 		{
 			return FilterBuilder.CompileToFilter<T>( builder.CreateExpression );

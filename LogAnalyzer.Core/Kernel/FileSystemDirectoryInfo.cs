@@ -66,7 +66,7 @@ namespace LogAnalyzer.Kernel
 			}
 		}
 
-		public IEnumerable<string> EnumerateFileNames()
+		public virtual IEnumerable<string> EnumerateFileNames()
 		{
 			var searchOption = SearchOption;
 
