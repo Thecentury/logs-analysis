@@ -37,6 +37,13 @@ namespace LogAnalyzer
 
 		protected readonly Logger Logger;
 
+		/// <summary>
+		/// Для тестов.
+		/// </summary>
+		protected LogEntriesList()
+		{
+		}
+
 		protected LogEntriesList( IEnvironment environment, Logger logger )
 		{
 			if ( environment == null )

@@ -13,6 +13,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 	{
 		void Visit( FileTreeItem file );
 		void Visit( DirectoryTreeItem dir );
+		void Visit( CoreTreeItem core );
 	}
 
 	public interface IFileTreeVisitable

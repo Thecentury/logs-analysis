@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Windows.Markup;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Filters
@@ -9,6 +10,16 @@ namespace LogAnalyzer.Filters
 	[ContentProperty( "DirectoryName" )]
 	public abstract class DirectoryNameEqualsFilterBase : ExpressionBuilder
 	{
+		protected DirectoryNameEqualsFilterBase() { }
+		protected DirectoryNameEqualsFilterBase( [NotNull] string directoryDisplayName )
+		{
+			if ( directoryDisplayName == null )
+			{
+				throw new ArgumentNullException( "directoryDisplayName" );
+			}
+			DirectoryName = directoryDisplayName;
+		}
+
 		[FilterParameter( typeof( string ), "DirectoryName" )]
 		public string DirectoryName
 		{
@@ -24,6 +35,9 @@ namespace LogAnalyzer.Filters
 
 	public sealed class DirectoryNameEquals : DirectoryNameEqualsFilterBase
 	{
+		public DirectoryNameEquals() { }
+		public DirectoryNameEquals( [NotNull] string directoryDisplayName ) : base( directoryDisplayName ) { }
+
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
 			string directoryName = DirectoryName;
@@ -36,6 +50,9 @@ namespace LogAnalyzer.Filters
 
 	public sealed class DirectoryNameNotEquals : DirectoryNameEqualsFilterBase
 	{
+		public DirectoryNameNotEquals() { }
+		public DirectoryNameNotEquals( [NotNull] string directoryDisplayName ) : base( directoryDisplayName ) { }
+
 		protected override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
 			string directoryName = DirectoryName;

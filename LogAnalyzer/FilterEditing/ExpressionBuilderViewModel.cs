@@ -178,7 +178,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 					ExpressionBuilder innerBuilder = _selectedChild.Builder;
 					if ( innerBuilder != null )
 					{
-						isInline = innerBuilder is IntermediateConstantBuilder;
+						isInline =
+							innerBuilder is IntermediateConstantBuilder ||
+							innerBuilder is DirectoryNameEqualsFilterBase ||
+							innerBuilder is FileNameFilterBase;
 					}
 				}
 

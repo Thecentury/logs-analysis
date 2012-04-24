@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Markup;
+using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 
 namespace LogAnalyzer.Filters
@@ -22,6 +23,14 @@ namespace LogAnalyzer.Filters
 		private void OnChildrenCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			PropertyChangedDelegate.Raise( this, "Children" );
+		}
+
+		protected void ValidateCount()
+		{
+			if ( Children.Count < 2 )
+			{
+				throw new ArgumentException( "Count of Children should be greater than 1." );
+			}
 		}
 
 		private readonly ObservableCollection<ExpressionBuilder> _children = new ObservableCollection<ExpressionBuilder>();
@@ -63,10 +72,20 @@ namespace LogAnalyzer.Filters
 	public sealed class AndCollection : BooleanCollectionBuilder
 	{
 		public AndCollection() { }
+		public AndCollection( [NotNull] IEnumerable<ExpressionBuilder> children )
+		{
+			if ( children == null )
+			{
+				throw new ArgumentNullException( "children" );
+			}
+			Children.AddRange( children );
+			ValidateCount();
+		}
 
 		public AndCollection( params ExpressionBuilder[] children )
 		{
 			Children.AddRange( children );
+			ValidateCount();
 		}
 
 		protected override Expression CreateBinaryOperation( Expression left, Expression right )
@@ -78,10 +97,26 @@ namespace LogAnalyzer.Filters
 	public sealed class OrCollection : BooleanCollectionBuilder
 	{
 		public OrCollection() { }
-
-		public OrCollection( params ExpressionBuilder[] children )
+		public OrCollection( [NotNull] IEnumerable<ExpressionBuilder> children )
 		{
+			if ( children == null )
+			{
+				throw new ArgumentNullException( "children" );
+			}
 			Children.AddRange( children );
+
+			ValidateCount();
+		}
+
+		public OrCollection( [NotNull] params ExpressionBuilder[] children )
+		{
+			if ( children == null )
+			{
+				throw new ArgumentNullException( "children" );
+			}
+
+			Children.AddRange( children );
+			ValidateCount();
 		}
 
 		protected override Expression CreateBinaryOperation( Expression left, Expression right )

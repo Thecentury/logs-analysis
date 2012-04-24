@@ -43,10 +43,57 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void Visit( DirectoryTreeItem dir )
 		{
-			var filters = dir.Files.Where( f => f.IsChecked ).Select( f => new FileNameEquals( f.LogFile.Name ) ).Cast<ExpressionBuilder>().ToArray();
-			OrCollection or = new OrCollection( filters );
+			var filter = CreateFilterForDirectory( dir );
 
-			_application.Tabs.Add( new FilterTabViewModel( _application.Core.MergedEntries, _application, or ) );
+			_application.Tabs.Add( new FilterTabViewModel( _application.Core.MergedEntries, _application, filter ) );
+		}
+
+		public static ExpressionBuilder CreateFilterForDirectory( DirectoryTreeItem dir )
+		{
+			var filters =
+				dir.Files.Where( f => f.IsChecked ).Select( f => new FileNameEquals( f.LogFile.Name ) ).Cast<ExpressionBuilder>().ToArray();
+			var filter = ExpressionBuilder.CreateOr( filters );
+
+			return filter;
+		}
+
+		public void Visit( CoreTreeItem core )
+		{
+			var filter = CreateFilterForCore( core );
+
+			_application.Tabs.Add( new FilterTabViewModel( _application.Core.MergedEntries, _application, filter ) );
+		}
+
+		public static ExpressionBuilder CreateFilterForCore( CoreTreeItem core )
+		{
+			List<ExpressionBuilder> orParts = new List<ExpressionBuilder>();
+
+			foreach ( var directory in core.Directories )
+			{
+				if ( directory.IsChecked == false )
+				{
+					continue;
+				}
+
+				List<ExpressionBuilder> fileFilters = new List<ExpressionBuilder>();
+				foreach ( var file in directory.Files )
+				{
+					if ( file.IsChecked )
+					{
+						fileFilters.Add( new FileNameEquals( file.LogFile.Name ) );
+					}
+				}
+
+				if ( fileFilters.Count > 0 )
+				{
+					And and = new And( new DirectoryNameEquals( directory.LogDirectory.DisplayName ),
+									  ExpressionBuilder.CreateOr( fileFilters ) );
+					orParts.Add( and );
+				}
+			}
+
+			var or = ExpressionBuilder.CreateOr( orParts );
+			return or;
 		}
 	}
 }

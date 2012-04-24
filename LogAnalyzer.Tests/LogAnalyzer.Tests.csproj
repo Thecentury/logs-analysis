@@ -87,6 +87,7 @@
     <Compile Include="Gui\DropFilesViewModelTests.cs" />
     <Compile Include="Gui\ExpressionBuilderViewModelTests.cs" />
     <Compile Include="Gui\FileSizeHelperTests.cs" />
+    <Compile Include="Gui\FilesTreeRequestShowVisitorTests.cs" />
     <Compile Include="Gui\TreeItemsTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />
     <Compile Include="Helpers\TotalOperationsCountHelper.cs" />
