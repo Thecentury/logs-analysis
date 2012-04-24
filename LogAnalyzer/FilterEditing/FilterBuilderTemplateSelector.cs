@@ -36,6 +36,8 @@ namespace LogAnalyzer.GUI.FilterEditing
 			Register<FileNameFilterBase>();
 			Register<DirectoryNameEqualsFilterBase>();
 			Register<MessageTypeEquals>();
+
+			Register<GetDateByFileNameBuilder>( "EmptyTemplate" );
 		}
 
 		private static void Register<T>()

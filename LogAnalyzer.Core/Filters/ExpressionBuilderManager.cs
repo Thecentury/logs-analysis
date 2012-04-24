@@ -71,9 +71,13 @@ namespace LogAnalyzer.Filters
 		{
 			var attributes = filterType.GetCustomAttributes( typeof( FilterTargetAttribute ), true );
 			if ( attributes.Length == 0 )
+			{
 				return true;
+			}
 			else
+			{
 				return attributes.Cast<FilterTargetAttribute>().Any( attr => attr.TargetType.IsAssignableFrom( inputType ) );
+			}
 		}
 	}
 }

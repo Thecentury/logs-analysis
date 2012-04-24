@@ -9,26 +9,31 @@ namespace LogAnalyzer.GUI.FilterEditing
 	[IgnoreBuilder]
 	internal sealed class DelegateBuilderProxy : ExpressionBuilder
 	{
-		private readonly object inner;
-		private readonly PropertyInfo propertyInfo;
+		private readonly object _inner;
+		private readonly PropertyInfo _propertyInfo;
 
 		public DelegateBuilderProxy( object inner, string propertyName )
 		{
 			if ( inner == null )
+			{
 				throw new ArgumentNullException( "inner" );
+			}
 			if ( propertyName == null )
+			{
 				throw new ArgumentNullException( "propertyName" );
+			}
 
-			this.inner = inner;
-			propertyInfo = inner.GetType().GetProperty( propertyName, BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty );
+			this._inner = inner;
+			_propertyInfo = inner.GetType().GetProperty( propertyName, 
+				BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty );
 		}
 
 		public ExpressionBuilder Inner
 		{
-			get { return (ExpressionBuilder)propertyInfo.GetValue( inner, null ); }
+			get { return (ExpressionBuilder)_propertyInfo.GetValue( _inner, null ); }
 			set
 			{
-				propertyInfo.SetValue( inner, value, null );
+				_propertyInfo.SetValue( _inner, value, null );
 				PropertyChangedDelegate.RaiseAllChanged( this );
 			}
 		}
@@ -36,9 +41,13 @@ namespace LogAnalyzer.GUI.FilterEditing
 		public override Type GetResultType( ParameterExpression target )
 		{
 			if ( Inner == null )
+			{
 				return typeof( object );
+			}
 			else
+			{
 				return Inner.GetResultType( target );
+			}
 		}
 
 		protected override bool ValidatePropertiesCore()
@@ -55,7 +64,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			Type propertyType = null;
 
-			object[] filterParameterAttributes = propertyInfo.GetCustomAttributes( typeof( FilterParameterAttribute ), false );
+			object[] filterParameterAttributes = _propertyInfo.GetCustomAttributes( typeof( FilterParameterAttribute ), false );
 			if ( filterParameterAttributes.Length > 0 )
 			{
 				FilterParameterAttribute filterParameterAttribute = (FilterParameterAttribute)filterParameterAttributes[0];
@@ -64,10 +73,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 			if ( propertyType == null )
 			{
-				IOverridePropertyTypeInfo obj = inner as IOverridePropertyTypeInfo;
+				IOverridePropertyTypeInfo obj = _inner as IOverridePropertyTypeInfo;
 				if ( obj != null )
 				{
-					propertyType = obj.GetPropertyType( propertyInfo.Name );
+					propertyType = obj.GetPropertyType( _propertyInfo.Name );
 				}
 			}
 

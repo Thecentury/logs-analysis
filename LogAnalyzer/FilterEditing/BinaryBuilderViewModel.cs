@@ -6,8 +6,8 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class BinaryBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ExpressionBuilderViewModel leftViewModel;
-		private readonly ExpressionBuilderViewModel rightViewModel;
+		private readonly ExpressionBuilderViewModel _leftViewModel;
+		private readonly ExpressionBuilderViewModel _rightViewModel;
 
 		public BinaryBuilderViewModel( BinaryExpressionBuilder builder, ParameterExpression parameter )
 			: base( builder, parameter )
@@ -15,27 +15,27 @@ namespace LogAnalyzer.GUI.FilterEditing
 			var leftBuilder = new DelegateBuilderProxy( builder, "Left" );
 			var rightBuilder = new DelegateBuilderProxy( builder, "Right" );
 
-			leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( leftBuilder, parameter );
+			_leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( leftBuilder, parameter );
 			if ( builder.Left != null )
 			{
-				leftViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Left, parameter );
+				_leftViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Left, parameter );
 			}
 
-			rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( rightBuilder, parameter );
+			_rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( rightBuilder, parameter );
 			if ( builder.Right != null )
 			{
-				rightViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Right, parameter );
+				_rightViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Right, parameter );
 			}
 		}
 
 		public ExpressionBuilderViewModel Left
 		{
-			get { return leftViewModel; }
+			get { return _leftViewModel; }
 		}
 
 		public ExpressionBuilderViewModel Right
 		{
-			get { return rightViewModel; }
+			get { return _rightViewModel; }
 		}
 	}
 }
