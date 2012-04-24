@@ -55,8 +55,10 @@ namespace LogAnalyzer.Filters
 
 		Type IOverridePropertyTypeInfo.GetPropertyType( string propertyName )
 		{
-			if ( !(propertyName == "Left" || propertyName == "Right") )
+			if ( !( propertyName == "Left" || propertyName == "Right" ) )
+			{
 				throw new ArgumentException( "Invalid property name." );
+			}
 
 			return typeof( bool );
 		}
@@ -108,7 +110,7 @@ namespace LogAnalyzer.Filters
 		}
 	}
 
-	public sealed class Equals : BooleanBinaryExpressionBuilder
+	public sealed class Equals : BinaryExpressionBuilder
 	{
 		public Equals() { }
 		public Equals( ExpressionBuilder left, ExpressionBuilder right ) : base( left, right ) { }
@@ -117,9 +119,14 @@ namespace LogAnalyzer.Filters
 		{
 			return Expression.Equal( left, right );
 		}
+
+		public override Type GetResultType( ParameterExpression target )
+		{
+			return typeof( bool );
+		}
 	}
 
-	public sealed class NotEquals : BooleanBinaryExpressionBuilder
+	public sealed class NotEquals : BinaryExpressionBuilder
 	{
 		public NotEquals() { }
 		public NotEquals( ExpressionBuilder left, ExpressionBuilder right ) : base( left, right ) { }
@@ -127,6 +134,11 @@ namespace LogAnalyzer.Filters
 		protected override BinaryExpression CreateBinaryCore( Expression left, Expression right )
 		{
 			return Expression.NotEqual( left, right );
+		}
+	
+		public override Type GetResultType( ParameterExpression target )
+		{
+			return typeof( bool );
 		}
 	}
 

@@ -52,11 +52,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 			{
 				if ( _builderViewModels == null )
 				{
-					Type resultType = GetResultType();
-					ExpressionBuilder[] builders = ExpressionBuilderManager
-						.GetBuilders( resultType, typeof( LogEntry ) )
-						.OrderBy( b => b.GetType().Name )
-						.ToArray();
+					var builders = GetAppropriateBuilders();
 					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, _parameter ) ).ToList();
 
 					ReplaceWithSelected();
@@ -64,6 +60,17 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 				return _builderViewModels;
 			}
+		}
+
+		public ExpressionBuilder[] GetAppropriateBuilders()
+		{
+			Type resultType = GetResultType();
+			ExpressionBuilder[] builders = ExpressionBuilderManager
+				.GetBuilders( resultType, typeof( LogEntry ) )
+				.OrderBy( b => b.GetType().Name )
+				.ToArray();
+
+			return builders;
 		}
 
 		private void ReplaceWithSelected()

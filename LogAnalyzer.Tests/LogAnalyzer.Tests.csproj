@@ -73,6 +73,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpressionBuilderManagerTests.cs" />
     <Compile Include="GetDateByFileNameBuilderTests.cs" />
     <Compile Include="Gui\ApplicationViewModelCommandsTests.cs" />
     <Compile Include="CollectionBooleanBuildersViewModelTests.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="FilterTests.cs" />
     <Compile Include="Gui\ApplicationViewModelTests.cs" />
     <Compile Include="Gui\DropFilesViewModelTests.cs" />
+    <Compile Include="Gui\ExpressionBuilderViewModelTests.cs" />
     <Compile Include="Gui\FileSizeHelperTests.cs" />
     <Compile Include="Gui\TreeItemsTests.cs" />
     <Compile Include="Helpers\AssertExtensions.cs" />

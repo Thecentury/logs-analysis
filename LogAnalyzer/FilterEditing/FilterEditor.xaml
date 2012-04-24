@@ -25,6 +25,8 @@
 			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 		</Style>
+		
+		<DataTemplate x:Key="EmptyTemplate"></DataTemplate>
 
 		<DataTemplate x:Key="{x:Type log:BooleanCollectionBuilder}">
 			<StackPanel Orientation="Vertical">
@@ -72,7 +74,7 @@
 		</DataTemplate>
 
 		<DataTemplate x:Key="ConstantTemplate">
-			<TextBox Text="{Binding Builder.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+			<TextBox Text="{Binding Builder.Value, UpdateSourceTrigger=Default, Mode=TwoWay}"
 					 MinWidth="140"
 					 Margin="0,4,4,4"/>
 		</DataTemplate>

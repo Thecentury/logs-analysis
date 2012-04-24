@@ -16,19 +16,19 @@ namespace LogAnalyzer.Filters
 	{
 		protected BooleanCollectionBuilder()
 		{
-			children.CollectionChanged += OnChildren_CollectionChanged;
+			_children.CollectionChanged += OnChildrenCollectionChanged;
 		}
 
-		private void OnChildren_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnChildrenCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
 			PropertyChangedDelegate.Raise( this, "Children" );
 		}
 
-		private readonly ObservableCollection<ExpressionBuilder> children = new ObservableCollection<ExpressionBuilder>();
+		private readonly ObservableCollection<ExpressionBuilder> _children = new ObservableCollection<ExpressionBuilder>();
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		public Collection<ExpressionBuilder> Children
 		{
-			get { return children; }
+			get { return _children; }
 		}
 
 		public sealed override Type GetResultType( ParameterExpression target )
@@ -38,18 +38,18 @@ namespace LogAnalyzer.Filters
 
 		protected sealed override bool ValidatePropertiesCore()
 		{
-			return children.Count >= 2
-				   && children.All( c => c != null )
-				   && children.All( c => c.ValidateProperties() );
+			return _children.Count >= 2
+				   && _children.All( c => c != null )
+				   && _children.All( c => c.ValidateProperties() );
 		}
 
 		protected sealed override Expression CreateExpressionCore( ParameterExpression parameterExpression )
 		{
-			var second = children.Last().CreateExpression( parameterExpression );
+			var second = _children.Last().CreateExpression( parameterExpression );
 
-			for ( int i = children.Count - 2; i >= 0; i-- )
+			for ( int i = _children.Count - 2; i >= 0; i-- )
 			{
-				var first = children[i].CreateExpression( parameterExpression );
+				var first = _children[i].CreateExpression( parameterExpression );
 				var op = CreateBinaryOperation( first, second );
 				second = op;
 			}
