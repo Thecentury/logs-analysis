@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace LogAnalyzer
@@ -23,7 +24,17 @@ namespace LogAnalyzer
 
 		public static DateTime GetDate( string logFileName )
 		{
-			throw new NotImplementedException();
+			var match = startsWithDigitsRegex.Match( logFileName );
+			if ( match.Success )
+			{
+				var dateString = match.Groups["date"].Value;
+				DateTime result = DateTime.ParseExact( dateString, "yyyy-MM-dd", CultureInfo.InvariantCulture );
+				return result;
+			}
+			else
+			{
+				return DateTime.Now.Date;
+			}
 		}
 	}
 }

@@ -38,6 +38,11 @@ namespace LogAnalyzer.Kernel
 			return _fileNames.Select( CreateFile );
 		}
 
+		public override IEnumerable<string> EnumerateFileNames()
+		{
+			return _fileNames;
+		}
+
 		public IFileInfo CreateFile( string fileName )
 		{
 			string fullPath = System.IO.Path.GetFullPath( fileName );
