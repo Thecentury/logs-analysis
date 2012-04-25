@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using LogAnalyzer.Filters;
+using LogAnalyzer.Kernel;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
@@ -41,7 +43,7 @@ namespace LogAnalyzer.Tests
 
 			Assert.IsTrue( include );
 		}
-		
+
 		[Test]
 		public void DateByFileNameEqualsShouldBeFalse()
 		{
@@ -52,6 +54,16 @@ namespace LogAnalyzer.Tests
 			bool include = filter.Include( "2012-10-30-Kernel.log" );
 
 			Assert.IsFalse( include );
+		}
+
+		[Test]
+		public void DateByFileNameEqualsShouldWorkForIFileInfo()
+		{
+			var builder = new GetDateByFileNameBuilder();
+
+			var expression = builder.CreateExpression( Expression.Parameter( typeof( IFileInfo ) ) );
+
+			Assert.NotNull( expression );
 		}
 	}
 }

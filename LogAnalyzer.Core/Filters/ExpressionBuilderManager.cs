@@ -36,7 +36,7 @@ namespace LogAnalyzer.Filters
 				throw new ArgumentNullException( "returnType" );
 			}
 
-			ParameterExpression target = Expression.Parameter( typeof( LogEntry ) );
+			ParameterExpression target = Expression.Parameter( inputType );
 
 			var result = (from builderType in expressionBuilderTypes
 						  let builder = CreateExpressionBuilder( builderType, returnType )

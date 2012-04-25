@@ -319,18 +319,20 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void EditFilterExecute()
 		{
 			if ( editingInProgress )
+			{
 				throw new InvalidOperationException( "Already editing" );
+			}
 
 			var editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
-			var editorViewModel = new FilterEditorViewModel( editorWindow ) { Builder = filter.ExpressionBuilder };
-			editorWindow.Closed += OnEditorWindow_Closed;
+			var editorViewModel = new FilterEditorViewModel( editorWindow, typeof(LogEntry) ) { Builder = filter.ExpressionBuilder };
+			editorWindow.Closed += OnEditorWindowClosed;
 			editorWindow.Show();
 		}
 
-		private void OnEditorWindow_Closed( object sender, EventArgs e )
+		private void OnEditorWindowClosed( object sender, EventArgs e )
 		{
 			var window = (Window)sender;
-			window.Closed -= OnEditorWindow_Closed;
+			window.Closed -= OnEditorWindowClosed;
 			var vm = (FilterEditorViewModel)window.DataContext;
 
 			if ( vm.DialogResult )

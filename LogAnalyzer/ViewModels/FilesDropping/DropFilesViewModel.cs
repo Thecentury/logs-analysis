@@ -280,7 +280,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 				}
 				else
 				{
-					DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( t.Result, dirInfo, _files );
+					DroppedDirectoryViewModel droppedDir = new DroppedDirectoryViewModel( t.Result, dirInfo, _files, ApplicationViewModel );
 					_files.Add( droppedDir );
 					return droppedDir;
 				}
