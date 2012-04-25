@@ -24,6 +24,15 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
+		
+		<Style TargetType="Panel" x:Key="directoryFilterEditorsPanel">
+			<Setter Property="Visibility" Value="Collapsed"/>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding IsDirectory}" Value="True">
+					<Setter Property="Visibility" Value="Visible"/>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
 
 		<DataTemplate DataType="{x:Type FilesDropping:DroppedObjectViewModel}" x:Key="droppedFileTemplate">
 			<StackPanel Orientation="Vertical">
@@ -46,6 +55,25 @@
 					<TextBlock Text="      "/>
 					<TextBlock Text="{Binding LengthString}"
 							   Foreground="DimGray"/>
+					
+					<StackPanel 
+						Orientation="Horizontal"
+						Style="{StaticResource directoryFilterEditorsPanel}">
+						<Button
+							Margin="3,0"
+							ToolTip="Edit files filter"
+							Command="{Binding ShowFilesFilterEditorCommand}">
+							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/blue-document--pencil.png"
+								   Stretch="None"/>
+						</Button>
+						<Button
+							Margin="3,0"
+							ToolTip="Edit file names filter"
+							Command="{Binding ShowFileNamesFilterEditorCommand}">
+							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/blue-document-bookmark.png"
+								   Stretch="None"/>
+						</Button>
+					</StackPanel>
 				</StackPanel>
 			</StackPanel>
 		</DataTemplate>

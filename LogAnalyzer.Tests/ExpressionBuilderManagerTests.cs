@@ -15,7 +15,7 @@ namespace LogAnalyzer.Tests
 		{
 			var builders = ExpressionBuilderManager.GetBuilders( typeof( object ), typeof( LogEntry ) );
 
-			Assert.That( builders, Has.Some.TypeOf<GetDateByFileNameBuilder>() );
+			Assert.That( builders.OfType<GetDateByFileNameBuilder>().Any() );
 		}
 	}
 }

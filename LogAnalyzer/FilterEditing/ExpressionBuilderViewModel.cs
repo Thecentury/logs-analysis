@@ -62,7 +62,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				if ( _builderViewModels == null )
 				{
 					var builders = GetAppropriateBuilders();
-					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( _context ) ).ToList();
+					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( _context.WithBuilder( b ) ) ).ToList();
 
 					ReplaceWithSelected();
 				}

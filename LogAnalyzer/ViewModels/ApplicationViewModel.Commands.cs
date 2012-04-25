@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xaml;
+using JetBrains.Annotations;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
@@ -68,8 +70,18 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public ExpressionBuilder ShowFilterEditorWindow()
 		{
+			return ShowFilterEditorWindow( typeof( LogEntry ) );
+		}
+
+		public ExpressionBuilder ShowFilterEditorWindow( [NotNull] Type inputType )
+		{
+			if ( inputType == null )
+			{
+				throw new ArgumentNullException( "inputType" );
+			}
+
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
-			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow );
+			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow, inputType );
 			editorWindow.ShowDialog();
 			if ( editorViewModel.DialogResult )
 			{

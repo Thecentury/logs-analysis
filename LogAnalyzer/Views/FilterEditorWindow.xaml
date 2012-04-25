@@ -13,7 +13,8 @@
 		>
 
 	<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-		<FilterEditing:FilterEditor x:Name="filterEditor"/>
+		<FilterEditing:FilterEditor x:Name="filterEditor" InputType="{Binding InputType}"/>
+		
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,0,4,8">
 			<StackPanel.Resources>
 				<Style TargetType="Button">

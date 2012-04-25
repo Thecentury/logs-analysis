@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Kernel;
 
 namespace LogAnalyzer.Filters
 {
@@ -24,6 +25,10 @@ namespace LogAnalyzer.Filters
 			if ( parameterExpression.Type == typeof( LogFile ) )
 			{
 				return CreateDateTimeExpression<LogFile>( f => LogFileNameCleaner.GetDate( f.Name ), parameterExpression );
+			}
+			if ( parameterExpression.Type == typeof( IFileInfo ) )
+			{
+				return CreateDateTimeExpression<IFileInfo>( f => LogFileNameCleaner.GetDate( f.Name ), parameterExpression );
 			}
 			if ( parameterExpression.Type == typeof( LogEntry ) )
 			{

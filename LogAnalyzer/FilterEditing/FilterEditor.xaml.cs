@@ -13,7 +13,6 @@ namespace LogAnalyzer.GUI.FilterEditing
 	{
 		private readonly TransparentBuilder _rootBuilder = new TransparentBuilder();
 		private ExpressionBuilderViewModel _vm;
-		private Type _inputType = typeof( LogEntry );
 
 		public FilterEditor()
 		{
@@ -28,12 +27,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 
 		private void UserControlLoaded( object sender, RoutedEventArgs e )
 		{
-			if ( _inputType == null )
-			{
-				throw new InvalidOperationException( "InputType should not be null" );
-			}
-
-			var parameterExpression = System.Linq.Expressions.Expression.Parameter( _inputType, "Input" );
+			var parameterExpression = System.Linq.Expressions.Expression.Parameter( InputType, "Input" );
 			_context = new BuilderContext( _rootBuilder, parameterExpression );
 			_vm = new ExpressionBuilderViewModel( _context );
 			if ( Builder != null )
@@ -53,11 +47,23 @@ namespace LogAnalyzer.GUI.FilterEditing
 			}
 		}
 
+		#region InputType dependency property
+
 		public Type InputType
 		{
-			get { return _inputType; }
-			set { _inputType = value; }
+			get { return (Type)GetValue( InputTypeProperty ); }
+			set { SetValue( InputTypeProperty, value ); }
 		}
+
+		public static readonly DependencyProperty InputTypeProperty = DependencyProperty.Register(
+		  "InputType",
+		  typeof( Type ),
+		  typeof( FilterEditor ),
+		  new FrameworkPropertyMetadata( typeof(LogEntry) ) );
+
+		#endregion
+
+		#region SelectedBuilder dependency property
 
 		public ExpressionBuilder SelectedBuilder
 		{
@@ -86,5 +92,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				}
 			}
 		}
+
+		#endregion
 	}
 }

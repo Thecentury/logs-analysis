@@ -41,13 +41,13 @@ namespace LogAnalyzer
 		private readonly LogAnalyzerConfiguration _config;
 		private readonly LogAnalyzerCore _core;
 
-		private readonly ExpressionFilter<LogEntry> _entriesFilter;
+		private ExpressionFilter<LogEntry> _entriesFilter;
 
 		private readonly ExpressionFilter<IFileInfo> _globalFileFilter;
 		private readonly ExpressionFilter<string> _globalFileNameFilter;
 
-		private readonly ExpressionFilter<IFileInfo> _localFileFilter;
-		private readonly ExpressionFilter<string> _localFileNameFilter;
+		private ExpressionFilter<IFileInfo> _localFileFilter;
+		private ExpressionFilter<string> _localFileNameFilter;
 
 		private readonly Encoding _encoding = Encoding.Unicode;
 		private readonly ILogLineParser _lineParser;
@@ -62,9 +62,22 @@ namespace LogAnalyzer
 			get { return _notificationsSource; }
 		}
 
-		public IFilter<LogEntry> EntriesFilter
+		public ExpressionFilter<LogEntry> EntriesFilter
 		{
 			get { return _entriesFilter; }
+			set { _entriesFilter = value; }
+		}
+
+		public ExpressionFilter<IFileInfo> LocalFileFilter
+		{
+			get { return _localFileFilter; }
+			set { _localFileFilter = value; }
+		}
+		
+		public ExpressionFilter<string> LocalFileNameFilter
+		{
+			get { return _localFileNameFilter; }
+			set { _localFileNameFilter = value; }
 		}
 
 		public IFilter<IFileInfo> FileFilter
@@ -148,8 +161,8 @@ namespace LogAnalyzer
 
 			this._globalFileFilter = config.GlobalFilesFilter;
 			this._globalFileNameFilter = config.GlobalFileNamesFilter;
-			this._localFileFilter = new ExpressionFilter<IFileInfo>( directoryCfg.FilesFilter ?? new AlwaysTrue() );
-			this._localFileNameFilter = new ExpressionFilter<string>( directoryCfg.FileNamesFilter ?? new AlwaysTrue() );
+			this.LocalFileFilter = new ExpressionFilter<IFileInfo>( directoryCfg.FilesFilter ?? new AlwaysTrue() );
+			this.LocalFileNameFilter = new ExpressionFilter<string>( directoryCfg.FileNamesFilter ?? new AlwaysTrue() );
 
 			_globalFileFilter.Changed += OnFileFilterChanged;
 
@@ -178,7 +191,7 @@ namespace LogAnalyzer
 													var filesInDirectory = ( from path in dir.EnumerateFileNames()
 																			 let fileName = IOPath.GetFileNameWithoutExtension( path )
 																			 where _globalFileNameFilter.Include( fileName )
-																			 where _localFileNameFilter.Include( fileName )
+																			 where LocalFileNameFilter.Include( fileName )
 																			 let file = dir.GetFileInfo( path )
 																			 select file ).ToList();
 
@@ -381,7 +394,7 @@ namespace LogAnalyzer
 				return false;
 			}
 
-			if ( !_localFileNameFilter.Include( fileName ) )
+			if ( !LocalFileNameFilter.Include( fileName ) )
 			{
 				Logger.WriteInfo( "AddFile: Excluded file '{0}' by local filter by its name", fullPath );
 				return false;
@@ -398,7 +411,7 @@ namespace LogAnalyzer
 				return false;
 			}
 
-			if ( !_localFileFilter.Include( file ) )
+			if ( !LocalFileFilter.Include( file ) )
 			{
 				Logger.WriteInfo( "AddFile: Excluded file '{0}' by local filter", fullPath );
 				return false;

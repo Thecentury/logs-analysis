@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using JetBrains.Annotations;
+using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.Kernel;
 
@@ -8,17 +10,32 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
 	public sealed class DroppedDirectoryViewModel : DroppedObjectViewModel
 	{
-		private readonly LogDirectory directory;
-		private IDirectoryInfo dirInfo;
+		private readonly LogDirectory _directory;
+		private IDirectoryInfo _dirInfo;
+		private readonly ApplicationViewModel _applicationViewModel;
 
-		public DroppedDirectoryViewModel( [NotNull] LogDirectory directory, [NotNull] IDirectoryInfo dirInfo, [NotNull] ICollection<DroppedObjectViewModel> parentCollection )
+		public DroppedDirectoryViewModel(
+			[NotNull] LogDirectory directory, [NotNull] IDirectoryInfo dirInfo,
+			[NotNull] ICollection<DroppedObjectViewModel> parentCollection,
+			[NotNull] ApplicationViewModel applicationViewModel )
 			: base( parentCollection )
 		{
-			if ( directory == null ) throw new ArgumentNullException( "directory" );
-			if ( dirInfo == null ) throw new ArgumentNullException( "dirInfo" );
+			if ( directory == null )
+			{
+				throw new ArgumentNullException( "directory" );
+			}
+			if ( dirInfo == null )
+			{
+				throw new ArgumentNullException( "dirInfo" );
+			}
+			if ( applicationViewModel == null )
+			{
+				throw new ArgumentNullException( "applicationViewModel" );
+			}
 
-			this.directory = directory;
-			this.dirInfo = dirInfo;
+			this._directory = directory;
+			this._dirInfo = dirInfo;
+			_applicationViewModel = applicationViewModel;
 
 			InitReadReporter( directory );
 		}
@@ -43,6 +60,11 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			get { return true; }
 		}
 
+		public override bool IsDirectory
+		{
+			get { return true; }
+		}
+
 		public override void AcceptVisitor( IDroppedObjectVisitor visitor )
 		{
 			visitor.Visit( this );
@@ -50,7 +72,63 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		public LogDirectory LogDirectory
 		{
-			get { return directory; }
+			get { return _directory; }
+		}
+
+		// Commands
+
+		// Show files filter editor
+
+		private DelegateCommand _showFilesFilterEditorCommand;
+
+		public ICommand ShowFilesFilterEditorCommand
+		{
+			get
+			{
+				if ( _showFilesFilterEditorCommand == null )
+				{
+					_showFilesFilterEditorCommand = new DelegateCommand( ShowFilesFilterEditor );
+				}
+
+				return _showFilesFilterEditorCommand;
+			}
+		}
+
+		private void ShowFilesFilterEditor()
+		{
+			var filesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( LogFile ) );
+			if ( filesFilter != null )
+			{
+				_directory.LocalFileFilter = new ExpressionFilter<IFileInfo>( filesFilter );
+				_directory.Config.GlobalFilesFilterBuilder = filesFilter;
+			}
+		}
+
+		// Show file names filter editor
+
+		private DelegateCommand _showFileNamesFilterEditorCommand;
+
+		public ICommand ShowFileNamesFilterEditorCommand
+		{
+			get
+			{
+				if ( _showFileNamesFilterEditorCommand == null )
+				{
+					_showFileNamesFilterEditorCommand = new DelegateCommand( ShowFileNamesFilterEditor );
+				}
+
+				return _showFileNamesFilterEditorCommand;
+			}
+		}
+
+		private void ShowFileNamesFilterEditor()
+		{
+			var fileNamesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( string ) );
+			if ( fileNamesFilter != null )
+			{
+				_directory.LocalFileNameFilter = new ExpressionFilter<string>( fileNamesFilter );
+				_directory.Config.GlobalFileNamesFilterBuilder = fileNamesFilter;
+			}
 		}
 	}
 }

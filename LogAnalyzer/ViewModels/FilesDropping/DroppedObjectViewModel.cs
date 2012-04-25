@@ -8,8 +8,8 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 {
 	public abstract class DroppedObjectViewModel : BindingObject
 	{
-		private IReportReadProgress reporter;
-		private readonly ICollection<DroppedObjectViewModel> parentCollection;
+		private IReportReadProgress _reporter;
+		private readonly ICollection<DroppedObjectViewModel> _parentCollection;
 
 		protected DroppedObjectViewModel()
 			: this( null )
@@ -18,26 +18,26 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		protected DroppedObjectViewModel( [CanBeNull] ICollection<DroppedObjectViewModel> parentCollection )
 		{
-			this.parentCollection = parentCollection;
+			this._parentCollection = parentCollection;
 		}
 
 		protected void InitReadReporter( IReportReadProgress readReporter )
 		{
-			this.reporter = readReporter;
-			reporter.ReadProgress += OnReadProgress;
+			this._reporter = readReporter;
+			_reporter.ReadProgress += OnReadProgress;
 		}
 
 		protected virtual void OnReadProgress( object sender, FileReadEventArgs e )
 		{
-			bytesReadTotal += e.BytesReadSincePreviousCall;
-			ReadingProcessPercents = bytesReadTotal * 100.0 / Length;
+			_bytesReadTotal += e.BytesReadSincePreviousCall;
+			ReadingProcessPercents = _bytesReadTotal * 100.0 / Length;
 		}
 
 		public override void Dispose()
 		{
-			if ( reporter != null )
+			if ( _reporter != null )
 			{
-				reporter.ReadProgress -= OnReadProgress;
+				_reporter.ReadProgress -= OnReadProgress;
 			}
 			base.Dispose();
 		}
@@ -46,15 +46,15 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		public abstract string Name { get; }
 
-		private int bytesReadTotal;
-		private double readingProgressPercents;
+		private int _bytesReadTotal;
+		private double _readingProgressPercents;
 
 		public double ReadingProcessPercents
 		{
-			get { return readingProgressPercents; }
+			get { return _readingProgressPercents; }
 			private set
 			{
-				readingProgressPercents = value;
+				_readingProgressPercents = value;
 				RaisePropertyChanged( "ReadingProcessPercents" );
 			}
 		}
@@ -73,30 +73,35 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		// todo brinchuk is this neccessary?
 		public abstract bool CanBeRemoved { get; }
 
+		public virtual bool IsDirectory
+		{
+			get { return false; }
+		}
+
 		public abstract void AcceptVisitor( IDroppedObjectVisitor visitor );
 
 		#region Commands
 
-		private DelegateCommand removeFileCommand;
+		private DelegateCommand _removeFileCommand;
 		public ICommand RemoveFileCommand
 		{
 			get
 			{
-				if ( removeFileCommand == null )
-					removeFileCommand = new DelegateCommand( RemoveFileCommandExecute, RemoveFileCommandCanExecute );
-				return removeFileCommand;
+				if ( _removeFileCommand == null )
+					_removeFileCommand = new DelegateCommand( RemoveFileCommandExecute, RemoveFileCommandCanExecute );
+				return _removeFileCommand;
 			}
 		}
 
 		private void RemoveFileCommandExecute()
 		{
 			Dispose();
-			parentCollection.Remove( this );
+			_parentCollection.Remove( this );
 		}
 
 		private bool RemoveFileCommandCanExecute()
 		{
-			return parentCollection != null;
+			return _parentCollection != null;
 		}
 
 		#endregion
