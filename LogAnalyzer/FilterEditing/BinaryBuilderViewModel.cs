@@ -9,22 +9,24 @@ namespace LogAnalyzer.GUI.FilterEditing
 		private readonly ExpressionBuilderViewModel _leftViewModel;
 		private readonly ExpressionBuilderViewModel _rightViewModel;
 
-		public BinaryBuilderViewModel( BinaryExpressionBuilder builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public BinaryBuilderViewModel( BuilderContext<BinaryExpressionBuilder> context )
+			: base( context )
 		{
-			var leftBuilder = new DelegateBuilderProxy( builder, "Left" );
-			var rightBuilder = new DelegateBuilderProxy( builder, "Right" );
+			var builder = context.TypedBuilder;
 
-			_leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( leftBuilder, parameter );
+			var leftBuilder = new DelegateBuilderProxy( context.Builder, "Left" );
+			var rightBuilder = new DelegateBuilderProxy( context.Builder, "Right" );
+
+			_leftViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( context.WithBuilder( leftBuilder ) );
 			if ( builder.Left != null )
 			{
-				_leftViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Left, parameter );
+				_leftViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( context.WithBuilder( builder.Left ) );
 			}
 
-			_rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( rightBuilder, parameter );
+			_rightViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( context.WithBuilder( rightBuilder ) );
 			if ( builder.Right != null )
 			{
-				_rightViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Right, parameter );
+				_rightViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( context.WithBuilder( builder.Right ) );
 			}
 		}
 

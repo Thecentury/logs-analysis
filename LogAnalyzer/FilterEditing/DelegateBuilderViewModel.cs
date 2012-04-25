@@ -6,25 +6,22 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class DelegateBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly DelegateBuilderProxy delegateBuilder;
+		private readonly DelegateBuilderProxy _delegateBuilder;
 
-		public DelegateBuilderViewModel( DelegateBuilderProxy builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public DelegateBuilderViewModel( BuilderContext<DelegateBuilderProxy> ctx  )
+			: base( ctx )
 		{
-			if ( builder == null )
-				throw new ArgumentNullException( "builder" );
-
-			this.delegateBuilder = builder;
+			this._delegateBuilder = ctx.TypedBuilder;
 		}
 
 		protected override void OnSelectedChildChanged( ExpressionBuilder builder )
 		{
-			delegateBuilder.Inner = builder;
+			_delegateBuilder.Inner = builder;
 		}
 
 		protected override Type GetResultType()
 		{
-			return delegateBuilder.GetPropertyType();
+			return _delegateBuilder.GetPropertyType();
 		}
 	}
 }

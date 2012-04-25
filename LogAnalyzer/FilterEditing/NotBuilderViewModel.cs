@@ -5,29 +5,29 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class NotBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly Not notBuilder;
-		private readonly ExpressionBuilderViewModel innerViewModel;
+		private readonly Not _notBuilder;
+		private readonly ExpressionBuilderViewModel _innerViewModel;
 
-		public NotBuilderViewModel( Not notBuilder, ParameterExpression parameter )
-			: base( notBuilder, parameter )
+		public NotBuilderViewModel( BuilderContext<Not> ctx )
+			: base( ctx )
 		{
-			this.notBuilder = notBuilder;
-			innerViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( notBuilder, "Inner" ), parameter );
+			_notBuilder = ctx.TypedBuilder;
+			_innerViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( new DelegateBuilderProxy( _notBuilder, "Inner" ) ) );
 
-			if ( notBuilder.Inner != null )
+			if ( _notBuilder.Inner != null )
 			{
-				innerViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( notBuilder.Inner, parameter );
+				_innerViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( _notBuilder.Inner ) );
 			}
 		}
 
 		public ExpressionBuilderViewModel Inner
 		{
-			get { return innerViewModel; }
+			get { return _innerViewModel; }
 		}
 
 		protected override void OnSelectedChildChanged( ExpressionBuilder builder )
 		{
-			notBuilder.Inner = builder;
+			_notBuilder.Inner = builder;
 		}
 	}
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using JetBrains.Annotations;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
 using LogAnalyzer.GUI.Common;
@@ -14,27 +16,34 @@ namespace LogAnalyzer.GUI.FilterEditing
 	internal class ExpressionBuilderViewModel : BindingObject
 	{
 		private readonly ParameterExpression _parameter;
+		private readonly BuilderContext _context;
+
+		protected BuilderContext Context
+		{
+			get { return _context; }
+		}
 
 		protected ParameterExpression Parameter
 		{
 			get { return _parameter; }
 		}
 
-		public ExpressionBuilderViewModel( ExpressionBuilder builder, ParameterExpression parameter )
+		public ExpressionBuilderViewModel( [NotNull] BuilderContext context )
 		{
-			if ( builder == null )
-				throw new ArgumentNullException( "builder" );
-			if ( parameter == null )
-				throw new ArgumentNullException( "parameter" );
+			if ( context == null )
+			{
+				throw new ArgumentNullException( "context" );
+			}
 
-			this._builder = builder;
-			this._parameter = parameter;
+			_builder = context.Builder;
+			_parameter = context.Parameter;
+			_context = context;
 
-			// todo отписываться
-			builder.PropertyChanged += OnBuilderPropertyChanged;
+			_builder.ToNotifyPropertyChangedObservable()
+				.SubscribeWeakly( this, ( t, e ) => t.OnBuilderPropertyChanged( e.EventArgs ) );
 		}
 
-		private void OnBuilderPropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnBuilderPropertyChanged( PropertyChangedEventArgs e )
 		{
 			RaiseAllPropertiesChanged();
 		}
@@ -53,7 +62,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 				if ( _builderViewModels == null )
 				{
 					var builders = GetAppropriateBuilders();
-					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( b, _parameter ) ).ToList();
+					_builderViewModels = builders.Select( b => ExpressionBuilderViewModelFactory.CreateViewModel( _context ) ).ToList();
 
 					ReplaceWithSelected();
 				}
@@ -66,7 +75,7 @@ namespace LogAnalyzer.GUI.FilterEditing
 		{
 			Type resultType = GetResultType();
 			ExpressionBuilder[] builders = ExpressionBuilderManager
-				.GetBuilders( resultType, typeof( LogEntry ) )
+				.GetBuilders( resultType, _context.InputType )
 				.OrderBy( b => b.GetType().Name )
 				.ToArray();
 

@@ -6,28 +6,28 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class GetPropertyBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ExpressionBuilderViewModel targetViewModel;
-		private readonly GetProperty getPropertyBuilder;
+		private readonly ExpressionBuilderViewModel _targetViewModel;
+		private readonly GetProperty _getPropertyBuilder;
 
-		public GetPropertyBuilderViewModel( GetProperty builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public GetPropertyBuilderViewModel( BuilderContext<GetProperty> ctx )
+			: base( ctx )
 		{
-			getPropertyBuilder = builder;
-			targetViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Target" ), parameter );
-			if ( builder.Target != null )
+			_getPropertyBuilder = ctx.TypedBuilder;
+			_targetViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( new DelegateBuilderProxy( _getPropertyBuilder, "Target" ) ) );
+			if ( _getPropertyBuilder.Target != null )
 			{
-				targetViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Target, parameter );
+				_targetViewModel.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( _getPropertyBuilder.Target) );
 			}
 		}
 
 		public ExpressionBuilderViewModel Target
 		{
-			get { return targetViewModel; }
+			get { return _targetViewModel; }
 		}
 
 		protected override void OnSelectedChildChanged( ExpressionBuilder builder )
 		{
-			getPropertyBuilder.Target = builder;
+			_getPropertyBuilder.Target = builder;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using LogAnalyzer.Filters;
 using System.ComponentModel;
@@ -10,39 +11,52 @@ namespace LogAnalyzer.GUI.FilterEditing
 	/// </summary>
 	public partial class FilterEditor : UserControl
 	{
-		private readonly TransparentBuilder rootBuilder = new TransparentBuilder();
-		private ExpressionBuilderViewModel vm;
+		private readonly TransparentBuilder _rootBuilder = new TransparentBuilder();
+		private ExpressionBuilderViewModel _vm;
+		private Type _inputType = typeof( LogEntry );
 
 		public FilterEditor()
 		{
 			InitializeComponent();
-			rootBuilder.PropertyChanged += OnRootBuilder_PropertyChanged;
+			_rootBuilder.PropertyChanged += OnRootBuilderPropertyChanged;
 		}
 
-		private void OnRootBuilder_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnRootBuilderPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			SelectedBuilder = Builder;
 		}
 
-		private void UserControl_Loaded( object sender, RoutedEventArgs e )
+		private void UserControlLoaded( object sender, RoutedEventArgs e )
 		{
-			var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
-			vm = new ExpressionBuilderViewModel( rootBuilder, parameterExpression );
+			if ( _inputType == null )
+			{
+				throw new InvalidOperationException( "InputType should not be null" );
+			}
+
+			var parameterExpression = System.Linq.Expressions.Expression.Parameter( _inputType, "Input" );
+			_context = new BuilderContext( _rootBuilder, parameterExpression );
+			_vm = new ExpressionBuilderViewModel( _context );
 			if ( Builder != null )
 			{
-				vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( Builder, parameterExpression );
+				_vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( _context.WithBuilder( Builder ) );
 			}
-			DataContext = vm;
+			DataContext = _vm;
 		}
 
 		public ExpressionBuilder Builder
 		{
-			get { return rootBuilder.Inner; }
+			get { return _rootBuilder.Inner; }
 			set
 			{
-				rootBuilder.Inner = value;
+				_rootBuilder.Inner = value;
 				SelectedBuilder = value;
 			}
+		}
+
+		public Type InputType
+		{
+			get { return _inputType; }
+			set { _inputType = value; }
 		}
 
 		public ExpressionBuilder SelectedBuilder
@@ -57,6 +71,8 @@ namespace LogAnalyzer.GUI.FilterEditing
 		  typeof( FilterEditor ),
 		  new FrameworkPropertyMetadata( null, OnSelectedBuilderChanged ) );
 
+		private BuilderContext _context;
+
 		private static void OnSelectedBuilderChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{
 			FilterEditor editor = (FilterEditor)d;
@@ -64,10 +80,9 @@ namespace LogAnalyzer.GUI.FilterEditing
 			if ( editor.Builder != newBuilder )
 			{
 				editor.Builder = newBuilder;
-				if ( editor.vm != null )
+				if ( editor._vm != null )
 				{
-					var parameterExpression = System.Linq.Expressions.Expression.Parameter( typeof( LogEntry ), "Input" );
-					editor.vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( newBuilder, parameterExpression );
+					editor._vm.SelectedChild = ExpressionBuilderViewModelFactory.CreateViewModel( editor._context.WithBuilder( newBuilder ) );
 				}
 			}
 		}
