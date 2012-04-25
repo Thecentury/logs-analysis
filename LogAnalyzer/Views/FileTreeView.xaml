@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:FilesTree="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesTree"
-             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common" mc:Ignorable="d" 
+             xmlns:Common="clr-namespace:LogAnalyzer.GUI.Common"
+             xmlns:ShaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary"
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 
@@ -13,6 +15,16 @@
 			<Style.Triggers>
 				<Trigger Property="Common:IsMouseOverService.IsMouseOver" Value="True">
 					<Setter Property="Visibility" Value="Visible"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<ShaderEffectLibrary:MonochromeEffect x:Key="monochromeEffect"/>
+
+		<Style TargetType="Button" x:Key="buttonStyle">
+			<Style.Triggers>
+				<Trigger Property="IsEnabled" Value="False">
+					<Setter Property="Effect" Value="{StaticResource monochromeEffect}"/>
 				</Trigger>
 			</Style.Triggers>
 		</Style>
@@ -55,9 +67,10 @@
 						Style="{StaticResource collapsibleStyle}"
 						Width="26">
 					<Button Margin="10,0,0,0"
-						Padding="0"
-						Command="{Binding ShowCommand}"
-						ToolTip="Show">
+							Padding="0"
+							Command="{Binding ShowCommand}"
+							Style="{StaticResource buttonStyle}"
+							ToolTip="Show">
 						<Image Stretch="None"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"
@@ -100,9 +113,10 @@
 			DockPanel.Dock="Top">
 			<TextBlock>Files and Folders</TextBlock>
 			<Button Margin="10,0,0,0"
-						Padding="0"
-						Command="{Binding ShowCommand}"
-						ToolTip="Show selected">
+					Padding="0"
+					Command="{Binding ShowCommand}"
+					Style="{StaticResource buttonStyle}"
+					ToolTip="Show selected">
 				<Image Stretch="None"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 
 		private readonly IScheduler _scheduler;
 		private readonly List<DirectoryTreeItem> _directories;
+		private readonly ReadOnlyCollection<DirectoryTreeItem> _readonlyDirectories;
 
 		/// <summary>
 		/// Для тестов.
@@ -23,6 +25,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		private CoreTreeItem()
 		{
 			_directories = new List<DirectoryTreeItem>();
+			_readonlyDirectories = _directories.AsReadOnly();
 		}
 
 		internal static CoreTreeItem CreateEmpty()
@@ -41,14 +44,20 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 				throw new ArgumentNullException( "scheduler" );
 			}
 
-			this._core = core;
+			_core = core;
 			_scheduler = scheduler;
-			this._directories = new List<DirectoryTreeItem>( core.Directories.Select( CreateDirectory ) );
+			_directories = new List<DirectoryTreeItem>( core.Directories.Select( CreateDirectory ) );
+			_readonlyDirectories = _directories.AsReadOnly();
 		}
 
-		public IList<DirectoryTreeItem> Directories
+		internal IList<DirectoryTreeItem> DirectoriesInternal
 		{
 			get { return _directories; }
+		}
+
+		public ReadOnlyCollection<DirectoryTreeItem> Directories
+		{
+			get { return _readonlyDirectories; }
 		}
 
 		// Commands
@@ -62,7 +71,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			{
 				if ( _showCommand == null )
 				{
-					_showCommand = new DelegateCommand( ShowExecute );
+					_showCommand = new DelegateCommand( ShowExecute, ShowCanExecute );
 				}
 
 				return _showCommand;
@@ -72,6 +81,12 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		private void ShowExecute()
 		{
 			RequestShow.Raise( this, new RequestShowEventArgs( this ) );
+		}
+
+		private bool ShowCanExecute()
+		{
+			bool hasCheckedDirectories = Directories.Any( d => d.IsChecked != false );
+			return hasCheckedDirectories;
 		}
 
 		public event EventHandler<RequestShowEventArgs> RequestShow;
