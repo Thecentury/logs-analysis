@@ -73,7 +73,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			return ShowFilterEditorWindow( typeof( LogEntry ) );
 		}
 
-		public ExpressionBuilder ShowFilterEditorWindow( [NotNull] Type inputType )
+		public ExpressionBuilder ShowFilterEditorWindow( [NotNull] Type inputType, ExpressionBuilder currentBuilder = null )
 		{
 			if ( inputType == null )
 			{
@@ -82,6 +82,11 @@ namespace LogAnalyzer.GUI.ViewModels
 
 			FilterEditorWindow editorWindow = new FilterEditorWindow( Application.Current.MainWindow );
 			FilterEditorViewModel editorViewModel = new FilterEditorViewModel( editorWindow, inputType );
+			if ( currentBuilder != null )
+			{
+				editorViewModel.Builder = currentBuilder;
+			}
+
 			editorWindow.ShowDialog();
 			if ( editorViewModel.DialogResult )
 			{
