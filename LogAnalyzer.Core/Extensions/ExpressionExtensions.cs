@@ -10,6 +10,10 @@ namespace LogAnalyzer.Extensions
 			ParameterReplaceExpressionVisitor visitor = new ParameterReplaceExpressionVisitor( parameter );
 
 			var result = visitor.Visit( expression );
+			if ( result.NodeType == ExpressionType.Lambda )
+			{
+				result = ((LambdaExpression) result).Body;
+			}
 			return result;
 		}
 	}

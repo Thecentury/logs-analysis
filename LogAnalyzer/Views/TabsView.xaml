@@ -60,24 +60,44 @@
 		</Common:TabTemplateSelector>
 	</UserControl.Resources>
 
-	<ad:DockingManager
-		DocumentsSource="{Binding Tabs}"
-		ActiveContent="{Binding SelectedTab, Mode=TwoWay}"
-		DocumentHeaderTemplateSelector="{StaticResource headerTemplateSelector}"
-		DocumentTitleTemplateSelector="{StaticResource headerTemplateSelector}"
-		DocumentTemplateSelector="{StaticResource tabTemplateSelector}"
-		DocumentCloseCommand="{Binding CloseSelectedTabCommand}">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="3"/>
+			<ColumnDefinition Width="160"/>
+		</Grid.ColumnDefinitions>
 
-		<adl:LayoutRoot>
-			<adl:LayoutPanel>
-				<adl:LayoutDocumentPane/>
-				<adl:LayoutAnchorablePane DockWidth="150" IsMaximized="False">
-					<adl:LayoutAnchorable Title="Directories &amp; Files">
-						<views:FileTreeView DataContext="{Binding FilesTree}"/>
-					</adl:LayoutAnchorable>
-				</adl:LayoutAnchorablePane>
-			</adl:LayoutPanel>
-		</adl:LayoutRoot>
-	</ad:DockingManager>
+		<ad:DockingManager
+			DocumentsSource="{Binding Tabs}"
+			ActiveContent="{Binding SelectedTab, Mode=TwoWay}"
+			DocumentHeaderTemplateSelector="{StaticResource headerTemplateSelector}"
+			DocumentTitleTemplateSelector="{StaticResource headerTemplateSelector}"
+			DocumentTemplateSelector="{StaticResource tabTemplateSelector}"
+			DocumentCloseCommand="{Binding CloseSelectedTabCommand}"
+			Grid.Column="0">
+
+			<adl:LayoutRoot>
+				<adl:LayoutPanel>
+					<adl:LayoutDocumentPane/>
+				</adl:LayoutPanel>
+			</adl:LayoutRoot>
+		</ad:DockingManager>
+		
+		<GridSplitter
+			Grid.Column="1"
+			VerticalAlignment="Stretch"
+			HorizontalAlignment="Stretch"
+			Width="3"
+			ResizeDirection="Columns"
+			ResizeBehavior="PreviousAndNext"
+			Background="DarkGray"/>
+
+		<views:FileTreeView 
+			DataContext="{Binding FilesTree}" 
+			HorizontalAlignment="Stretch"
+			Grid.Column="2"
+			/>
+		
+	</Grid>
 
 </UserControl>

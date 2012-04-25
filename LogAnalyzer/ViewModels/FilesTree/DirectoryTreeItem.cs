@@ -16,6 +16,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 	{
 		private readonly LogDirectory _directory;
 		private readonly ObservableCollection<FileTreeItem> _files;
+		private readonly ReadOnlyObservableCollection<FileTreeItem> _readonlyFiles;
 
 		public DirectoryTreeItem( [NotNull] LogDirectory directory, [NotNull] IScheduler scheduler )
 		{
@@ -29,13 +30,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 
 			var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( directory.Files,
-																			   "CollectionChanged" );
+																						   "CollectionChanged" );
 			observable
 				.ObserveOn( scheduler )
 				.Subscribe( e => OnFilesCollectionChanged( e.EventArgs ) );
 
 			this._directory = directory;
 			_files = new ObservableCollection<FileTreeItem>( directory.Files.Select( CreateFile ).OrderBy( f => f.Header ) );
+			_readonlyFiles = new ReadOnlyObservableCollection<FileTreeItem>( _files );
 		}
 
 		private FileTreeItem CreateFile( LogFile file )
@@ -78,11 +80,6 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 
 			IsChecked = null;
-		}
-
-		private void OnFilesViewModelsChanged( NotifyCollectionChangedEventArgs e )
-		{
-			UpdateIsChecked();
 		}
 
 		private void OnFilesCollectionChanged( NotifyCollectionChangedEventArgs e )
@@ -129,6 +126,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		}
 
 		private bool? _isChecked = false;
+
 		public bool? IsChecked
 		{
 			get { return _isChecked; }
@@ -154,9 +152,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 			}
 		}
 
-		public ObservableCollection<FileTreeItem> Files
+		internal ObservableCollection<FileTreeItem> FilesInternal
 		{
 			get { return _files; }
+		}
+
+		public ReadOnlyObservableCollection<FileTreeItem> Files
+		{
+			get { return _readonlyFiles; }
 		}
 
 		public event EventHandler<RequestShowEventArgs> RequestShow;
@@ -166,13 +169,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		// ShowCommand
 
 		private DelegateCommand _showCommand;
+
 		public ICommand ShowCommand
 		{
 			get
 			{
 				if ( _showCommand == null )
 				{
-					_showCommand = new DelegateCommand( ShowExecute );
+					_showCommand = new DelegateCommand( ShowExecute, ShowCanExecute );
 				}
 
 				return _showCommand;
@@ -182,6 +186,12 @@ namespace LogAnalyzer.GUI.ViewModels.FilesTree
 		private void ShowExecute()
 		{
 			RequestShow.Raise( this, new RequestShowEventArgs( this ) );
+		}
+
+		private bool ShowCanExecute()
+		{
+			bool canExecute = _files.Any( f => f.IsChecked );
+			return canExecute;
 		}
 	}
 }
