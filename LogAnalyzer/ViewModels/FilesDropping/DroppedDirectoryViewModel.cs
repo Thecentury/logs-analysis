@@ -96,7 +96,13 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		private void ShowFilesFilterEditor()
 		{
-			var filesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( LogFile ) );
+			var currentFilter = _directory.Config.GlobalFilesFilterBuilder;
+			if ( currentFilter != null && currentFilter is AlwaysTrue )
+			{
+				currentFilter = null;
+			}
+
+			var filesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( LogFile ), currentFilter );
 			if ( filesFilter != null )
 			{
 				_directory.LocalFileFilter = new ExpressionFilter<IFileInfo>( filesFilter );
@@ -123,7 +129,13 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 		private void ShowFileNamesFilterEditor()
 		{
-			var fileNamesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( string ) );
+			var currentFilter = _directory.Config.GlobalFileNamesFilterBuilder;
+			if ( currentFilter != null && currentFilter is AlwaysTrue )
+			{
+				currentFilter = null;
+			} 
+
+			var fileNamesFilter = _applicationViewModel.ShowFilterEditorWindow( typeof( string ), currentFilter );
 			if ( fileNamesFilter != null )
 			{
 				_directory.LocalFileNameFilter = new ExpressionFilter<string>( fileNamesFilter );
