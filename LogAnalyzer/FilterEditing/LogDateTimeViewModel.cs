@@ -10,10 +10,10 @@ namespace LogAnalyzer.GUI.FilterEditing
 	internal sealed class LogDateTimeViewModel : ExpressionBuilderViewModel
 	{
 		private readonly LogDateTimeFilterBase _filter;
-		public LogDateTimeViewModel( LogDateTimeFilterBase filter, ParameterExpression parameter )
-			: base( filter, parameter )
+		public LogDateTimeViewModel( BuilderContext<LogDateTimeFilterBase> ctx )
+			: base( ctx )
 		{
-			this._filter = filter;
+			_filter = ctx.TypedBuilder;
 		}
 
 		public string Time

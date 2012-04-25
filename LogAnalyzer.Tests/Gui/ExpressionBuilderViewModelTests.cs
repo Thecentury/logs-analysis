@@ -16,7 +16,7 @@ namespace LogAnalyzer.Tests.Gui
 		public void ShouldIncludeGetDateByFileNameBuilder()
 		{
 			ParameterExpression parameter = Expression.Parameter( typeof( LogEntry ) );
-			var vm = (BinaryBuilderViewModel)ExpressionBuilderViewModelFactory.CreateViewModel( new Equals(), parameter );
+			var vm = (BinaryBuilderViewModel)ExpressionBuilderViewModelFactory.CreateViewModel( new BuilderContext( new Equals(), parameter ) );
 
 			var builders = vm.Left.GetAppropriateBuilders();
 			bool containsGetDateByFileBuilder = builders.Any( b => b is GetDateByFileNameBuilder );

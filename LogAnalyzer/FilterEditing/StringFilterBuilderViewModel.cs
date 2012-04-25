@@ -6,24 +6,24 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal class StringFilterBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ExpressionBuilderViewModel stringViewModel;
-		private readonly ExpressionBuilderViewModel substringViewModel;
+		private readonly ExpressionBuilderViewModel _stringViewModel;
+		private readonly ExpressionBuilderViewModel _substringViewModel;
 
-		public StringFilterBuilderViewModel( StringFilterBuilder builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public StringFilterBuilderViewModel( BuilderContext<StringFilterBuilder> ctx )
+			: base( ctx )
 		{
-			stringViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Inner" ), parameter );
-			substringViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( new DelegateBuilderProxy( builder, "Substring" ), parameter );
+			_stringViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( new DelegateBuilderProxy( ctx.TypedBuilder, "Inner" ) ) );
+			_substringViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( ctx.WithBuilder( new DelegateBuilderProxy( ctx.TypedBuilder, "Substring" ) ) );
 		}
 
 		public ExpressionBuilderViewModel String
 		{
-			get { return stringViewModel; }
+			get { return _stringViewModel; }
 		}
 
 		public ExpressionBuilderViewModel Substring
 		{
-			get { return substringViewModel; }
+			get { return _substringViewModel; }
 		}
 	}
 }

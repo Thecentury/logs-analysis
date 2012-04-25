@@ -36,7 +36,7 @@ namespace LogAnalyzer.Filters
 
 		private Expression CreateDateTimeExpression<T>( Expression<Func<T, DateTime>> expression, ParameterExpression parameter )
 		{
-			return Expression.Invoke( expression.ReplaceParameter( parameter ), parameter );
+			return expression.ReplaceParameter( parameter );
 		}
 	}
 }

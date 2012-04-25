@@ -13,111 +13,104 @@ namespace LogAnalyzer.GUI.FilterEditing
 {
 	internal sealed class CollectionBooleanBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly BooleanCollectionBuilder builder;
-		private readonly ParameterExpression parameter;
+		private readonly BooleanCollectionBuilder _builder;
 
-		public CollectionBooleanBuilderViewModel( BooleanCollectionBuilder builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public CollectionBooleanBuilderViewModel( BuilderContext<BooleanCollectionBuilder> context )
+			: base( context )
 		{
-			if ( builder == null ) throw new ArgumentNullException( "builder" );
-			if ( parameter == null ) throw new ArgumentNullException( "parameter" );
+			this._builder = context.TypedBuilder;
 
-			this.builder = builder;
-			this.parameter = parameter;
-
-			int count = Math.Max( 2, builder.Children.Count );
+			int count = Math.Max( 2, _builder.Children.Count );
 			for ( int i = 0; i < count; i++ )
 			{
 				var proxyViewModel = CreateProxyViewModel();
-				children.Add( proxyViewModel );
+				_children.Add( proxyViewModel );
 			}
 		}
 
 		private ExpressionBuilderViewModel CreateProxyViewModel()
 		{
-			int index = children.Count;
-			var proxy = new ProxyCollectionElementBuilder( builder.Children, Children, index );
-			var proxyViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( proxy, parameter );
+			int index = _children.Count;
+			var proxy = new ProxyCollectionElementBuilder( _builder.Children, Children, index );
+			var proxyViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( Context.WithBuilder( proxy ) );
 
-			if ( index < builder.Children.Count && builder.Children[index] != null )
+			if ( index < _builder.Children.Count && _builder.Children[index] != null )
 			{
-				var selectedViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( builder.Children[index], parameter );
+				var selectedViewModel = ExpressionBuilderViewModelFactory.CreateViewModel( Context.WithBuilder( _builder.Children[index] ) );
 				proxyViewModel.SelectedChild = selectedViewModel;
 			}
 
 			return proxyViewModel;
 		}
 
-		private readonly ObservableCollection<ExpressionBuilderViewModel> children = new ObservableCollection<ExpressionBuilderViewModel>();
+		private readonly ObservableCollection<ExpressionBuilderViewModel> _children = new ObservableCollection<ExpressionBuilderViewModel>();
 		public ObservableCollection<ExpressionBuilderViewModel> Children
 		{
-			get { return children; }
+			get { return _children; }
 		}
 
-		private DelegateCommand addChildCommand;
+		private DelegateCommand _addChildCommand;
 		public ICommand AddChildCommand
 		{
 			get
 			{
-				if ( addChildCommand == null )
-					addChildCommand = new DelegateCommand( AddChildExecute );
+				if ( _addChildCommand == null )
+					_addChildCommand = new DelegateCommand( AddChildExecute );
 
-				return addChildCommand;
+				return _addChildCommand;
 			}
 		}
 
 		private void AddChildExecute()
 		{
 			var newChild = CreateProxyViewModel();
-			children.Add( newChild );
+			_children.Add( newChild );
 		}
 	}
 
 	internal sealed class CollectionBooleanChildBuilderViewModel : ExpressionBuilderViewModel
 	{
-		private readonly ProxyCollectionElementBuilder builder;
+		private readonly ProxyCollectionElementBuilder _builder;
 
-		public CollectionBooleanChildBuilderViewModel( ProxyCollectionElementBuilder builder, ParameterExpression parameter )
-			: base( builder, parameter )
+		public CollectionBooleanChildBuilderViewModel( BuilderContext<ProxyCollectionElementBuilder> context )
+			: base( context )
 		{
-			if ( builder == null ) throw new ArgumentNullException( "builder" );
-
-			this.builder = builder;
+			_builder = context.TypedBuilder;
 		}
 
 		protected override void OnSelectedChildChanged( ExpressionBuilder newBuilder )
 		{
-			builder.Inner = newBuilder;
+			_builder.Inner = newBuilder;
 		}
 
-		private DelegateCommand removeCommand;
+		private DelegateCommand _removeCommand;
 
 		public ICommand RemoveCommand
 		{
 			get
 			{
-				if ( removeCommand == null )
-					removeCommand = new DelegateCommand( ExecuteRemove );
+				if ( _removeCommand == null )
+					_removeCommand = new DelegateCommand( ExecuteRemove );
 
-				return removeCommand;
+				return _removeCommand;
 			}
 		}
 
 		private void ExecuteRemove()
 		{
-			if ( builder.Index < builder.Builders.Count )
+			if ( _builder.Index < _builder.Builders.Count )
 			{
-				builder.Builders.RemoveAt( builder.Index );
+				_builder.Builders.RemoveAt( _builder.Index );
 			}
 
-			builder.ViewModels.RemoveAt( builder.Index );
+			_builder.ViewModels.RemoveAt( _builder.Index );
 
-			for ( int i = builder.Index; i < builder.ViewModels.Count; i++ )
+			for ( int i = _builder.Index; i < _builder.ViewModels.Count; i++ )
 			{
-				var proxyBuilder = builder.ViewModels[i] as CollectionBooleanChildBuilderViewModel;
+				var proxyBuilder = _builder.ViewModels[i] as CollectionBooleanChildBuilderViewModel;
 				if ( proxyBuilder != null )
 				{
-					proxyBuilder.builder.Index--;
+					proxyBuilder._builder.Index--;
 				}
 			}
 		}

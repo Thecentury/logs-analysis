@@ -178,6 +178,7 @@
     <Compile Include="Extensions\ICommandExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
+    <Compile Include="FilterEditing\BuilderContext.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
     <Compile Include="FilterEditing\DelegateBuilderProxy.cs" />
     <Compile Include="FilterEditing\DelegateBuilderViewModel.cs" />

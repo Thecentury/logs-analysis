@@ -17,7 +17,7 @@ namespace LogAnalyzer.Tests
 		{
 			var parameter = Expression.Parameter( typeof( object ) );
 			AndCollection and = new AndCollection();
-			var vm = ExpressionBuilderViewModelFactory.CreateViewModel( and, parameter ) as CollectionBooleanBuilderViewModel;
+			var vm = ExpressionBuilderViewModelFactory.CreateViewModel( new BuilderContext( and, parameter ) ) as CollectionBooleanBuilderViewModel;
 
 			Assert.NotNull( vm );
 
