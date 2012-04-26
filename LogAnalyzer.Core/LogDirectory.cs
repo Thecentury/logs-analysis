@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using JetBrains.Annotations;
+using LogAnalyzer.Common;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using System.Threading;
@@ -41,16 +42,13 @@ namespace LogAnalyzer
 		private readonly LogAnalyzerConfiguration _config;
 		private readonly LogAnalyzerCore _core;
 
-		private ExpressionFilter<LogEntry> _entriesFilter;
-
 		private readonly ExpressionFilter<IFileInfo> _globalFileFilter;
 		private readonly ExpressionFilter<string> _globalFileNameFilter;
 
-		private ExpressionFilter<IFileInfo> _localFileFilter;
-		private ExpressionFilter<string> _localFileNameFilter;
-
 		private readonly Encoding _encoding = Encoding.Unicode;
 		private readonly ILogLineParser _lineParser;
+
+		private readonly ImpersonationContext _impersonationContext;
 
 		public ILogLineParser LineParser
 		{
@@ -62,23 +60,11 @@ namespace LogAnalyzer
 			get { return _notificationsSource; }
 		}
 
-		public ExpressionFilter<LogEntry> EntriesFilter
-		{
-			get { return _entriesFilter; }
-			set { _entriesFilter = value; }
-		}
+		public ExpressionFilter<LogEntry> EntriesFilter { get; set; }
 
-		public ExpressionFilter<IFileInfo> LocalFileFilter
-		{
-			get { return _localFileFilter; }
-			set { _localFileFilter = value; }
-		}
-		
-		public ExpressionFilter<string> LocalFileNameFilter
-		{
-			get { return _localFileNameFilter; }
-			set { _localFileNameFilter = value; }
-		}
+		public ExpressionFilter<IFileInfo> LocalFileFilter { get; set; }
+
+		public ExpressionFilter<string> LocalFileNameFilter { get; set; }
 
 		public IFilter<IFileInfo> FileFilter
 		{
@@ -154,7 +140,7 @@ namespace LogAnalyzer
 			this._filesWrapper = new ObservableList<LogFile>( _files );
 			this._lineParser = directoryCfg.LineParser ?? new ManualLogLineParser();
 
-			this._entriesFilter = new ExpressionFilter<LogEntry>(
+			this.EntriesFilter = new ExpressionFilter<LogEntry>(
 				new And(
 					config.GlobalLogEntryFilter.ExpressionBuilder,
 					directoryCfg.LogEntriesFilter ?? new AlwaysTrue() ) );
@@ -176,6 +162,11 @@ namespace LogAnalyzer
 			{
 				this._encoding = Encoding.GetEncoding( directoryCfg.EncodingName );
 			}
+
+			if ( !directoryCfg.Domain.IsNullOrEmpty() && !directoryCfg.Username.IsNullOrEmpty() && !directoryCfg.Password.IsNullOrEmpty() )
+			{
+				_impersonationContext = new ImpersonationContext( directoryCfg.Domain, directoryCfg.Username, directoryCfg.Password );
+			}
 		}
 
 		private void OnFileFilterChanged( object sender, EventArgs e )
@@ -184,19 +175,19 @@ namespace LogAnalyzer
 
 		protected override void StartImpl()
 		{
-			_operationsQueue.EnqueueOperation( () =>
-												{
-													IDirectoryInfo dir = _environment.GetDirectory( Path );
+			_operationsQueue.EnqueueOperation( _impersonationContext, () =>
+			{
+				IDirectoryInfo dir = _environment.GetDirectory( Path );
 
-													var filesInDirectory = ( from path in dir.EnumerateFileNames()
-																			 let fileName = IOPath.GetFileNameWithoutExtension( path )
-																			 where _globalFileNameFilter.Include( fileName )
-																			 where LocalFileNameFilter.Include( fileName )
-																			 let file = dir.GetFileInfo( path )
-																			 select file ).ToList();
+				var filesInDirectory = ( from path in dir.EnumerateFileNames()
+											let fileName = IOPath.GetFileNameWithoutExtension( path )
+											where _globalFileNameFilter.Include( fileName )
+											where LocalFileNameFilter.Include( fileName )
+											let file = dir.GetFileInfo( path )
+											select file ).ToList();
 
-													BeginLoadFiles( filesInDirectory );
-												} );
+				BeginLoadFiles( filesInDirectory );
+			} );
 		}
 
 		private int _initialFilesLoadedCount;
@@ -226,38 +217,43 @@ namespace LogAnalyzer
 			RaiseLoadedEvent();
 #endif
 
-			foreach ( IFileInfo file in filesInDirectory )
+			using ( _impersonationContext.ExecuteInContext() )
 			{
-				file.Refresh();
-
-				if ( !_globalFileFilter.Include( file ) )
+				foreach (IFileInfo file in filesInDirectory)
 				{
-					continue;
+					file.Refresh();
+
+					if (!_globalFileFilter.Include(file))
+					{
+						continue;
+					}
+
+					IFileInfo local = file;
+
+					LogFile logFile = CreateLogFile(local);
+
+					_operationsQueue.EnqueueOperation(() => AddFile(logFile));
+
+					_environment.Scheduler.StartNewOperation(() =>
+					{
+					    logFile.ReadFile();
+
+					    _operationsQueue.EnqueueOperation(() =>
+					    {
+					        Logger.WriteInfo(
+					            "Loaded file '{0}'", local.Name);
+					        Interlocked.Increment(
+					            ref _initialFilesLoadedCount);
+					        AnalyzeIfLoaded();
+					    });
+					});
+
+					Interlocked.Increment(ref _initialFilesLoadingCount);
 				}
 
-				IFileInfo local = file;
-
-				LogFile logFile = CreateLogFile( local );
-
-				_operationsQueue.EnqueueOperation( () => AddFile( logFile ) );
-
-				_environment.Scheduler.StartNewOperation( () =>
-				{
-					logFile.ReadFile();
-
-					_operationsQueue.EnqueueOperation( () =>
-					{
-						Logger.WriteInfo( "Loaded file '{0}'", local.Name );
-						Interlocked.Increment( ref _initialFilesLoadedCount );
-						AnalyzeIfLoaded();
-					} );
-				} );
-
-				Interlocked.Increment( ref _initialFilesLoadingCount );
+				_loadStarted = true;
+				AnalyzeIfLoaded();
 			}
-
-			_loadStarted = true;
-			AnalyzeIfLoaded();
 		}
 
 		private void AnalyzeIfLoaded()

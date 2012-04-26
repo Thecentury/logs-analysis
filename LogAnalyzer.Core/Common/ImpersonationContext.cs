@@ -1,37 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
-using System.Threading;
 
-namespace AuthenticationToProdSample
+namespace LogAnalyzer.Common
 {
-	class Program
-	{
-		static void Main( string[] args )
-		{
-			ImpersonationContext ctx = new ImpersonationContext( "MO", "mikhail.brinchuk", "." );
-
-			try
-			{
-				ctx.Enter();
-
-				const string path = @"\\192.168.101.41\logs";
-				var dirs = Directory.GetDirectories( path );
-			}
-			finally
-			{
-				ctx.Leave();
-			}
-		}
-	}
-
-	public sealed class ImpersonationContext : IDisposable
+	public sealed class ImpersonationContext
 	{
 		[DllImport( "advapi32.dll", SetLastError = true )]
 		public static extern bool LogonUser( String lpszUsername, String lpszDomain,
@@ -50,13 +28,6 @@ namespace AuthenticationToProdSample
 
 		private WindowsImpersonationContext _context;
 
-		public static IDisposable ExecuteInContext( string domain, string username, string password )
-		{
-			var ctx = new ImpersonationContext( domain, username, password );
-			ctx.Enter();
-			return ctx;
-		}
-
 		private bool IsInContext
 		{
 			get { return _context != null; }
@@ -69,10 +40,14 @@ namespace AuthenticationToProdSample
 			_password = password;
 		}
 
-		[PermissionSetAttribute( SecurityAction.Demand, Name = "FullTrust" )]
+		[PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
 		public void Enter()
 		{
-			if ( this.IsInContext ) return;
+			if ( this.IsInContext )
+			{
+				return;
+			}
+
 			_token = new IntPtr( 0 );
 
 			_token = IntPtr.Zero;
@@ -83,28 +58,63 @@ namespace AuthenticationToProdSample
 			   Logon32LogonInteractive,
 			   Logon32ProviderDefault,
 			   ref _token );
+
 			if ( logonSuccessfull == false )
 			{
 				int error = Marshal.GetLastWin32Error();
 				throw new Win32Exception( error );
 			}
+
 			WindowsIdentity identity = new WindowsIdentity( _token );
 			_context = identity.Impersonate();
 		}
 
-		[PermissionSetAttribute( SecurityAction.Demand, Name = "FullTrust" )]
+		[PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
 		public void Leave()
 		{
-			if ( this.IsInContext == false ) return;
+			if ( this.IsInContext == false )
+			{
+				return;
+			}
 			_context.Undo();
 
-			if ( _token != IntPtr.Zero ) CloseHandle( _token );
+			if ( _token != IntPtr.Zero )
+			{
+				CloseHandle( _token );
+			}
+
 			_context = null;
 		}
+	}
 
-		public void Dispose()
+	public static class ImpersonationContextExtensions
+	{
+		public static IDisposable ExecuteInContext( this ImpersonationContext context )
 		{
-			Leave();
+			if ( context != null )
+			{
+				context.Enter();
+			}
+
+			return new ContextDisposable( context );
+		}
+
+		private sealed class ContextDisposable : IDisposable
+		{
+			private readonly ImpersonationContext _context;
+
+			public ContextDisposable( ImpersonationContext context )
+			{
+				_context = context;
+			}
+
+			public void Dispose()
+			{
+				if ( _context != null )
+				{
+					_context.Leave();
+				}
+			}
 		}
 	}
 }

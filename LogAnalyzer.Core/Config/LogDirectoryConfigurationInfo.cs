@@ -84,12 +84,7 @@ namespace LogAnalyzer.Config
 			set { _notificationsEnabledAtStart = value; }
 		}
 
-		private int _pollingIntervalMillisecods;
-		public int PollingIntervalMillisecods
-		{
-			get { return _pollingIntervalMillisecods; }
-			set { _pollingIntervalMillisecods = value; }
-		}
+		public int PollingIntervalMillisecods { get; set; }
 
 		private ExpressionBuilder _logEntriesFilter = new AlwaysTrue();
 		public ExpressionBuilder LogEntriesFilter
@@ -111,5 +106,11 @@ namespace LogAnalyzer.Config
 			get { return _fileNamesFilter; }
 			set { _fileNamesFilter = value; }
 		}
+
+		public string Domain { get; set; }
+
+		public string Username { get; set; }
+
+		public string Password { get; set; }
 	}
 }
