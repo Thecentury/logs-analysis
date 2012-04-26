@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using LogAnalyzer.Common;
 
 namespace LogAnalyzer.Kernel
 {
@@ -12,5 +13,19 @@ namespace LogAnalyzer.Kernel
 		void WaitAllRunningOperationsToComplete();
 
 		bool IsSynchronous { get; }
+	}
+
+	public static class OperationsQueueExtensions
+	{
+		public static void EnqueueOperation( this IOperationsQueue queue, ImpersonationContext context, Action action )
+		{
+			queue.EnqueueOperation( () =>
+									{
+										using ( context.ExecuteInContext() )
+										{
+											action();
+										}
+									} );
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using LogAnalyzer.Common;
 
 namespace LogAnalyzer.Operations
 {
@@ -7,7 +8,9 @@ namespace LogAnalyzer.Operations
 		public AsyncOperation CreateOperation( Action action )
 		{
 			if ( action == null )
+			{
 				throw new ArgumentNullException( "action" );
+			}
 
 			var operation = CreateOperationCore( action );
 			return operation;
@@ -21,8 +24,6 @@ namespace LogAnalyzer.Operations
 
 		protected abstract AsyncOperation CreateOperationCore( Action action );
 
-		#region Static
-
 		private static readonly SyncronousOperationScheduler syncronousScheduler = new SyncronousOperationScheduler();
 		public static OperationScheduler SyncronousScheduler
 		{
@@ -34,7 +35,21 @@ namespace LogAnalyzer.Operations
 		{
 			get { return taskScheduler; }
 		}
+	}
 
-		#endregion
+	public static class OperationsSchedulerExtensions
+	{
+		public static AsyncOperation CreateOperation( this OperationScheduler scheduler, ImpersonationContext context, Action action )
+		{
+			var operation = scheduler.CreateOperation( () =>
+			{
+				using ( context.ExecuteInContext() )
+				{
+					action();
+				}
+			} );
+
+			return operation;
+		}
 	}
 }
