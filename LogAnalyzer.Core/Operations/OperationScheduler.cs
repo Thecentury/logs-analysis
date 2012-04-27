@@ -1,5 +1,4 @@
 ﻿using System;
-using LogAnalyzer.Common;
 
 namespace LogAnalyzer.Operations
 {
@@ -34,28 +33,6 @@ namespace LogAnalyzer.Operations
         public static OperationScheduler TaskScheduler
         {
             get { return taskScheduler; }
-        }
-    }
-
-    public static class OperationsSchedulerExtensions
-    {
-        public static AsyncOperation CreateOperation(this OperationScheduler scheduler, ImpersonationContext context, Action action)
-        {
-            var operation = scheduler.CreateOperation(() =>
-            {
-                using (context.ExecuteInContext())
-                {
-                    action();
-                }
-            });
-
-            return operation;
-        }
-
-        public static void StartNewOperation(this OperationScheduler scheduler, ImpersonationContext context, Action action)
-        {
-            var operation = scheduler.CreateOperation(context, action);
-            operation.Start();
         }
     }
 }
