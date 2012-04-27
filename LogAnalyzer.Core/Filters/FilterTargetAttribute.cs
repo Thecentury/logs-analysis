@@ -12,12 +12,12 @@ namespace LogAnalyzer.Filters
 	[AttributeUsage( AttributeTargets.Class, AllowMultiple = true, Inherited = true )]
 	public sealed class FilterTargetAttribute : Attribute
 	{
-		private readonly Type targetType;
+		private readonly Type _targetType;
 
 		public FilterTargetAttribute( [NotNull] Type targetType )
 		{
 			if ( targetType == null ) throw new ArgumentNullException( "targetType" );
-			this.targetType = targetType;
+			this._targetType = targetType;
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace LogAnalyzer.Filters
 		/// </summary>
 		public Type TargetType
 		{
-			get { return targetType; }
+			get { return _targetType; }
 		}
 	}
 }

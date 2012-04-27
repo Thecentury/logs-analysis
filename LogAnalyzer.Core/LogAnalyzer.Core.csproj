@@ -153,6 +153,7 @@
     <Compile Include="Kernel\Notifications\IgnoringStopNotificationSource.cs" />
     <Compile Include="Kernel\Notifications\PausableNotificationSource.cs" />
     <Compile Include="Kernel\Notifications\SubscribableLogNotificationSourceBase.cs" />
+    <Compile Include="Extensions\OperationsQueueExtensions.cs" />
     <Compile Include="Kernel\Parsers\ConfigurableLineParser.cs" />
     <Compile Include="Kernel\DefaultDirectoryFactory.cs" />
     <Compile Include="Kernel\DependencyInjectionContainer.cs" />
@@ -279,6 +280,7 @@
     <Compile Include="Misc\BCLPositionAwareStreamReader.cs" />
     <Compile Include="Misc\PositionAwareStreamReader.cs" />
     <Compile Include="Operations\AsyncOperation.cs" />
+    <Compile Include="Extensions\OperationsSchedulerExtensions.cs" />
     <Compile Include="Operations\SyncronousAsyncOperation.cs" />
     <Compile Include="Operations\SyncronousOperationScheduler.cs" />
     <Compile Include="Operations\TaskAsyncOperation.cs" />

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
+using System.Threading;
 
 namespace LogAnalyzer.Common
 {
@@ -28,12 +29,19 @@ namespace LogAnalyzer.Common
 
 		private WindowsImpersonationContext _context;
 
+	    private static readonly ThreadLocal<ImpersonationContext> currentThreadContext = new ThreadLocal<ImpersonationContext>();
+
 		private bool IsInContext
 		{
 			get { return _context != null; }
 		}
 
-		public ImpersonationContext( string domain, string username, string password )
+	    public static ThreadLocal<ImpersonationContext> CurrentThreadContext
+	    {
+	        get { return currentThreadContext; }
+	    }
+
+	    public ImpersonationContext( string domain, string username, string password )
 		{
 			_domain = domain;
 			_username = username;
@@ -67,6 +75,8 @@ namespace LogAnalyzer.Common
 
 			WindowsIdentity identity = new WindowsIdentity( _token );
 			_context = identity.Impersonate();
+
+		    CurrentThreadContext.Value = this;
 		}
 
 		[PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
@@ -84,6 +94,8 @@ namespace LogAnalyzer.Common
 			}
 
 			_context = null;
+
+		    CurrentThreadContext.Value = null;
 		}
 	}
 

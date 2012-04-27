@@ -15,7 +15,6 @@ using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Kernel.Parsers;
 using LogAnalyzer.Logging;
 using IOPath = System.IO.Path;
-using LogAnalyzer.Operations;
 
 namespace LogAnalyzer
 {
@@ -132,9 +131,25 @@ namespace LogAnalyzer
 			this.DisplayName = directoryCfg.DisplayName;
 			this.UseCache = directoryCfg.UseCache;
 
+            if (!directoryCfg.Domain.IsNullOrEmpty() && !directoryCfg.Username.IsNullOrEmpty() && !directoryCfg.Password.IsNullOrEmpty())
+            {
+                _impersonationContext = new ImpersonationContext(directoryCfg.Domain, directoryCfg.Username, directoryCfg.Password);
+            }
+
 			this._directoryInfo = environment.GetDirectory( Path );
-			this._notificationsSource = _directoryInfo.NotificationSource;
-			this._environment = environment;
+
+            using (_impersonationContext.ExecuteInContext())
+            {
+                _notificationsSource = _directoryInfo.NotificationSource;
+
+                _notificationsSource.Changed += OnFileChanged;
+                _notificationsSource.Created += OnFileCreated;
+                _notificationsSource.Deleted += OnFileDeleted;
+                _notificationsSource.Error += OnWatcherError;
+                _notificationsSource.Renamed += OnFileRenamed;
+            }
+
+		    this._environment = environment;
 			this._operationsQueue = environment.OperationsQueue;
 			this._config = config;
 			this._core = core;
@@ -153,20 +168,9 @@ namespace LogAnalyzer
 
 			_globalFileFilter.Changed += OnFileFilterChanged;
 
-			_notificationsSource.Changed += OnFileChanged;
-			_notificationsSource.Created += OnFileCreated;
-			_notificationsSource.Deleted += OnFileDeleted;
-			_notificationsSource.Error += OnWatcherError;
-			_notificationsSource.Renamed += OnFileRenamed;
-
 			if ( !String.IsNullOrWhiteSpace( directoryCfg.EncodingName ) )
 			{
 				this._encoding = Encoding.GetEncoding( directoryCfg.EncodingName );
-			}
-
-			if ( !directoryCfg.Domain.IsNullOrEmpty() && !directoryCfg.Username.IsNullOrEmpty() && !directoryCfg.Password.IsNullOrEmpty() )
-			{
-				_impersonationContext = new ImpersonationContext( directoryCfg.Domain, directoryCfg.Username, directoryCfg.Password );
 			}
 		}
 
