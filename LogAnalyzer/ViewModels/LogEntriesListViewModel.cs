@@ -23,7 +23,6 @@ using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.Kernel.Notifications;
 using LogAnalyzer.Logging;
 using LogAnalyzer.Operations;
-using Microsoft.Research.DynamicDataDisplay.Charts;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace LogAnalyzer.GUI.ViewModels
@@ -42,7 +41,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private DispatcherTimer _updateAddedCountTimer;
 		private SearchViewModel _searchViewModel;
 
-		protected LogEntriesListViewModel( ApplicationViewModel applicationViewModel )
+		protected LogEntriesListViewModel(ApplicationViewModel applicationViewModel)
 			: base( applicationViewModel )
 		{
 			_highlightingFilters.CollectionChanged += OnHighlightingFiltersCollectionChanged;
@@ -110,29 +109,56 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _selectedEntry; }
 			set
 			{
-				if ( _selectedEntry == value )
+				if (_selectedEntry == value)
 				{
 					return;
 				}
 
 				_selectedEntry = value;
 
-				UpdateTimeDelta();
+				if (!HasTimeDeltaLockedEntry)
+				{
+					UpdateTimeDelta();
+				}
 
 				RaisePropertyChanged( "SelectedEntry" );
 			}
 		}
 
+		public bool HasTimeDeltaLockedEntry
+		{
+			get { return _timeDeltaLockedEntry != null; }
+		}
+
+		private LogEntryViewModel _timeDeltaLockedEntry;
+		public LogEntryViewModel TimeDeltaLockedEntry
+		{
+			get { return _timeDeltaLockedEntry; }
+			set
+			{
+				if (_timeDeltaLockedEntry != value)
+				{
+					_timeDeltaLockedEntry = value;
+					UpdateTimeDelta();
+				}
+			}
+		}
+
 		private void UpdateTimeDelta()
 		{
-			var selectedTime = DateTime.MinValue;
-			if ( SelectedEntry != null )
+			DateTime selectedTime = DateTime.MinValue;
+			if (HasTimeDeltaLockedEntry)
+			{
+				selectedTime = _timeDeltaLockedEntry.Time;
+			}
+			else if (SelectedEntry != null)
 			{
 				selectedTime = SelectedEntry.Time;
 			}
-			foreach ( var entry in _logEntriesViewModels.CreatedEntries )
+
+			foreach (var entry in _logEntriesViewModels.CreatedEntries)
 			{
-				if ( entry == SelectedEntry || SelectedEntry == null )
+				if (entry == SelectedEntry || SelectedEntry == null)
 				{
 					entry.TimeDelta = null;
 				}
@@ -140,11 +166,11 @@ namespace LogAnalyzer.GUI.ViewModels
 				{
 					var delta = entry.Time - selectedTime;
 					string format;
-					if ( delta.Days == 0 )
+					if (delta.Days == 0)
 					{
-						if ( delta.Hours == 0 )
+						if (delta.Hours == 0)
 						{
-							if ( delta.Minutes == 0 )
+							if (delta.Minutes == 0)
 							{
 								format = @"s\s";
 							}
@@ -163,7 +189,7 @@ namespace LogAnalyzer.GUI.ViewModels
 						format = @"d\d\ h\h";
 					}
 
-					if ( delta.TotalDays < 0 )
+					if (delta.TotalDays < 0)
 					{
 						format = @"\-" + format;
 					}
@@ -177,23 +203,23 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _selectedEntryIndex; }
 			set
 			{
-				if ( _selectedEntryIndex == value )
+				if (_selectedEntryIndex == value)
 				{
 					return;
 				}
 
 				_selectedEntryIndex = value;
 
-				if ( DataGrid != null )
+				if (DataGrid != null)
 				{
-					if ( value < _logEntriesViewModels.Count )
+					if (value < _logEntriesViewModels.Count)
 					{
 						var selectedValue = _logEntriesViewModels[value];
 						try
 						{
 							DataGrid.ScrollIntoView( selectedValue );
 						}
-						catch ( Exception exc )
+						catch (Exception exc)
 						{
 							Logger.Instance.WriteException( exc );
 						}
@@ -209,7 +235,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _autoScrollToBottom; }
 			set
 			{
-				if ( _autoScrollToBottom == value )
+				if (_autoScrollToBottom == value)
 				{
 					return;
 				}
@@ -226,7 +252,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _addedEntriesCountString; }
 			set
 			{
-				if ( _addedEntriesCountString == value )
+				if (_addedEntriesCountString == value)
 				{
 					return;
 				}
@@ -247,7 +273,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _dynamicHighlightingFilter; }
 			set
 			{
-				if ( _dynamicHighlightingFilter == value )
+				if (_dynamicHighlightingFilter == value)
 					return;
 
 				_dynamicHighlightingFilter = value;
@@ -260,7 +286,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _highlightedPropertyName; }
 			set
 			{
-				if ( _highlightedPropertyName == value )
+				if (_highlightedPropertyName == value)
 					return;
 
 				_highlightedPropertyName = value;
@@ -270,12 +296,16 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public void UpdateDynamicHighlighting()
 		{
-			if ( _dynamicHighlightingFilter == null )
+			if (_dynamicHighlightingFilter == null)
+			{
 				return;
-			if ( _highlightedPropertyName == null )
+			}
+			if (_highlightedPropertyName == null)
+			{
 				return;
+			}
 
-			foreach ( LogEntryViewModel logEntryViewModel in _logEntriesViewModels.CreatedEntries )
+			foreach (LogEntryViewModel logEntryViewModel in _logEntriesViewModels.CreatedEntries)
 			{
 				bool include = _dynamicHighlightingFilter.Include( logEntryViewModel.LogEntry );
 
@@ -293,7 +323,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _messagesDensityDataSource == null )
+				if (_messagesDensityDataSource == null)
 				{
 					Task.Factory.StartNew( () =>
 											{
@@ -330,7 +360,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _overviews == null )
+				if (_overviews == null)
 				{
 					_overviews = new ObservableCollection<IOverviewViewModel>();
 					PopulateOverviews( _overviews );
@@ -339,14 +369,14 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateOverviews( IList<IOverviewViewModel> overviewsList )
+		protected virtual void PopulateOverviews(IList<IOverviewViewModel> overviewsList)
 		{
 			overviewsList.Add( new MessageTypeOverview( _entries, this ) );
 			AddLogFileOverview( overviewsList );
 			overviewsList.Add( new ThreadOverview( _entries, this ) );
 		}
 
-		protected virtual void AddLogFileOverview( IList<IOverviewViewModel> overviewsList )
+		protected virtual void AddLogFileOverview(IList<IOverviewViewModel> overviewsList)
 		{
 			overviewsList.Add( new LogFileOverview( _entries, this ) );
 		}
@@ -356,7 +386,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollToItemCommand == null )
+				if (_scrollToItemCommand == null)
 				{
 					_scrollToItemCommand = new DelegateCommand<LogEntry>( entry =>
 					{
@@ -378,19 +408,19 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _gotFocusCommand == null )
+				if (_gotFocusCommand == null)
 					_gotFocusCommand = new DelegateCommand<RoutedEventArgs>( GotFocusExecute );
 
 				return _gotFocusCommand;
 			}
 		}
 
-		public void GotFocusExecute( RoutedEventArgs e )
+		public void GotFocusExecute(RoutedEventArgs e)
 		{
 			DynamicHighlightManager.ProcessCellSelection( e );
 		}
 
-		protected override void OnLoaded( RoutedEventArgs e )
+		protected override void OnLoaded(RoutedEventArgs e)
 		{
 			base.OnLoaded( e );
 			ScrollToBottomCommand.ExecuteIfCan();
@@ -415,7 +445,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollDownCommand == null )
+				if (_scrollDownCommand == null)
 					_scrollDownCommand = new DelegateCommand( () => SelectedEntryIndex++, () => SelectedEntryIndex < _entries.Count - 1 );
 
 				return _scrollDownCommand;
@@ -426,7 +456,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollUpCommand == null )
+				if (_scrollUpCommand == null)
 					_scrollUpCommand = new DelegateCommand( () => SelectedEntryIndex--, () => SelectedEntryIndex > 0 );
 
 				return _scrollUpCommand;
@@ -437,7 +467,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollPageDownCommand == null )
+				if (_scrollPageDownCommand == null)
 					_scrollPageDownCommand = new DelegateCommand(
 						() => ScrollViewer.PageDown(),
 						() => SelectedEntryIndex < _entries.Count - 1 );
@@ -450,7 +480,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollPageUpCommand == null )
+				if (_scrollPageUpCommand == null)
 					_scrollPageUpCommand = new DelegateCommand(
 						() => ScrollViewer.PageUp(),
 						() => SelectedEntryIndex > 0 );
@@ -463,7 +493,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollToTopCommand == null )
+				if (_scrollToTopCommand == null)
 					_scrollToTopCommand = new DelegateCommand( () => ScrollViewer.ScrollToTop(), () => ScrollViewer != null );
 
 				return _scrollToTopCommand;
@@ -474,7 +504,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _scrollToBottomCommand == null )
+				if (_scrollToBottomCommand == null)
 					_scrollToBottomCommand = new DelegateCommand( () => ScrollViewer.ScrollToBottom(), () => ScrollViewer != null );
 
 				return _scrollToBottomCommand;
@@ -485,7 +515,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _toggleAutoScrollToBottomCommand == null )
+				if (_toggleAutoScrollToBottomCommand == null)
 					_toggleAutoScrollToBottomCommand = new DelegateCommand( () => AutoScrollToBottom = !AutoScrollToBottom );
 				return _toggleAutoScrollToBottomCommand;
 			}
@@ -493,12 +523,30 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion // Scroll commands
 
+		private DelegateCommand _removeTimeDeltaLockCommand;
+		public ICommand RemoveTimeDeltaLockCommand
+		{
+			get
+			{
+				if (_removeTimeDeltaLockCommand == null)
+				{
+					_removeTimeDeltaLockCommand = new DelegateCommand( () =>
+					{
+						_timeDeltaLockedEntry = null;
+						UpdateTimeDelta();
+					} );
+				}
+
+				return _removeTimeDeltaLockCommand;
+			}
+		}
+
 		private DelegateCommand _addHighlightingCommand;
 		public ICommand AddHighlightingCommand
 		{
 			get
 			{
-				if ( _addHighlightingCommand == null )
+				if (_addHighlightingCommand == null)
 					_addHighlightingCommand = new DelegateCommand( AddHighlighting );
 
 				return _addHighlightingCommand;
@@ -508,7 +556,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void AddHighlighting()
 		{
 			var highlightVm = ApplicationViewModel.ShowHighlightEditorWindow();
-			if ( highlightVm == null )
+			if (highlightVm == null)
 				return;
 
 			var vm = new HighlightingViewModel( this, highlightVm.SelectedBuilder, new SolidColorBrush( highlightVm.SelectedColor ).AsFrozen() );
@@ -523,7 +571,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _addFilterTabCommand == null )
+				if (_addFilterTabCommand == null)
 				{
 					_addFilterTabCommand = new DelegateCommand( AddFilterTabExecute );
 				}
@@ -534,7 +582,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void AddFilterTabExecute()
 		{
 			ExpressionBuilder filterBuilder = ApplicationViewModel.ShowFilterEditorWindow();
-			if ( filterBuilder == null )
+			if (filterBuilder == null)
 			{
 				return;
 			}
@@ -554,7 +602,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _saveToFileCommand == null )
+				if (_saveToFileCommand == null)
 				{
 					_saveToFileCommand = new DelegateCommand( SaveToFileExecute );
 				}
@@ -565,7 +613,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private void SaveToFileExecute()
 		{
 			var saveFileDialog = ApplicationViewModel.Config.ResolveNotNull<ISaveFileDialog>();
-			if ( saveFileDialog.ShowDialog() == true )
+			if (saveFileDialog.ShowDialog() == true)
 			{
 				string path = saveFileDialog.FileName;
 
@@ -575,17 +623,17 @@ namespace LogAnalyzer.GUI.ViewModels
 														{
 															try
 															{
-																using ( FileStream fs = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ) )
-																using ( var writer = new StreamWriter( fs ) )
+																using (FileStream fs = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ))
+																using (var writer = new StreamWriter( fs ))
 																{
 																	LogSaveVisitor saveVisitor = new LogSaveVisitor( writer, new DefaultLogEntryFormatter() );
-																	foreach ( var logEntry in _entries )
+																	foreach (var logEntry in _entries)
 																	{
 																		logEntry.Accept( saveVisitor );
 																	}
 																}
 															}
-															catch ( Exception exc )
+															catch (Exception exc)
 															{
 																Logger.Instance.WriteError( "SaveToFileExecute(): {0}", exc );
 															}
@@ -605,18 +653,18 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _highlightingFilters; }
 		}
 
-		private void OnHighlightingFiltersCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnHighlightingFiltersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if ( e.NewItems != null )
+			if (e.NewItems != null)
 			{
-				foreach ( HighlightingViewModel added in e.NewItems )
+				foreach (HighlightingViewModel added in e.NewItems)
 				{
 					added.Changed += OnHighlightingFilterChanged;
 				}
 			}
-			if ( e.OldItems != null )
+			if (e.OldItems != null)
 			{
-				foreach ( HighlightingViewModel removed in e.OldItems )
+				foreach (HighlightingViewModel removed in e.OldItems)
 				{
 					removed.Changed -= OnHighlightingFilterChanged;
 					removed.Dispose();
@@ -624,15 +672,15 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private void OnHighlightingFilterChanged( object sender, EventArgs e )
+		private void OnHighlightingFilterChanged(object sender, EventArgs e)
 		{
 			var highlighter = (HighlightingViewModel)sender;
 
-			foreach ( LogEntryViewModel entryViewModel in LogEntriesViewModels.CreatedEntries )
+			foreach (LogEntryViewModel entryViewModel in LogEntriesViewModels.CreatedEntries)
 			{
 				entryViewModel.HighlightedByList.Remove( highlighter );
 
-				if ( highlighter.Filter.Include( entryViewModel.LogEntry ) )
+				if (highlighter.Filter.Include( entryViewModel.LogEntry ))
 				{
 					entryViewModel.HighlightedByList.Add( highlighter );
 				}
@@ -650,7 +698,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( !_toolbarItemsPopulated )
+				if (!_toolbarItemsPopulated)
 				{
 					PopulateToolbarItems( _toolbarItems );
 					_toolbarItemsPopulated = true;
@@ -660,7 +708,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateToolbarItems( IList<object> collection )
+		protected virtual void PopulateToolbarItems(IList<object> collection)
 		{
 			collection.Add( new LogEntryListToolbarViewModel( this ) );
 			collection.Add( new ToolBarItemViewModel( "Add filter tab", AddFilterTabCommand, MakePackUri( "/Resources/funnel--plus.png" ) ) );
@@ -668,7 +716,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			collection.Add( new ToolBarItemViewModel( "Add highlighting", AddHighlightingCommand, MakePackUri( "/Resources/flag--plus.png" ) ) );
 
 			var notificationSource = GetNotificationSource();
-			if ( notificationSource != null )
+			if (notificationSource != null)
 			{
 				collection.Add( new ToolBarItemViewModel( "Force update", CreateForceUpdateCommand( notificationSource ), MakePackUri( "/Resources/arrow-retweet.png" ) ) );
 			}
@@ -679,7 +727,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			return null;
 		}
 
-		private ICommand CreateForceUpdateCommand( LogNotificationsSourceBase notificationsSource )
+		private ICommand CreateForceUpdateCommand(LogNotificationsSourceBase notificationsSource)
 		{
 			return new DelegateCommand( () => notificationsSource.ForceUpdate() );
 		}
@@ -695,7 +743,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( !_statusBarItemsPopulated )
+				if (!_statusBarItemsPopulated)
 				{
 					PopulateStatusBarItems( _statusBarItems );
 					_statusBarItemsPopulated = true;
@@ -705,13 +753,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		protected virtual void PopulateStatusBarItems( ICollection<object> collection )
+		protected virtual void PopulateStatusBarItems(ICollection<object> collection)
 		{
 			collection.Add( GetEntriesCountStatusBarItem() );
 			collection.Add( new SelectedEntryIndexStatusBarItem( this ) );
 
 			MessageSeverityCountViewModel messagesCount = MessageSeverityCount;
-			if ( messagesCount != null )
+			if (messagesCount != null)
 			{
 				collection.Add( messagesCount );
 			}
@@ -725,7 +773,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private StatusBarLogWriter GetOrCreateLogWriter()
 		{
 			StatusBarLogWriter writer = Logger.Instance.Writers.OfType<StatusBarLogWriter>().FirstOrDefault();
-			if ( writer == null )
+			if (writer == null)
 			{
 				writer = new StatusBarLogWriter();
 				Logger.Instance.Writers.Add( writer );
@@ -741,13 +789,13 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
-		protected internal abstract LogFileViewModel GetFileViewModel( LogEntry logEntry );
+		protected internal abstract LogFileViewModel GetFileViewModel(LogEntry logEntry);
 
 		public abstract LogEntriesListViewModel Clone();
 
-		protected void Init( IList<LogEntry> entries )
+		protected void Init(IList<LogEntry> entries)
 		{
-			if ( entries == null )
+			if (entries == null)
 			{
 				throw new ArgumentNullException( "entries" );
 			}
@@ -781,29 +829,29 @@ namespace LogAnalyzer.GUI.ViewModels
 			_logEntriesViewModels.Dispose();
 		}
 
-		private void OnLogEntriesViewModelsItemCreated( object sender, LogEntryHostChangedEventArgs e )
+		private void OnLogEntriesViewModelsItemCreated(object sender, LogEntryHostChangedEventArgs e)
 		{
 			OnLogEntryViewModelCreated( e.LogEntryViewModel );
 		}
 
-		protected virtual void OnLogEntryViewModelCreated( LogEntryViewModel createdViewModel )
+		protected virtual void OnLogEntryViewModelCreated(LogEntryViewModel createdViewModel)
 		{
 			UpdateDynamicHighlighting();
 			UpdateTimeDelta();
 		}
 
-		private void OnLogEntriesViewModelsItemRemoved( object sender, LogEntryHostChangedEventArgs e )
+		private void OnLogEntriesViewModelsItemRemoved(object sender, LogEntryHostChangedEventArgs e)
 		{
 			OnLogEntryViewModelRemoved( e.LogEntryViewModel );
 		}
 
-		protected virtual void OnLogEntryViewModelRemoved( LogEntryViewModel removedViewModel )
+		protected virtual void OnLogEntryViewModelRemoved(LogEntryViewModel removedViewModel)
 		{
 			UpdateDynamicHighlighting();
 			UpdateTimeDelta();
 		}
 
-		private void OnLogEntriesViewModelsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		private void OnLogEntriesViewModelsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			OnLogEntriesViewModelsCollectionChanged( e );
 		}
@@ -812,7 +860,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		/// <remarks>Вызывается в UI потоке.</remarks>
 		/// </summary>
 		/// <param name="e"></param>
-		protected virtual void OnLogEntriesViewModelsCollectionChanged( NotifyCollectionChangedEventArgs e )
+		protected virtual void OnLogEntriesViewModelsCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			ScrollToBottomIfShould();
 
@@ -823,40 +871,40 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		private void ScrollToBottomIfShould()
 		{
-			if ( _autoScrollToBottom )
+			if (_autoScrollToBottom)
 			{
 				ScrollToBottomCommand.ExecuteIfCan();
 			}
 		}
 
-		private void OnUpdateAddedCountTimerTick( object sender, EventArgs e )
+		private void OnUpdateAddedCountTimerTick(object sender, EventArgs e)
 		{
 			AddedEntriesCountString = "+" + _addedEntriesCount;
 			_addedEntriesCount = 0;
 		}
 
-		private void UpdateAddedCount( NotifyCollectionChangedEventArgs e )
+		private void UpdateAddedCount(NotifyCollectionChangedEventArgs e)
 		{
-			if ( e.Action == NotifyCollectionChangedAction.Add )
+			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				_addedEntriesCount += e.NewItems.Count;
 			}
-			else if ( e.Action == NotifyCollectionChangedAction.Reset )
+			else if (e.Action == NotifyCollectionChangedAction.Reset)
 			{
 				_addedEntriesCount = 0;
 			}
 		}
 
-		public void OnSelectedTextChanged( string text )
+		public void OnSelectedTextChanged(string text)
 		{
-			if ( String.IsNullOrWhiteSpace( text ) )
+			if (String.IsNullOrWhiteSpace( text ))
 				return;
 
 			Regex textSearchRegex = CreateTextSearchRegex( text );
-			foreach ( var logEntryViewModel in LogEntriesViewModels.CreatedEntries )
+			foreach (var logEntryViewModel in LogEntriesViewModels.CreatedEntries)
 			{
 				var document = logEntryViewModel.Document;
-				if ( document == null )
+				if (document == null)
 					return;
 
 				//string xaml = XamlServices.Save( document );
@@ -867,7 +915,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 				var start = document.ContentStart;
 
-				while ( match.Success )
+				while (match.Success)
 				{
 					var selectionRange = new TextRange( start.GetPositionAtOffset( match.Index ),
 													   start.GetPositionAtOffset( match.Index + match.Length ) );
@@ -879,7 +927,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			}
 		}
 
-		private Regex CreateTextSearchRegex( string text )
+		private Regex CreateTextSearchRegex(string text)
 		{
 			string escapedText = text.Escape( "[", "]", "(", ")", @"\", ".", "+", "*", "?" );
 

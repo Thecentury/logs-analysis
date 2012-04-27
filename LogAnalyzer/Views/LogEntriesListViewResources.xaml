@@ -7,7 +7,10 @@
 					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 					mc:Ignorable="d"
 					xmlns:local="clr-namespace:LogAnalyzer.GUI" xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels">
+	
 	<SolidColorBrush Color="#99FFEE3A" x:Key="dynamicHighlightBrush"/>
+	
+	<BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
 
 	<Common:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
 
@@ -287,6 +290,25 @@
 							</Style>
 						</MenuItem.ItemContainerStyle>
 					</MenuItem>
+
+					<MenuItem Header="Mark entry as time delta source" 
+							  Visibility="{Binding LockTimeDeltaCommandVisible, Converter={StaticResource booleanToVisibilityConverter}}"
+							  Command="{Binding LockTimeDeltaCommand}"
+							  ToolTip="Set current log entry as a source for time delta calculation">
+						<MenuItem.Icon>
+							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/lock.png"/>
+						</MenuItem.Icon>
+					</MenuItem>
+							  
+					<MenuItem Header="Clear time delta source lock"
+							  Visibility="{Binding RemoveTimeDeltaLockCommandVisible, Converter={StaticResource booleanToVisibilityConverter}}"
+							  Command="{Binding RemoveTimeDeltaLockCommand}"
+							  ToolTip="Remove time delta calculation source lock">
+						<MenuItem.Icon>
+							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/lock-unlock.png"/>
+						</MenuItem.Icon>
+					</MenuItem>
+							  
 
 				</ContextMenu>
 			</Setter.Value>

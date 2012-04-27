@@ -78,13 +78,11 @@ namespace LogAnalyzer.GUI.Common
 			this.isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
 		}
 
-		[DebuggerStepThrough]
 		public bool CanExecute()
 		{
 			return canExecuteMethod == null || canExecuteMethod();
 		}
 
-		[DebuggerStepThrough]
 		public void Execute()
 		{
 #if DEBUG
