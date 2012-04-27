@@ -47,17 +47,17 @@ namespace LogAnalyzer.GUI.ViewModels
 		private static int createdCount;
 #endif
 
-		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host,
-			LogEntriesListViewModel parentViewModel, int indexInParentCollection )
+		internal LogEntryViewModel(LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host,
+			LogEntriesListViewModel parentViewModel, int indexInParentCollection)
 			: base( logEntry )
 		{
-			if ( logEntry == null )
+			if (logEntry == null)
 				throw new ArgumentNullException( "logEntry" );
-			if ( parentFile == null )
+			if (parentFile == null)
 				throw new ArgumentNullException( "parentFile" );
-			if ( host == null )
+			if (host == null)
 				throw new ArgumentNullException( "host" );
-			if ( parentViewModel == null )
+			if (parentViewModel == null)
 				throw new ArgumentNullException( "parentViewModel" );
 
 			this._logEntry = logEntry;
@@ -74,7 +74,7 @@ namespace LogAnalyzer.GUI.ViewModels
 #endif
 
 			// todo обдумать, как еще можно сделать
-			if ( logEntry.IsFrozen )
+			if (logEntry.IsFrozen)
 			{
 				// Freeze();
 			}
@@ -94,7 +94,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _template == null )
+				if (_template == null)
 				{
 					UpdateColorization();
 				}
@@ -116,7 +116,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if ( _templateContext == null )
+				if (_templateContext == null)
 				{
 					UpdateColorization();
 				}
@@ -126,29 +126,29 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		public FlowDocument Document { get; set; }
 
-		public void OnSelectionChanged( TextSelection range )
+		public void OnSelectionChanged(TextSelection range)
 		{
 			_parentViewModel.OnSelectedTextChanged( range.Text );
 		}
 
 		public string SelectedText { get; set; }
 
-		public bool Equals( LogEntryViewModel other )
+		public bool Equals(LogEntryViewModel other)
 		{
-			if ( ReferenceEquals( null, other ) )
+			if (ReferenceEquals( null, other ))
 				return false;
-			if ( ReferenceEquals( this, other ) )
+			if (ReferenceEquals( this, other ))
 				return true;
 			bool equals = Equals( other._logEntry, _logEntry );
 			return equals;
 		}
 
-		public override bool Equals( object obj )
+		public override bool Equals(object obj)
 		{
-			if ( ReferenceEquals( null, obj ) )
+			if (ReferenceEquals( null, obj ))
 				return false;
-			if ( ReferenceEquals( this, obj ) ) return true;
-			if ( obj.GetType() != typeof( LogEntryViewModel ) ) return false;
+			if (ReferenceEquals( this, obj )) return true;
+			if (obj.GetType() != typeof( LogEntryViewModel )) return false;
 			bool equals = Equals( (LogEntryViewModel)obj );
 			return equals;
 		}
@@ -190,7 +190,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _highlightedColumnName; }
 			internal set
 			{
-				if ( _highlightedColumnName == value )
+				if (_highlightedColumnName == value)
 				{
 					return;
 				}
@@ -206,7 +206,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _isDynamicHighlighted; }
 			internal set
 			{
-				if ( _isDynamicHighlighted == value )
+				if (_isDynamicHighlighted == value)
 				{
 					return;
 				}
@@ -271,7 +271,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				List<MenuItemViewModel> parents = new List<MenuItemViewModel>();
 
 				var parent = _parentViewModel.ParentView;
-				while ( parent != null )
+				while (parent != null)
 				{
 					MenuItemViewModel vm = new MenuItemViewModel
 											{
@@ -474,9 +474,43 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#endregion
 
+		private DelegateCommand _lockTimeDeltaCommand;
+		public ICommand LockTimeDeltaCommand
+		{
+			get
+			{
+				if (_lockTimeDeltaCommand == null)
+				{
+					_lockTimeDeltaCommand = new DelegateCommand( LockTimeDeltaExecute );
+				}
+				return _lockTimeDeltaCommand;
+			}
+		}
+
+
+		private void LockTimeDeltaExecute()
+		{
+			_parentViewModel.TimeDeltaLockedEntry = this;
+		}
+
+		public ICommand RemoveTimeDeltaLockCommand
+		{
+			get { return _parentViewModel.RemoveTimeDeltaLockCommand; }
+		}
+
+		public bool LockTimeDeltaCommandVisible
+		{
+			get { return !_parentViewModel.HasTimeDeltaLockedEntry; }
+		}
+
+		public bool RemoveTimeDeltaLockCommandVisible
+		{
+			get { return _parentViewModel.HasTimeDeltaLockedEntry; }
+		}
+
 		#region Highlight by commands
 
-		private ICommand CreateHighlightCommand( ExpressionBuilder filter )
+		private ICommand CreateHighlightCommand(ExpressionBuilder filter)
 		{
 			DelegateCommand command = new DelegateCommand( () =>
 			{
@@ -575,66 +609,68 @@ namespace LogAnalyzer.GUI.ViewModels
 		#region Copy to clipboard
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private DelegateCommand copyFileNameCommand;
+		private DelegateCommand _copyFileNameCommand;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFileNameCommand
 		{
 			get
 			{
-				if ( copyFileNameCommand == null )
-					copyFileNameCommand = new DelegateCommand( () => Clipboard.SetText( File.Name ) );
+				if (_copyFileNameCommand == null)
+					_copyFileNameCommand = new DelegateCommand( () => Clipboard.SetText( File.Name ) );
 
-				return copyFileNameCommand;
+				return _copyFileNameCommand;
 			}
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private DelegateCommand copyFullPathCommand;
+		private DelegateCommand _copyFullPathCommand;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFullPathCommand
 		{
 			get
 			{
-				if ( copyFullPathCommand == null )
-					copyFullPathCommand = new DelegateCommand( () => Clipboard.SetText( File.LogFile.FullPath ) );
+				if (_copyFullPathCommand == null)
+					_copyFullPathCommand = new DelegateCommand( () => Clipboard.SetText( File.LogFile.FullPath ) );
 
-				return copyFullPathCommand;
+				return _copyFullPathCommand;
 			}
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private DelegateCommand copyFileLocationCommand;
+		private DelegateCommand _copyFileLocationCommand;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyFileLocationCommand
 		{
 			get
 			{
-				if ( copyFileLocationCommand == null )
-					copyFileLocationCommand = new DelegateCommand( () =>
+				if (_copyFileLocationCommand == null)
+					_copyFileLocationCommand = new DelegateCommand( () =>
 																	{
 																		string location = Path.GetDirectoryName( File.LogFile.FullPath );
 																		Clipboard.SetText( location );
 																	} );
 
-				return copyFileLocationCommand;
+				return _copyFileLocationCommand;
 			}
 		}
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private DelegateCommand copyMessageCommand;
+		private DelegateCommand _copyMessageCommand;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		public ICommand CopyMessageCommand
 		{
 			get
 			{
-				if ( copyMessageCommand == null )
-					copyMessageCommand = new DelegateCommand( () => Clipboard.SetText( UnitedText ) );
+				if (_copyMessageCommand == null)
+				{
+					_copyMessageCommand = new DelegateCommand( () => Clipboard.SetText( UnitedText ) );
+				}
 
-				return copyMessageCommand;
+				return _copyMessageCommand;
 			}
 		}
 
