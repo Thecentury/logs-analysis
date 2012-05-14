@@ -279,6 +279,7 @@
     <Compile Include="Misc\PerformanceCountersService.cs" />
     <Compile Include="Misc\BCLPositionAwareStreamReader.cs" />
     <Compile Include="Misc\PositionAwareStreamReader.cs" />
+    <Compile Include="Misc\ReverseLineReader.cs" />
     <Compile Include="Operations\AsyncOperation.cs" />
     <Compile Include="Extensions\OperationsSchedulerExtensions.cs" />
     <Compile Include="Operations\SyncronousAsyncOperation.cs" />
