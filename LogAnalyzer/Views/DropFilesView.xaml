@@ -182,9 +182,9 @@
 							</Button>
 
 							<Button Command="{Binding SaveCommand}"
-						Padding="10"
-						HorizontalAlignment="Right"
-						Content="Save"/>
+								Padding="10"
+								HorizontalAlignment="Right"
+								Content="Save"/>
 						</Grid>
 
 						<ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -193,10 +193,10 @@
 						  VerticalAlignment="Top">
 
 							<ItemsControl ItemsSource="{Binding Files}"
-					  HorizontalAlignment="Center"
-					  VerticalAlignment="Center"
-					  ItemTemplate="{StaticResource droppedFileTemplate}"
-					  />
+							  HorizontalAlignment="Center"
+							  VerticalAlignment="Center"
+							  ItemTemplate="{StaticResource droppedFileTemplate}"
+							  />
 
 						</ScrollViewer>
 					</DockPanel>

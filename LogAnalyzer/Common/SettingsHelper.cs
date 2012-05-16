@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Interop;
 using LogAnalyzer.GUI.Properties;
+using Windows7.DesktopIntegration;
 
 namespace LogAnalyzer.GUI.Common
 {
@@ -27,6 +30,16 @@ namespace LogAnalyzer.GUI.Common
 			Settings.Default.LatestProjectPaths = projectPaths;
 
 			Settings.Default.Save();
+
+			Application currentApp = Application.Current;
+			if ( currentApp != null )
+			{
+				WindowInteropHelper interopHelper = new WindowInteropHelper( currentApp.MainWindow );
+				using ( JumpListManager jumpListManager = new JumpListManager( interopHelper.Handle ) )
+				{
+					jumpListManager.AddToRecent( projectFile );
+				}
+			}
 		}
 	}
 }
