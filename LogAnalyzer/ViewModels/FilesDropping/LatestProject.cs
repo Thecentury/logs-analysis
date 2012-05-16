@@ -11,8 +11,6 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		private readonly string _path;
 		private readonly DropFilesViewModel _parent;
 
-		private DelegateCommand _openRecentProjectCommand;
-
 		public LatestProject( [NotNull] string path, [NotNull] DropFilesViewModel parent )
 		{
 			if ( path == null )
@@ -28,6 +26,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			_parent = parent;
 		}
 
+		private DelegateCommand _openRecentProjectCommand;
 		public ICommand OpenRecentProjectCommand
 		{
 			get
@@ -43,6 +42,25 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 
 				return _openRecentProjectCommand;
 			}
+		}
+
+		private DelegateCommand _removeFromRecentCommand;
+		public ICommand RemoveFromRecentCommand
+		{
+			get
+			{
+				if ( _removeFromRecentCommand == null )
+				{
+					_removeFromRecentCommand = new DelegateCommand( RemoveFromRecentExecute );
+				}
+				return _removeFromRecentCommand;
+			}
+		}
+
+		private void RemoveFromRecentExecute()
+		{
+			SettingsHelper.RemoveProjectFromRecent( _path );
+			_parent.LatestProjects.Remove( this );
 		}
 
 		public string Path

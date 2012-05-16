@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using LogAnalyzer.Extensions;
 using System.Windows;
 using System.Windows.Threading;
@@ -45,7 +46,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			dispatcher.Invoke( action, priority );
 		}
 
-		protected void BeginInvokeInUIDispatcher( Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+		protected void BeginInvokeInUIDispatcher( Action action, DispatcherPriority priority = DispatcherPriority.Normal )
 		{
 			Dispatcher dispatcher = DispatcherHelper.GetDispatcher();
 			dispatcher.BeginInvoke( action, priority );
@@ -96,6 +97,12 @@ namespace LogAnalyzer.GUI.ViewModels
 		protected void RaiseAllPropertiesChanged()
 		{
 			propertyChanged.Raise( this, String.Empty );
+		}
+
+		protected void RaisePropertyChanged<T>( Expression<Func<T>> propertyExpression )
+		{
+			var body = propertyExpression.Body as MemberExpression;
+			RaisePropertyChanged( body.Member.Name );
 		}
 
 		protected void RaisePropertyChanged( string propertyName )
