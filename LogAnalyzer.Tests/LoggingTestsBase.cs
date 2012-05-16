@@ -27,10 +27,10 @@ namespace LogAnalyzer.Tests
 		protected void InitEnvironment( Encoding encoding, int directoriesCount = 2 )
 		{
 			var configBuilder = LogAnalyzerConfiguration.CreateNew();
-			configBuilder.AddLogDirectory( "Dir1", "*", "Some directory 1" );
+			configBuilder.AddLogDirectory( "Dir1", "Some directory 1" );
 			if ( directoriesCount > 1 )
 			{
-				configBuilder.AddLogDirectory( "Dir2", "*", "Some directory 2" );
+				configBuilder.AddLogDirectory( "Dir2", "Some directory 2" );
 			}
 
 			foreach ( var dir in configBuilder.Directories )

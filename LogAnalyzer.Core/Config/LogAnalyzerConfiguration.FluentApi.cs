@@ -16,9 +16,9 @@ namespace LogAnalyzer.Config
 			return config;
 		}
 
-		public static T AddLogDirectory<T>( this T config, string path, string fileNameFilter, string displayName ) where T : LogAnalyzerConfiguration
+		public static T AddLogDirectory<T>( this T config, string path, string displayName ) where T : LogAnalyzerConfiguration
 		{
-			LogDirectoryConfigurationInfo logDirectory = new LogDirectoryConfigurationInfo( path, fileNameFilter, displayName );
+			LogDirectoryConfigurationInfo logDirectory = new LogDirectoryConfigurationInfo( path, displayName );
 			config.Directories.Add( logDirectory );
 
 			return config;

@@ -171,6 +171,7 @@
     <Compile Include="Common\PackUriHelper.cs" />
     <Compile Include="Common\PropertyNameToIsDynamicHighlightedConverter.cs" />
     <Compile Include="Common\ColorHelper.cs" />
+    <Compile Include="Common\SettingsHelper.cs" />
     <Compile Include="Common\TabHeaderTemplateSelector.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
     <Compile Include="Controls\HighlightingBorderControl.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="ViewModels\EntriesCountStatusBarItem.cs" />
     <Compile Include="ViewModels\FilesDropping\DroppedObjectViewModel.cs" />
     <Compile Include="ViewModels\FilesDropping\IDroppedObjectVisitor.cs" />
+    <Compile Include="ViewModels\FilesDropping\LatestProject.cs" />
     <Compile Include="ViewModels\FilesDropping\StartAnalyzingVisitor.cs" />
     <Compile Include="ViewModels\FilesTreeRequestShowVisitor.cs" />
     <Compile Include="ViewModels\FilesTree\CoreTreeItem.cs" />
@@ -348,6 +350,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <None Include="app.config" />
     <None Include="Templates\BusinessProcessStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -445,10 +448,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="TabViewModelHierarchy.cd" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />

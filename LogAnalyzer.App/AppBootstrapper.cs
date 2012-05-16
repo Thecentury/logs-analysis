@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace LogAnalyzer.App
 
 			Logger.WriteLine( MessageType.Error, "TaskSchdeduler - Unhandled exception: " + e.Exception );
 			MessageBox.Show( e.Exception.ToString(), "Task Scheduler unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
-			
+
 			e.SetObserved();
 		}
 
@@ -76,7 +77,7 @@ namespace LogAnalyzer.App
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
 			var args = GetPathsFromCommandArgs( CommandLineArgs );
-			var projectFile = args.OfType<FileInfo>().Select( f => f.FullName ).FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
+			string projectFile = args.OfType<FileInfo>().Select( f => f.FullName ).FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
 
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 			if ( projectFile != null )
@@ -88,12 +89,12 @@ namespace LogAnalyzer.App
 				if ( AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null )
 				{
 					var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
-					if (activationData != null)
+					if ( activationData != null )
 					{
 						projectFile =
 							activationData
-								.FirstOrDefault(f => Path.GetExtension(f) == Constants.ProjectExtension);
-						if (projectFile != null)
+								.FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
+						if ( projectFile != null )
 						{
 							configPath = projectFile;
 						}
@@ -112,6 +113,11 @@ namespace LogAnalyzer.App
 			if ( configPathExists )
 			{
 				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
+
+				if ( projectFile != null )
+				{
+					SettingsHelper.AddProjectToRecent( projectFile );
+				}
 			}
 			else
 			{
@@ -136,81 +142,6 @@ namespace LogAnalyzer.App
 			// замедление чтения
 			//KeyValueStorage.Instance.Add( "FileSystemStreamReaderTransformer",
 			//    new SlowStreamTransformer( TimeSpan.FromMilliseconds( 1 ) ) );
-		}
-
-		/// <summary>
-		/// Обрабатывает пути к файлам логов, переданные как аргументы командной строки.
-		/// </summary>
-		/// <param name="config"></param>
-		private void HandleOpenWithCalls( LogAnalyzerConfiguration config )
-		{
-			var paths = GetPathsFromCommandArgs( CommandLineArgs )
-				.Where( item => item.Extension != Constants.ProjectExtension )
-				.ToList();
-
-			if ( paths.Count > 0 )
-			{
-				config.Directories.Clear();
-				foreach ( var dir in paths.OfType<DirectoryInfo>() )
-				{
-					config.Directories.Add( new LogDirectoryConfigurationInfo( dir.FullName, "*", dir.Name )
-												{
-													EncodingName = config.DefaultEncodingName
-												} );
-				}
-
-				var files = paths
-					.OfType<FileInfo>()
-					.Where( f => f.Extension == ".log" )
-					.ToList();
-
-				if ( files.Count > 0 )
-				{
-					LogDirectoryConfigurationInfo directoryForSeparateFiles = new LogDirectoryConfigurationInfo( "Files", "*", "Files" )
-					{
-						EncodingName = config.DefaultEncodingName
-					};
-
-					directoryForSeparateFiles.PredefinedFiles.AddRange( files.Select( f => f.FullName ) );
-
-					config.Directories.Add( directoryForSeparateFiles );
-				}
-
-				var zipFiles = paths.OfType<FileInfo>().Where( f => f.Extension == ".zip" ).ToList();
-				if ( zipFiles.Count > 0 )
-				{
-					foreach ( FileInfo zipFile in zipFiles )
-					{
-						var zipDir = new LogDirectoryConfigurationInfo( zipFile.FullName, "*", zipFile.Name ) { IncludeNestedDirectories = true };
-						config.Directories.Add( zipDir );
-					}
-				}
-			}
-		}
-
-		private List<FileSystemInfo> GetPathsFromCommandArgs( IEnumerable<string> commandLineArgs )
-		{
-			List<FileSystemInfo> result = new List<FileSystemInfo>();
-
-			foreach ( string arg in commandLineArgs )
-			{
-				bool isForConfig = arg.StartsWith( "/" ) && arg.Contains( ":" );
-				if ( isForConfig )
-				{
-					continue;
-				}
-
-				if ( File.Exists( arg ) )
-				{
-					result.Add( new FileInfo( arg ) );
-				}
-				else if ( Directory.Exists( arg ) )
-				{
-					result.Add( new DirectoryInfo( arg ) );
-				}
-			}
-
-			return result;
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace TestApp
 								.AddLoggerAcceptedMessageType( MessageType.Error )
 								.AddLoggerAcceptedMessageType( MessageType.Warning )
 								.AddLoggerAcceptedMessageType( MessageType.Info )
-								.AddLogDirectory( new LogDirectoryConfigurationInfo( "Dir1", "*", "Dir1" )
+								.AddLogDirectory( new LogDirectoryConfigurationInfo( "Dir1", "Dir1" )
 								{
 									EncodingName = "utf-16",
 									LineParser = new ConfigurableLineParser

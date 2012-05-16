@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,6 +84,78 @@ namespace LogAnalyzer.GUI
 			Environment.Exit( -1 );
 		}
 
+		/// <summary>
+		/// Обрабатывает пути к файлам логов, переданные как аргументы командной строки.
+		/// </summary>
+		/// <param name="config"></param>
+		protected void HandleOpenWithCalls( LogAnalyzerConfiguration config )
+		{
+			var paths = GetPathsFromCommandArgs( CommandLineArgs )
+				.Where( item => item.Extension != Constants.ProjectExtension )
+				.ToList();
+
+			if ( paths.Count > 0 )
+			{
+				config.Directories.Clear();
+				foreach ( var dir in paths.OfType<DirectoryInfo>() )
+				{
+					config.Directories.Add( new LogDirectoryConfigurationInfo( dir.FullName, dir.Name )
+					{
+						EncodingName = config.DefaultEncodingName
+					} );
+				}
+
+				var files = paths
+					.OfType<FileInfo>()
+					.Where( f => f.Extension == ".log" )
+					.ToList();
+
+				if ( files.Count > 0 )
+				{
+					var directoryForSeparateFiles = new LogDirectoryConfigurationInfo( "Files", "Files" ) { EncodingName = config.DefaultEncodingName };
+
+					directoryForSeparateFiles.PredefinedFiles.AddRange( files.Select( f => f.FullName ) );
+
+					config.Directories.Add( directoryForSeparateFiles );
+				}
+
+				var zipFiles = paths.OfType<FileInfo>().Where( f => f.Extension == ".zip" ).ToList();
+				if ( zipFiles.Count > 0 )
+				{
+					foreach ( FileInfo zipFile in zipFiles )
+					{
+						var zipDir = new LogDirectoryConfigurationInfo( zipFile.FullName, zipFile.Name ) { IncludeNestedDirectories = true };
+						config.Directories.Add( zipDir );
+					}
+				}
+			}
+		}
+
+		protected List<FileSystemInfo> GetPathsFromCommandArgs( IEnumerable<string> commandLineArgs )
+		{
+			List<FileSystemInfo> result = new List<FileSystemInfo>();
+
+			foreach ( string arg in commandLineArgs )
+			{
+				bool isForConfig = arg.StartsWith( "/" ) && arg.Contains( ":" );
+				if ( isForConfig )
+				{
+					continue;
+				}
+
+				if ( File.Exists( arg ) )
+				{
+					result.Add( new FileInfo( arg ) );
+				}
+				else if ( Directory.Exists( arg ) )
+				{
+					result.Add( new DirectoryInfo( arg ) );
+				}
+			}
+
+			return result;
+		}
+
 		protected void InitConfig( LogAnalyzerConfiguration config )
 		{
 			this._logger = config.Logger;
@@ -97,19 +170,19 @@ namespace LogAnalyzer.GUI
 
 			ColorizationManager colorizationManager = null;
 			DispatcherHelper.GetDispatcher().Invoke( () =>
-														{
-															List<ColorizeTemplateBase> templates;
-															if ( Directory.Exists( templatesDir ) )
-															{
-																ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
-																templates = colorizationLoader.Load();
-															}
-															else
-															{
-																templates = new List<ColorizeTemplateBase>();
-															}
-															colorizationManager = new ColorizationManager( templates );
-														}, DispatcherPriority.Send );
+			{
+				List<ColorizeTemplateBase> templates;
+				if ( Directory.Exists( templatesDir ) )
+				{
+					ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
+					templates = colorizationLoader.Load();
+				}
+				else
+				{
+					templates = new List<ColorizeTemplateBase>();
+				}
+				colorizationManager = new ColorizationManager( templates );
+			}, DispatcherPriority.Send );
 
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )

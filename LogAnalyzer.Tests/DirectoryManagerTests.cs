@@ -35,7 +35,7 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestHasNoPredefinedFiles()
 		{
-			LogDirectoryConfigurationInfo directoryConfiguration = new LogDirectoryConfigurationInfo( "C:/Windows", "*", "Dir" );
+			LogDirectoryConfigurationInfo directoryConfiguration = new LogDirectoryConfigurationInfo( "C:/Windows", "Dir" );
 
 			var dir = directoryManager.CreateDirectory( directoryConfiguration );
 

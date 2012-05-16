@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
+using LogAnalyzer.GUI.Properties;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 
@@ -45,7 +46,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			_fileSystem = fileSystem;
 			_saveToStreamDialog = saveToStreamDialog;
 
-			_directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "*", "DroppedFiles" );
+			_directoryConfig = new LogDirectoryConfigurationInfo( "DroppedFiles", "DroppedFiles" );
 
 			_directoryInfo = PredefinedFilesDirectoryFactory.CreateDirectory( _directoryConfig,
 				_files.OfType<DroppedFileViewModel>().Select( f => f.Name ) );
@@ -95,6 +96,47 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 		public bool HasFiles
 		{
 			get { return _files.Count > 0; }
+		}
+
+		private List<LatestProject> _latestProjects;
+		public List<LatestProject> LatestProjects
+		{
+			get
+			{
+				if ( _latestProjects == null )
+				{
+					List<string> projects;
+					var projectsFromSettings = Settings.Default.LatestProjectPaths;
+					if ( projectsFromSettings == null )
+					{
+						projects = new List<string>();
+					}
+					else
+					{
+						projects = projectsFromSettings.Cast<string>().ToList();
+					}
+
+					_latestProjects = projects.Select( p => new LatestProject( p, this ) ).ToList();
+				}
+
+				return _latestProjects;
+			}
+		}
+
+		public bool HasLatestProjects
+		{
+			get
+			{
+				var stringCollection = LatestProjects;
+				if ( stringCollection == null )
+				{
+					return false;
+				}
+				else
+				{
+					return stringCollection.Count > 0;
+				}
+			}
 		}
 
 		private bool _isEnabled = true;
@@ -151,57 +193,70 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			{
 				string[] paths = (string[])data.GetData( "FileDrop" );
 
-				IsEnabled = false;
-
-				List<Task> tasks = new List<Task>();
-				foreach ( string path in paths )
-				{
-					if ( _fileSystem.FileExists( path ) )
-					{
-						if ( Path.GetExtension( path ) == Constants.ProjectExtension )
-						{
-							Task t = AddProject( path );
-							tasks.Add( t );
-						}
-						else
-						{
-							AddDroppedFile( path );
-						}
-					}
-					else if ( _fileSystem.DirectoryExists( path ) )
-					{
-						Task t = AddDroppedDir( path );
-						tasks.Add( t );
-					}
-				}
-
-				if ( tasks.Count > 0 )
-				{
-					Task[] tasksArray = tasks.ToArray();
-					Task.Factory.ContinueWhenAll( tasksArray, tt =>
-					{
-						foreach ( var task in tt )
-						{
-							if ( task.IsFaulted )
-							{
-								Logger.Instance.WriteError( "DropCommandExecute(): {0}", task.Exception );
-							}
-						}
-						IsEnabled = true;
-					} );
-				}
-				else
-				{
-					IsEnabled = true;
-				}
+				DropCommandExecute( paths );
 			}
 		}
 
-		private Task AddProject( string path )
+		public Task DropCommandExecute( params string[] paths )
+		{
+			TaskCompletionSource<int> taskSource = new TaskCompletionSource<int>();
+
+			IsEnabled = false;
+
+			List<Task> tasks = new List<Task>();
+			foreach (string path in paths)
+			{
+				if ( _fileSystem.FileExists( path ) )
+				{
+					if ( Path.GetExtension( path ) == Constants.ProjectExtension )
+					{
+						Task t = AddProject( path );
+						tasks.Add( t );
+					}
+					else
+					{
+						AddDroppedFile( path );
+					}
+				}
+				else if ( _fileSystem.DirectoryExists( path ) )
+				{
+					Task t = AddDroppedDir( path );
+					tasks.Add( t );
+				}
+			}
+
+			if ( tasks.Count > 0 )
+			{
+				Task[] tasksArray = tasks.ToArray();
+				Task.Factory.ContinueWhenAll( tasksArray, tt =>
+				{
+				    foreach (var task in tt)
+				    {
+				        if ( task.IsFaulted )
+				        {
+				            Logger.Instance.WriteError( "DropCommandExecute(): {0}", task.Exception );
+				        }
+				    }
+				    IsEnabled = true;
+					taskSource.SetResult( 0 );
+				} );
+			}
+			else
+			{
+				IsEnabled = true;
+				taskSource.SetResult( 0 );
+			}
+
+			return taskSource.Task;
+		}
+
+		public Task AddProject( string path )
 		{
 			var config = ApplicationViewModel.Config;
 
 			var newProject = LogAnalyzerConfiguration.LoadFromFile( path );
+
+			SettingsHelper.AddProjectToRecent( path );
 
 			config.DefaultEncodingName = newProject.DefaultEncodingName;
 			config.GlobalFileNamesFilterBuilder = newProject.GlobalFileNamesFilterBuilder;
@@ -250,7 +305,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			var config = ApplicationViewModel.Config;
 
 			string name = Path.GetDirectoryName( path );
-			LogDirectoryConfigurationInfo dirConfig = new LogDirectoryConfigurationInfo( path, "*", name );
+			LogDirectoryConfigurationInfo dirConfig = new LogDirectoryConfigurationInfo( path, name );
 			dirConfig.EncodingName = config.DefaultEncodingName;
 
 			var droppedDirTask = CreateAndAddDirectory( dirConfig, config, uiScheduler );
