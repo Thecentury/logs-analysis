@@ -130,18 +130,26 @@ namespace LogAnalyzer
 		public void ReplaceLastLine( string newLine, long newLineIndex )
 		{
 			if ( newLine == null )
+			{
 				throw new ArgumentNullException( "newLine" );
+			}
 
 			if ( _textLines.Count == 0 )
+			{
 				throw new InvalidOperationException();
+			}
 
 			int lastLineIndex = this.LineIndex + this._textLines.Count - 1;
 
 			if ( lastLineIndex != newLineIndex )
+			{
 				throw new InvalidOperationException();
+			}
 
 			if ( _isFrozen )
+			{
 				throw new InvalidOperationException( "Cannot modify frozen object." );
+			}
 
 			_textLines[_textLines.Count - 1] = newLine;
 			RaiseAllPropertiesChanged();
@@ -150,14 +158,20 @@ namespace LogAnalyzer
 		public void AppendLine( string newLine )
 		{
 			if ( newLine == null )
+			{
 				throw new ArgumentNullException( "newLine" );
+			}
 
 			// первая строка должна извлекаться из заголовка LogEntry
 			if ( _textLines.Count == 0 )
+			{
 				throw new InvalidOperationException();
+			}
 
 			if ( _isFrozen )
+			{
 				throw new InvalidOperationException( "Cannot modify frozen object." );
+			}
 
 			_textLines.Add( newLine );
 			RaiseAllPropertiesChanged();

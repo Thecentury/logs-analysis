@@ -98,8 +98,8 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			get { return _files.Count > 0; }
 		}
 
-		private List<LatestProject> _latestProjects;
-		public List<LatestProject> LatestProjects
+		private ObservableCollection<LatestProject> _latestProjects;
+		public ObservableCollection<LatestProject> LatestProjects
 		{
 			get
 			{
@@ -116,11 +116,17 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 						projects = projectsFromSettings.Cast<string>().ToList();
 					}
 
-					_latestProjects = projects.Select( p => new LatestProject( p, this ) ).ToList();
+					_latestProjects = new ObservableCollection<LatestProject>( projects.Select( p => new LatestProject( p, this ) ) );
+					_latestProjects.CollectionChanged += OnLatestProjectsCollectionChanged;
 				}
 
 				return _latestProjects;
 			}
+		}
+
+		private void OnLatestProjectsCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
+		{
+			RaisePropertyChanged( () => HasLatestProjects );
 		}
 
 		public bool HasLatestProjects
@@ -204,7 +210,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			IsEnabled = false;
 
 			List<Task> tasks = new List<Task>();
-			foreach (string path in paths)
+			foreach ( string path in paths )
 			{
 				if ( _fileSystem.FileExists( path ) )
 				{
@@ -230,14 +236,14 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 				Task[] tasksArray = tasks.ToArray();
 				Task.Factory.ContinueWhenAll( tasksArray, tt =>
 				{
-				    foreach (var task in tt)
-				    {
-				        if ( task.IsFaulted )
-				        {
-				            Logger.Instance.WriteError( "DropCommandExecute(): {0}", task.Exception );
-				        }
-				    }
-				    IsEnabled = true;
+					foreach ( var task in tt )
+					{
+						if ( task.IsFaulted )
+						{
+							Logger.Instance.WriteError( "DropCommandExecute(): {0}", task.Exception );
+						}
+					}
+					IsEnabled = true;
 					taskSource.SetResult( 0 );
 				} );
 			}

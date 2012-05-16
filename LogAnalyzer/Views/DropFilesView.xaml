@@ -133,6 +133,12 @@
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
 									<Button
+										Margin="1"
+										Height="16"
+										VerticalContentAlignment="Center"
+										ToolTip="Remove from the recent list"
+										Command="{Binding RemoveFromRecentCommand}">x</Button>
+									<Button
 										Margin="2"
 										ToolTip="Open project"
 										Command="{Binding OpenRecentProjectCommand}">

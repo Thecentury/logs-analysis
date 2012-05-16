@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Shell;
+using System.Windows.Threading;
+using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Properties;
 using Windows7.DesktopIntegration;
 
@@ -31,15 +34,18 @@ namespace LogAnalyzer.GUI.Common
 
 			Settings.Default.Save();
 
-			Application currentApp = Application.Current;
-			if ( currentApp != null )
+			JumpList.AddToRecentCategory( projectFile );
+		}
+
+		public static void RemoveProjectFromRecent(string projectFile)
+		{
+			var recentProjects = Settings.Default.LatestProjectPaths;
+			if ( recentProjects != null )
 			{
-				WindowInteropHelper interopHelper = new WindowInteropHelper( currentApp.MainWindow );
-				using ( JumpListManager jumpListManager = new JumpListManager( interopHelper.Handle ) )
-				{
-					jumpListManager.AddToRecent( projectFile );
-				}
+				recentProjects.Remove( projectFile );
 			}
+
+			Settings.Default.Save();
 		}
 	}
 }
