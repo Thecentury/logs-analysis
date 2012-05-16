@@ -35,7 +35,7 @@ namespace LogAnalyzer.Zip.Tests
 
 			manager.RegisterFactory( new ZipDirectoryFactory() );
 
-			LogDirectoryConfigurationInfo directoryConfiguration = new LogDirectoryConfigurationInfo( fileName, "*", "DisplayName" );
+			LogDirectoryConfigurationInfo directoryConfiguration = new LogDirectoryConfigurationInfo( fileName, "DisplayName" );
 
 			ZipDirectoryInfo zipDirectory = manager.CreateDirectory( directoryConfiguration ) as ZipDirectoryInfo;
 
@@ -45,7 +45,7 @@ namespace LogAnalyzer.Zip.Tests
 		[Test]
 		public void TestGetZippedLogs()
 		{
-			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, null );
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "" ), zipFileName, null );
 			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 4, files.Count );
@@ -68,7 +68,7 @@ namespace LogAnalyzer.Zip.Tests
 		[Test]
 		public void TestSetRootFolder()
 		{
-			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1" );
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "" ), zipFileName, "Logs1" );
 			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 2, files.Count );
@@ -77,7 +77,7 @@ namespace LogAnalyzer.Zip.Tests
 		[Test]
 		public void TestSetRootFolderWithNestedEnabled()
 		{
-			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ) { IncludeNestedDirectories = true }, zipFileName, "Logs1" );
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "" ) { IncludeNestedDirectories = true }, zipFileName, "Logs1" );
 			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 3, files.Count );
@@ -86,7 +86,7 @@ namespace LogAnalyzer.Zip.Tests
 		[Test]
 		public void TestSetDeepRootFolderWithNestedEnabled()
 		{
-			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "", "" ), zipFileName, "Logs1/Inner" );
+			ZipDirectoryInfo zip = new ZipDirectoryInfo( new LogDirectoryConfigurationInfo( zipFileName, "" ), zipFileName, "Logs1/Inner" );
 			var files = zip.EnumerateFiles().ToList();
 
 			Assert.AreEqual( 1, files.Count );

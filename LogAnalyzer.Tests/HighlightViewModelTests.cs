@@ -46,7 +46,7 @@ namespace LogAnalyzer.Tests
 			_dispatcherStartedEvent.Wait();
 
 			_config = LogAnalyzerConfiguration.CreateNew()
-				.AddLogDirectory( new LogDirectoryConfigurationInfo( "Mock", "*", "Mock" ) { EncodingName = Encoding.Unicode.WebName } )
+				.AddLogDirectory( new LogDirectoryConfigurationInfo( "Mock", "Mock" ) { EncodingName = Encoding.Unicode.WebName } )
 				.SetScheduler( new DispatcherScheduler( DispatcherHelper.RunningDispatcher ) )
 				.RegisterInstance( new ColorizationManager( new List<ColorizeTemplateBase>() ) );
 

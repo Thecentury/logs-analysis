@@ -15,7 +15,7 @@ namespace LogAnalyzer.Config
 			UseCache = false;
 		}
 
-		public LogDirectoryConfigurationInfo( [NotNull]string path, string fileNameFilter, string displayName )
+		public LogDirectoryConfigurationInfo( [NotNull]string path, string displayName )
 		{
 			UseCache = false;
 			if ( path.IsNullOrEmpty() )
@@ -29,7 +29,6 @@ namespace LogAnalyzer.Config
 			}
 
 			Path = path;
-			FileNameFilter = fileNameFilter;
 			DisplayName = displayName;
 		}
 
