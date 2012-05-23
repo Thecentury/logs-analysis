@@ -34,13 +34,13 @@ namespace LogAnalyzer.LoggingTemplates
 			}
 		}
 
-		private static readonly Regex _formatPlaceholderRegex = new Regex( @"(\{\d+\})", RegexOptions.Compiled );
+		private static readonly Regex formatPlaceholderRegex = new Regex( @"(\{\d+\})", RegexOptions.Compiled );
 		public static Regex FormatPlaceholderRegex
 		{
-			get { return _formatPlaceholderRegex; }
+			get { return formatPlaceholderRegex; }
 		}
 
-		private static readonly Regex _digitsRegex = new Regex( @"^\{(?<DIGIT>\d+)\}$", RegexOptions.Compiled );
+		private static readonly Regex digitsRegex = new Regex( @"^\{(?<DIGIT>\d+)\}$", RegexOptions.Compiled );
 
 		private void CreateRegex()
 		{
@@ -49,19 +49,24 @@ namespace LogAnalyzer.LoggingTemplates
 			_regex = new Regex( pattern, RegexOptions.Compiled );
 		}
 
+		public const char TemplatedPartStart = 'G';
+		public const char ConstantPartStart = 'C';
+
 		public static string BuildRegexPattern( string input )
 		{
-			string[] parts = _formatPlaceholderRegex.Split( input );
+			string[] parts = formatPlaceholderRegex.Split( input );
 
 			StringBuilder builder = new StringBuilder();
+
+			int constantPartsCounter = 0;
 
 			builder.Append( "^" );
 			foreach ( string part in parts )
 			{
-				var digitsMatch = _digitsRegex.Match( part );
+				var digitsMatch = digitsRegex.Match( part );
 				if ( digitsMatch.Success )
 				{
-					builder.Append( "(?<G" );
+					builder.Append( "(?<" ).Append( TemplatedPartStart );
 					string groupNumber = digitsMatch.Groups["DIGIT"].Value;
 					builder.Append( groupNumber );
 					builder.Append( ">.*)" );
@@ -70,7 +75,8 @@ namespace LogAnalyzer.LoggingTemplates
 				{
 					if ( !String.IsNullOrEmpty( part ) )
 					{
-						builder.Append( "(" ).Append( part.EscapeRegexChars() ).Append( ")" );
+						builder.Append( "(?<" ).Append( ConstantPartStart ).Append( constantPartsCounter ).Append( ">" ).Append( part.EscapeRegexChars() ).Append( ")" );
+						constantPartsCounter++;
 					}
 				}
 			}
