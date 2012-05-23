@@ -1,15 +1,19 @@
 ﻿//#define MEASURE_CREATED_COUNT
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xaml;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using System.Windows.Input;
@@ -18,6 +22,7 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
+using LogAnalyzer.LoggingTemplates;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -28,7 +33,6 @@ namespace LogAnalyzer.GUI.ViewModels
 		private readonly ILogEntryHost _host;
 		private readonly int _indexInParentCollection = ParallelHelper.IndexNotFound;
 		private readonly LogEntriesListViewModel _parentViewModel;
-		private readonly ColorizationManager _colorizationManager;
 
 		/// <summary>
 		/// Индекс в коллекции host.
@@ -47,18 +51,26 @@ namespace LogAnalyzer.GUI.ViewModels
 		private static int createdCount;
 #endif
 
-		internal LogEntryViewModel(LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host,
-			LogEntriesListViewModel parentViewModel, int indexInParentCollection)
+		internal LogEntryViewModel( LogEntry logEntry, LogFileViewModel parentFile, ILogEntryHost host,
+			LogEntriesListViewModel parentViewModel, int indexInParentCollection )
 			: base( logEntry )
 		{
-			if (logEntry == null)
+			if ( logEntry == null )
+			{
 				throw new ArgumentNullException( "logEntry" );
-			if (parentFile == null)
+			}
+			if ( parentFile == null )
+			{
 				throw new ArgumentNullException( "parentFile" );
-			if (host == null)
+			}
+			if ( host == null )
+			{
 				throw new ArgumentNullException( "host" );
-			if (parentViewModel == null)
+			}
+			if ( parentViewModel == null )
+			{
 				throw new ArgumentNullException( "parentViewModel" );
+			}
 
 			this._logEntry = logEntry;
 			this._parentFile = parentFile;
@@ -66,15 +78,13 @@ namespace LogAnalyzer.GUI.ViewModels
 			this._indexInParentCollection = indexInParentCollection;
 			this._parentViewModel = parentViewModel;
 
-			_colorizationManager = parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ColorizationManager>();
-
 #if MEASURE_CREATED_COUNT
 			Interlocked.Increment( ref createdCount );
 			Logger.Instance.WriteInfo( "LogEntryViewModel.ctor: CreatedCount = {0}", createdCount );
 #endif
 
 			// todo обдумать, как еще можно сделать
-			if (logEntry.IsFrozen)
+			if ( logEntry.IsFrozen )
 			{
 				// Freeze();
 			}
@@ -88,67 +98,121 @@ namespace LogAnalyzer.GUI.ViewModels
 		}
 #endif
 
-		// todo brinchuk remove me
-		private ControlTemplate _template;
-		public ControlTemplate Template
+		private static readonly Brush[] templateGroupBrushes = new Brush[]
+		                                              	{
+		                                              		Brushes.Gold,
+		                                              		Brushes.DarkSeaGreen,
+		                                              		Brushes.DeepSkyBlue
+		                                              	};
+
+		private Paragraph _paragraph;
+		public Paragraph Paragraph
 		{
 			get
 			{
-				if (_template == null)
+				if ( _paragraph == null )
 				{
-					UpdateColorization();
+					_paragraph = new Paragraph( new Run( _logEntry.UnitedText ) );
+
+					Task.Factory.StartNew( () =>
+											{
+												var formatRecognizer =
+													_parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ILogEntryFormatRecognizer>();
+
+												var format = formatRecognizer.FindFormat( _logEntry );
+												return format;
+											} ).ContinueWith( t =>
+																{
+																	var format = t.Result;
+																	if ( format == null )
+																	{
+																		return;
+																	}
+																	var regex = format.Usage.Regex;
+																	string[] parts = regex.Split( _logEntry.UnitedText );
+																	var match = regex.Match( _logEntry.UnitedText );
+																	var groupNames = regex.GetGroupNames();
+
+																	List<string> groupValues = groupNames.Select( groupName => match.Groups[groupName].Value ).ToList();
+
+																	List<MessagePart> messageParts = new List<MessagePart>( parts.Length );
+																	foreach ( string part in parts )
+																	{
+																		int groupValueIndex = groupValues.IndexOf( part );
+																		if ( groupValueIndex >= 0 )
+																		{
+																			string groupName = groupNames[groupValueIndex];
+																			int groupIndex = Int32.Parse( groupName.Substring( 1 ) );
+
+																			messageParts.Add( new GroupMessagePart( part, groupIndex ) );
+																		}
+																		else
+																		{
+																			messageParts.Add( new CommonMessagePart( part ) );
+																		}
+																	}
+
+																	var paragraph = new Paragraph();
+																	foreach ( var messagePart in messageParts )
+																	{
+																		Run run = new Run( messagePart.Text );
+																		GroupMessagePart groupPart = messagePart as GroupMessagePart;
+																		if ( groupPart != null )
+																		{
+																			run.Background = templateGroupBrushes[groupPart.GroupNumber % templateGroupBrushes.Length];
+																		}
+
+																		paragraph.Inlines.Add( run );
+																	}
+
+																	Paragraph = paragraph;
+																}, TaskScheduler.FromCurrentSynchronizationContext() );
 				}
-				return _template;
+
+				return _paragraph;
 			}
-		}
-
-		// todo brinchuk remove me
-		private void UpdateColorization()
-		{
-			var colorizingTemplate = _colorizationManager.GetTemplateForEntry( _logEntry );
-			_template = colorizingTemplate.Template;
-			_templateContext = colorizingTemplate.GetDataContext( _logEntry );
-		}
-
-		// todo brinchuk remove me
-		private object _templateContext;
-		public object TemplateContext
-		{
-			get
+			private set
 			{
-				if (_templateContext == null)
-				{
-					UpdateColorization();
-				}
-				return _templateContext;
+				_paragraph = value;
+				RaisePropertyChanged( () => Paragraph );
 			}
 		}
 
-		public FlowDocument Document { get; set; }
-
-		public void OnSelectionChanged(TextSelection range)
+		public void OnSelectionChanged( TextSelection range )
 		{
 			_parentViewModel.OnSelectedTextChanged( range.Text );
 		}
 
 		public string SelectedText { get; set; }
 
-		public bool Equals(LogEntryViewModel other)
+		public bool Equals( LogEntryViewModel other )
 		{
-			if (ReferenceEquals( null, other ))
+			if ( ReferenceEquals( null, other ) )
+			{
 				return false;
-			if (ReferenceEquals( this, other ))
+			}
+			if ( ReferenceEquals( this, other ) )
+			{
 				return true;
+			}
 			bool equals = Equals( other._logEntry, _logEntry );
 			return equals;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals( object obj )
 		{
-			if (ReferenceEquals( null, obj ))
+			if ( ReferenceEquals( null, obj ) )
+			{
 				return false;
-			if (ReferenceEquals( this, obj )) return true;
-			if (obj.GetType() != typeof( LogEntryViewModel )) return false;
+			}
+			if ( ReferenceEquals( this, obj ) )
+			{
+				return true;
+			}
+			if ( obj.GetType() != typeof( LogEntryViewModel ) )
+			{
+				return false;
+			}
 			bool equals = Equals( (LogEntryViewModel)obj );
 			return equals;
 		}
@@ -190,7 +254,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _highlightedColumnName; }
 			internal set
 			{
-				if (_highlightedColumnName == value)
+				if ( _highlightedColumnName == value )
 				{
 					return;
 				}
@@ -206,7 +270,7 @@ namespace LogAnalyzer.GUI.ViewModels
 			get { return _isDynamicHighlighted; }
 			internal set
 			{
-				if (_isDynamicHighlighted == value)
+				if ( _isDynamicHighlighted == value )
 				{
 					return;
 				}
@@ -271,7 +335,7 @@ namespace LogAnalyzer.GUI.ViewModels
 				List<MenuItemViewModel> parents = new List<MenuItemViewModel>();
 
 				var parent = _parentViewModel.ParentView;
-				while (parent != null)
+				while ( parent != null )
 				{
 					MenuItemViewModel vm = new MenuItemViewModel
 											{
@@ -479,7 +543,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if (_lockTimeDeltaCommand == null)
+				if ( _lockTimeDeltaCommand == null )
 				{
 					_lockTimeDeltaCommand = new DelegateCommand( LockTimeDeltaExecute );
 				}
@@ -510,7 +574,7 @@ namespace LogAnalyzer.GUI.ViewModels
 
 		#region Highlight by commands
 
-		private ICommand CreateHighlightCommand(ExpressionBuilder filter)
+		private ICommand CreateHighlightCommand( ExpressionBuilder filter )
 		{
 			DelegateCommand command = new DelegateCommand( () =>
 			{
@@ -616,7 +680,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if (_copyFileNameCommand == null)
+				if ( _copyFileNameCommand == null )
 					_copyFileNameCommand = new DelegateCommand( () => Clipboard.SetText( File.Name ) );
 
 				return _copyFileNameCommand;
@@ -631,7 +695,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if (_copyFullPathCommand == null)
+				if ( _copyFullPathCommand == null )
 					_copyFullPathCommand = new DelegateCommand( () => Clipboard.SetText( File.LogFile.FullPath ) );
 
 				return _copyFullPathCommand;
@@ -646,7 +710,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if (_copyFileLocationCommand == null)
+				if ( _copyFileLocationCommand == null )
 					_copyFileLocationCommand = new DelegateCommand( () =>
 																	{
 																		string location = Path.GetDirectoryName( File.LogFile.FullPath );
@@ -665,7 +729,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		{
 			get
 			{
-				if (_copyMessageCommand == null)
+				if ( _copyMessageCommand == null )
 				{
 					_copyMessageCommand = new DelegateCommand( () => Clipboard.SetText( UnitedText ) );
 				}

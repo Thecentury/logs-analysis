@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using AvalonDock.Layout;

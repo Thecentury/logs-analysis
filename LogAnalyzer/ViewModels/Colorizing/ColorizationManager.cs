@@ -12,7 +12,10 @@ namespace LogAnalyzer.GUI.ViewModels.Colorizing
 
 		public ColorizationManager( [NotNull] List<ColorizeTemplateBase> templates )
 		{
-			if ( templates == null ) throw new ArgumentNullException( "templates" );
+			if ( templates == null )
+			{
+				throw new ArgumentNullException( "templates" );
+			}
 			this.templates = templates;
 		}
 

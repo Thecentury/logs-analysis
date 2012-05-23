@@ -14,9 +14,9 @@ namespace DecompilerSample
 	{
 		private static void Main( string[] args )
 		{
-			const string projectDir = @"D:\MOST\AWAD\Bin-server\Project\";
-			const string platformDir = @"D:\MOST\AWAD\Bin-server\Common\";
-			const string environmentDir = @"D:\MOST\AWAD\BIN-SERVER\ENVIROMENT";
+			const string projectDir = @"C:\MOST\AWAD\Bin-server\Project\";
+			const string platformDir = @"C:\MOST\AWAD\Bin-server\Common\";
+			const string environmentDir = @"C:\MOST\AWAD\BIN-SERVER\ENVIROMENT";
 
 			var dlls = Directory.GetFiles( projectDir, "*.dll" ).Concat( Directory.GetFiles( platformDir, "*.dll" ) );
 
@@ -29,7 +29,7 @@ namespace DecompilerSample
 			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\ZLibs\" );
 			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\mongodb\" );
 			resolver.AddSearchDirectory( @"d:\Dev\Mikhail\Environment\Microsoft\" );
-			resolver.AddSearchDirectory( @"d:\MOST\AWAD\BIN-SERVER\PROJECT\Controllers\" );
+			resolver.AddSearchDirectory( @"c:\MOST\AWAD\BIN-SERVER\PROJECT\Controllers\" );
 			resolver.AddSearchDirectory( @"D:\Dev\Mikhail\Projects\Eticket\Version31_jet\Source\FastSerializer\bin\Debug" );
 
 			List<LoggerUsageInAssembly> usages = new List<LoggerUsageInAssembly>();

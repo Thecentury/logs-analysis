@@ -96,6 +96,7 @@
     <Compile Include="LogDateTimeFilterTests.cs" />
     <Compile Include="LogFileIndexerTests.cs" />
     <Compile Include="LogFileNavigatorTests.cs" />
+    <Compile Include="LoggerUsageInAssemblyTests.cs" />
     <Compile Include="LoggingTestsBase.cs" />
     <Compile Include="LogLineParsingBenchmark.cs" />
     <Compile Include="ManualLogLineParserTests.cs" />
