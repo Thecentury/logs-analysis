@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:FilesDropping="clr-namespace:LogAnalyzer.GUI.ViewModels.FilesDropping" mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-			 Background="Transparent"
-			 >
+             d:DesignHeight="300" d:DesignWidth="600"
+			 Background="Transparent">
 
 	<UserControl.Resources>
 
@@ -105,109 +104,116 @@
 
 		<DockPanel 
 			LastChildFill="True">
-			<Border
+
+			<StackPanel 
 				DockPanel.Dock="Left"
 				Visibility="{Binding HasLatestProjects, Converter={StaticResource bool2VisibilityConverter}}"
-				BorderThickness="1"
-				BorderBrush="LightSlateGray"
 				Margin="3"
-				Padding="3"
-				CornerRadius="3">
+				Orientation="Vertical"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Stretch"
+				>
+				<TextBlock
+					FontSize="20"
+					Margin="3">
+						Latest projects
+				</TextBlock>
 
-				<StackPanel 
-					Orientation="Vertical"
-					HorizontalAlignment="Left"
-					VerticalAlignment="Top">
-					<TextBlock
-						FontSize="20"
-						Margin="3">
-						Latest projects:
-					</TextBlock>
+				<Rectangle
+					Fill="LightGray"
+					HorizontalAlignment="Stretch"
+					Margin="3,0,6,3"
+					Height="2"/>
 
-					<ItemsControl 
-						ItemsSource="{Binding LatestProjects}"
-						BorderBrush="{x:Null}"
-						BorderThickness="0"
-						Margin="10,0,0,0">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
-									<Button
+				<ItemsControl 
+					ItemsSource="{Binding LatestProjects}"
+					BorderBrush="{x:Null}"
+					BorderThickness="0"
+					Margin="10,0,0,0">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<Button
 										Margin="1"
 										Height="16"
 										VerticalContentAlignment="Center"
 										ToolTip="Remove from the recent list"
-										Command="{Binding RemoveFromRecentCommand}">x</Button>
-									<Button
+										Command="{Binding RemoveFromRecentCommand}">
+									<TextBlock
+											VerticalAlignment="Center"
+											>✕</TextBlock>
+								</Button>
+								<Button
 										Margin="2"
 										ToolTip="Open project"
 										Command="{Binding OpenRecentProjectCommand}">
-										<Image Stretch="None" Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
-									</Button>
-									<TextBlock 
+									<Image Stretch="None" Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
+								</Button>
+								<TextBlock 
 										Text="{Binding Path}"
 										VerticalAlignment="Center"/>
-								</StackPanel>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</StackPanel>
-			</Border>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
 
-			<Border
-				BorderThickness="1" 
-				BorderBrush="DarkGray"
-				CornerRadius="3" 
+			<Rectangle 
+				DockPanel.Dock="Left"
+				Width="2"
+				VerticalAlignment="Stretch"
 				Margin="3"
-				Padding="3"
-				DockPanel.Dock="Right">
-				<Grid>
-					<TextBlock HorizontalAlignment="Center"
+				Fill="DarkGray"/>
+
+			<Grid
+					Margin="3"
+					DockPanel.Dock="Right">
+
+				<TextBlock HorizontalAlignment="Center"
 					   VerticalAlignment="Center"
 					   FontSize="20"
 					   Visibility="{Binding HasNoFiles, Converter={StaticResource bool2VisibilityConverter}}">
 						Drop files here to analyze them
-					</TextBlock>
+				</TextBlock>
 
-					<DockPanel 
+				<DockPanel 
 						Visibility="{Binding HasFiles, Converter={StaticResource bool2VisibilityConverter}}"
 						VerticalAlignment="Stretch" 
 						LastChildFill="True">
-						<Grid DockPanel.Dock="Bottom"
+					<Grid DockPanel.Dock="Bottom"
 							  HorizontalAlignment="Stretch" 
 							  Margin="10">
-							<Button Content="Clear" 
+						<Button Content="Clear" 
 								Command="{Binding ClearCommand}"
 								Padding="10"
 								HorizontalAlignment="Left"/>
-							<Button Command="{Binding AnalyzeCommand}"
+						<Button Command="{Binding AnalyzeCommand}"
 								Padding="10"
 								Foreground="DarkViolet"
 								HorizontalAlignment="Center">
-								<TextBlock>Analyze!</TextBlock>
-							</Button>
+							<TextBlock>Analyze!</TextBlock>
+						</Button>
 
-							<Button Command="{Binding SaveCommand}"
+						<Button Command="{Binding SaveCommand}"
 								Padding="10"
 								HorizontalAlignment="Right"
 								Content="Save"/>
-						</Grid>
+					</Grid>
 
-						<ScrollViewer VerticalScrollBarVisibility="Auto"
+					<ScrollViewer VerticalScrollBarVisibility="Auto"
 						  HorizontalAlignment="Center"
 						  DockPanel.Dock="Top"
 						  VerticalAlignment="Top">
 
-							<ItemsControl ItemsSource="{Binding Files}"
+						<ItemsControl ItemsSource="{Binding Files}"
 							  HorizontalAlignment="Center"
 							  VerticalAlignment="Center"
 							  ItemTemplate="{StaticResource droppedFileTemplate}"
 							  />
 
-						</ScrollViewer>
-					</DockPanel>
-				</Grid>
-			</Border>
+					</ScrollViewer>
+				</DockPanel>
+			</Grid>
 		</DockPanel>
 	</Border>
 </UserControl>

@@ -17,6 +17,7 @@ using LogAnalyzer.GUI.ViewModels;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
+using LogAnalyzer.LoggingTemplates;
 using LogAnalyzer.Misc;
 using LogAnalyzer.Operations;
 
@@ -168,6 +169,7 @@ namespace LogAnalyzer.GUI
 				Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ),
 				"Templates" );
 
+			// todo brinchuk убрать, не нужно
 			ColorizationManager colorizationManager = null;
 			DispatcherHelper.GetDispatcher().Invoke( () =>
 			{
@@ -184,6 +186,15 @@ namespace LogAnalyzer.GUI
 				colorizationManager = new ColorizationManager( templates );
 			}, DispatcherPriority.Send );
 
+
+			Lazy<LogEntryFormatRecognizer> recognizerLazy = new Lazy<LogEntryFormatRecognizer>( () =>
+																									{
+																										using ( var fs = new FileStream( @"LoggingTemplates\usages.xml", FileMode.Open, FileAccess.Read ) )
+																										{
+																											var usages = LoggerUsageInAssembly.Deserialize( fs );
+																											return new LogEntryFormatRecognizer( usages );
+																										}
+																									}, LazyThreadSafetyMode.PublicationOnly );
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance( OperationScheduler.TaskScheduler )
@@ -193,7 +204,8 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
 				.RegisterInstance<IFileSystem>( new RealFileSystem() )
 				.RegisterInstance( colorizationManager )
-				.Register<ISaveToStreamDialog>( () => new UISaveFileDialog() );
+				.Register<ISaveToStreamDialog>( () => new UISaveFileDialog() )
+				.Register<ILogEntryFormatRecognizer>( () => recognizerLazy.Value );
 		}
 	}
 }

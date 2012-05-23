@@ -257,6 +257,12 @@
     <Compile Include="LogFileIndexer.cs" />
     <Compile Include="Collections\LogFileNavigator.cs" />
     <Compile Include="LogFileNameCleaner.cs" />
+    <Compile Include="LoggingTemplates\ILogEntryFormatRecognizer.cs" />
+    <Compile Include="LoggingTemplates\LogEntryFormat.cs" />
+    <Compile Include="LoggingTemplates\LogEntryFormatByPatternLengthComparer.cs" />
+    <Compile Include="LoggingTemplates\LogEntryFormatRecognizer.cs" />
+    <Compile Include="LoggingTemplates\LoggerUsage.cs" />
+    <Compile Include="LoggingTemplates\LoggerUsageInAssembly.cs" />
     <Compile Include="Logging\ConsoleLogWriter.cs" />
     <Compile Include="Logging\DebugLogWriter.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -311,6 +317,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="LoggingTemplates\usages.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -6,10 +6,12 @@
 					xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 					mc:Ignorable="d"
-					xmlns:local="clr-namespace:LogAnalyzer.GUI" xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels">
-	
+					xmlns:local="clr-namespace:LogAnalyzer.GUI" 
+					xmlns:toolkitControls="clr-namespace:Microsoft.Windows.Controls;assembly=WpfToolkit.Extended"
+					xmlns:ViewModels="clr-namespace:LogAnalyzer.GUI.ViewModels">
+
 	<SolidColorBrush Color="#99FFEE3A" x:Key="dynamicHighlightBrush"/>
-	
+
 	<BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
 
 	<Common:PropertyNameToIsDynamicHighlightedConverter x:Key="propertyNameConverter"/>
@@ -299,7 +301,7 @@
 							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/lock.png"/>
 						</MenuItem.Icon>
 					</MenuItem>
-							  
+
 					<MenuItem Header="Clear time delta source lock"
 							  Visibility="{Binding RemoveTimeDeltaLockCommandVisible, Converter={StaticResource booleanToVisibilityConverter}}"
 							  Command="{Binding RemoveTimeDeltaLockCommand}"
@@ -308,7 +310,7 @@
 							<Image Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/lock-unlock.png"/>
 						</MenuItem.Icon>
 					</MenuItem>
-							  
+
 
 				</ContextMenu>
 			</Setter.Value>
@@ -356,11 +358,11 @@
 	<DataTemplate x:Key="textCellTemplate">
 		<Grid>
 			<Controls:HighlightingBorderControl HighlightingViewModels="{Binding HighlightedByList}"
-													HorizontalAlignment="Stretch"
-													VerticalAlignment="Stretch"
-													Offset="{StaticResource highlightingOffset}"/>
+												HorizontalAlignment="Stretch"
+												VerticalAlignment="Stretch"
+												Offset="{StaticResource highlightingOffset}"/>
 
-			<TextBox
+			<!--<TextBox
 					Background="Transparent"
 					IsReadOnly="True"
 					BorderBrush="{x:Null}"
@@ -372,7 +374,17 @@
 					Margin="{Binding HighlightedByList.Count, Converter={StaticResource highlightingCountToMarginConverter}}"
 					VerticalAlignment="Center"
 					HorizontalAlignment="Left"
-					Text="{Binding UnitedText, Mode=OneTime}"/>
+					Text="{Binding UnitedText, Mode=OneTime}"/>-->
+			<Controls:BindableRichTextBox
+				Background="Transparent"
+				VerticalScrollBarVisibility="Auto"
+				MaxHeight="200"
+				IsReadOnly="True"
+				IsReadOnlyCaretVisible="True"
+				BorderThickness="0"
+				Paragraph="{Binding Paragraph, Mode=OneWay}"
+				>
+			</Controls:BindableRichTextBox>
 		</Grid>
 
 		<!--<Control Template="{Binding Template}"

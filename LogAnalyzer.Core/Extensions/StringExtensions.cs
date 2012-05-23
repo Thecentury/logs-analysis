@@ -18,5 +18,26 @@ namespace LogAnalyzer.Extensions
 		{
 			return String.IsNullOrWhiteSpace( str );
 		}
+
+		public static string Escape( this string source, string str )
+		{
+			string result = source.Replace( str, @"\" + str );
+			return result;
+		}
+
+		public static string Escape( this string source, params string[] chars )
+		{
+			string result = source;
+			foreach ( var c in chars )
+			{
+				result = result.Replace( c, @"\" + c );
+			}
+			return result;
+		}
+
+		public static string EscapeRegexChars( this string source )
+		{
+			return Escape( source, @"\", "[", "]", "(", ")", ".", "+", "*", "?" );
+		}
 	}
 }

@@ -174,10 +174,10 @@
     <Compile Include="Common\SettingsHelper.cs" />
     <Compile Include="Common\TabHeaderTemplateSelector.cs" />
     <Compile Include="Common\Windows7Helper.cs" />
+    <Compile Include="Controls\BindableRichTextBox.cs" />
     <Compile Include="Controls\HighlightingBorderControl.cs" />
     <Compile Include="Extensions\FreezableExtensions.cs" />
     <Compile Include="Extensions\ICommandExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FilterEditing\BinaryBuilderViewModel.cs" />
     <Compile Include="FilterEditing\BuilderContext.cs" />
     <Compile Include="FilterEditing\CollectionBooleanBuilderViewModel.cs" />
@@ -275,6 +275,7 @@
     <Compile Include="ViewModels\LogStatusBarItem.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MergedEntriesDebugStatusBarItem.cs" />
+    <Compile Include="ViewModels\MessagePart.cs" />
     <Compile Include="ViewModels\MessageSeverityCountViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SelectedEntryIndexStatusBarItem.cs" />
