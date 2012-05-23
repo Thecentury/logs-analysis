@@ -22,7 +22,10 @@ using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels.Collections;
 using LogAnalyzer.GUI.ViewModels.Colorizing;
+using LogAnalyzer.Logging;
 using LogAnalyzer.LoggingTemplates;
+using Microsoft.Research.DynamicDataDisplay;
+using ColorHelper = LogAnalyzer.GUI.Common.ColorHelper;
 
 namespace LogAnalyzer.GUI.ViewModels
 {
@@ -101,8 +104,8 @@ namespace LogAnalyzer.GUI.ViewModels
 		private static readonly Brush[] templateGroupBrushes = new Brush[]
 		                                              	{
 		                                              		Brushes.Gold,
-		                                              		Brushes.LightGreen,
-		                                              		Brushes.DeepSkyBlue
+		                                              		Brushes.LightGreen.MakeTransparent(0.5).AsFrozen(),
+		                                              		Brushes.DeepSkyBlue.MakeTransparent(0.3).AsFrozen()
 		                                              	};
 
 		private Paragraph _paragraph;
@@ -116,10 +119,20 @@ namespace LogAnalyzer.GUI.ViewModels
 
 					Task.Factory.StartNew( () =>
 											{
+												Stopwatch timer = Stopwatch.StartNew();
+
 												var formatRecognizer =
 													_parentViewModel.ApplicationViewModel.Config.ResolveNotNull<ILogEntryFormatRecognizer>();
 
+												var gotFormatRecognizerTime = timer.ElapsedMilliseconds;
+												timer.Restart();
+
 												var format = formatRecognizer.FindFormat( _logEntry );
+
+												var foundFormat = timer.ElapsedMilliseconds;
+
+												Logger.Instance.WriteVerbose( "Got recognizer in {0} ms, found format in {1} ms", gotFormatRecognizerTime, foundFormat );
+
 												return format;
 											} ).ContinueWith( t =>
 																{
@@ -148,7 +161,7 @@ namespace LogAnalyzer.GUI.ViewModels
 																		if ( groupValueIndex >= 0 )
 																		{
 																			string groupName = groupNames[groupValueIndex];
-																			if ( !Char.IsDigit( groupName[0] ) )
+																			if ( groupName[0] == LoggerUsage.TemplatedPartStart )
 																			{
 																				int groupIndex = Int32.Parse( groupName.Substring( 1 ) );
 																				messageParts.Add( new GroupMessagePart( part, groupIndex ) );
