@@ -65,9 +65,18 @@ namespace LogAnalyzer.Tests
 			Stopwatch timer = Stopwatch.StartNew();
 
 			var allMatching = recognizer.FindFormat( new FakeLogEntry { UnitedText = logEntry } );
+			int index = recognizer.LoadedUsages.IndexOf( allMatching );
 
 			var elapsed = timer.ElapsedMilliseconds;
-			Console.WriteLine( "{0} ms: '{1}'", elapsed, allMatching );
+			Console.WriteLine( "{0} ms: {2}th, '{1}'", elapsed, allMatching.Usage.FormatString, index ); 
+			
+			timer.Restart();
+
+			allMatching = recognizer.FindFormat( new FakeLogEntry { UnitedText = logEntry } );
+			index = recognizer.LoadedUsages.IndexOf( allMatching );
+
+			elapsed = timer.ElapsedMilliseconds;
+			Console.WriteLine( "{0} ms: {2}th, '{1}'", elapsed, allMatching.Usage.FormatString, index );
 		}
 
 		[TestCase( "OrderAviaProcesses clearing before=0 removed=0 after=0" )]
@@ -93,7 +102,7 @@ namespace LogAnalyzer.Tests
 		[TestCase( "ModuleOrderManager.CreateReservationDelegate(): Failed to create ReservationStatusRecord after 4 attempts. Returning RESERVATIONS_IS_TEMPORARY_UNAVAILABLE.", "^(ModuleOrderManager.CreateReservationDelegate(): Failed to create ReservationStatusRecord after 4 attempts. Returning RESERVATIONS_IS_TEMPORARY_UNAVAILABLE.)$" )]
 		public void ShouldBuildCorrectRegexPattern( string input, string expectedPattern )
 		{
-			var pattern = LoggerUsage.BuildRegexPattern( input );
+			var pattern = LoggerUsage.BuildFullRegexPattern( input );
 
 			Assert.That( pattern, Is.EqualTo( expectedPattern ) );
 		}
