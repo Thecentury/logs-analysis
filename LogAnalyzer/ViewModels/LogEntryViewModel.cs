@@ -101,7 +101,7 @@ namespace LogAnalyzer.GUI.ViewModels
 		private static readonly Brush[] templateGroupBrushes = new Brush[]
 		                                              	{
 		                                              		Brushes.Gold,
-		                                              		Brushes.DarkSeaGreen,
+		                                              		Brushes.LightGreen,
 		                                              		Brushes.DeepSkyBlue
 		                                              	};
 
@@ -128,6 +128,7 @@ namespace LogAnalyzer.GUI.ViewModels
 																	{
 																		return;
 																	}
+
 																	var regex = format.Usage.Regex;
 																	string[] parts = regex.Split( _logEntry.UnitedText );
 																	var match = regex.Match( _logEntry.UnitedText );
@@ -138,13 +139,24 @@ namespace LogAnalyzer.GUI.ViewModels
 																	List<MessagePart> messageParts = new List<MessagePart>( parts.Length );
 																	foreach ( string part in parts )
 																	{
+																		if ( String.IsNullOrEmpty( part ) )
+																		{
+																			continue;
+																		}
+
 																		int groupValueIndex = groupValues.IndexOf( part );
 																		if ( groupValueIndex >= 0 )
 																		{
 																			string groupName = groupNames[groupValueIndex];
-																			int groupIndex = Int32.Parse( groupName.Substring( 1 ) );
-
-																			messageParts.Add( new GroupMessagePart( part, groupIndex ) );
+																			if ( !Char.IsDigit( groupName[0] ) )
+																			{
+																				int groupIndex = Int32.Parse( groupName.Substring( 1 ) );
+																				messageParts.Add( new GroupMessagePart( part, groupIndex ) );
+																			}
+																			else
+																			{
+																				messageParts.Add( new CommonMessagePart( part ) );
+																			}
 																		}
 																		else
 																		{

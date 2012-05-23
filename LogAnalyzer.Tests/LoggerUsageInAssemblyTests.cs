@@ -45,16 +45,26 @@ namespace LogAnalyzer.Tests
 			return regexes;
 		}
 
+		private List<LoggerUsageInAssembly> LoadUsages()
+		{
+			using ( var fs = new FileStream( @"LoggingTemplates\usages.xml", FileMode.Open, FileAccess.Read ) )
+			{
+				var usages = LoggerUsageInAssembly.Deserialize( fs );
+				return usages;
+			}
+		}
 
-
+		[TestCase( "Stoping module Muscat" )]
 		[TestCase( "OrderAviaProcesses clearing before=0 removed=0 after=0" )]
 		public void FindRegexSequentially( string logEntry )
 		{
-			var regexes = LoadRegexes().OrderByDescending( r => r.ToString().Length ).ToList();
+			var usages = LoadUsages();
+
+			LogEntryFormatRecognizer recognizer = new LogEntryFormatRecognizer( usages );
 
 			Stopwatch timer = Stopwatch.StartNew();
 
-			var allMatching = regexes.FirstOrDefault( r => r.Match( logEntry ).Success );
+			var allMatching = recognizer.FindFormat( new FakeLogEntry { UnitedText = logEntry } );
 
 			var elapsed = timer.ElapsedMilliseconds;
 			Console.WriteLine( "{0} ms: '{1}'", elapsed, allMatching );
@@ -71,6 +81,21 @@ namespace LogAnalyzer.Tests
 
 			var elapsed = timer.ElapsedMilliseconds;
 			Console.WriteLine( "{0} ms: '{1}'", elapsed, allMatching );
+		}
+
+		private sealed class FakeLogEntry : ILogEntry
+		{
+			public string UnitedText { get; set; }
+		}
+
+		[TestCase( "Hello", "^(Hello)$" )]
+		[TestCase( "Hello, {0}", "^(Hello, )(?<G0>.*)$" )]
+		[TestCase( "ModuleOrderManager.CreateReservationDelegate(): Failed to create ReservationStatusRecord after 4 attempts. Returning RESERVATIONS_IS_TEMPORARY_UNAVAILABLE.", "^(ModuleOrderManager.CreateReservationDelegate(): Failed to create ReservationStatusRecord after 4 attempts. Returning RESERVATIONS_IS_TEMPORARY_UNAVAILABLE.)$" )]
+		public void ShouldBuildCorrectRegexPattern( string input, string expectedPattern )
+		{
+			var pattern = LoggerUsage.BuildRegexPattern( input );
+
+			Assert.That( pattern, Is.EqualTo( expectedPattern ) );
 		}
 	}
 }
