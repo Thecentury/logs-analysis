@@ -44,15 +44,15 @@ namespace LogAnalyzer.LoggingTemplates
 
 		private void CreateRegex()
 		{
-			var pattern = BuildRegexPattern( FormatString );
+			var pattern = BuildFullRegexPattern( FormatString );
 
-			_regex = new Regex( pattern, RegexOptions.Compiled );
+			_regex = new Regex( pattern/*, RegexOptions.Compiled*/ );
 		}
 
 		public const char TemplatedPartStart = 'G';
 		public const char ConstantPartStart = 'C';
 
-		public static string BuildRegexPattern( string input )
+		public static string BuildFullRegexPattern( string input )
 		{
 			string[] parts = formatPlaceholderRegex.Split( input );
 
@@ -66,16 +66,24 @@ namespace LogAnalyzer.LoggingTemplates
 				var digitsMatch = digitsRegex.Match( part );
 				if ( digitsMatch.Success )
 				{
-					builder.Append( "(?<" ).Append( TemplatedPartStart );
 					string groupNumber = digitsMatch.Groups["DIGIT"].Value;
-					builder.Append( groupNumber );
-					builder.Append( ">.*)" );
+					builder
+						.Append( "(?<" )
+						.Append( TemplatedPartStart )
+						.Append( groupNumber )
+						.Append( ">.*)" );
 				}
 				else
 				{
 					if ( !String.IsNullOrEmpty( part ) )
 					{
-						builder.Append( "(?<" ).Append( ConstantPartStart ).Append( constantPartsCounter ).Append( ">" ).Append( part.EscapeRegexChars() ).Append( ")" );
+						builder
+							.Append( "(?<" )
+							.Append( ConstantPartStart )
+							.Append( constantPartsCounter )
+							.Append( ">" )
+							.Append( part.EscapeRegexChars() )
+							.Append( ")" );
 						constantPartsCounter++;
 					}
 				}
@@ -83,11 +91,6 @@ namespace LogAnalyzer.LoggingTemplates
 			builder.Append( "$" );
 
 			return builder.ToString();
-
-			//string pattern = FormatPlaceholderRegex.Replace( input, "§§§${1}®®®" );
-			//pattern = pattern.EscapeRegexChars().Replace( "§§§", "(?<G" ).Replace( "®®®", ">.*)" );
-			//pattern = "^" + pattern + "$";
-			//return pattern;
 		}
 	}
 }

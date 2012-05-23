@@ -194,7 +194,7 @@ namespace LogAnalyzer.GUI
 																											var usages = LoggerUsageInAssembly.Deserialize( fs );
 																											return new LogEntryFormatRecognizer( usages );
 																										}
-																									}, LazyThreadSafetyMode.PublicationOnly );
+																									}, true );
 			config
 				.RegisterInstance<IOperationsQueue>( operationsQueue )
 				.RegisterInstance( OperationScheduler.TaskScheduler )

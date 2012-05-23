@@ -20,17 +20,22 @@ namespace LogAnalyzer.LoggingTemplates
 			{
 				foreach ( var usage in usageInAssembly.Usages )
 				{
-					_usages.Add( new LogEntryFormat( usage, usageInAssembly.AssemblyName ) );
+					LoadedUsages.Add( new LogEntryFormat( usage, usageInAssembly.AssemblyName ) );
 				}
 			}
 
-			_usages.Sort( new LogEntryFormatByPatternLengthComparer() );
+			LoadedUsages.Sort( new LogEntryFormatByPatternLengthComparer() );
+		}
+
+		public List<LogEntryFormat> LoadedUsages
+		{
+			get { return _usages; }
 		}
 
 		public LogEntryFormat FindFormat( ILogEntry logEntry )
 		{
 			string message = logEntry.UnitedText;
-			var format = _usages.FirstOrDefault( u => u.Usage.Regex.IsMatch( message ) );
+			var format = LoadedUsages.FirstOrDefault( u => u.Usage.Regex.IsMatch( message ) );
 			return format;
 		}
 	}
