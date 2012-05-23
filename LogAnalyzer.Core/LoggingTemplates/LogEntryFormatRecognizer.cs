@@ -27,7 +27,7 @@ namespace LogAnalyzer.LoggingTemplates
 			_usages.Sort( new LogEntryFormatByPatternLengthComparer() );
 		}
 
-		public LogEntryFormat FindFormat( LogEntry logEntry )
+		public LogEntryFormat FindFormat( ILogEntry logEntry )
 		{
 			string message = logEntry.UnitedText;
 			var format = _usages.FirstOrDefault( u => u.Usage.Regex.IsMatch( message ) );
