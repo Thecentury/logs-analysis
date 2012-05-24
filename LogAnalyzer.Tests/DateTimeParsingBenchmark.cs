@@ -37,9 +37,10 @@ namespace LogAnalyzer.Tests
 		{
 			Stopwatch timer = Stopwatch.StartNew();
 
+			DateTime date;
 			for ( int i = 0; i < Count; i++ )
 			{
-				DateTime date = MostLogLineParser.ParseDate( Sample );
+				MostLogLineParser.TryParseDate( Sample, out date );
 			}
 
 			var elapsed = timer.ElapsedMilliseconds;
@@ -49,11 +50,13 @@ namespace LogAnalyzer.Tests
 		[Test]
 		public void TestParseAsInt()
 		{
-			var dt = MostLogLineParser.ParseDate( Sample );
-			Assert.AreEqual( new DateTime( 2011, 5, 24, 0, 0, 47 ), dt );
+			DateTime date;
+			MostLogLineParser.TryParseDate( Sample, out date );
+			Assert.AreEqual( new DateTime( 2011, 5, 24, 0, 0, 47 ), date );
 
-			var dt2 = MostLogLineParser.ParseDate( "24.05.2011 11:12:13" );
-			Assert.AreEqual( new DateTime( 2011, 5, 24, 11, 12, 13 ), dt2 );
+			DateTime date2;
+			MostLogLineParser.TryParseDate( "24.05.2011 11:12:13", out date2 );
+			Assert.AreEqual( new DateTime( 2011, 5, 24, 11, 12, 13 ), date2 );
 		}
 	}
 }

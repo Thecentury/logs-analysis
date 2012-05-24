@@ -32,34 +32,64 @@ namespace LogAnalyzer.Kernel.Parsers
 			}
 
 			string timeStr = match.Groups[3].Value;
-			time = ParseDate( timeStr );
+			if ( !TryParseDate( timeStr, out time ) )
+			{
+				return false;
+			}
 
 			text = match.Groups[4].Value;
 
 			return true;
 		}
 
-		internal static DateTime ParseDate( string dateString )
+		internal static bool TryParseDate( string dateString, out DateTime dateTime )
 		{
-			int day = (dateString[0] - '0') * 10 + (dateString[1] - '0');
-			int month = (dateString[3] - '0') * 10 + (dateString[4] - '0');
-			int year = (dateString[6] - '0') * 1000 + (dateString[7] - '0') * 100 + (dateString[8] - '0') * 10 + (dateString[9] - '0');
+			int day = ( dateString[0] - '0' ) * 10 + ( dateString[1] - '0' );
+			int month = ( dateString[3] - '0' ) * 10 + ( dateString[4] - '0' );
+			int year = ( dateString[6] - '0' ) * 1000 + ( dateString[7] - '0' ) * 100 + ( dateString[8] - '0' ) * 10 + ( dateString[9] - '0' );
 
 			int pos = 12;
-			int hour = (dateString[11] - '0');
+			int hour = ( dateString[11] - '0' );
 			char nextAfterFirstHourLetter = dateString[12];
 			if ( nextAfterFirstHourLetter != ':' )
 			{
 				hour *= 10;
-				hour += (nextAfterFirstHourLetter - '0');
+				hour += ( nextAfterFirstHourLetter - '0' );
 				pos = 13;
 			}
 
-			int minute = (dateString[pos + 1] - '0') * 10 + (dateString[pos + 2] - '0');
-			int second = (dateString[pos + 4] - '0') * 10 + (dateString[pos + 5] - '0');
+			int minute = ( dateString[pos + 1] - '0' ) * 10 + ( dateString[pos + 2] - '0' );
+			int second = ( dateString[pos + 4] - '0' ) * 10 + ( dateString[pos + 5] - '0' );
 
-			DateTime result = new DateTime( year, month, day, hour, minute, second );
-			return result;
+			dateTime = new DateTime();
+
+			if ( year > DateTime.Today.Year + 1 )
+			{
+				return false;
+			}
+			if ( month > 12 )
+			{
+				return false;
+			}
+			if ( day > 31 )
+			{
+				return false;
+			}
+			if ( hour > 23 )
+			{
+				return false;
+			}
+			if ( minute > 59 )
+			{
+				return false;
+			}
+			if ( second > 59 )
+			{
+				return false;
+			}
+
+			dateTime = new DateTime( year, month, day, hour, minute, second );
+			return true;
 		}
 	}
 }

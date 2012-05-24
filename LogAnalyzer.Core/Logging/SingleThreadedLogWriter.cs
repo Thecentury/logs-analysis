@@ -1,9 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Collections.Concurrent;
 
 namespace LogAnalyzer.Logging
 {
-	public abstract class SingleThreadedLogWriter : LogWriter
+	public abstract class SingleThreadedLogWriter : LogWriter, IDisposable
 	{
 		protected SingleThreadedLogWriter()
 		{
@@ -14,15 +15,21 @@ namespace LogAnalyzer.Logging
 		}
 
 		private readonly Thread _loggerThread;
-		private readonly BlockingCollection<LogMessage> _operationsQueue = new BlockingCollection<LogMessage>( new ConcurrentQueue<LogMessage>() );
+		private readonly BlockingCollection<ThreadMessage> _operationsQueue = new BlockingCollection<ThreadMessage>( new ConcurrentQueue<ThreadMessage>() );
 
 		private void ThreadProc( object state )
 		{
 			while ( true )
 			{
-				var message = _operationsQueue.Take();
-
-				OnNewMessage( message );
+				var threadMessage = _operationsQueue.Take();
+				if ( !threadMessage.AbortRequested )
+				{
+					OnNewMessage( threadMessage.Message );
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
@@ -30,13 +37,34 @@ namespace LogAnalyzer.Logging
 
 		public sealed override void WriteLine( string message, MessageType messageType )
 		{
-			_operationsQueue.Add( new LogMessage { Message = message, MessageType = messageType } );
+			_operationsQueue.Add( new ThreadMessage( new LogMessage { Message = message, MessageType = messageType } ) );
 		}
 
 		protected sealed class LogMessage
 		{
 			public string Message { get; set; }
 			public MessageType MessageType { get; set; }
+		}
+
+		public void Dispose()
+		{
+			_operationsQueue.Add( new ThreadMessage( abortRequested: true ) );
+		}
+
+		private sealed class ThreadMessage
+		{
+			public bool AbortRequested { get; set; }
+			public LogMessage Message { get; set; }
+
+			public ThreadMessage( LogMessage message )
+			{
+				Message = message;
+			}
+
+			public ThreadMessage( bool abortRequested )
+			{
+				AbortRequested = abortRequested;
+			}
 		}
 	}
 }
