@@ -14,7 +14,6 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Regions;
 using LogAnalyzer.GUI.ViewModels;
-using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Kernel;
 using LogAnalyzer.Logging;
 using LogAnalyzer.LoggingTemplates;
@@ -165,28 +164,6 @@ namespace LogAnalyzer.GUI
 
 			DirectoryManager.RegisterCommonFactories();
 
-			string templatesDir = Path.Combine(
-				Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ),
-				"Templates" );
-
-			// todo brinchuk убрать, не нужно
-			ColorizationManager colorizationManager = null;
-			DispatcherHelper.GetDispatcher().Invoke( () =>
-			{
-				List<ColorizeTemplateBase> templates;
-				if ( Directory.Exists( templatesDir ) )
-				{
-					ColorizationLoader colorizationLoader = new ColorizationLoader( templatesDir );
-					templates = colorizationLoader.Load();
-				}
-				else
-				{
-					templates = new List<ColorizeTemplateBase>();
-				}
-				colorizationManager = new ColorizationManager( templates );
-			}, DispatcherPriority.Send );
-
-
 			Lazy<LogEntryFormatRecognizer> recognizerLazy = new Lazy<LogEntryFormatRecognizer>( () =>
 																									{
 																										using ( var fs = new FileStream( @"LoggingTemplates\usages.xml", FileMode.Open, FileAccess.Read ) )
@@ -203,7 +180,6 @@ namespace LogAnalyzer.GUI
 				.RegisterInstance<IDirectoryFactory>( DirectoryManager )
 				.RegisterInstance<ITimeService>( new NeverOldTimeService() )
 				.RegisterInstance<IFileSystem>( new RealFileSystem() )
-				.RegisterInstance( colorizationManager )
 				.Register<ISaveToStreamDialog>( () => new UISaveFileDialog() )
 				.Register<ILogEntryFormatRecognizer>( () => recognizerLazy.Value );
 		}
