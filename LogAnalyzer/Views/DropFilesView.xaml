@@ -147,7 +147,11 @@
 										Margin="2"
 										ToolTip="Open project"
 										Command="{Binding OpenRecentProjectCommand}">
-									<Image Stretch="None" Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
+									<Image 
+										Stretch="None" 
+										HorizontalAlignment="Center" 
+										VerticalAlignment="Center"
+										Source="pack://application:,,,/LogAnalyzer.GUI;component/Resources/folder-horizontal-open.png"/>
 								</Button>
 								<TextBlock 
 										Text="{Binding Path}"
@@ -160,6 +164,7 @@
 
 			<Rectangle 
 				DockPanel.Dock="Left"
+				Visibility="{Binding HasLatestProjects, Converter={StaticResource bool2VisibilityConverter}}"
 				Width="2"
 				VerticalAlignment="Stretch"
 				Margin="3"

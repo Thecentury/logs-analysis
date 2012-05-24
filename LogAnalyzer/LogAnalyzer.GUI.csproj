@@ -227,12 +227,6 @@
     <Compile Include="ViewModels\ApplicationViewModel.Commands.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Collections\LogEntryViewModelLight.cs" />
-    <Compile Include="ViewModels\Colorizing\ColorizationLoader.cs" />
-    <Compile Include="ViewModels\Colorizing\ColorizationManager.cs" />
-    <Compile Include="ViewModels\Colorizing\DefaultColorizeTemplate.cs" />
-    <Compile Include="ViewModels\Colorizing\FilteringColorizeTemplate.cs" />
-    <Compile Include="ViewModels\Colorizing\RegexColorizeTemplate.cs" />
-    <Compile Include="ViewModels\Colorizing\ColorizeTemplateBase.cs" />
     <Compile Include="ViewModels\Commands.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\DialogWindowViewModel.cs" />

@@ -15,7 +15,6 @@ using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using LogAnalyzer.GUI.Extensions;
 using LogAnalyzer.GUI.ViewModels;
-using LogAnalyzer.GUI.ViewModels.Colorizing;
 using LogAnalyzer.Tests.Common;
 using LogAnalyzer.Tests.Mocks;
 using NUnit.Framework;
@@ -47,8 +46,7 @@ namespace LogAnalyzer.Tests
 
 			_config = LogAnalyzerConfiguration.CreateNew()
 				.AddLogDirectory( new LogDirectoryConfigurationInfo( "Mock", "Mock" ) { EncodingName = Encoding.Unicode.WebName } )
-				.SetScheduler( new DispatcherScheduler( DispatcherHelper.RunningDispatcher ) )
-				.RegisterInstance( new ColorizationManager( new List<ColorizeTemplateBase>() ) );
+				.SetScheduler( new DispatcherScheduler( DispatcherHelper.RunningDispatcher ) );
 
 			var env = new MockEnvironment( _config );
 			_dir = (MockDirectoryInfo)env.GetDirectory( "Mock" );
