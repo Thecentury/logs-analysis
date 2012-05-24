@@ -261,6 +261,12 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			var config = ApplicationViewModel.Config;
 
 			var newProject = LogAnalyzerConfiguration.LoadFromFile( path );
+			// выключаем логеры, которые пришли из файла проекта
+			foreach (var loggerWriter in newProject.LoggerWriters.OfType<IDisposable>())
+			{
+				loggerWriter.Dispose();
+			}
+			newProject.Logger.Writers.Clear();
 
 			SettingsHelper.AddProjectToRecent( path );
 

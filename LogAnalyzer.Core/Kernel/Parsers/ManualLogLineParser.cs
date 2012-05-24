@@ -30,7 +30,10 @@ namespace LogAnalyzer.Kernel.Parsers
 			}
 
 			string tidString = line.Substring( tidOpeningBracketIndex + 1, tidClosingBracketIndex - tidOpeningBracketIndex - 1 ).Trim();
-			threadId = Int32.Parse( tidString );
+			if ( !Int32.TryParse( tidString, out threadId ) )
+			{
+				return false;
+			}
 
 			const int minDateLength = 20;
 			int tabIndex = line.IndexOf( '\t', tidClosingBracketIndex + minDateLength );
@@ -40,7 +43,10 @@ namespace LogAnalyzer.Kernel.Parsers
 			}
 
 			string dateString = line.Substring( tidClosingBracketIndex + 2, tabIndex - tidClosingBracketIndex - 2 );
-			time = MostLogLineParser.ParseDate( dateString );
+			if ( !MostLogLineParser.TryParseDate( dateString, out time ) )
+			{
+				return false;
+			}
 
 			text = line.Substring( tabIndex + 1, line.Length - tabIndex - 1 );
 
