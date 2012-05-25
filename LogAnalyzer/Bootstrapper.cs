@@ -166,7 +166,10 @@ namespace LogAnalyzer.GUI
 
 			Lazy<LogEntryFormatRecognizer> recognizerLazy = new Lazy<LogEntryFormatRecognizer>( () =>
 																									{
-																										using ( var fs = new FileStream( @"LoggingTemplates\usages.xml", FileMode.Open, FileAccess.Read ) )
+																										string exeLocation = typeof( Bootstrapper ).Assembly.Location;
+																										string folder = Path.GetDirectoryName( exeLocation );
+																										string usagesPath = Path.Combine( folder, "LoggingTemplates", "usages.xml" );
+																										using ( var fs = new FileStream( usagesPath, FileMode.Open, FileAccess.Read ) )
 																										{
 																											var usages = LoggerUsageInAssembly.Deserialize( fs );
 																											return new LogEntryFormatRecognizer( usages );

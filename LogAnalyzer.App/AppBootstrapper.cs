@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using JetBrains.Annotations;
 using LogAnalyzer.Auxilliary;
 using LogAnalyzer.Config;
 using LogAnalyzer.Extensions;
+using LogAnalyzer.Filters;
 using LogAnalyzer.GUI;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.Properties;
@@ -76,8 +80,8 @@ namespace LogAnalyzer.App
 
 			string settingsSubPath = Properties.Settings.Default.ConfigPath;
 			string defaultSettingsPath = Path.GetFullPath( Path.Combine( exeLocation, settingsSubPath ) );
-			var args = GetPathsFromCommandArgs( CommandLineArgs );
-			string projectFile = args.OfType<FileInfo>().Select( f => f.FullName ).FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
+			var paths = GetPathsFromCommandArgs( CommandLineArgs );
+			string projectFile = paths.OfType<FileInfo>().Select( f => f.FullName ).FirstOrDefault( f => Path.GetExtension( f ) == Constants.ProjectExtension );
 
 			string configPath = ArgsParser.GetValueOrDefault( "config", defaultSettingsPath );
 			if ( projectFile != null )
@@ -110,6 +114,7 @@ namespace LogAnalyzer.App
 				configPathExists = File.Exists( configPath );
 			}
 
+
 			if ( configPathExists )
 			{
 				config = LogAnalyzerConfiguration.LoadFromFile( configPath );
@@ -121,11 +126,58 @@ namespace LogAnalyzer.App
 			}
 			else
 			{
-				config = new LogAnalyzerConfiguration()
-					.AcceptAllLogTypes()
-					.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+				string args = Environment.CommandLine;
+				string[] parts = args.Split( ' ' );
 
-				config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
+				string imagePath = parts[0].Trim( '"' );
+				string currentDirectory = Environment.CurrentDirectory;
+				bool launchedFromOtherDirectory = !String.Equals( Path.GetDirectoryName( imagePath ), currentDirectory );
+
+				if ( !launchedFromOtherDirectory )
+				{
+					config = new LogAnalyzerConfiguration()
+						.AcceptAllLogTypes()
+						.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+
+					config.Logger.WriteLine( MessageType.Warning, string.Format( "Config not found at '{0}'", configPath ) );
+				}
+				else
+				{
+					config = new LogAnalyzerConfiguration()
+						.AddLoggerAcceptedMessageType( MessageType.Warning )
+						.AddLoggerAcceptedMessageType( MessageType.Info )
+						.AddLoggerAcceptedMessageType( MessageType.Error )
+						.AddLogWriter( new FileLogWriter( Path.Combine( exeLocation, "log.log" ) ) );
+
+					string currentDirectoryName = Path.GetFileNameWithoutExtension( currentDirectory );
+
+					LogDirectoryConfigurationInfo dir = new LogDirectoryConfigurationInfo( currentDirectory, currentDirectoryName );
+
+					config.AddLogDirectory( dir );
+
+					List<CommandLineSwitch> switches = new List<CommandLineSwitch>();
+					CommandLineSwitch lastSwitch = null;
+					foreach ( string commandLinePart in parts )
+					{
+						if ( commandLinePart.StartsWith( "-" ) )
+						{
+							string cleanedName = commandLinePart.TrimStart( '-' );
+							lastSwitch = new CommandLineSwitch( cleanedName );
+							switches.Add( lastSwitch );
+						}
+						else
+						{
+							if ( lastSwitch != null )
+							{
+								lastSwitch.Parameters.Add( commandLinePart );
+							}
+						}
+					}
+
+					CommandLineFilterBuilder filterBuilder = new CommandLineFilterBuilder();
+					config.GlobalLogEntryFilterBuilder = filterBuilder.CreateLogEntryFilter( switches );
+					config.GlobalFilesFilterBuilder = filterBuilder.CreateFileFilter( switches );
+				}
 			}
 
 			return config;
@@ -142,6 +194,96 @@ namespace LogAnalyzer.App
 			// замедление чтения
 			//KeyValueStorage.Instance.Add( "FileSystemStreamReaderTransformer",
 			//    new SlowStreamTransformer( TimeSpan.FromMilliseconds( 1 ) ) );
+		}
+	}
+
+	public sealed class CommandLineSwitch
+	{
+		public CommandLineSwitch( [NotNull] string name )
+		{
+			if ( name == null )
+			{
+				throw new ArgumentNullException( "name" );
+			}
+			Name = name;
+		}
+
+		public string Name { get; set; }
+
+		private readonly List<string> _parameters = new List<string>();
+		public List<string> Parameters
+		{
+			get { return _parameters; }
+		}
+	}
+
+	public static class CommandLineSwitchesCollectionExtensions
+	{
+		public static CommandLineSwitch GetSwitchByName( this IEnumerable<CommandLineSwitch> switches, string lowerName )
+		{
+			return switches.FirstOrDefault( s => s.Name.ToLowerInvariant() == lowerName.ToLowerInvariant() );
+		}
+	}
+
+	public sealed class CommandLineFilterBuilder
+	{
+		public ExpressionBuilder CreateLogEntryFilter( List<CommandLineSwitch> switches )
+		{
+			var typesSwitch = switches.GetSwitchByName( "types" );
+			if ( typesSwitch != null )
+			{
+				string messageTypes = typesSwitch.Parameters[0];
+				if ( messageTypes.Length < 1 )
+				{
+					throw new ArgumentException( "MessageTypes switch should have at least one argument." );
+				}
+				else if ( messageTypes.Length == 1 )
+				{
+					return new MessageTypeEquals( messageTypes );
+				}
+				else
+				{
+					return new OrCollection(
+						messageTypes
+						.Select( c => c.ToString( CultureInfo.InvariantCulture ) )
+						.Select( s => new MessageTypeEquals( s ) ) );
+				}
+			}
+
+			return new AlwaysTrue();
+		}
+
+		public ExpressionBuilder CreateFileFilter( List<CommandLineSwitch> switches )
+		{
+			List<ExpressionBuilder> builders = new List<ExpressionBuilder>();
+
+			var todaySwitch = switches.GetSwitchByName( "today" );
+			if ( todaySwitch != null )
+			{
+				builders.Add( new Equals( new GetDateByFileNameBuilder(), new DateTimeConstant( DateTime.Today ) ) );
+			}
+
+			var sizeLessSwitch = switches.GetSwitchByName( "sizeLess" );
+			if ( sizeLessSwitch != null )
+			{
+				if ( sizeLessSwitch.Parameters.Count != 1 )
+				{
+					throw new ArgumentException( "SizeLess switch is missing required argument: size in Kb." );
+				}
+
+				int kiloBytes = Int32.Parse( sizeLessSwitch.Parameters[0] );
+
+				builders.Add( new SizeLessThanFilter { Megabytes = kiloBytes } );
+			}
+
+			if ( builders.Count == 0 )
+			{
+				return new AlwaysTrue();
+			}
+			else
+			{
+				return ExpressionBuilder.CreateAnd( builders );
+			}
 		}
 	}
 }
