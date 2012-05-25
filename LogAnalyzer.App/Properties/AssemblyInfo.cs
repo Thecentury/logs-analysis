@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle( "LogAnalyzer.App" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "Microsoft" )]
+[assembly: AssemblyCompany( "AWAD" )]
 [assembly: AssemblyProduct( "LogAnalyzer.App" )]
-[assembly: AssemblyCopyright( "Copyright © Microsoft 2011" )]
+[assembly: AssemblyCopyright( "Copyright © AWAD 2012" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
