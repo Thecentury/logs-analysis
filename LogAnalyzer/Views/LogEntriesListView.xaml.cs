@@ -22,7 +22,7 @@ namespace LogAnalyzer.GUI.Views
 		{
 			InitializeComponent();
 
-			plotter.Viewport.Restrictions.Add( new DataHeightRestriction() );
+			//plotter.Viewport.Restrictions.Add( new DataHeightRestriction() );
 
 			Logger.Instance.WriteInfo( "LogEntriesListView.ctor()" );
 

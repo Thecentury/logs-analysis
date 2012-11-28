@@ -35,7 +35,7 @@
 
 		<views:StatusBar DockPanel.Dock="Bottom"/>
 
-		<Expander
+		<!--<Expander
 			ExpandDirection="Up"
 			IsExpanded="False"
 			Header="Timeline"
@@ -51,7 +51,7 @@
 					<d3:HorizontalDateTimeAxis/>
 				</d3:ChartPlotter.MainHorizontalAxis>
 			</d3:ChartPlotter>
-		</Expander>
+		</Expander>-->
 
 		<views:OverviewControl 
 			DockPanel.Dock="Right"
@@ -88,9 +88,9 @@
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss, Mode=OneTime}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 
-				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
+				<!--<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>-->
 
-				<!--<DataGridTextColumn Binding="{Binding UnitedText, Mode=OneTime}"/>-->
+				<DataGridTextColumn Binding="{Binding UnitedText, Mode=OneTime}"/>
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->
 				<!--<DataGridTextColumn Header="ColumnName" Binding="{Binding HighlightedColumnName}" Width="60"/>-->
