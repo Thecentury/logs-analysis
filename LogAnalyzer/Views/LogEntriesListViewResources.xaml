@@ -362,7 +362,7 @@
 												VerticalAlignment="Stretch"
 												Offset="{StaticResource highlightingOffset}"/>
 
-			<!--<TextBox
+			<TextBox
 					Background="Transparent"
 					IsReadOnly="True"
 					BorderBrush="{x:Null}"
@@ -374,8 +374,8 @@
 					Margin="{Binding HighlightedByList.Count, Converter={StaticResource highlightingCountToMarginConverter}}"
 					VerticalAlignment="Center"
 					HorizontalAlignment="Left"
-					Text="{Binding UnitedText, Mode=OneTime}"/>-->
-			<Controls:BindableRichTextBox
+					Text="{Binding UnitedText, Mode=OneTime}"/>
+			<!--<Controls:BindableRichTextBox
 				Background="Transparent"
 				VerticalScrollBarVisibility="Auto"
 				MaxHeight="200"
@@ -384,7 +384,7 @@
 				BorderThickness="0"
 				Paragraph="{Binding Paragraph, Mode=OneWay}"
 				>
-			</Controls:BindableRichTextBox>
+			</Controls:BindableRichTextBox>-->
 		</Grid>
 
 		<!--<Control Template="{Binding Template}"
