@@ -88,9 +88,9 @@
 				<DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat=dd.MM HH:mm:ss, Mode=OneTime}" Width="120"
 									CellStyle="{StaticResource timeCellStyle}"/>
 
-				<!--<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>-->
+				<DataGridTemplateColumn Header="Text" Width="*" CellTemplate="{StaticResource textCellTemplate}"/>
 
-				<DataGridTextColumn Binding="{Binding UnitedText, Mode=OneTime}"/>
+				<!--<DataGridTextColumn Binding="{Binding UnitedText, Mode=OneTime}"/>-->
 
 				<!--<DataGridTextColumn Header="IsDynamicHighlighted" Binding="{Binding IsDynamicHighlighted}" Width="40"/>-->
 				<!--<DataGridTextColumn Header="ColumnName" Binding="{Binding HighlightedColumnName}" Width="60"/>-->
