@@ -35,7 +35,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			get { return fileName; }
 		}
 
-		protected override long Length
+		public override long Length
 		{
 			get { return fileInfo.Length; }
 		}
