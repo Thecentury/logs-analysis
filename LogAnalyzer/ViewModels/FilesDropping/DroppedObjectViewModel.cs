@@ -42,7 +42,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			base.Dispose();
 		}
 
-		protected abstract long Length { get; }
+		public abstract long Length { get; }
 
 		public abstract string Name { get; }
 

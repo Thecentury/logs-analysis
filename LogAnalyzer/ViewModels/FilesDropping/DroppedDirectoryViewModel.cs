@@ -40,7 +40,7 @@ namespace LogAnalyzer.GUI.ViewModels.FilesDropping
 			InitReadReporter( directory );
 		}
 
-		protected override long Length
+		public override long Length
 		{
 			get { return LogDirectory.TotalLengthInBytes; }
 		}
