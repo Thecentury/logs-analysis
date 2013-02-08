@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LogAnalyzer.Kernel;
 using LogAnalyzer.Kernel.Parsers;
+using LogAnalyzer.Tests.Mocks;
 using NUnit.Framework;
 
 namespace LogAnalyzer.Tests
