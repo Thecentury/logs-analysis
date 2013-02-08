@@ -353,6 +353,8 @@ namespace LogAnalyzer.Kernel
 				}
 			}
 
+			_logger.WriteInfo( "Last line: {0}", logEntries.Last().UnitedText );
+
 			return logEntries;
 		}
 
