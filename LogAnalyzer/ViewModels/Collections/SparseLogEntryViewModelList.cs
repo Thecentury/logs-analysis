@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
@@ -13,7 +15,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 	/// Syncronized Collection + IList for LogEntryViewModels.
 	/// </summary>
 	[DebuggerDisplay( "SparseLogEntryViewModelList Count={Count}" )]
-	public sealed class SparseLogEntryViewModelList : DispatcherObservableCollection, IList<LogEntryViewModel>, IList, ILogEntryHost
+	public sealed class SparseLogEntryViewModelList : IList<LogEntryViewModel>, IList, ILogEntryHost, INotifyCollectionChanged, INotifyPropertyChanged
 	{
 		private readonly IList<LogEntry> _logEntries;
 		private readonly Func<LogEntry, LogFileViewModel> _fileViewModelFactory;
@@ -26,7 +28,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		}
 
 		internal SparseLogEntryViewModelList( LogEntriesListViewModel parentViewModel, Func<LogEntry, LogFileViewModel> fileViewModelFactory )
-			: base( parentViewModel.Entries, parentViewModel.Scheduler )
 		{
 			if ( parentViewModel == null )
 			{
@@ -40,6 +41,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			this._parent = parentViewModel;
 			this._logEntries = parentViewModel.Entries;
 			this._fileViewModelFactory = fileViewModelFactory;
+
 		}
 
 		internal ICollection<LogEntryViewModel> CreatedEntries
