@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using LogAnalyzer.Collections;
 using LogAnalyzer.Extensions;
 using System.ComponentModel;
 using LogAnalyzer.Logging;
@@ -39,9 +38,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 
 			INotifyCollectionChanged observableCollection = (INotifyCollectionChanged)collection;
 
-			// todo brinchuk remove me
-			observableCollection.CollectionChanged += ObservableCollectionCollectionChanged;
-
 			var observable = Observable.FromEventPattern<NotifyCollectionChangedEventArgs>( observableCollection,
 																						   "CollectionChanged" );
 
@@ -58,32 +54,6 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 				.Subscribe( e => OnCollectionChanged( e.EventArgs ) );
 
 			_unsubscriber = new CompositeDisposable( unsubscribeAdd, unsubscribeOthers );
-		}
-
-		// todo brinchuk remove me!!!
-		void ObservableCollectionCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
-		{
-			if ( e.Action != NotifyCollectionChangedAction.Add )
-				return;
-
-			var compositeList = _collection as CompositeObservableListWrapper<LogEntry>;
-			if ( compositeList == null )
-			{
-				return;
-			}
-
-			for ( int i = 0; i < e.NewItems.Count; i++ )
-			{
-				int index = e.NewStartingIndex + i;
-
-				var entry = (LogEntry)e.NewItems[i];
-				int adjustedIndex = ParallelHelper.SequentialIndexOf( compositeList, entry, 0 );
-
-				if ( adjustedIndex != index )
-				{
-					//Logger.Instance.WriteError( "Adjusted index: was {0}, now {1}", index, adjustedIndex );
-				}
-			}
 		}
 
 		private void OnAdded( NotifyCollectionChangedEventArgs e )
