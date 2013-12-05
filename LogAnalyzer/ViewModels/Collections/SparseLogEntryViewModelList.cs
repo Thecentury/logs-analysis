@@ -42,6 +42,7 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 			this._logEntries = parentViewModel.Entries;
 			this._fileViewModelFactory = fileViewModelFactory;
 
+			INotifyCollectionChanged parentViewModel.Entries
 		}
 
 		internal ICollection<LogEntryViewModel> CreatedEntries
@@ -312,5 +313,9 @@ namespace LogAnalyzer.GUI.ViewModels.Collections
 		}
 
 		#endregion
+
+		public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }
