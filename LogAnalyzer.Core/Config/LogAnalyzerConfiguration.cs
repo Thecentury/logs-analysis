@@ -22,7 +22,7 @@ namespace LogAnalyzer.Config
 			RegisterCommonDependencies();
 		}
 
-		private string _defaultEncodingName = "windows-1251";
+		private string _defaultEncodingName = "utf-8";
 		public string DefaultEncodingName
 		{
 			get { return _defaultEncodingName; }
