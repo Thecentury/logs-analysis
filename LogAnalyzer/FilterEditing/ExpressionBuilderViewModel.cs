@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using LogAnalyzer.Extensions;
 using LogAnalyzer.Filters;
 using System.Linq.Expressions;
+using System.Reactive;
 using LogAnalyzer.GUI.Common;
 using LogAnalyzer.GUI.ViewModels;
 
@@ -40,10 +41,16 @@ namespace LogAnalyzer.GUI.FilterEditing
 			_context = context;
 
 			_builder.ToNotifyPropertyChangedObservable()
-				.SubscribeWeakly( this, ( t, e ) => t.OnBuilderPropertyChanged( e.EventArgs ) );
+				.SubscribeWeakly( this, OnBuilderPropertyChanged);
 		}
 
-		private void OnBuilderPropertyChanged( PropertyChangedEventArgs e )
+	    private static void OnBuilderPropertyChanged(ExpressionBuilderViewModel vm,
+	        EventPattern<PropertyChangedEventArgs> eventPattern)
+	    {
+	        vm.OnBuilderPropertyChanged(eventPattern.EventArgs);
+	    }
+
+        private void OnBuilderPropertyChanged( PropertyChangedEventArgs e )
 		{
 			RaiseAllPropertiesChanged();
 		}

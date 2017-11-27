@@ -13,7 +13,7 @@ namespace LogAnalyzer.Tests
 	{
 		private readonly DirectoryManager directoryManager = new DirectoryManager();
 
-		[TestFixtureSetUp]
+        [OneTimeSetUp]
 		public void SetUp()
 		{
 			directoryManager.RegisterFactory( new DefaultDirectoryFactory() );

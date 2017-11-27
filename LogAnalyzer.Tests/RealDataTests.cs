@@ -13,7 +13,7 @@ namespace LogAnalyzer.Tests
 	[TestFixture]
 	public class RealDataTests
 	{
-		[Ignore]
+		[Ignore("Local")]
 		[Test]
 		public void TestRealData()
 		{

@@ -104,7 +104,7 @@ namespace LogAnalyzer
 		/// <param name="textLine"></param>
 		private void SetHeaderValues( string type, int threadId, DateTime time, string textLine )
 		{
-			if ( String.IsNullOrEmpty( type ) || type.Length > 1 )
+			if ( String.IsNullOrEmpty( type ) /*|| type.Length > 1*/ )
 				throw new ArgumentException( "type" );
 			if ( threadId < 0 )
 				throw new ArgumentOutOfRangeException( "threadId" );

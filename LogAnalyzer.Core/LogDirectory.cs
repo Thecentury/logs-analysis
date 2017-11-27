@@ -154,7 +154,7 @@ namespace LogAnalyzer
 			this._config = config;
 			this._core = core;
 			this._filesWrapper = new ObservableList<LogFile>( _files );
-			this._lineParser = directoryCfg.LineParser ?? new ManualLogLineParser();
+			this._lineParser = directoryCfg.LineParser ?? new Log4NetLogLineParser();
 
 			this.EntriesFilter = new ExpressionFilter<LogEntry>(
 				new And(

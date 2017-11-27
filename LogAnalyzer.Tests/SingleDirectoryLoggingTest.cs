@@ -11,7 +11,7 @@ namespace LogAnalyzer.Tests
 	[TestFixture]
 	public class SingleDirectoryLoggingTest : LoggingTestsBase
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init()
 		{
 			InitEnvironment( Encoding.Unicode, directoriesCount: 1 );

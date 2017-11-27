@@ -171,6 +171,7 @@
     <Compile Include="Kernel\ITransformer.cs" />
     <Compile Include="Kernel\IViewManager.cs" />
     <Compile Include="Auxilliary\KeyValueStorage.cs" />
+    <Compile Include="Kernel\Parsers\Log4NetLogLineParser.cs" />
     <Compile Include="Kernel\Parsers\ManualLogLineParser.cs" />
     <Compile Include="Kernel\NeverOldTimeService.cs" />
     <Compile Include="Kernel\Notifications\PollingFileSystemNotificationSource.cs" />
