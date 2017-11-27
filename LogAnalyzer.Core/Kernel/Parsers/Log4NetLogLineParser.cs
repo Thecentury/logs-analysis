@@ -13,7 +13,6 @@ namespace LogAnalyzer.Kernel.Parsers
             MaxTypeLength = 10;
         }
 
-
         protected override DateTime ParseDate(string dateString)
         {
             return DateTime.ParseExact(dateString, DateFormat, CultureInfo.InvariantCulture);
